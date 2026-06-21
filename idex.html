@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Converter App</title>
+</head>
+<body>
+
+<h2>Converter Tool</h2>
+
+<input id="text" placeholder="Enter text">
+<button onclick="convert()">Convert</button>
+
+<p id="result"></p>
+
+<script>
+async function convert() {
+  const text = document.getElementById("text").value;
+
+  const res = await fetch("http://143.198.40.238:3000/convert", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data: text })
+  });
+
+  const data = await res.json();
+  document.getElementById("result").innerText = data.result;
+}
+</script>
+
+</body>
+</html>
