@@ -89,41 +89,122 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
         </div>
       </section>
 
-      {/* Tools by Category */}
-      <section id="tools" className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* Featured AI Tools Section - Premium Design at Top */}
+      <section id="tools" className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-transparent -z-10" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -z-10 animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-br from-purple-200 to-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -z-10 animate-pulse" style={{animationDelay: '2s'}} />
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-6 border border-blue-200 animate-bounce" style={{animationDelay: '0.5s'}}>
+              <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+              <span className="text-blue-700 font-bold text-sm tracking-widest">POWERED BY AI</span>
+            </div>
+            <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight">
+              Advanced AI Tools
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Transform your PDFs with intelligent AI features that work like magic. Process, analyze, and enhance documents with cutting-edge technology.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
+            {toolsByCategory.ai.map((tool, index) => {
+              const Icon = tool.icon;
+              return (
+                <button
+                  key={tool.id}
+                  onClick={() => onSelectTool(tool.id)}
+                  className="group relative bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-2xl transition-all duration-500 text-left overflow-hidden hover:-translate-y-2"
+                >
+                  {/* Premium gradient border effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl opacity-0 group-hover:opacity-100 blur transition-opacity duration-500" />
+                        <div className="relative w-16 h-16 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-br from-blue-500 to-purple-500 group-hover:shadow-2xl transition-shadow duration-500">
+                          <Icon className="w-8 h-8 text-white" />
+                        </div>
+                      </div>
+                      {tool.badge && (
+                        <span className="px-3 py-1.5 bg-amber-100 text-amber-700 text-xs font-bold rounded-full border border-amber-200 animate-pulse">
+                          {tool.badge}
+                        </span>
+                      )}
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
+                      {tool.name}
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-6 leading-relaxed group-hover:text-gray-700 transition-colors">
+                      {tool.description}
+                    </p>
+                    
+                    <div className="flex items-center gap-2 text-blue-600 group-hover:gap-3 transition-all font-bold text-sm">
+                      Try Now
+                      <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Complete Toolkit by Category */}
+      <section className="py-28 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          {categories.map((category) => (
-            <div key={category.key} className="mb-20">
-              <h2 className="text-4xl font-black text-gray-900 mb-10">{category.title}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">Complete PDF Toolkit</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              30+ professional tools for every PDF need
+            </p>
+          </div>
+
+          {categories.filter(c => c.key !== 'ai').map((category) => (
+            <div key={category.key} className="mb-24">
+              <div className="flex items-center gap-4 mb-12">
+                <div 
+                  className="h-12 w-1.5 rounded-full shadow-lg"
+                  style={{ backgroundColor: category.color }}
+                />
+                <div>
+                  <h3 className="text-3xl sm:text-4xl font-black text-gray-900">{category.title}</h3>
+                  <p className="text-gray-600 text-sm mt-1">{category.tools.length} tools</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {category.tools.map((tool) => {
                   const Icon = tool.icon;
                   return (
                     <button
                       key={tool.id}
                       onClick={() => onSelectTool(tool.id)}
-                      className="bg-white border border-gray-200 rounded-xl p-7 hover:shadow-xl hover:border-gray-300 transition-all duration-300 text-left group"
+                      className="group bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl hover:border-gray-300 transition-all duration-300 text-left hover:-translate-y-1"
                     >
-                      <div className="flex items-start justify-between mb-5">
+                      <div className="mb-5">
                         <div
-                          className="w-14 h-14 rounded-lg flex items-center justify-center shadow-sm"
-                          style={{ backgroundColor: category.color + '15' }}
+                          className="w-12 h-12 rounded-lg flex items-center justify-center shadow-md mb-4 group-hover:shadow-lg transition-shadow"
+                          style={{ backgroundColor: category.color + '20' }}
                         >
-                          <Icon className="w-7 h-7" style={{ color: category.color }} />
+                          <Icon className="w-6 h-6 transition-transform group-hover:scale-110 duration-300" style={{ color: category.color }} />
                         </div>
-                        {tool.badge && (
-                          <span className="px-3 py-1 bg-purple-600 text-white text-xs font-bold rounded-full">
-                            {tool.badge}
-                          </span>
-                        )}
                       </div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-2.5">
+                      <h4 className="text-base font-bold text-gray-900 mb-2 group-hover:text-gray-700">
                         {tool.name}
-                      </h3>
-                      <p className="text-gray-600 text-sm mb-5 leading-relaxed">{tool.description}</p>
-                      <div className="flex items-center gap-2 text-red-600 group-hover:gap-3 transition-all font-bold text-sm">
+                      </h4>
+                      <p className="text-gray-600 text-sm leading-relaxed line-clamp-2 mb-4">
+                        {tool.description}
+                      </p>
+                      <div className="flex items-center gap-2 text-gray-600 group-hover:text-gray-900 group-hover:gap-3 transition-all font-semibold text-xs opacity-70 group-hover:opacity-100">
                         Use Tool
-                        <ChevronRight className="w-4 h-4" />
+                        <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                       </div>
                     </button>
                   );
