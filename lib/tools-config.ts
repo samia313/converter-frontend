@@ -31,6 +31,7 @@ import {
   BookOpen,
   HelpCircle,
   Settings,
+  Briefcase,
 } from 'lucide-react';
 
 export interface Tool {
@@ -258,8 +259,8 @@ export const tools: Tool[] = [
   },
   {
     id: 'summarize',
-    name: 'PDF Summary',
-    description: 'Generate comprehensive document summaries',
+    name: 'AI PDF Summarizer',
+    description: 'Generate comprehensive document summaries with AI',
     category: 'ai',
     icon: FileCheck,
     color: '#cc00cc',
@@ -267,7 +268,7 @@ export const tools: Tool[] = [
   },
   {
     id: 'translate',
-    name: 'PDF Translation',
+    name: 'AI Translator',
     description: 'Translate entire PDF to 10+ languages instantly',
     category: 'ai',
     icon: Globe,
@@ -312,17 +313,26 @@ export const tools: Tool[] = [
   },
   {
     id: 'cover-letter',
-    name: 'AI Cover Letter',
-    description: 'Generate personalized cover letters',
+    name: 'AI Cover Letter Generator',
+    description: 'Generate personalized cover letters instantly',
     category: 'ai',
     icon: FileText,
     color: '#cc00cc',
     badge: 'NEW',
   },
   {
+    id: 'business-proposal',
+    name: 'AI Business Proposal',
+    description: 'Create professional business proposals quickly',
+    category: 'ai',
+    icon: Briefcase,
+    color: '#cc00cc',
+    badge: 'NEW',
+  },
+  {
     id: 'study-notes',
-    name: 'AI Study Notes',
-    description: 'Convert PDFs into study notes',
+    name: 'AI Notes Generator',
+    description: 'Convert PDFs into organized study notes automatically',
     category: 'ai',
     icon: BookOpen,
     color: '#cc00cc',
@@ -330,8 +340,8 @@ export const tools: Tool[] = [
   },
   {
     id: 'quiz-generator',
-    name: 'AI PDF Quiz',
-    description: 'Create MCQs from PDFs automatically',
+    name: 'AI Quiz Generator',
+    description: 'Create multiple choice questions from PDFs automatically',
     category: 'ai',
     icon: HelpCircle,
     color: '#cc00cc',
