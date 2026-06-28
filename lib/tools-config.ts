@@ -32,6 +32,7 @@ import {
   HelpCircle,
   Settings,
   Briefcase,
+  Search,
 } from 'lucide-react';
 
 export interface Tool {
@@ -276,6 +277,15 @@ export const tools: Tool[] = [
     badge: 'NEW',
   },
   {
+    id: 'research-assistant',
+    name: 'AI Research Assistant',
+    description: 'Extract insights and generate research summaries',
+    category: 'ai',
+    icon: Search,
+    color: '#cc00cc',
+    badge: 'NEW',
+  },
+  {
     id: 'ocr',
     name: 'OCR Text',
     description: 'Extract text from scanned PDFs and images',
@@ -294,9 +304,9 @@ export const tools: Tool[] = [
     badge: 'NEW',
   },
   {
-    id: 'contract-reader',
-    name: 'AI Contract Reader',
-    description: 'Extract clauses, analyze risks, and understand',
+    id: 'contract-analyzer',
+    name: 'AI Contract Analyzer',
+    description: 'Extract clauses, analyze risks, and understand contracts',
     category: 'ai',
     icon: Shield,
     color: '#cc00cc',
