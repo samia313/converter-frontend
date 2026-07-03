@@ -1,0 +1,37 @@
+# PDFilio Robots.txt Configuration
+User-agent: *
+Allow: /
+Disallow: /api/private/
+Disallow: /admin/
+Disallow: /*.json$
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+
+# Crawl delay for bots
+Crawl-delay: 1
+
+# Sitemap locations
+Sitemap: https://pdfilio.com/sitemap.xml
+
+# Allow specific search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Block bad bots
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+# Rate limiting for other bots
+User-agent: *
+Request-rate: 10/1m
