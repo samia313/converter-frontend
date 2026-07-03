@@ -130,8 +130,20 @@ export default function Navbar({ onSelectTool, onNavigateBlog }: NavbarProps) {
             >
               Blog
             </button>
-            <a href="#" className="px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm">
+            <a href="/pricing" className="px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm">
               Pricing
+            </a>
+            <a href="/about" className="px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm">
+              About
+            </a>
+            <a href="/security" className="px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm">
+              Security
+            </a>
+            <a href="/contact" className="px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm">
+              Support
+            </a>
+            <a href="/developers" className="px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm">
+              API
             </a>
           </div>
 
