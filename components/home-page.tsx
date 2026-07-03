@@ -7,7 +7,7 @@ import TypingText from './typing-text';
 import TrustIndicators from './trust-indicators';
 import FeatureCardsGrid from './feature-cards-grid';
 import HeroAnimation from './hero-animation';
-import AllPdfTools from './all-pdf-tools';
+import UnifiedToolsGrid from './unified-tools-grid';
 import { animationVariants } from '@/lib/animations';
 
 interface HomePageProps {
@@ -126,13 +126,7 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
         </div>
       </section>
 
-      {/* Trust Indicators Section */}
-      <TrustIndicators />
-
-      {/* Complete PDF Tools Library Section */}
-      <AllPdfTools />
-
-      {/* Featured AI Tools Section - Premium Design at Top */}
+      {/* Featured AI Tools Section - At Top */}
       <section id="tools" className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Animated gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-transparent -z-10" />
@@ -210,64 +204,11 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
       {/* Feature Cards Grid */}
       <FeatureCardsGrid />
 
-      {/* Complete Toolkit by Category */}
-      <section className="py-28 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-50 to-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">Complete PDF Toolkit</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              30+ professional tools for every PDF need
-            </p>
-          </div>
+      {/* Trust Indicators Section */}
+      <TrustIndicators />
 
-          {categories.filter(c => c.key !== 'ai').map((category) => (
-            <div key={category.key} className="mb-24">
-              <div className="flex items-center gap-4 mb-12">
-                <div 
-                  className="h-12 w-1.5 rounded-full shadow-lg"
-                  style={{ backgroundColor: category.color }}
-                />
-                <div>
-                  <h3 className="text-3xl sm:text-4xl font-black text-gray-900">{category.title}</h3>
-                  <p className="text-gray-600 text-sm mt-1">{category.tools.length} tools</p>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {category.tools.map((tool) => {
-                  const Icon = tool.icon;
-                  return (
-                    <button
-                      key={tool.id}
-                      onClick={() => onSelectTool(tool.id)}
-                      className="group bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl hover:border-gray-300 transition-all duration-300 text-left hover:-translate-y-1"
-                    >
-                      <div className="mb-5">
-                        <div
-                          className="w-12 h-12 rounded-lg flex items-center justify-center shadow-md mb-4 group-hover:shadow-lg transition-shadow"
-                          style={{ backgroundColor: category.color + '20' }}
-                        >
-                          <Icon className="w-6 h-6 transition-transform group-hover:scale-110 duration-300" style={{ color: category.color }} />
-                        </div>
-                      </div>
-                      <h4 className="text-base font-bold text-gray-900 mb-2 group-hover:text-gray-700">
-                        {tool.name}
-                      </h4>
-                      <p className="text-gray-600 text-sm leading-relaxed line-clamp-2 mb-4">
-                        {tool.description}
-                      </p>
-                      <div className="flex items-center gap-2 text-gray-600 group-hover:text-gray-900 group-hover:gap-3 transition-all font-semibold text-xs opacity-70 group-hover:opacity-100">
-                        Use Tool
-                        <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Unified Tools Grid - All Tools in One Place */}
+      <UnifiedToolsGrid />
 
       {/* Features Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
