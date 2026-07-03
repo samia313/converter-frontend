@@ -44,7 +44,7 @@ export default function FeatureCardsGrid() {
   };
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-slate-50 to-slate-100 relative overflow-hidden">
+    <section className="pt-2 pb-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-slate-50 to-slate-100 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-red-100/40 rounded-full mix-blend-multiply filter blur-3xl" />
