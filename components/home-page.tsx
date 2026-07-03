@@ -6,6 +6,7 @@ import { ChevronRight } from 'lucide-react';
 import TypingText from './typing-text';
 import TrustIndicators from './trust-indicators';
 import FeatureCardsGrid from './feature-cards-grid';
+import HeroAnimation from './hero-animation';
 import { animationVariants } from '@/lib/animations';
 
 interface HomePageProps {
@@ -55,12 +56,15 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section className="relative py-32 px-4 sm:px-6 lg:px-8 text-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+      <section className="relative py-40 px-4 sm:px-6 lg:px-8 text-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden min-h-screen flex items-center">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
           <div className="absolute -bottom-8 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{animationDelay: '2s'}} />
         </div>
+
+        {/* Hero Animation Component */}
+        <HeroAnimation />
 
         <div className="max-w-5xl mx-auto relative z-10">
           <motion.div

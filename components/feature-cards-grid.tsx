@@ -44,8 +44,14 @@ export default function FeatureCardsGrid() {
   };
 
   return (
-    <section className="py-28 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-slate-50 to-slate-100 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-red-100/40 rounded-full mix-blend-multiply filter blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100/40 rounded-full mix-blend-multiply filter blur-3xl" />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -53,11 +59,22 @@ export default function FeatureCardsGrid() {
           transition={{ duration: 0.6 }}
           className="text-center mb-20"
         >
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="inline-block mb-6"
+          >
+            <span className="text-sm font-bold text-red-600 bg-red-100 px-4 py-2 rounded-full inline-block">
+              ✓ Everything You Need
+            </span>
+          </motion.div>
           <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6">
-            Complete Toolkit
+            Your Complete PDF Toolkit
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Powerful features for every PDF task. Everything you need in one place.
+            12+ powerful tools to handle any PDF task. Convert, merge, split, compress, protect, and more - all free and easy to use.
           </p>
         </motion.div>
 
@@ -78,34 +95,49 @@ export default function FeatureCardsGrid() {
               <motion.div
                 key={index}
                 variants={animationVariants.staggerItem}
-                whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                className="group relative bg-white border border-gray-200 rounded-xl p-6 hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden"
+                whileHover={{ y: -12, transition: { duration: 0.3 } }}
+                className="group relative bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-7 hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden hover:border-red-200"
               >
                 {/* Gradient background on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-br from-red-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                {/* Top accent line */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 <div className="relative z-10">
                   {/* Icon */}
                   <motion.div
-                    whileHover={{ scale: 1.15, rotate: 5 }}
-                    className={`w-12 h-12 rounded-lg bg-gradient-to-br ${colorClass} flex items-center justify-center mb-4 shadow-lg group-hover:shadow-xl transition-shadow`}
+                    whileHover={{ scale: 1.2, rotate: 10 }}
+                    className={`w-14 h-14 rounded-xl bg-gradient-to-br ${colorClass} flex items-center justify-center mb-5 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
                   >
-                    <Icon className="w-6 h-6 text-white" />
+                    <Icon className="w-7 h-7 text-white" />
                   </motion.div>
 
+                  {/* Checkmark */}
+                  <div className="absolute top-6 right-6">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      whileInView={{ scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3 + index * 0.05 }}
+                      className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold"
+                    >
+                      ✓
+                    </motion.div>
+                  </div>
+
                   {/* Name */}
-                  <h3 className="font-bold text-gray-900 text-base mb-2 group-hover:text-gray-700 transition-colors">
+                  <h3 className="font-bold text-gray-900 text-base mb-3 group-hover:text-red-600 transition-colors duration-300">
                     {feature.name}
                   </h3>
 
-                  {/* Checkmark */}
-                  <div className="flex items-center gap-2 text-sm text-gray-600 group-hover:text-gray-700">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                    Ready to use
-                  </div>
+                  {/* Description */}
+                  <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
+                    {feature.category.charAt(0).toUpperCase() + feature.category.slice(1)}
+                  </p>
 
                   {/* Border accent on hover */}
-                  <div className="absolute inset-0 rounded-xl border border-transparent group-hover:border-gray-300 transition-colors duration-300 pointer-events-none" />
+                  <div className="absolute inset-0 rounded-2xl border border-transparent group-hover:border-red-300/50 transition-colors duration-300 pointer-events-none" />
                 </div>
               </motion.div>
             );

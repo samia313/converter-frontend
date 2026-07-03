@@ -88,3 +88,63 @@ export const pageVariants = {
     transition: { duration: 0.3 },
   },
 };
+
+// Advanced animations for enhanced hero section
+export const dragDropAnimation = {
+  hidden: { opacity: 0, y: 100 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { 
+      type: 'spring',
+      stiffness: 100,
+      damping: 15,
+      duration: 0.8,
+    },
+  },
+};
+
+export const pulseGlow = {
+  animate: {
+    boxShadow: [
+      '0 0 0 0 rgba(239, 68, 68, 0.7)',
+      '0 0 0 10px rgba(239, 68, 68, 0)',
+    ],
+    transition: {
+      duration: 1.5,
+      repeat: Infinity,
+    },
+  },
+};
+
+export const floatingAnimation = {
+  animate: {
+    y: [0, -20, 0],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: 'easeInOut',
+    },
+  },
+};
+
+export const shimmer = {
+  animate: {
+    backgroundPosition: ['200% center', '-200% center'],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: 'linear',
+    },
+  },
+};
+
+export const countUp = {
+  animate: {
+    opacity: [0, 1],
+    transition: {
+      duration: 1,
+      delay: 0.3,
+    },
+  },
+};
