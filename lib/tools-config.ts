@@ -34,6 +34,15 @@ import {
   Briefcase,
   Search,
   Wand2,
+  Cloud,
+  HardDrive,
+  Layers,
+  BarChart3,
+  Loader,
+  QrCode,
+  RefreshCw,
+  Copy,
+  Key,
 } from 'lucide-react';
 
 export interface Tool {
@@ -88,6 +97,22 @@ export const tools: Tool[] = [
     icon: Grid3x3,
     color: '#cc0000',
   },
+  {
+    id: 'drag-drop-reorder',
+    name: 'Drag & Drop Reorder',
+    description: 'Reorder PDF pages with intuitive drag and drop',
+    category: 'organize',
+    icon: Layers,
+    color: '#cc0000',
+  },
+  {
+    id: 'scan-to-pdf',
+    name: 'Scan to PDF',
+    description: 'Convert scanned documents to PDF format',
+    category: 'organize',
+    icon: Scan,
+    color: '#cc0000',
+  },
 
   // Optimize
   {
@@ -140,6 +165,22 @@ export const tools: Tool[] = [
     icon: Code,
     color: '#0066cc',
   },
+  {
+    id: 'epub-to-pdf',
+    name: 'EPUB to PDF',
+    description: 'Convert EPUB ebooks to PDF format',
+    category: 'convert_to',
+    icon: BookOpen,
+    color: '#0066cc',
+  },
+  {
+    id: 'cad-to-pdf',
+    name: 'CAD to PDF',
+    description: 'Convert CAD drawings to PDF documents',
+    category: 'convert_to',
+    icon: Grid3x3,
+    color: '#0066cc',
+  },
 
   // Convert from PDF
   {
@@ -180,6 +221,14 @@ export const tools: Tool[] = [
     description: 'Convert PDF pages to PNG images',
     category: 'convert_from',
     icon: FileDown,
+    color: '#00aa00',
+  },
+  {
+    id: 'pdf-to-html',
+    name: 'PDF to HTML',
+    description: 'Convert PDF to editable HTML web pages',
+    category: 'convert_from',
+    icon: Code,
     color: '#00aa00',
   },
 
@@ -246,6 +295,30 @@ export const tools: Tool[] = [
     description: 'Add your signature to PDF documents',
     category: 'edit',
     icon: PenTool,
+    color: '#9933cc',
+  },
+  {
+    id: 'password-recovery',
+    name: 'Password Recovery',
+    description: 'Recover lost PDF passwords and decrypt files',
+    category: 'edit',
+    icon: Key,
+    color: '#9933cc',
+  },
+  {
+    id: 'pdf-repair',
+    name: 'PDF Repair',
+    description: 'Fix corrupted PDF files and recover data',
+    category: 'edit',
+    icon: Wrench,
+    color: '#9933cc',
+  },
+  {
+    id: 'compare-pdf',
+    name: 'Compare PDFs',
+    description: 'Find differences between two PDF documents',
+    category: 'edit',
+    icon: Copy,
     color: '#9933cc',
   },
 
@@ -383,6 +456,62 @@ export const tools: Tool[] = [
     category: 'ai',
     icon: Settings,
     color: '#cc00cc',
+  },
+  {
+    id: 'batch-conversion',
+    name: 'Batch Conversion',
+    description: 'Convert multiple files at once automatically',
+    category: 'ai',
+    icon: Layers,
+    color: '#cc00cc',
+    badge: 'NEW',
+  },
+  {
+    id: 'qr-code-generator',
+    name: 'QR Code Generator',
+    description: 'Generate QR codes and embed them in PDFs',
+    category: 'ai',
+    icon: QrCode,
+    color: '#cc00cc',
+    badge: 'NEW',
+  },
+  
+  // Cloud Storage & Integration
+  {
+    id: 'cloud-storage',
+    name: 'Cloud Storage',
+    description: 'Save and sync PDFs across multiple clouds',
+    category: 'organize',
+    icon: Cloud,
+    color: '#cc0000',
+    badge: 'NEW',
+  },
+  {
+    id: 'google-drive',
+    name: 'Google Drive',
+    description: 'Direct integration with Google Drive',
+    category: 'organize',
+    icon: HardDrive,
+    color: '#cc0000',
+    badge: 'NEW',
+  },
+  {
+    id: 'dropbox',
+    name: 'Dropbox',
+    description: 'Direct integration with Dropbox cloud storage',
+    category: 'organize',
+    icon: HardDrive,
+    color: '#cc0000',
+    badge: 'NEW',
+  },
+  {
+    id: 'onedrive',
+    name: 'OneDrive',
+    description: 'Direct integration with Microsoft OneDrive',
+    category: 'organize',
+    icon: HardDrive,
+    color: '#cc0000',
+    badge: 'NEW',
   },
 ];
 
