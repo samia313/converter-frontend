@@ -33,6 +33,7 @@ import {
   Settings,
   Briefcase,
   Search,
+  Wand2,
 } from 'lucide-react';
 
 export interface Tool {
@@ -260,7 +261,7 @@ export const tools: Tool[] = [
   },
   {
     id: 'summarize',
-    name: 'AI PDF Summarizer',
+    name: 'AI PDF Summary',
     description: 'Generate comprehensive document summaries with AI',
     category: 'ai',
     icon: FileCheck,
@@ -269,10 +270,19 @@ export const tools: Tool[] = [
   },
   {
     id: 'translate',
-    name: 'AI Translator',
+    name: 'AI Translate PDF',
     description: 'Translate entire PDF to 10+ languages instantly',
     category: 'ai',
     icon: Globe,
+    color: '#cc00cc',
+    badge: 'NEW',
+  },
+  {
+    id: 'rewrite',
+    name: 'AI Rewrite PDF',
+    description: 'Rewrite and improve PDF content with AI suggestions',
+    category: 'ai',
+    icon: Wand2,
     color: '#cc00cc',
     badge: 'NEW',
   },
@@ -287,7 +297,7 @@ export const tools: Tool[] = [
   },
   {
     id: 'ocr',
-    name: 'OCR Text',
+    name: 'AI OCR',
     description: 'Extract text from scanned PDFs and images',
     category: 'ai',
     icon: Scan,
@@ -354,6 +364,15 @@ export const tools: Tool[] = [
     description: 'Create multiple choice questions from PDFs automatically',
     category: 'ai',
     icon: HelpCircle,
+    color: '#cc00cc',
+    badge: 'NEW',
+  },
+  {
+    id: 'table-extraction',
+    name: 'AI Table Extraction',
+    description: 'Extract and convert tables from PDFs to Excel',
+    category: 'ai',
+    icon: Table,
     color: '#cc00cc',
     badge: 'NEW',
   },
