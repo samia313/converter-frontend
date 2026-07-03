@@ -1,30 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Star } from 'lucide-react';
 
 export default function HeroAnimation() {
-  const features = [
-    'AI PDF Chat',
-    'OCR',
-    'Batch Conversion',
-    'Cloud Storage',
-    'Google Drive',
-    'Dropbox',
-    'OneDrive',
-    'Drag & Drop Reorder',
-    'Watermark',
-    'Redaction',
-    'Password Recovery',
-    'PDF Repair',
-    'Compare PDFs',
-    'PDF to HTML',
-    'HTML to PDF',
-    'EPUB to PDF',
-    'CAD to PDF',
-    'Scan to PDF',
-    'QR Code Generator',
-  ];
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -57,101 +35,7 @@ export default function HeroAnimation() {
         }}
       />
 
-      {/* Features floating around - top left */}
-      <motion.div
-        className="absolute top-10 left-10 flex flex-col gap-3"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-      >
-        {features.slice(0, 4).map((feature, i) => (
-          <motion.div
-            key={i}
-            className="flex items-center gap-2 text-sm font-medium text-gray-700 whitespace-nowrap"
-            animate={{ y: [0, -5, 0] }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              delay: i * 0.15,
-            }}
-          >
-            <Star className="w-4 h-4 text-red-500 fill-red-500" />
-            <span>{feature}</span>
-          </motion.div>
-        ))}
-      </motion.div>
 
-      {/* Features floating around - top right */}
-      <motion.div
-        className="absolute top-20 right-12 flex flex-col gap-3"
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-      >
-        {features.slice(4, 8).map((feature, i) => (
-          <motion.div
-            key={i}
-            className="flex items-center gap-2 text-sm font-medium text-gray-700 whitespace-nowrap"
-            animate={{ y: [0, 5, 0] }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              delay: i * 0.15 + 0.3,
-            }}
-          >
-            <Star className="w-4 h-4 text-red-500 fill-red-500" />
-            <span>{feature}</span>
-          </motion.div>
-        ))}
-      </motion.div>
-
-      {/* Features floating around - bottom left */}
-      <motion.div
-        className="absolute bottom-20 left-8 flex flex-col gap-3"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 0.6 }}
-      >
-        {features.slice(8, 12).map((feature, i) => (
-          <motion.div
-            key={i}
-            className="flex items-center gap-2 text-sm font-medium text-gray-700 whitespace-nowrap"
-            animate={{ y: [0, -5, 0] }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              delay: i * 0.15 + 0.6,
-            }}
-          >
-            <Star className="w-4 h-4 text-red-500 fill-red-500" />
-            <span>{feature}</span>
-          </motion.div>
-        ))}
-      </motion.div>
-
-      {/* Features floating around - bottom right */}
-      <motion.div
-        className="absolute bottom-10 right-10 flex flex-col gap-3"
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 0.8 }}
-      >
-        {features.slice(12, 19).map((feature, i) => (
-          <motion.div
-            key={i}
-            className="flex items-center gap-2 text-sm font-medium text-gray-700 whitespace-nowrap"
-            animate={{ y: [0, 5, 0] }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              delay: i * 0.15 + 0.9,
-            }}
-          >
-            <Star className="w-4 h-4 text-red-500 fill-red-500" />
-            <span>{feature}</span>
-          </motion.div>
-        ))}
-      </motion.div>
 
       {/* Center accent pulse */}
       <motion.div

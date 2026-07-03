@@ -12,21 +12,47 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'PDFilio - Free AI-Powered PDF Tools & Editor | Convert, Merge, Compress',
-  description: 'PDFilio - Complete PDF solution with 19+ free tools. Convert PDF to Word, merge, split, compress, edit, OCR, and more with AI. No sign-up required. Enterprise-grade security.',
-  keywords: 'PDF converter, PDF editor, merge PDF, compress PDF, PDF to Word, OCR, free PDF tools',
+  description: 'PDFilio - Complete PDF solution with 45+ free professional tools. Convert PDF to Word, merge, split, compress, edit, OCR, protect and more with AI. No sign-up required. Enterprise-grade security.',
+  keywords: 'PDF converter, PDF editor, merge PDF, compress PDF, PDF to Word, Word to PDF, OCR PDF, protect PDF, unlock PDF, split PDF, rotate PDF, free PDF tools, online PDF editor, best PDF converter, secure PDF converter, convert PDF online, edit PDF online, compress PDF free, merge PDF online, split PDF online',
   generator: 'v0.app',
+  applicationName: 'PDFilio',
+  referrer: 'strict-origin-when-cross-origin',
+  formatDetection: {
+    email: false,
+    telephone: false,
+  },
   icons: {
     icon: [
+      {
+        url: '/favicon-16x16.png',
+        sizes: '16x16',
+        type: 'image/png',
+      },
+      {
+        url: '/favicon-32x32.png',
+        sizes: '32x32',
+        type: 'image/png',
+      },
       {
         url: '/favicon.svg',
         type: 'image/svg+xml',
       },
+    ],
+    apple: [
       {
-        url: '/favicon.png?v=3',
+        url: '/apple-icon-180x180.png',
+        sizes: '180x180',
         type: 'image/png',
       },
     ],
-    apple: '/favicon.png?v=3',
+    other: [
+      {
+        rel: 'icon',
+        url: '/icon-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      },
+    ],
   },
   authors: [
     {
@@ -34,18 +60,31 @@ export const metadata: Metadata = {
       url: 'https://pdfilio.com',
     },
   ],
+  creator: 'PDFilio Team',
+  publisher: 'PDFilio',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://pdfilio.com',
     title: 'PDFilio - Free AI-Powered PDF Tools & Editor',
-    description: 'Complete PDF solution with 19+ free tools. Convert, merge, split, compress, edit, and OCR PDFs online.',
+    description: 'Complete PDF solution with 45+ free tools. Convert, merge, split, compress, edit, OCR, protect PDFs and more. No sign-up required.',
     siteName: 'PDFilio',
+    images: [
+      {
+        url: 'https://pdfilio.com/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'PDFilio - Free PDF Tools',
+        type: 'image/png',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'PDFilio - Free PDF Tools with AI',
-    description: 'Convert, merge, compress, edit PDFs and more.',
+    description: 'Convert, merge, compress, edit, OCR and protect PDFs online. 45+ professional tools, no sign-up required.',
+    creator: '@PDFilio',
+    images: ['https://pdfilio.com/og-image.png'],
   },
   robots: {
     index: true,
@@ -55,11 +94,21 @@ export const metadata: Metadata = {
       index: true,
       follow: true,
       noimageindex: false,
+      'max-snippet': -1,
+      'max-image-preview': 'large',
+      'max-video-preview': -1,
+    },
+    bingbot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
     },
   },
   alternates: {
     canonical: 'https://pdfilio.com',
   },
+  category: 'Productivity',
+  classification: 'PDF Tools, Document Management, Online Editor',
 }
 
 export const viewport: Viewport = {

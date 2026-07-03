@@ -57,7 +57,7 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 text-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden flex items-center justify-center" style={{ minHeight: '600px' }}>
+      <section className="relative py-12 px-4 sm:px-6 lg:px-8 text-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden flex items-center justify-center" style={{ minHeight: '450px' }}>
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
@@ -82,7 +82,7 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight"
+            className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight"
           >
             Your Complete
             <br />
@@ -95,16 +95,16 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-lg sm:text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
           >
-            19+ professional PDF tools with AI superpowers. Convert, compress, merge, split, edit, and extract intelligence from your documents in seconds. No limits. No sign-up. Completely free.
+            60+ professional PDF tools with AI superpowers. Convert, compress, merge, split, edit, and extract intelligence from your documents instantly. No limits. No sign-up. Completely free.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
+            className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <motion.button
               onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}

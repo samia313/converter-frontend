@@ -12,6 +12,8 @@ Crawl-delay: 1
 
 # Sitemap locations
 Sitemap: https://pdfilio.com/sitemap.xml
+Sitemap: https://pdfilio.com/tools-sitemap.xml
+Sitemap: https://pdfilio.com/blog-sitemap.xml
 
 # Allow specific search engines
 User-agent: Googlebot
