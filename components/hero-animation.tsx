@@ -1,86 +1,170 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FileText, Zap, CheckCircle2 } from 'lucide-react';
+import { Star } from 'lucide-react';
 
 export default function HeroAnimation() {
+  const features = [
+    'AI PDF Chat',
+    'OCR',
+    'Batch Conversion',
+    'Cloud Storage',
+    'Google Drive',
+    'Dropbox',
+    'OneDrive',
+    'Drag & Drop Reorder',
+    'Watermark',
+    'Redaction',
+    'Password Recovery',
+    'PDF Repair',
+    'Compare PDFs',
+    'PDF to HTML',
+    'HTML to PDF',
+    'EPUB to PDF',
+    'CAD to PDF',
+    'Scan to PDF',
+    'QR Code Generator',
+  ];
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Animated PDF document */}
+      {/* Animated gradient orb - left side */}
       <motion.div
-        className="absolute top-20 left-1/4"
-        initial={{ opacity: 0, y: -50, rotate: -20 }}
-        animate={{ opacity: 1, y: 0, rotate: 0 }}
+        className="absolute -left-40 -top-40 w-80 h-80 bg-gradient-to-br from-red-500/20 to-orange-500/20 rounded-full blur-3xl"
+        animate={{
+          y: [0, 30, 0],
+          x: [0, 20, 0],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+
+      {/* Animated gradient orb - right side */}
+      <motion.div
+        className="absolute -right-40 -bottom-40 w-80 h-80 bg-gradient-to-tl from-red-600/20 to-pink-500/20 rounded-full blur-3xl"
+        animate={{
+          y: [0, -30, 0],
+          x: [0, -20, 0],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: 'easeInOut',
+          delay: 0.5,
+        }}
+      />
+
+      {/* Features floating around - top left */}
+      <motion.div
+        className="absolute top-10 left-10 flex flex-col gap-3"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <motion.div
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 3, repeat: Infinity }}
-          className="relative"
-        >
-          <div className="w-24 h-32 bg-gradient-to-br from-red-500 to-red-600 rounded-lg shadow-2xl flex items-center justify-center">
-            <FileText className="w-12 h-12 text-white" />
-          </div>
-        </motion.div>
+        {features.slice(0, 4).map((feature, i) => (
+          <motion.div
+            key={i}
+            className="flex items-center gap-2 text-sm font-medium text-gray-700 whitespace-nowrap"
+            animate={{ y: [0, -5, 0] }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: i * 0.15,
+            }}
+          >
+            <Star className="w-4 h-4 text-red-500 fill-red-500" />
+            <span>{feature}</span>
+          </motion.div>
+        ))}
       </motion.div>
 
-      {/* Animated AI spark */}
+      {/* Features floating around - top right */}
       <motion.div
-        className="absolute top-32 right-1/4"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.5 }}
+        className="absolute top-20 right-12 flex flex-col gap-3"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.4 }}
       >
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-          className="relative"
-        >
-          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-2xl flex items-center justify-center">
-            <Zap className="w-10 h-10 text-white" />
-          </div>
-        </motion.div>
+        {features.slice(4, 8).map((feature, i) => (
+          <motion.div
+            key={i}
+            className="flex items-center gap-2 text-sm font-medium text-gray-700 whitespace-nowrap"
+            animate={{ y: [0, 5, 0] }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: i * 0.15 + 0.3,
+            }}
+          >
+            <Star className="w-4 h-4 text-red-500 fill-red-500" />
+            <span>{feature}</span>
+          </motion.div>
+        ))}
       </motion.div>
 
-      {/* Animated success checkmark */}
+      {/* Features floating around - bottom left */}
       <motion.div
-        className="absolute top-1/2 right-1/3"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
+        className="absolute bottom-20 left-8 flex flex-col gap-3"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
+      >
+        {features.slice(8, 12).map((feature, i) => (
+          <motion.div
+            key={i}
+            className="flex items-center gap-2 text-sm font-medium text-gray-700 whitespace-nowrap"
+            animate={{ y: [0, -5, 0] }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: i * 0.15 + 0.6,
+            }}
+          >
+            <Star className="w-4 h-4 text-red-500 fill-red-500" />
+            <span>{feature}</span>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* Features floating around - bottom right */}
+      <motion.div
+        className="absolute bottom-10 right-10 flex flex-col gap-3"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.8 }}
       >
-        <motion.div
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="relative"
-        >
-          <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full shadow-2xl flex items-center justify-center">
-            <CheckCircle2 className="w-10 h-10 text-white" />
-          </div>
-        </motion.div>
+        {features.slice(12, 19).map((feature, i) => (
+          <motion.div
+            key={i}
+            className="flex items-center gap-2 text-sm font-medium text-gray-700 whitespace-nowrap"
+            animate={{ y: [0, 5, 0] }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: i * 0.15 + 0.9,
+            }}
+          >
+            <Star className="w-4 h-4 text-red-500 fill-red-500" />
+            <span>{feature}</span>
+          </motion.div>
+        ))}
       </motion.div>
 
-      {/* Floating particles */}
-      {[...Array(5)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-2 h-2 bg-red-500 rounded-full opacity-50"
-          style={{
-            left: `${20 + i * 15}%`,
-            top: `${30 + i * 10}%`,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.5, 1, 0.5],
-          }}
-          transition={{
-            duration: 3 + i * 0.5,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: i * 0.2,
-          }}
-        />
-      ))}
+      {/* Center accent pulse */}
+      <motion.div
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        animate={{ scale: [1, 1.1, 1] }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      >
+        <div className="w-1 h-1 bg-red-500 rounded-full shadow-lg" />
+      </motion.div>
     </div>
   );
 }

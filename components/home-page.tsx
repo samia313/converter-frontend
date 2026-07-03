@@ -84,10 +84,10 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight"
           >
-            Transform PDFs
+            Your Complete
             <br />
             <span className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 bg-clip-text text-transparent">
-              Instantly with AI
+              PDF Superpower
             </span>
           </motion.h1>
 
@@ -95,9 +95,9 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
+            className="text-lg sm:text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
           >
-            The complete PDF solution trusted by millions. Convert, merge, split, compress, and use AI to extract insights from your documents - all instantly and completely free.
+            19+ professional PDF tools with AI superpowers. Convert, compress, merge, split, edit, and extract intelligence from your documents in seconds. No limits. No sign-up. Completely free.
           </motion.p>
 
           <motion.div
@@ -112,7 +112,7 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
               whileTap={{ scale: 0.95 }}
               className="px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:shadow-2xl shadow-lg font-bold transition-all duration-200 flex items-center justify-center gap-2 text-base"
             >
-              Start Converting Now
+              Explore All Tools
               <ChevronRight className="w-5 h-5" />
             </motion.button>
             <motion.button
