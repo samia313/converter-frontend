@@ -25,6 +25,10 @@ export const seoKeywords = {
     'Merge PDF Online',
     'Split PDF Online',
     'PDF Merge Tool',
+    'Online PDF Editor',
+    'PDF Management Tool',
+    'Document Converter Online',
+    'Batch PDF Converter',
   ],
 
   // Long Tail Keywords
