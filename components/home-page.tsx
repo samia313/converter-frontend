@@ -7,7 +7,7 @@ import TypingText from './typing-text';
 import TrustIndicators from './trust-indicators';
 import FeatureCardsGrid from './feature-cards-grid';
 import HeroAnimation from './hero-animation';
-import QuickAccessTools from './quick-access-tools';
+import AllPdfTools from './all-pdf-tools';
 import { animationVariants } from '@/lib/animations';
 
 interface HomePageProps {
@@ -129,8 +129,8 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
       {/* Trust Indicators Section */}
       <TrustIndicators />
 
-      {/* Quick Access Tools Section */}
-      <QuickAccessTools />
+      {/* Complete PDF Tools Library Section */}
+      <AllPdfTools />
 
       {/* Featured AI Tools Section - Premium Design at Top */}
       <section id="tools" className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
