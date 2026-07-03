@@ -1,8 +1,12 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { tools, toolsByCategory } from '@/lib/tools-config';
 import { ChevronRight } from 'lucide-react';
 import TypingText from './typing-text';
+import TrustIndicators from './trust-indicators';
+import FeatureCardsGrid from './feature-cards-grid';
+import { animationVariants } from '@/lib/animations';
 
 interface HomePageProps {
   onSelectTool: (toolId: string) => void;
@@ -51,43 +55,74 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 text-center bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-4xl mx-auto">
-          <span className="inline-block px-4 py-2 bg-red-100 text-red-600 rounded-full font-bold text-xs mb-6 tracking-widest">
-            TRUSTED BY PROFESSIONALS WORLDWIDE
-          </span>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-8 leading-tight">
-            <TypingText 
-              text="AI-Powered PDF" 
-              speed={80}
-              cursor={false}
-              delay={200}
-            />
+      <section className="relative py-32 px-4 sm:px-6 lg:px-8 text-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+          <div className="absolute -bottom-8 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{animationDelay: '2s'}} />
+        </div>
+
+        <div className="max-w-5xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 border border-red-500/50 text-red-300 rounded-full font-bold text-xs mb-8 tracking-widest backdrop-blur-sm"
+          >
+            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+            FASTEST AI PDF TOOLKIT
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight"
+          >
+            Transform PDFs
             <br />
-            <TypingText 
-              text="Workspace for Professionals" 
-              speed={80}
-              cursor={true}
-              delay={900}
-            />
-          </h1>
-          <p className="text-lg text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Transform your PDF workflow with intelligent AI features. Access 30+ professional-grade tools for merging, converting, editing, and analyzing documents. Enterprise security, unlimited processing, completely free.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
+            <span className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 bg-clip-text text-transparent">
+              Instantly with AI
+            </span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
+          >
+            The complete PDF solution trusted by millions. Convert, merge, split, compress, and use AI to extract insights from your documents - all instantly and completely free.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
+          >
+            <motion.button
               onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-8 py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 text-base"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:shadow-2xl shadow-lg font-bold transition-all duration-200 flex items-center justify-center gap-2 text-base"
             >
-              Start Processing
+              Start Converting Now
               <ChevronRight className="w-5 h-5" />
-            </button>
-            <button className="px-8 py-4 border-2 border-red-600 text-red-600 rounded-lg hover:bg-red-50 font-bold transition-all duration-200 text-base">
-              Upgrade to Premium
-            </button>
-          </div>
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-4 border-2 border-red-500 text-red-400 rounded-lg hover:bg-red-500/10 font-bold transition-all duration-200 text-base backdrop-blur-sm"
+            >
+              Explore Premium
+            </motion.button>
+          </motion.div>
         </div>
       </section>
+
+      {/* Trust Indicators Section */}
+      <TrustIndicators />
 
       {/* Featured AI Tools Section - Premium Design at Top */}
       <section id="tools" className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -110,14 +145,22 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
+          <motion.div
+            variants={animationVariants.staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24"
+          >
             {toolsByCategory.ai.map((tool, index) => {
               const Icon = tool.icon;
               return (
-                <button
+                <motion.button
                   key={tool.id}
                   onClick={() => onSelectTool(tool.id)}
-                  className="group relative bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-2xl transition-all duration-500 text-left overflow-hidden hover:-translate-y-2"
+                  variants={animationVariants.staggerItem}
+                  whileHover={{ y: -8 }}
+                  className="group relative bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-2xl transition-all duration-500 text-left overflow-hidden"
                 >
                   {/* Premium gradient border effect */}
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
@@ -149,15 +192,18 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
                       <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
-                </button>
+                </motion.button>
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </section>
 
+      {/* Feature Cards Grid */}
+      <FeatureCardsGrid />
+
       {/* Complete Toolkit by Category */}
-      <section className="py-28 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-28 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">Complete PDF Toolkit</h2>
