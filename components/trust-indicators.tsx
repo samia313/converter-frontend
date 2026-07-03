@@ -34,7 +34,7 @@ export default function TrustIndicators() {
   ];
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-y border-slate-700 relative overflow-hidden">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-y border-slate-700 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-96 h-96 bg-red-500/10 rounded-full mix-blend-screen filter blur-3xl" />
@@ -47,7 +47,7 @@ export default function TrustIndicators() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
           <h2 className="text-4xl font-bold text-white mb-4">Why Trust PDFilio?</h2>
           <p className="text-lg text-slate-300">Enterprise-grade security and reliability for your documents</p>
