@@ -75,7 +75,7 @@ export default function Navbar({ onSelectTool, onNavigateBlog }: NavbarProps) {
             <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center shadow-sm">
               <FileText className="w-5 h-5 text-white font-bold" />
             </div>
-            <span className="text-xl font-bold text-gray-900">pdfilio</span>
+            <span className="text-xl font-bold text-gray-900">PDFilio</span>
           </button>
 
           {/* Menu Items */}
