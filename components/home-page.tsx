@@ -127,7 +127,7 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
       </section>
 
       {/* Featured AI Tools Section - At Top */}
-      <section id="tools" className="relative py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section id="tools" className="relative pt-8 pb-4 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Animated gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-transparent -z-10" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -z-10 animate-pulse" />
