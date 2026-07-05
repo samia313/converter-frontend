@@ -9,9 +9,7 @@ function getStripe() {
   if (!process.env.STRIPE_SECRET_KEY) {
     throw new Error('STRIPE_SECRET_KEY is not set');
   }
-  return new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2024-04-10',
-  });
+  return new Stripe(process.env.STRIPE_SECRET_KEY);
 }
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
@@ -56,14 +54,15 @@ export async function POST(req: NextRequest) {
           if (priceId?.includes('professional')) plan = 'professional';
           if (priceId?.includes('enterprise')) plan = 'enterprise';
 
+          const sub = stripeSubscription as any;
           await db
             .update(subscription)
             .set({
-              stripeSubscriptionId: stripeSubscription.id,
+              stripeSubscriptionId: sub.id,
               plan,
-              status: stripeSubscription.status as any,
-              currentPeriodStart: new Date(stripeSubscription.current_period_start * 1000),
-              currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
+              status: sub.status,
+              currentPeriodStart: new Date(sub.current_period_start * 1000),
+              currentPeriodEnd: new Date(sub.current_period_end * 1000),
               updatedAt: new Date(),
             })
             .where(eq(subscription.stripeCustomerId, customerId));

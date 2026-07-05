@@ -28,7 +28,7 @@ export default function ReferralPage() {
     { label: 'Active Referrals', value: '0', icon: TrendingUp },
   ];
 
-  const referrals = [];
+  const referrals: Array<{ date: string; name: string; commission: number }> = [];
 
   return (
     <div className="min-h-screen bg-white">

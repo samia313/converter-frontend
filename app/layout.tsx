@@ -99,11 +99,6 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-video-preview': -1,
     },
-    bingbot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-    },
   },
   alternates: {
     canonical: 'https://pdfilio.com',
@@ -163,9 +158,9 @@ export default function RootLayout({
             }),
           }}
         />
+        <StructuredData />
       </head>
       <body className="font-sans antialiased bg-white">
-        <StructuredData />
         {children}
         <LiveChatWidget />
         {process.env.NODE_ENV === 'production' && <Analytics />}

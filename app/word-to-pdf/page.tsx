@@ -5,7 +5,9 @@ export const metadata: Metadata = {
   title: 'Word to PDF Converter - Free Online | PDFilio',
   description: 'Convert Word documents to PDF instantly. Free, fast, and secure Word to PDF conversion. Preserve formatting. No sign-up required.',
   keywords: 'Word to PDF, Convert Word to PDF, DOC to PDF, DOCX to PDF, free converter',
-  canonical: 'https://pdfilio.com/word-to-pdf',
+  alternates: {
+    canonical: 'https://pdfilio.com/word-to-pdf',
+  },
 };
 
 export default function WordToPDFPage() {

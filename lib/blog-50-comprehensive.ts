@@ -3654,6 +3654,3 @@ Connecting with systems includes integration with help systems, training systems
 Organizations report 30-40% productivity improvement, reduced rework, faster decision-making, improved consistency, and better new employee onboarding.`,
   },
 ];
-
-export type { BlogPost };
-export { comprehensive50Posts };
