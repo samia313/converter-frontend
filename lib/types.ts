@@ -1,21 +1,4 @@
-export interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content?: string;
-  author: string;
-  category: string;
-  tags: string[];
-  date?: string;
-  publishedAt?: string;
-  updatedAt?: string;
-  readingTime?: number;
-  featured?: boolean;
-  image?: string;
-  [key: string]: any;
-}
-
+// BlogPost is imported from blog-data.ts to avoid duplication
 export interface Tool {
   id: string;
   name: string;
