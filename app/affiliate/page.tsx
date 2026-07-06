@@ -20,7 +20,7 @@ export default function AffiliateProgram() {
     { plan: 'Enterprise - Custom', commission: '30%', amount: 'Custom' }
   ];
 
-  const sampleSales = [];
+  const sampleSales: Array<{ date: string; sales: number; commission: number }> = [];
 
   return (
     <div className="min-h-screen bg-white">

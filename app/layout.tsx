@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import LiveChatWidget from '@/components/live-chat-widget'
+import StructuredData from '@/components/structured-data'
 import './globals.css'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
@@ -98,11 +99,6 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-video-preview': -1,
     },
-    bingbot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-    },
   },
   alternates: {
     canonical: 'https://pdfilio.com',
@@ -162,6 +158,7 @@ export default function RootLayout({
             }),
           }}
         />
+        <StructuredData />
       </head>
       <body className="font-sans antialiased bg-white">
         {children}

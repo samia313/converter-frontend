@@ -5,7 +5,9 @@ export const metadata: Metadata = {
   title: 'Compress PDF Online - Reduce File Size Free | PDFilio',
   description: 'Compress PDF files online and reduce file size without losing quality. Free PDF compressor. Compress to any size instantly.',
   keywords: 'compress PDF, reduce PDF size, compress PDF online, free PDF compressor',
-  canonical: 'https://pdfilio.com/compress-pdf',
+  alternates: {
+    canonical: 'https://pdfilio.com/compress-pdf',
+  },
 };
 
 export default function CompressPDFPage() {

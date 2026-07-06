@@ -1,4 +1,4 @@
-import { BlogPost } from './types';
+import { BlogPost } from './blog-data';
 
 export const comprehensive50Posts: BlogPost[] = [
   {
@@ -10,8 +10,7 @@ export const comprehensive50Posts: BlogPost[] = [
     image: '/blog/merge-pdf.png',
     date: 'June 20, 2024',
     author: 'Sarah Johnson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Learn the definitive methods for combining multiple PDF documents into a single, organized file with professional results.',
     content: `## Complete Guide to Merging PDF Files
 
@@ -123,8 +122,7 @@ PDF merging is fundamental to modern document management. By implementing these 
     image: '/blog/compress-pdf.png',
     date: 'June 18, 2024',
     author: 'Michael Chen',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Michael',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Master PDF compression techniques to reduce file sizes by 50-80% while maintaining excellent visual quality and document integrity.',
     content: `## PDF Compression Guide
 
@@ -281,8 +279,7 @@ Effective PDF compression balances size reduction with quality preservation. Ima
     image: '/blog/word-to-pdf.png',
     date: 'June 16, 2024',
     author: 'Emma Wilson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Emma',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Learn the comprehensive process of converting Word documents to PDF while maintaining formatting, preserving fonts, and ensuring professional output.',
     content: `## Converting Word to PDF
 
@@ -441,8 +438,7 @@ Converting Word to PDF is essential for professional document management. Master
     image: '/blog/edit-pdf.png',
     date: 'June 14, 2024',
     author: 'David Martinez',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=David',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Master PDF editing techniques including text insertion, annotations, form filling, and professional document modifications without converting to Word.',
     content: `## Professional PDF Editing
 
@@ -599,8 +595,7 @@ Professional PDF editing skills are essential for modern document management. Ma
     image: '/blog/chat-pdf.png',
     date: 'June 12, 2024',
     author: 'Lisa Anderson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Lisa',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Explore how artificial intelligence enables natural language conversations with PDFs, extracting insights, answering questions, and accelerating document analysis.',
     content: `## AI-Powered PDF Chat
 
@@ -800,8 +795,7 @@ AI-powered PDF chat dramatically improves efficiency and insight generation. Key
     image: '/blog/pdf-security.png',
     date: 'June 10, 2024',
     author: 'James Wilson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Master PDF security through encryption, password protection, digital signatures, and compliance measures for protecting confidential and sensitive documents.',
     content: `## PDF Security Guide
 
@@ -976,8 +970,7 @@ Effective PDF security requires multilayered approach combining encryption, acce
     image: '/blog/ocr-pdf.png',
     date: 'June 8, 2024',
     author: 'Robert Taylor',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Robert',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Master OCR technology to convert scanned images into searchable, editable text, enabling better document management and information accessibility.',
     content: `## OCR Technology in PDFs
 
@@ -1146,8 +1139,7 @@ OCR is essential for modern document management. By understanding capabilities, 
     image: '/blog/pdf-batch.png',
     date: 'June 6, 2024',
     author: 'Patricia Lee',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Patricia',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Master batch processing to automate repetitive PDF tasks across hundreds or thousands of documents, saving hours of manual work.',
     content: `## Batch PDF Processing
 
@@ -1330,8 +1322,7 @@ Batch processing transforms document management through automation. By properly 
     image: '/blog/form-pdf.png',
     date: 'June 19, 2024',
     author: 'Kevin Brown',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Kevin',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Automate PDF form filling and data extraction using advanced tools and integration methods for streamlined business processes.',
     content: `## Automated PDF Form Processing
 
@@ -1404,8 +1395,7 @@ Effective form automation requires standardized form templates, robust data vali
     image: '/blog/collaboration.png',
     date: 'June 18, 2024',
     author: 'Michelle Garcia',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Michelle',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Implement collaborative PDF review processes that streamline team feedback, comments, and approval workflows.',
     content: `## Collaborative PDF Workflows
 
@@ -1459,8 +1449,7 @@ Typical collaboration challenges include managing multiple reviewers with confli
     image: '/blog/business-docs.png',
     date: 'June 17, 2024',
     author: 'William Smith',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=William',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Master creation of professional business PDFs including proposals, reports, and contracts.',
     content: `## Creating Professional Business Documents in PDF
 
@@ -1512,8 +1501,7 @@ Avoid these common errors: using too many fonts (limit to 2), inconsistent brand
     image: '/blog/accessibility.png',
     date: 'June 16, 2024',
     author: 'Nicole Johnson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Nicole',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Create accessible PDFs compliant with WCAG, ADA, and accessibility standards.',
     content: `## PDF Accessibility Standards
 
@@ -1561,8 +1549,7 @@ Failure to provide accessible documents can result in lawsuits, regulatory fines
     image: '/blog/signatures.png',
     date: 'June 15, 2024',
     author: 'Thomas Anderson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Thomas',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Understand digital signatures, legal requirements, and secure implementation.',
     content: `## Digital Signatures and Electronic Signatures
 
@@ -1618,8 +1605,7 @@ Organizations implementing digital signatures report 70% faster contract turnaro
     image: '/blog/invoices.png',
     date: 'June 14, 2024',
     author: 'Jennifer White',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jennifer',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Master automated invoice processing to extract data and streamline accounts payable workflows.',
     content: `## Automated Invoice Processing
 
@@ -1683,8 +1669,7 @@ Effective automation requires standardizing invoice formats with vendors, implem
     image: '/blog/compliance.png',
     date: 'June 13, 2024',
     author: 'David Harris',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=David',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Navigate regulatory requirements for e-reporting and PDF compliance.',
     content: `## E-Reporting and Compliance
 
@@ -1732,8 +1717,7 @@ Maintaining compliance requires staying updated on regulatory changes, regular c
     image: '/blog/security.png',
     date: 'June 12, 2024',
     author: 'Rachel Martinez',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rachel',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Implement Data Loss Prevention strategies for protecting sensitive PDFs.',
     content: `## Data Loss Prevention for PDFs
 
@@ -1781,8 +1765,7 @@ Typical implementation challenges include data classification complexity, balanc
     image: '/blog/mobile.png',
     date: 'June 11, 2024',
     author: 'Alex Thompson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Optimize PDFs for mobile devices with improved layouts and performance.',
     content: `## Mobile PDF Optimization
 
@@ -1830,8 +1813,7 @@ Measuring mobile success includes tracking page load times, monitoring engagemen
     image: '/blog/redaction.png',
     date: 'June 10, 2024',
     author: 'Catherine Lee',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Catherine',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Master advanced redaction techniques for permanently removing sensitive data.',
     content: `## Advanced PDF Redaction Techniques
 
@@ -1879,8 +1861,7 @@ Poor redaction results in exposure of confidential information, legal liability,
     image: '/blog/workflow.png',
     date: 'June 9, 2024',
     author: 'Michael Scott',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Michael',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Integrate PDFs into comprehensive business workflow systems.',
     content: `## PDF Workflow Management Systems
 
@@ -1928,8 +1909,7 @@ Workflow automation delivers significant returns: time savings, error reduction,
     image: '/blog/future.png',
     date: 'June 8, 2024',
     author: 'Samuel Wilson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Samuel',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Explore emerging PDF technologies and trends in document management.',
     content: `## Future of PDF Technology
 
@@ -1977,8 +1957,7 @@ The future of PDF technology holds enhanced intelligence, security, integration 
     image: '/blog/splitting.png',
     date: 'June 7, 2024',
     author: 'Victoria Adams',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Victoria',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Learn PDF splitting techniques to divide large documents into manageable files.',
     content: `## PDF Splitting and Organizing
 
@@ -2026,8 +2005,7 @@ Verification procedures include confirming complete splitting, verifying page ac
     image: '/blog/compare.png',
     date: 'June 6, 2024',
     author: 'Christopher Brown',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Christopher',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Master PDF comparison tools to identify differences between versions.',
     content: `## Comparing and Analyzing PDFs
 
@@ -2075,8 +2053,7 @@ Typical challenges include handling large document sets, managing many compariso
     image: '/blog/forms.png',
     date: 'June 5, 2024',
     author: 'Laura Martin',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Laura',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Create interactive fillable PDF forms for streamlined data collection.',
     content: `## Creating and Distributing Fillable PDF Forms
 
@@ -2124,8 +2101,7 @@ Organizations report 75% data entry time reduction, 90% error reduction, improve
     image: '/blog/search.png',
     date: 'June 4, 2024',
     author: 'Daniel Garcia',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Daniel',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Implement advanced search and indexing for fully searchable PDF libraries.',
     content: `## Advanced PDF Search and Indexing
 
@@ -2173,8 +2149,7 @@ Successful implementation requires planning search strategy, selecting appropria
     image: '/blog/audit.png',
     date: 'June 3, 2024',
     author: 'Margaret Johnson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Margaret',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Establish PDF compliance frameworks with comprehensive audit trails.',
     content: `## PDF Compliance and Audit Trails
 
@@ -2226,8 +2201,7 @@ Generate compliance documentation, incident reports, management summaries, audit
     image: '/blog/extract.png',
     date: 'June 2, 2024',
     author: 'Andrew Wilson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Andrew',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Master table and data extraction from PDFs for efficient processing.',
     content: `## Extracting Tables and Data from PDFs
 
@@ -2279,8 +2253,7 @@ Organizations report 80% time savings, 95%+ accuracy, reduced errors, faster ana
     image: '/blog/print.png',
     date: 'June 1, 2024',
     author: 'Susan Lee',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Susan',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Optimize PDFs for professional printing with high-quality results.',
     content: `## PDF Print Optimization
 
@@ -2336,8 +2309,7 @@ Organizations achieving proper print optimization report professional appearance
     image: '/blog/multimedia.png',
     date: 'May 31, 2024',
     author: 'James Mitchell',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Create engaging PDFs with multimedia and interactive elements.',
     content: `## Adding Multimedia and Interactive Elements to PDFs
 
@@ -2393,8 +2365,7 @@ Track engagement metrics, user interaction data, completion rates, conversion re
     image: '/blog/version.png',
     date: 'May 30, 2024',
     author: 'Patricia Lewis',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Patricia',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Implement effective version management to track document evolution.',
     content: `## PDF Version Management and Control
 
@@ -2446,8 +2417,7 @@ Successful implementation requires selecting appropriate tools, establishing nam
     image: '/blog/cloud.png',
     date: 'May 29, 2024',
     author: 'Robert Taylor',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Robert',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Leverage cloud storage for secure and accessible PDF management.',
     content: `## Cloud-Based PDF Storage and Management
 
@@ -2503,8 +2473,7 @@ Organizations realize 40% operational cost reduction, improved accessibility, 99
     image: '/blog/training.png',
     date: 'May 28, 2024',
     author: 'Jennifer Adams',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jennifer',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Design effective training materials and documentation in PDF.',
     content: `## Creating Professional Training Materials in PDF
 
@@ -2560,8 +2529,7 @@ Organizations report 50% faster training, 40% improved retention, better consist
     image: '/blog/marketing.png',
     date: 'May 27, 2024',
     author: 'Michael Brown',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Michael',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Create compelling marketing materials in PDF format.',
     content: `## Designing Marketing Materials in PDF
 
@@ -2621,8 +2589,7 @@ Effective marketing PDFs focus on customer benefits, maintain professional appea
     image: '/blog/stamp.png',
     date: 'May 26, 2024',
     author: 'Kevin Martinez',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Kevin',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Add stamps and watermarks to PDFs for tracking, identification, and document control.',
     content: `## Document Stamping and Watermarking
 
@@ -2678,8 +2645,7 @@ Organizations report reduced unauthorized sharing, improved document control, be
     image: '/blog/conversion.png',
     date: 'May 25, 2024',
     author: 'Sarah Chen',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Convert multiple documents to PDF format simultaneously using batch processing.',
     content: `## Batch Document Conversion
 
@@ -2735,8 +2701,7 @@ Effective batch conversion requires thorough testing, clear configuration docume
     image: '/blog/validation.png',
     date: 'May 24, 2024',
     author: 'David Wilson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=David',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Implement comprehensive form validation and error handling in PDF forms.',
     content: `## PDF Form Validation and Error Handling
 
@@ -2792,8 +2757,7 @@ Organizations implementing comprehensive validation report 70-80% reduction in d
     image: '/blog/security.png',
     date: 'May 23, 2024',
     author: 'Maria Garcia',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Maria',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Implement comprehensive PDF security combining encryption, signatures, and protection.',
     content: `## Advanced Document Security Combining Multiple Protections
 
@@ -2849,8 +2813,7 @@ Organizations report significant risk reduction, improved compliance, prevention
     image: '/blog/large-files.png',
     date: 'May 22, 2024',
     author: 'Thomas Lee',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Thomas',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Handle and process large PDF documents efficiently without performance degradation.',
     content: `## Handling Large PDF Documents
 
@@ -2906,8 +2869,7 @@ Proper optimization enables smooth handling of large documents, improved user ex
     image: '/blog/analytics.png',
     date: 'May 21, 2024',
     author: 'Jennifer Taylor',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jennifer',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Track PDF usage and performance metrics for data-driven document management.',
     content: `## PDF Document Analytics and Performance Metrics
 
@@ -2967,8 +2929,7 @@ Organizations report improved document effectiveness, optimized content, better 
     image: '/blog/mobile-app.png',
     date: 'May 20, 2024',
     author: 'Richard Kim',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Richard',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Integrate PDFs into mobile applications with optimal viewing and interaction.',
     content: `## Integrating PDFs into Mobile Applications
 
@@ -3024,8 +2985,7 @@ Proper mobile integration enables seamless PDF experience, improved user satisfa
     image: '/blog/api.png',
     date: 'May 19, 2024',
     author: 'Michael Chang',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Michael',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Use PDF APIs for programmatic document creation, modification, and control.',
     content: `## PDF APIs and Programmatic Integration
 
@@ -3081,8 +3041,7 @@ API integration enables automation of document processes, reduced manual work, i
     image: '/blog/preservation.png',
     date: 'May 18, 2024',
     author: 'Lisa Anderson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Lisa',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Implement PDF document preservation strategies for long-term archival.',
     content: `## PDF Document Preservation and Long-Term Archival
 
@@ -3142,8 +3101,7 @@ Proper preservation ensures documents remain accessible decades later, maintains
     image: '/blog/ocr-advanced.png',
     date: 'May 17, 2024',
     author: 'Christopher Moore',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Christopher',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Master advanced OCR techniques to improve recognition accuracy on scanned documents.',
     content: `## Advanced OCR Techniques for Improved Recognition
 
@@ -3199,8 +3157,7 @@ Advanced techniques achieve 99%+ accuracy, handle complex documents, recognize h
     image: '/blog/financial.png',
     date: 'May 16, 2024',
     author: 'Victoria Ross',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Victoria',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Manage financial PDFs with proper compliance, security, and retention.',
     content: `## Financial PDF Compliance and Document Management
 
@@ -3256,8 +3213,7 @@ Proper compliance prevents fines, demonstrates regulatory compliance, protects o
     image: '/blog/healthcare.png',
     date: 'May 15, 2024',
     author: 'Amanda White',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Amanda',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Implement HIPAA-compliant healthcare PDF management and patient privacy protection.',
     content: `## Healthcare PDF Compliance: HIPAA-Compliant Document Management
 
@@ -3313,8 +3269,7 @@ Proper HIPAA compliance protects patient privacy, prevents fines, demonstrates r
     image: '/blog/legal.png',
     date: 'May 14, 2024',
     author: 'James Turner',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Manage legal documents and contracts with proper security, signatures, and compliance.',
     content: `## Legal PDF Management and Document Security
 
@@ -3374,8 +3329,7 @@ Proper legal management protects organizations, supports litigation, enables dis
     image: '/blog/government.png',
     date: 'May 13, 2024',
     author: 'Margaret Davis',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Margaret',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Manage government records and public documents with proper compliance.',
     content: `## Government Records Management
 
@@ -3431,8 +3385,7 @@ Proper records management ensures compliance, enables transparency, protects sen
     image: '/blog/enterprise.png',
     date: 'May 12, 2024',
     author: 'Peter Johnson',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Peter',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Implement comprehensive enterprise document governance for large organizations.',
     content: `## Enterprise Document Governance Framework
 
@@ -3492,8 +3445,7 @@ Proper governance enables organizational consistency, ensures compliance, improv
     image: '/blog/adaptation.png',
     date: 'May 11, 2024',
     author: 'Rachel Green',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rachel',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Adapt PDF content for different audiences improving relevance and engagement.',
     content: `## PDF Content Adaptation for Different Audiences
 
@@ -3549,8 +3501,7 @@ Content adaptation increases engagement by 40-60%, improves relevance, increases
     image: '/blog/real-time.png',
     date: 'May 10, 2024',
     author: 'Steven Mark',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Steven',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Enable real-time collaboration with live PDF editing and instant feedback.',
     content: `## Real-Time PDF Collaboration and Live Editing
 
@@ -3606,8 +3557,7 @@ Real-time collaboration accelerates completion by 40-50%, improves team coordina
     image: '/blog/knowledge.png',
     date: 'May 9, 2024',
     author: 'Jessica Powell',
-    authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jessica',
-    readTime: '12 min read',
+    readTime: 15,
     excerpt: 'Build comprehensive knowledge management systems leveraging PDFs.',
     content: `## PDF-Based Knowledge Management Systems
 
@@ -3654,6 +3604,3 @@ Connecting with systems includes integration with help systems, training systems
 Organizations report 30-40% productivity improvement, reduced rework, faster decision-making, improved consistency, and better new employee onboarding.`,
   },
 ];
-
-export type { BlogPost };
-export { comprehensive50Posts };

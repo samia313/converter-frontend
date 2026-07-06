@@ -5,7 +5,9 @@ export const metadata: Metadata = {
   title: 'PDF to Word Converter - Free Online | PDFilio',
   description: 'Convert PDF to Word documents instantly. Free, fast, and secure PDF to Word conversion online. No sign-up required.',
   keywords: 'PDF to Word, Convert PDF to Word, PDF to DOC, PDF to DOCX, free PDF converter',
-  canonical: 'https://pdfilio.com/pdf-to-word',
+  alternates: {
+    canonical: 'https://pdfilio.com/pdf-to-word',
+  },
   openGraph: {
     title: 'PDF to Word Converter - Free Online | PDFilio',
     description: 'Convert PDF to Word documents instantly without losing formatting.',
