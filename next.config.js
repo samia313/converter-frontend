@@ -85,36 +85,8 @@ const nextConfig = {
     };
   },
 
-  // 6. Webpack optimization
-  webpack: (config, { isServer }) => {
-    config.optimization = {
-      ...config.optimization,
-      minimize: true,
-      runtimeChunk: 'single',
-      splitChunks: {
-        chunks: 'all',
-        cacheGroups: {
-          default: false,
-          vendors: false,
-          // Vendor code splitting
-          vendor: {
-            filename: 'chunks/vendor.[hash].js',
-            test: /node_modules/,
-            priority: 10,
-            reuseExistingChunk: true,
-          },
-          // Common code splitting
-          common: {
-            filename: 'chunks/common.[hash].js',
-            minChunks: 2,
-            priority: 5,
-            reuseExistingChunk: true,
-          },
-        },
-      },
-    };
-    return config;
-  },
+  // 6. Turbopack (Next.js 16 default) - empty config to use defaults
+  turbopack: {},
 
   // 7. Experimental features for better performance
   experimental: {
