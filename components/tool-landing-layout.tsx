@@ -13,6 +13,12 @@ interface ToolLandingLayoutProps {
   relatedTools: Array<{ name: string; slug: string }>;
   primaryKeyword: string;
   secondaryKeywords: string[];
+  heroImage?: string;
+  useCase?: string;
+  mainContent?: string;
+  howitworks?: string;
+  testimonials?: Array<{ name: string; text: string; role?: string }>;
+  schema?: Record<string, any>;
 }
 
 export default function ToolLandingLayout({
@@ -25,6 +31,12 @@ export default function ToolLandingLayout({
   relatedTools,
   primaryKeyword,
   secondaryKeywords,
+  heroImage,
+  useCase,
+  mainContent,
+  howitworks,
+  testimonials,
+  schema,
 }: ToolLandingLayoutProps) {
   return (
     <div className="min-h-screen bg-white">
@@ -32,19 +44,45 @@ export default function ToolLandingLayout({
       
       {/* Hero Section */}
       <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl sm:text-6xl font-black text-white mb-6">
-            {toolName}
-          </h1>
-          <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-            {description}
-          </p>
-          <button className="px-8 py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold transition-all duration-200 inline-flex items-center gap-2">
-            Use {toolName} Now
-            <ChevronRight className="w-5 h-5" />
-          </button>
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <h1 className="text-5xl sm:text-6xl font-black text-white mb-6">
+                {toolName}
+              </h1>
+              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+                {description}
+              </p>
+              <button className="px-8 py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold transition-all duration-200 inline-flex items-center gap-2">
+                Use {toolName} Now
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+            {heroImage && (
+              <div className="hidden lg:block">
+                <img 
+                  src={heroImage} 
+                  alt={toolName}
+                  className="rounded-lg shadow-2xl"
+                />
+              </div>
+            )}
+          </div>
         </div>
       </section>
+
+      {/* Main Content Section */}
+      {mainContent && (
+        <section className="py-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+              {mainContent.split('\n').map((paragraph, i) => (
+                <p key={i} className="mb-4">{paragraph}</p>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Features Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
@@ -85,6 +123,49 @@ export default function ToolLandingLayout({
           </div>
         </div>
       </section>
+
+      {/* Use Cases Section */}
+      {useCase && (
+        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-50 border-l-4 border-blue-600">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-black text-gray-900 mb-6">Use Cases</h2>
+            <div className="prose prose-lg max-w-none text-gray-700">
+              {useCase.split('\n').map((line, i) => (
+                <p key={i} className="mb-3">{line}</p>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Testimonials Section */}
+      {testimonials && testimonials.length > 0 && (
+        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-4xl font-black text-gray-900 mb-12 text-center">
+              What Users Say
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {testimonials.map((testimonial, i) => (
+                <div key={i} className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(5)].map((_, star) => (
+                      <Star key={star} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-gray-600 mb-4 italic">"{testimonial.text}"</p>
+                  <div>
+                    <p className="font-bold text-gray-900">{testimonial.name}</p>
+                    {testimonial.role && (
+                      <p className="text-sm text-gray-500">{testimonial.role}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* How to Use Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
@@ -187,23 +268,33 @@ export default function ToolLandingLayout({
       </section>
 
       {/* Schema Markup for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'SoftwareApplication',
-            name: toolName,
-            description: description,
-            applicationCategory: 'Utility',
-            offers: {
-              '@type': 'Offer',
-              price: '0',
-              priceCurrency: 'USD',
-            },
-          }),
-        }}
-      />
+      {schema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema),
+          }}
+        />
+      )}
+      {!schema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'SoftwareApplication',
+              name: toolName,
+              description: description,
+              applicationCategory: 'Utility',
+              offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'USD',
+              },
+            }),
+          }}
+        />
+      )}
     </div>
   );
 }
