@@ -108,10 +108,9 @@ export default function Navbar({ onSelectTool, onNavigateBlog }: NavbarProps) {
                         className="w-full text-left px-5 py-3 hover:bg-gray-50 transition-colors duration-150 flex items-start gap-3 group/item"
                       >
                         <div 
-                          className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
-                          style={{ backgroundColor: tool.bgColor }}
+                          className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 bg-gray-100"
                         >
-                          <Icon className="w-5 h-5" style={{ color: tool.color }} />
+                          <Icon className="w-5 h-5 text-gray-700" />
                         </div>
                         <div className="text-left">
                           <h4 className="font-semibold text-gray-900 text-sm">{tool.label}</h4>
@@ -155,7 +154,7 @@ export default function Navbar({ onSelectTool, onNavigateBlog }: NavbarProps) {
             <button className="px-4 py-2 text-gray-700 hover:text-gray-900 font-semibold transition-colors text-sm">
               Sign In
             </button>
-            <button className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 font-bold transition-all duration-200 shadow-sm hover:shadow-md text-sm">
+            <button className="px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 font-semibold transition-all duration-200 shadow-sm hover:shadow-md text-sm">
               Get Premium
             </button>
           </div>
