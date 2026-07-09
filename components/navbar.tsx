@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { FileText, ChevronDown, Moon, Combine, Scissors, RotateCw, Trash2, Layout, Zap, FileUp, Grid3X3, BookOpen, Mail, Lock } from 'lucide-react';
 import { useState } from 'react';
 
@@ -68,15 +69,15 @@ export default function Navbar({ onSelectTool, onNavigateBlog }: NavbarProps) {
       <div className="max-w-full mx-auto px-8 py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <button 
-            onClick={() => window.location.href = '/'}
+          <Link 
+            href="/"
             className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0"
           >
             <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center shadow-sm">
               <FileText className="w-5 h-5 text-white font-bold" />
             </div>
             <span className="text-xl font-bold text-gray-900">PDFilio</span>
-          </button>
+          </Link>
 
           {/* Menu Items */}
           <div className="flex items-center gap-1">
