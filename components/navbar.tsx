@@ -87,7 +87,7 @@ export default function Navbar({ onSelectTool, onNavigateBlog }: NavbarProps) {
                 onMouseEnter={() => setOpenMenu(key)}
                 onMouseLeave={() => setOpenMenu(null)}
               >
-                <button className="flex items-center gap-1 px-3 py-2 text-gray-700 hover:text-gray-900 font-semibold transition-colors text-sm whitespace-nowrap">
+                <button style={{backgroundColor: 'transparent', color: '#374151'}} className="flex items-center gap-1 px-3 py-2 text-gray-700 hover:text-gray-900 font-semibold transition-colors text-sm whitespace-nowrap hover:bg-gray-100 rounded">
                   {category.label}
                   <ChevronDown className="w-4 h-4" />
                 </button>
