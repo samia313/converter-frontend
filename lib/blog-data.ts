@@ -14,9 +14,8 @@ export interface BlogPost {
 
 // Import comprehensive 50 blog posts with 1500-2000 words each
 import { comprehensive50Posts } from './blog-50-comprehensive';
-import { aiFeatureBlogPosts } from './blog-ai-features';
 
-export const blogPosts: BlogPost[] = [...comprehensive50Posts, ...aiFeatureBlogPosts];
+export const blogPosts: BlogPost[] = comprehensive50Posts;
 
 export const legacyBlogPosts: BlogPost[] = [
   {

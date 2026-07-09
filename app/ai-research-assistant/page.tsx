@@ -1,4 +1,4 @@
-import { ToolLandingLayout } from '@/components/tool-landing-layout';
+import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
