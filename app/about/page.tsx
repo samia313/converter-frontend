@@ -141,6 +141,41 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* Featured Tools Section */}
+        <section className="bg-gray-50 px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
+              Our Most Popular Tools
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Link
+                href="/compress-pdf"
+                className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-lg hover:border-red-300 transition-all group"
+              >
+                <h3 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-red-600">Compress PDF</h3>
+                <p className="text-sm text-gray-600 mb-4">Reduce file size instantly without quality loss.</p>
+                <span className="text-red-600 text-sm font-semibold flex items-center gap-1">Learn more <ArrowRight className="w-4 h-4" /></span>
+              </Link>
+              <Link
+                href="/merge-pdf"
+                className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-lg hover:border-red-300 transition-all group"
+              >
+                <h3 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-red-600">Merge PDF</h3>
+                <p className="text-sm text-gray-600 mb-4">Combine multiple PDFs into one document.</p>
+                <span className="text-red-600 text-sm font-semibold flex items-center gap-1">Learn more <ArrowRight className="w-4 h-4" /></span>
+              </Link>
+              <Link
+                href="/pdf-to-word"
+                className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-lg hover:border-red-300 transition-all group"
+              >
+                <h3 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-red-600">PDF to Word</h3>
+                <p className="text-sm text-gray-600 mb-4">Convert PDFs to editable Word files.</p>
+                <span className="text-red-600 text-sm font-semibold flex items-center gap-1">Learn more <ArrowRight className="w-4 h-4" /></span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Contact CTA */}
         <section className="px-4 sm:px-6 lg:px-8 py-20 max-w-7xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">

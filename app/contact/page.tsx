@@ -231,6 +231,41 @@ export default function ContactPage() {
             <p className="text-red-600 font-semibold">Live Chat Widget Coming Soon</p>
           </div>
         </section>
+
+        {/* Featured Tools Section */}
+        <section className="bg-gray-50 px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
+              Our PDF Tools
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Link
+                href="/compress-pdf"
+                className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-lg hover:border-red-300 transition-all group"
+              >
+                <h3 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-red-600">Compress PDF</h3>
+                <p className="text-sm text-gray-600 mb-4">Reduce file size instantly without quality loss.</p>
+                <span className="text-red-600 text-sm font-semibold flex items-center gap-1">Try it <Mail className="w-3 h-3" /></span>
+              </Link>
+              <Link
+                href="/merge-pdf"
+                className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-lg hover:border-red-300 transition-all group"
+              >
+                <h3 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-red-600">Merge PDF</h3>
+                <p className="text-sm text-gray-600 mb-4">Combine multiple PDFs into one document.</p>
+                <span className="text-red-600 text-sm font-semibold flex items-center gap-1">Try it <Mail className="w-3 h-3" /></span>
+              </Link>
+              <Link
+                href="/word-to-pdf"
+                className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-lg hover:border-red-300 transition-all group"
+              >
+                <h3 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-red-600">Word to PDF</h3>
+                <p className="text-sm text-gray-600 mb-4">Convert Word documents to PDF format.</p>
+                <span className="text-red-600 text-sm font-semibold flex items-center gap-1">Try it <Mail className="w-3 h-3" /></span>
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );
