@@ -87,7 +87,7 @@ export default function Navbar({ onSelectTool, onNavigateBlog }: NavbarProps) {
                 onMouseEnter={() => setOpenMenu(key)}
                 onMouseLeave={() => setOpenMenu(null)}
               >
-                <button className="flex items-center gap-1 px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm whitespace-nowrap">
+                <button className="flex items-center gap-1 px-3 py-2 text-gray-700 hover:text-gray-900 font-semibold transition-colors text-sm whitespace-nowrap">
                   {category.label}
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -126,23 +126,23 @@ export default function Navbar({ onSelectTool, onNavigateBlog }: NavbarProps) {
 
             <button 
               onClick={onNavigateBlog}
-              className="px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm"
+              className="px-3 py-2 text-gray-700 hover:text-gray-900 font-semibold transition-colors text-sm"
             >
               Blog
             </button>
-            <a href="/pricing" className="px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm">
+            <a href="/pricing" className="px-3 py-2 text-gray-700 hover:text-gray-900 font-semibold transition-colors text-sm">
               Pricing
             </a>
-            <a href="/about" className="px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm">
+            <a href="/about" className="px-3 py-2 text-gray-700 hover:text-gray-900 font-semibold transition-colors text-sm">
               About
             </a>
-            <a href="/security" className="px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm">
+            <a href="/security" className="px-3 py-2 text-gray-700 hover:text-gray-900 font-semibold transition-colors text-sm">
               Security
             </a>
-            <a href="/contact" className="px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm">
+            <a href="/contact" className="px-3 py-2 text-gray-700 hover:text-gray-900 font-semibold transition-colors text-sm">
               Support
             </a>
-            <a href="/developers" className="px-3 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm">
+            <a href="/developers" className="px-3 py-2 text-gray-700 hover:text-gray-900 font-semibold transition-colors text-sm">
               API
             </a>
           </div>
@@ -152,7 +152,7 @@ export default function Navbar({ onSelectTool, onNavigateBlog }: NavbarProps) {
             <button className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors">
               <Moon className="w-5 h-5" />
             </button>
-            <button className="px-4 py-2 text-gray-700 hover:text-red-600 font-bold transition-colors text-sm">
+            <button className="px-4 py-2 text-gray-700 hover:text-gray-900 font-semibold transition-colors text-sm">
               Sign In
             </button>
             <button className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 font-bold transition-all duration-200 shadow-sm hover:shadow-md text-sm">
