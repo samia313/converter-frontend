@@ -26,7 +26,7 @@ export default function AIPDFSummaryPage() {
       heroImage="/tool-images/ai-pdf-summary-hero.png"
       mainContent={`AI PDF Summary uses advanced artificial intelligence to automatically generate concise, accurate summaries of your documents. Instead of reading entire documents, get the essential information in seconds.
 
-Our AI algorithm analyzes document structure, identifies key concepts, and extracts the most important information. Whether it's a 50-page report or a dense research paper, get a clear summary instantly.
+Our AI algorithm analyzes document structure, identifies key concepts, and extracts the most important information. Whether it&apos;s a 50-page report or a dense research paper, get a clear summary instantly.
 
 Upload any PDF and get an intelligent summary automatically. The AI preserves all critical information while removing redundancy. Perfect for busy professionals who need quick insights without spending hours reading.`}
       useCase={`Summarizing lengthy research papers

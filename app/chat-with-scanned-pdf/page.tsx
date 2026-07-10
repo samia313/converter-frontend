@@ -40,7 +40,7 @@ Works with:
 - Low-quality scans
 - Any document format
 
-Perfect for archival documents, handwritten notes, old papers, and image-based PDFs that traditional tools can't handle.`}
+Perfect for archival documents, handwritten notes, old papers, and image-based PDFs that traditional tools can&apos;t handle.`}
       useCase={[
         'Extract info from scanned books',
         'Chat with handwritten notes',

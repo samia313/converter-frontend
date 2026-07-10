@@ -44,7 +44,7 @@ Scientific papers and journals`}
         {
           name: 'Emma Johnson',
           role: 'Global Marketing Manager',
-          text: 'Translation quality maintains our brand voice perfectly. We've expanded to 15 new markets using this tool. Cost savings are enormous.',
+          text: 'Translation quality maintains our brand voice perfectly. We&apos;ve expanded to 15 new markets using this tool. Cost savings are enormous.',
         },
       ]}
       features={[

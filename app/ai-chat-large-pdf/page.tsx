@@ -29,7 +29,7 @@ Process Large Files Instantly:
 Large files that used to require special handling? Now process and chat instantly like any other PDF.
 
 Handle Everything:
-Annual reports, comprehensive manuals, complete books, doctoral theses - if it's a PDF, you can chat with it.`}
+Annual reports, comprehensive manuals, complete books, doctoral theses - if it&apos;s a PDF, you can chat with it.`}
       features={[
         'Unlimited file size',
         'Multi-page support',

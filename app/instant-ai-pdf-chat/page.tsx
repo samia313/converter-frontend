@@ -13,7 +13,7 @@ export default function Page() {
       toolName="Instant AI PDF Chat"
       toolSlug="instant-ai-pdf-chat"
       description="Lightning-fast PDF chat with instant responses. No waiting, no delays, immediate answers."
-      mainContent={`Speed optimized. Most responses in under 3 seconds. Built for users who can't wait.
+      mainContent={`Speed optimized. Most responses in under 3 seconds. Built for users who can&apos;t wait.
 
 Lightning Performance:
 - Sub-3-second responses

@@ -29,7 +29,7 @@ Process Large Files Instantly:
 Large documents that used to require special handling? Now translate and process instantly.
 
 Handle Everything:
-Annual reports, comprehensive manuals, complete books, long documents—if it's a PDF, you can translate it.`}
+Annual reports, comprehensive manuals, complete books, long documents—if it&apos;s a PDF, you can translate it.`}
       features={[
         'Unlimited file size',
         'Multi-page support',

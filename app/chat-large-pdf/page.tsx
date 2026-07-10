@@ -17,7 +17,7 @@ export default function ChatLargePDFPage() {
     <ToolLandingLayout
       toolName="Chat with Large PDF Files"
       toolSlug="chat-large-pdf"
-      description="Upload massive PDF files and chat with AI without limits. Whether it's a 500-page manual or a 2000-page document, instant answers from any part of your large files."
+      description="Upload massive PDF files and chat with AI without limits. Whether it&apos;s a 500-page manual or a 2000-page document, instant answers from any part of your large files."
       heroImage="/tool-images/large-pdf-hero.png"
       mainContent={`Large PDFs shouldn't mean large problems. Chat with Large PDF Files handles massive documents effortlessly.
 

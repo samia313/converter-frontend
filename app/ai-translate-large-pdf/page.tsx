@@ -18,7 +18,7 @@ Unlimited Support:
 Process large files instantly. No fragmentation. No page limits. Complete document access. All pages translated.
 
 Handle Everything:
-Annual reports, comprehensive manuals, complete books—if it's a PDF, you can translate it.`}
+Annual reports, comprehensive manuals, complete books—if it&apos;s a PDF, you can translate it.`}
       useCase={[
         'Large report translation',
         'Multi-volume document translation',

@@ -40,7 +40,7 @@ Unlimited usage: Chat with unlimited PDFs, ask unlimited questions, analyze as m
 
 No registration required. Start chatting immediately without creating an account, providing credit card details, or subscribing to anything. Just upload and start asking questions.
 
-Free doesn't mean limited features. Our AI is powerful, accurate, and reliable. Get enterprise-grade document analysis without enterprise-grade pricing.`}
+Free doesn&apos;t mean limited features. Our AI is powerful, accurate, and reliable. Get enterprise-grade document analysis without enterprise-grade pricing.`}
       useCase={`Perfect for students on tight budgets
 Free document analysis for researchers
 Help organizations reduce software costs

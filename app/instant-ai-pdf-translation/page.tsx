@@ -12,22 +12,21 @@ export default function Page() {
       toolName="Instant AI PDF Translation"
       toolSlug="instant-ai-pdf-translation"
       description="Lightning-fast PDF translation. Get professional translations in seconds, not hours."
-      mainContent={`Speed optimized. Most translations complete in under 10 seconds. Built for users who can't wait.
+      mainContent={`Speed optimized. Most translations complete in under 10 seconds. Built for users who can&apos;t wait.
 
 Lightning Performance:
 Optimized infrastructure. Fast processing. No delays. Instant results. Rapid processing without quality compromise.
 
 For Busy Professionals:
 Time is money. Instant translation means faster workflow and quicker decision-making.`}
-      useCase={{
-        'Time-sensitive work': 'Urgent translation needs',
-        'Busy professionals': 'Quick translation needs',
-        'Fast decisions': 'Time-critical translation',
-        'Urgent needs': 'Quick turnaround required',
-        'Speed preference': 'Performance priority',
-        'Fast-paced work': 'Speed-focused environment',
-        'Rapid deployment': 'Quick market entry',
-        'Quick turnaround': 'Time-efficient translation',
+      useCase={`Time-sensitive work
+Busy professionals
+Fast decisions
+Urgent needs
+Speed preference
+Fast-paced work
+Rapid deployment
+Quick turnaround`}
       }}
       testimonials={[
         {

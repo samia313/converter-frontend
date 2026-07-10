@@ -37,7 +37,7 @@ export default function AIPDFChatPage() {
       toolSlug="ai-pdf-chat"
       description="Meet your intelligent PDF assistant powered by cutting-edge AI technology. Understand documents better with advanced machine learning that comprehends context, nuance, and complex information."
       heroImage="/tool-images/ai-assistant-hero.png"
-      mainContent={`The AI PDF Chat Assistant represents the next generation of document analysis. Built on state-of-the-art machine learning models, it doesn't just search PDFs - it truly understands them.
+      mainContent={`The AI PDF Chat Assistant represents the next generation of document analysis. Built on state-of-the-art machine learning models, it doesn&apos;t just search PDFs - it truly understands them.
 
 Our AI technology:
 - Comprehends complex document structures and hierarchies
@@ -50,7 +50,7 @@ Unlike simple search tools, our AI assistant engages in real conversations. It u
 
 The technology powering AI PDF Chat Assistant has been trained on billions of documents, enabling it to understand virtually any type of document - from technical specifications to legal contracts, from research papers to business reports.
 
-Every answer is grounded in your actual document content. The AI doesn't hallucinate or make up information - it extracts and synthesizes knowledge directly from your PDF.`}
+Every answer is grounded in your actual document content. The AI doesn&apos;t hallucinate or make up information - it extracts and synthesizes knowledge directly from your PDF.`}
       useCase={`Analyze complex technical documentation with AI understanding
 Understand legal contracts through intelligent AI interpretation
 Extract insights from research papers automatically

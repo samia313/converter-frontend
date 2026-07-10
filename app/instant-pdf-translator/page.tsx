@@ -13,7 +13,7 @@ export default function Page() {
       toolName="Instant PDF Translator"
       toolSlug="instant-pdf-translator"
       description="Lightning-fast PDF translation. Get professional translations in seconds, not hours."
-      mainContent={`Speed optimized. Most translations complete in under 10 seconds. Built for users who can't wait.
+      mainContent={`Speed optimized. Most translations complete in under 10 seconds. Built for users who can&apos;t wait.
 
 Lightning Performance:
 - Sub-10-second translations
