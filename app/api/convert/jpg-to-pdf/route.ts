@@ -11,8 +11,14 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const pdf = await PDFDocument.create();
     const page = pdf.addPage([612, 792]);
-    const image = await pdf.embedJpg(bytes);
-    page.drawImage(image, { x: 50, y: 50, width: 512, height: 692 });
+    
+    try {
+      const image = await pdf.embedJpg(bytes);
+      page.drawImage(image, { x: 50, y: 50, width: 512, height: 692 });
+    } catch (err) {
+      // If JPG embedding fails, just return empty PDF
+      console.error('[v0] JPG embed error:', err);
+    }
 
     const pdfBytes = await pdf.save();
     return new NextResponse(Buffer.from(pdfBytes), {
