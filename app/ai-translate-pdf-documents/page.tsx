@@ -15,20 +15,18 @@ export default function Page() {
       mainContent={`One tool for all document types. PDF, Word, PowerPoint, images—any document format translates perfectly.
 
 Universal Compatibility:
-Don't worry about file formats. Upload whatever you have. Automatic format detection. Instant translation. Results maintain original formatting perfectly.
+Don&apos;t worry about file formats. Upload whatever you have. Automatic format detection. Instant translation. Results maintain original formatting perfectly.
 
 Simplified Workflow:
 No format conversion needed. No separate tools. Just upload and translate. Works with everything.`}
-      useCase={[
-        'Multi-format document translation',
-        'Mixed document collections',
-        'Workflow simplification',
-        'Document format flexibility',
-        'Cross-format projects',
-        'Unified translation solution',
-        'All document types',
-        'Format-agnostic translation',
-      ].join('\n')}
+      useCase={`Multi-format document translation
+Mixed document collections
+Workflow simplification
+Document format flexibility
+Cross-format projects
+Unified translation solution
+All document types
+Format-agnostic translation`}
       testimonials={[
         {
           name: 'Michelle Lee',
