@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
+import MergePDFTool from '@/components/tools/merge-pdf-tool';
 
 export const metadata: Metadata = {
   title: 'Merge PDF Files - Free Online | PDFilio',
@@ -11,26 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default function MergePDFPage() {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Merge PDF',
-    description: 'Combine multiple PDF files into a single document',
-    applicationCategory: 'Utility',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      ratingCount: '2800',
-    },
-  };
-
   return (
-    <ToolLandingLayout
+    <>
+      <MergePDFTool />
+      <ToolLandingLayout
       toolName="Merge PDF"
       toolSlug="merge-pdf"
       description="Combine multiple PDF files into a single document instantly. Reorder pages, organize documents, and merge with just a few clicks."
@@ -139,6 +124,7 @@ Unifying financial statements from multiple periods`}
       schema={schema}
       primaryKeyword="merge PDF"
       secondaryKeywords={['combine PDF', 'merge PDF online', 'join PDF files']}
-    />
+      />
+    </>
   );
 }

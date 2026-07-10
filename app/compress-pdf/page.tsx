@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
+import CompressPDFTool from '@/components/tools/compress-pdf-tool';
 
 export const metadata: Metadata = {
   title: 'Compress PDF Online - Reduce File Size Free | PDFilio',
@@ -11,26 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default function CompressPDFPage() {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Compress PDF',
-    description: 'Reduce PDF file size instantly without losing quality',
-    applicationCategory: 'Utility',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      ratingCount: '3200',
-    },
-  };
-
   return (
-    <ToolLandingLayout
+    <>
+      <CompressPDFTool />
+      <ToolLandingLayout
       toolName="Compress PDF"
       toolSlug="compress-pdf"
       description="Reduce PDF file size instantly without compromising quality. Compress large PDFs to email-friendly sizes in seconds. Completely free."
@@ -111,6 +96,7 @@ Improving website performance by reducing PDF sizes`}
       schema={schema}
       primaryKeyword="compress PDF"
       secondaryKeywords={['reduce PDF size', 'compress PDF online', 'shrink PDF']}
-    />
+      />
+    </>
   );
 }

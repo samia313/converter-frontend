@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
+import SplitPDFTool from '@/components/tools/split-pdf-tool';
 
 export const metadata: Metadata = {
   title: 'Split PDF - Divide PDFs into Separate Pages | PDFilio',
@@ -8,26 +9,10 @@ export const metadata: Metadata = {
 };
 
 export default function SplitPDFPage() {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Split PDF',
-    description: 'Split PDF files into individual pages or custom ranges',
-    applicationCategory: 'Utility',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      ratingCount: '1250',
-    },
-  };
-
   return (
-    <ToolLandingLayout
+    <>
+      <SplitPDFTool />
+      <ToolLandingLayout
       toolName="Split PDF"
       toolSlug="split-pdf"
       description="Divide your PDF files into individual pages or extract specific page ranges. Perfect for organizing documents, extracting sections, and managing large PDF files with precision."
@@ -139,6 +124,7 @@ Content creators organizing multi-file publications`}
       schema={schema}
       primaryKeyword="split PDF"
       secondaryKeywords={['divide PDF', 'extract PDF pages', 'PDF splitter', 'separate PDF pages']}
-    />
+      />
+    </>
   );
 }

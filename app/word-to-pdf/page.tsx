@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
+import WordToPDFTool from '@/components/tools/word-to-pdf-tool';
 
 export const metadata: Metadata = {
   title: 'Word to PDF Converter - Free Online | PDFilio',
@@ -11,26 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default function WordToPDFPage() {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Word to PDF Converter',
-    description: 'Convert Word documents to PDF format instantly',
-    applicationCategory: 'Utility',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      ratingCount: '3100',
-    },
-  };
-
   return (
-    <ToolLandingLayout
+    <>
+      <WordToPDFTool />
+      <ToolLandingLayout
       toolName="Word to PDF Converter"
       toolSlug="word-to-pdf"
       description="Convert Word documents (DOC, DOCX) to PDF format instantly. Maintain perfect formatting and styling. Secure and completely free."
@@ -139,6 +124,7 @@ Creating read-only document versions`}
       schema={schema}
       primaryKeyword="Word to PDF"
       secondaryKeywords={['convert Word to PDF', 'DOC to PDF', 'DOCX to PDF']}
-    />
+      />
+    </>
   );
 }
