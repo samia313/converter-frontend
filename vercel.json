@@ -2,46 +2,6 @@
   "buildCommand": "pnpm run build",
   "devCommand": "pnpm run dev",
   "installCommand": "pnpm install",
-  "git": {
-    "deploymentEnabled": {
-      "main": true
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/sitemap",
-      "destination": "/sitemap.xml"
-    },
-    {
-      "source": "/robots",
-      "destination": "/robots.txt"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/api/convert/:path*",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "POST, GET, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        }
-      ]
-    }
-  ],
   "functions": {
     "app/api/convert/**": {
       "maxDuration": 30
