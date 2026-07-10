@@ -43,9 +43,8 @@
     }
   ],
   "functions": {
-    "api/convert/**": {
-      "maxDuration": 30,
-      "memory": 1024
+    "app/api/convert/**": {
+      "maxDuration": 30
     }
   }
 }
