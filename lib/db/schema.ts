@@ -1,32 +1,38 @@
-import { pgTable, text, timestamp, boolean, integer, numeric } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, boolean, integer, uuid } from 'drizzle-orm/pg-core'
 
-// Better Auth tables
+// --- Better Auth required tables -------------------------------------------
+// Column names are camelCase to match Better Auth's defaults. Do not rename.
+
 export const user = pgTable('user', {
   id: text('id').primaryKey(),
-  email: text('email').unique(),
-  emailVerified: boolean('emailVerified'),
-  name: text('name'),
+  name: text('name').notNull(),
+  email: text('email').notNull().unique(),
+  emailVerified: boolean('emailVerified').notNull().default(false),
   image: text('image'),
-  createdAt: timestamp('createdAt'),
-  updatedAt: timestamp('updatedAt'),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt').notNull().defaultNow(),
 })
 
 export const session = pgTable('session', {
   id: text('id').primaryKey(),
-  expiresAt: timestamp('expiresAt'),
-  token: text('token').unique(),
-  createdAt: timestamp('createdAt'),
-  updatedAt: timestamp('updatedAt'),
+  expiresAt: timestamp('expiresAt').notNull(),
+  token: text('token').notNull().unique(),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt').notNull().defaultNow(),
   ipAddress: text('ipAddress'),
   userAgent: text('userAgent'),
-  userId: text('userId'),
+  userId: text('userId')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
 })
 
 export const account = pgTable('account', {
   id: text('id').primaryKey(),
-  accountId: text('accountId'),
-  providerId: text('providerId'),
-  userId: text('userId'),
+  accountId: text('accountId').notNull(),
+  providerId: text('providerId').notNull(),
+  userId: text('userId')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
   accessToken: text('accessToken'),
   refreshToken: text('refreshToken'),
   idToken: text('idToken'),
@@ -34,45 +40,83 @@ export const account = pgTable('account', {
   refreshTokenExpiresAt: timestamp('refreshTokenExpiresAt'),
   scope: text('scope'),
   password: text('password'),
-  createdAt: timestamp('createdAt'),
-  updatedAt: timestamp('updatedAt'),
-})
-
-export const verification = pgTable('verification', {
-  id: text('id').primaryKey(),
-  identifier: text('identifier'),
-  value: text('value'),
-  expiresAt: timestamp('expiresAt'),
-  createdAt: timestamp('createdAt'),
-  updatedAt: timestamp('updatedAt'),
-})
-
-// Monetization tables
-export const subscription = pgTable('subscription', {
-  id: text('id').primaryKey(),
-  userId: text('userId').notNull(),
-  stripeCustomerId: text('stripeCustomerId').unique(),
-  stripeSubscriptionId: text('stripeSubscriptionId').unique(),
-  plan: text('plan').notNull().default('free'),
-  status: text('status').notNull().default('active'),
-  priceInCents: integer('priceInCents'),
-  currentPeriodStart: timestamp('currentPeriodStart'),
-  currentPeriodEnd: timestamp('currentPeriodEnd'),
-  cancelAtPeriodEnd: boolean('cancelAtPeriodEnd').default(false),
-  canceledAt: timestamp('canceledAt'),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),
 })
 
-export const usage = pgTable('usage', {
+export const verification = pgTable('verification', {
   id: text('id').primaryKey(),
+  identifier: text('identifier').notNull(),
+  value: text('value').notNull(),
+  expiresAt: timestamp('expiresAt').notNull(),
+  createdAt: timestamp('createdAt').defaultNow(),
+  updatedAt: timestamp('updatedAt').defaultNow(),
+})
+
+// --- App tables ------------------------------------------------------------
+// Add your app tables below. Always include a plain `userId` column so queries
+// can be scoped per user — the security model depends on this column existing,
+// not on a foreign key. Do NOT add a foreign key constraint
+// (`.references(() => user.id, ...)`) unless the user explicitly asks for
+// foreign keys or referential integrity; FK constraints make iterating on the
+// schema harder.
+//
+// Example:
+//
+// import { serial } from "drizzle-orm/pg-core"
+//
+// export const todos = pgTable("todos", {
+//   id: serial("id").primaryKey(),
+//   userId: text("userId").notNull(),
+//   title: text("title").notNull(),
+//   completed: boolean("completed").notNull().default(false),
+//   createdAt: timestamp("createdAt").notNull().defaultNow(),
+// })
+//
+// If the user asks for foreign keys, add the reference back in:
+//   userId: text("userId")
+//     .notNull()
+//     .references(() => user.id, { onDelete: "cascade" }),
+
+// Conversions tracking table
+export const conversions = pgTable('conversions', {
+  id: uuid('id').primaryKey().defaultRandom(),
   userId: text('userId').notNull(),
-  conversionsThisMonth: integer('conversionsThisMonth').default(0),
-  mergesThisMonth: integer('mergesThisMonth').default(0),
-  optimizationsThisMonth: integer('optimizationsThisMonth').default(0),
-  editsThisMonth: integer('editsThisMonth').default(0),
-  storageUsedMB: numeric('storageUsedMB', { precision: 10, scale: 2 }).default('0'),
-  lastResetDate: timestamp('lastResetDate').notNull().defaultNow(),
+  toolName: text('toolName').notNull(),
+  inputFileName: text('inputFileName').notNull(),
+  inputFileSize: integer('inputFileSize').notNull(),
+  outputFileName: text('outputFileName'),
+  outputFileSize: integer('outputFileSize'),
+  status: text('status').notNull().default('pending'),
+  errorMessage: text('errorMessage'),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt').notNull().defaultNow(),
+  completedAt: timestamp('completedAt'),
+})
+
+// User conversion stats
+export const userStats = pgTable('userStats', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: text('userId').notNull().unique(),
+  totalConversions: integer('totalConversions').notNull().default(0),
+  totalFilesProcessed: integer('totalFilesProcessed').notNull().default(0),
+  lastConversionAt: timestamp('lastConversionAt'),
+  premiumUntil: timestamp('premiumUntil'),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt').notNull().defaultNow(),
+})
+
+// Subscriptions for Stripe integration
+export const subscription = pgTable('subscriptions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: text('userId').notNull(),
+  stripeCustomerId: text('stripeCustomerId').notNull().unique(),
+  stripeSubscriptionId: text('stripeSubscriptionId'),
+  plan: text('plan').notNull().default('free'),
+  status: text('status').notNull().default('inactive'),
+  currentPeriodStart: timestamp('currentPeriodStart'),
+  currentPeriodEnd: timestamp('currentPeriodEnd'),
+  canceledAt: timestamp('canceledAt'),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),
 })
