@@ -54,12 +54,12 @@ Citation management`}
         'Academic standards',
         'University compatibility',
       ]}
-      benefits={{
-        'Student success': 'Better research outcomes',
-        'Faculty efficiency': 'Research acceleration',
-        'Institutional support': 'Academic excellence',
-        'Research quality': 'Rigorous analysis',
-      }}
+      benefits={[
+        'Student success',
+        'Faculty efficiency',
+        'Institutional support',
+        'Research quality',
+      ]}
       faqs={[
         {
           q: 'University approved?',
