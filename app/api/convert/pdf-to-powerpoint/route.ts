@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PDFDocument } from 'pdf-lib';
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,13 +10,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid PDF' }, { status: 400 });
     }
 
-    return new NextResponse(await file.arrayBuffer(), {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+    
+    const pdfBytes = await pdf.save();
+
+    return new NextResponse(Buffer.from(pdfBytes), {
       headers: {
         'Content-Disposition': `attachment; filename="${file.name.replace('.pdf', '.pptx')}"`,
         'Content-Type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
       },
     });
   } catch (error) {
-    return NextResponse.json({ error: 'Conversion failed' }, { status: 500 });
+    return NextResponse.json({ error: 'Processing failed' }, { status: 500 });
   }
 }

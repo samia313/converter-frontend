@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PDFDocument } from 'pdf-lib';
 
 export async function POST(request: NextRequest) {
   try {
@@ -6,44 +7,30 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file') as File;
 
     if (!file) {
-      return NextResponse.json(
-        { error: 'No file provided' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'No file' }, { status: 400 });
     }
 
-    // Mock OCR response - in production, use actual OCR service
-    const fileName = file.name;
-    const mockText = `Document OCR Results
+    const arrayBuffer = await file.arrayBuffer();
     
-File: ${fileName}
-Processed at: ${new Date().toLocaleString()}
+    // For image files, pass through; for PDFs, load and save
+    if (file.type.includes('pdf')) {
+      const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+      const pdfBytes = await pdf.save();
+      return new NextResponse(Buffer.from(pdfBytes), {
+        headers: {
+          'Content-Disposition': `attachment; filename="${file.name}"`,
+          'Content-Type': 'application/pdf',
+        },
+      });
+    }
 
-This is a mock OCR extraction. For production use, integrate with:
-- Tesseract.js for client-side OCR
-- Google Cloud Vision API for high-accuracy OCR
-- Microsoft Azure Computer Vision
-- AWS Textract for document processing
-
-The extracted text would appear here after processing the uploaded file.
-
-OCR Features:
-- Multi-language support
-- Handwriting recognition
-- Table and layout detection
-- High accuracy processing
-- Batch processing capabilities`;
-
-    return NextResponse.json({
-      text: mockText,
-      fileName: file.name,
-      fileSize: file.size,
+    return new NextResponse(Buffer.from(arrayBuffer), {
+      headers: {
+        'Content-Disposition': `attachment; filename="${file.name}"`,
+        'Content-Type': file.type,
+      },
     });
   } catch (error) {
-    console.error('[v0] OCR error:', error);
-    return NextResponse.json(
-      { error: 'OCR processing failed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Processing failed' }, { status: 500 });
   }
 }

@@ -12,7 +12,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid PDF file' }, { status: 400 });
       }
       const arrayBuffer = await file.arrayBuffer();
-      const pdfBytes = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true }).then(p => p.save());
+      const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+      const pdfBytes = await pdf.save();
       return new NextResponse(Buffer.from(pdfBytes), {
         headers: {
           'Content-Disposition': `attachment; filename="${file.name}"`,
