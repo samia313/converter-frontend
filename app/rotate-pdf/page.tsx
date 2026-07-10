@@ -137,7 +137,6 @@ Correcting camera scan photos converted to PDF`}
           a: 'Rotate PDF works with standard PDF files (.pdf). For other formats, first convert them to PDF using our conversion tools.',
         },
       ]}
-      schema={schema}
       primaryKeyword="rotate PDF"
       secondaryKeywords={['fix PDF orientation', 'rotate PDF pages', 'PDF page rotation', 'fix sideways PDF']}
     />

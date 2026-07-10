@@ -137,7 +137,6 @@ Extracting specific pages as images for presentations`}
           a: '100% free! Unlimited conversions, no registration, no hidden fees. Convert as many PDFs as you need.',
         },
       ]}
-      schema={schema}
       primaryKeyword="PDF to image"
       secondaryKeywords={['convert PDF to image', 'PDF to JPG', 'PDF to PNG', 'extract PDF as image']}
     />

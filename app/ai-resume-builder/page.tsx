@@ -123,7 +123,6 @@ Create unlimited resumes for different positions. Download as PDF, Word, or shar
         { name: 'AI Chat PDF', slug: 'ai-chat-pdf' },
         { name: 'PDF to Word', slug: 'pdf-to-word' },
       ]}
-      schema={schema}
       primaryKeyword="AI resume builder"
       secondaryKeywords={['resume generator', 'professional resume', 'ATS resume', 'free resume builder']}
     />

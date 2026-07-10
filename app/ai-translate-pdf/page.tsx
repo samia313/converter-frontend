@@ -121,7 +121,6 @@ International collaboration and communication`}
         { name: 'AI Rewrite PDF', slug: 'ai-rewrite-pdf' },
         { name: 'AI OCR', slug: 'ai-ocr' },
       ]}
-      schema={schema}
       primaryKeyword="AI translate PDF"
       secondaryKeywords={['PDF translation', 'translate document', 'multi-language PDF']}
     />

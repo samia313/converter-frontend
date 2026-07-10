@@ -121,7 +121,6 @@ Quick content review before detailed reading`}
         { name: 'AI Translate PDF', slug: 'ai-translate-pdf' },
         { name: 'AI Notes Generator', slug: 'ai-notes-generator' },
       ]}
-      schema={schema}
       primaryKeyword="AI PDF summary"
       secondaryKeywords={['PDF summary generator', 'document summarization', 'auto summary']}
     />

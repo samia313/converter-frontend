@@ -121,7 +121,6 @@ Unifying financial statements from multiple periods`}
         { name: 'PDF to Word', slug: 'pdf-to-word' },
         { name: 'Rotate PDF', slug: 'rotate-pdf' },
       ]}
-      schema={schema}
       primaryKeyword="merge PDF"
       secondaryKeywords={['combine PDF', 'merge PDF online', 'join PDF files']}
       />

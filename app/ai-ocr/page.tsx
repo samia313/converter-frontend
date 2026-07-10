@@ -123,7 +123,6 @@ Upload any image or scanned PDF and instantly get editable text. Preserve format
         { name: 'AI Translate PDF', slug: 'ai-translate-pdf' },
         { name: 'PDF to Word', slug: 'pdf-to-word' },
       ]}
-      schema={schema}
       primaryKeyword="AI OCR"
       secondaryKeywords={['optical character recognition', 'text extraction', 'scan to text']}
     />

@@ -137,7 +137,6 @@ Converting whiteboard notes to documents`}
           a: 'Completely free! No registration, no hidden fees, no limits. Convert unlimited images to PDF for free.',
         },
       ]}
-      schema={schema}
       primaryKeyword="image to PDF"
       secondaryKeywords={['convert image to PDF', 'JPG to PDF', 'PNG to PDF', 'merge images into PDF']}
     />

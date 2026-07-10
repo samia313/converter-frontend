@@ -39,28 +39,24 @@ export async function POST(request: NextRequest) {
       x: 50,
       y: height - 100,
       size: 24,
-      color: '#0066cc',
     });
 
     page.drawText(`File: ${file.name}`, {
       x: 50,
       y: height - 150,
       size: 12,
-      color: '#666666',
     });
 
     page.drawText('This document was converted using PDFilio Word to PDF tool.', {
       x: 50,
       y: height - 200,
       size: 12,
-      color: '#666666',
     });
 
     page.drawText('For advanced Word to PDF conversion with formatting preservation, use our premium service.', {
       x: 50,
       y: height - 250,
       size: 11,
-      color: '#999999',
     });
 
     const pdfBytes = await pdfDoc.save();

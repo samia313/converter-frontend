@@ -123,7 +123,6 @@ Upload any PDF and select your preferred rewriting style. AI instantly generates
         { name: 'AI Translate PDF', slug: 'ai-translate-pdf' },
         { name: 'PDF to Word', slug: 'pdf-to-word' },
       ]}
-      schema={schema}
       primaryKeyword="AI rewrite PDF"
       secondaryKeywords={['rewrite content', 'improve writing', 'professional writing']}
     />

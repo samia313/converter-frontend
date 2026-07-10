@@ -78,9 +78,9 @@ export default function AISummaryTool() {
             </h3>
             <FileUploader
               accept=".pdf"
-              onFileSelect={setSelectedFile}
-              selectedFile={selectedFile}
-              maxSizeMB={50}
+              onFileSelected={(files) => setSelectedFile(files[0] || null)}
+              
+              maxSize={50}
             />
 
             {/* Summary Length Selection */}

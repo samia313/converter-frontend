@@ -63,12 +63,11 @@ export default function SplitPDFTool() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-8">
-          <FileUploader
-            accept=".pdf"
-            onFileSelect={setSelectedFile}
-            selectedFile={selectedFile}
-            maxSizeMB={50}
-          />
+              <FileUploader
+                accept=".pdf"
+                onFileSelected={(files) => setSelectedFile(files[0] || null)}
+                maxSize={50}
+              />
 
           {error && (
             <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">

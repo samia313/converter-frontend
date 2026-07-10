@@ -123,7 +123,6 @@ Upload research papers or documents and let AI provide comprehensive analysis. G
         { name: 'AI PDF Summary', slug: 'ai-pdf-summary' },
         { name: 'AI OCR', slug: 'ai-ocr' },
       ]}
-      schema={schema}
       primaryKeyword="AI research assistant"
       secondaryKeywords={['research paper analysis', 'academic analysis', 'literature review']}
     />

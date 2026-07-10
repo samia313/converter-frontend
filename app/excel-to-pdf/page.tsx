@@ -137,7 +137,6 @@ Preparing spreadsheets for legal compliance`}
           a: 'Charts, images, and all embedded objects are preserved perfectly in the PDF. Everything converts accurately.',
         },
       ]}
-      schema={schema}
       primaryKeyword="Excel to PDF"
       secondaryKeywords={['convert Excel to PDF', 'spreadsheet to PDF', 'XLSX to PDF', 'Excel conversion']}
     />

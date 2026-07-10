@@ -121,7 +121,6 @@ Creating read-only document versions`}
         { name: 'Merge PDF', slug: 'merge-pdf' },
         { name: 'Compress PDF', slug: 'compress-pdf' },
       ]}
-      schema={schema}
       primaryKeyword="Word to PDF"
       secondaryKeywords={['convert Word to PDF', 'DOC to PDF', 'DOCX to PDF']}
       />

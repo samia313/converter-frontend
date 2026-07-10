@@ -135,7 +135,6 @@ Quick research without manual page scrolling`}
         { name: 'AI OCR', slug: 'ai-ocr' },
         { name: 'AI Research Assistant', slug: 'ai-research-assistant' },
       ]}
-      schema={schema}
       primaryKeyword="AI chat PDF"
       secondaryKeywords={['chat with PDF', 'conversational PDF', 'PDF Q&A', 'ask PDF questions']}
     />

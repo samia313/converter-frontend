@@ -121,7 +121,6 @@ Content creators organizing multi-file publications`}
           a: 'Yes! When you split a PDF, you get only the selected pages as a new file. Your original PDF remains untouched on your device.',
         },
       ]}
-      schema={schema}
       primaryKeyword="split PDF"
       secondaryKeywords={['divide PDF', 'extract PDF pages', 'PDF splitter', 'separate PDF pages']}
       />

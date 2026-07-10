@@ -93,7 +93,6 @@ Improving website performance by reducing PDF sizes`}
         { name: 'PDF to Word', slug: 'pdf-to-word' },
         { name: 'Rotate PDF', slug: 'rotate-pdf' },
       ]}
-      schema={schema}
       primaryKeyword="compress PDF"
       secondaryKeywords={['reduce PDF size', 'compress PDF online', 'shrink PDF']}
       />

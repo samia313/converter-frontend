@@ -76,9 +76,9 @@ export default function OCRTool() {
             </h3>
             <FileUploader
               accept=".pdf,.jpg,.png,.jpeg"
-              onFileSelect={setSelectedFile}
-              selectedFile={selectedFile}
-              maxSizeMB={50}
+              onFileSelected={(files) => setSelectedFile(files[0] || null)}
+              
+              maxSize={50}
             />
 
             {error && (

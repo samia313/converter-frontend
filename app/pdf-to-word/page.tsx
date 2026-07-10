@@ -145,7 +145,6 @@ Converting invoices to editable formats`}
         { name: 'Compress PDF', slug: 'compress-pdf' },
         { name: 'Merge PDF', slug: 'merge-pdf' },
       ]}
-      schema={schema}
       primaryKeyword="PDF to Word"
       secondaryKeywords={['convert PDF to Word', 'PDF to DOC', 'PDF to DOCX']}
     />

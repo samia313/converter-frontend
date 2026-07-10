@@ -137,7 +137,6 @@ Processing bank statements and transaction data`}
           a: 'You will need to unlock the PDF first (remove password protection) before we can extract data from it.',
         },
       ]}
-      schema={schema}
       primaryKeyword="PDF to Excel"
       secondaryKeywords={['convert PDF to Excel', 'PDF table to Excel', 'extract data from PDF', 'PDF to spreadsheet']}
     />
