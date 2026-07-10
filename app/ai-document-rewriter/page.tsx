@@ -19,45 +19,60 @@ Format doesn&apos;t matter. Upload any document. AI rewrites intelligently. Resu
 
 Complete Document Solution:
 No format switching. No separate tools. Single interface for all your rewriting needs. Simplified workflow. Professional results always.`}
-      useCase={{
-        'Mixed document formats': 'PDF and Word documents',
-        'Multi-format projects': 'Diverse file types',
-        'Workflow simplification': 'Single tool approach',
-        'Document variety': 'All formats supported',
-        'Universal rewriting': 'Any document type',
-        'Format flexibility': 'Complete coverage',
-        'Enterprise documents': 'All types handled',
-        'Unified management': 'Single solution',
-      }}
-      testimonials={{
-        'Jennifer Martinez': 'Document Manager - Handles all our formats perfectly. Word, PDF, images—everything works. Simplified our entire workflow.',
-        'Carlos Rodriguez': 'Operations Director - One tool for all document types. Eliminated need for multiple services. Cost effective and efficient.',
-      }}
-      features={{
-        'Multi-format support': 'PDF, Word, PowerPoint',
-        'Image document handling': 'All types included',
-        'Format auto-detection': 'Automatic identification',
-        'Format preservation': 'Original maintained',
-        'Single interface': 'Unified workflow',
-        'Batch processing': 'Multiple documents',
-        'Quality consistency': 'All formats equal',
-        'Export flexibility': 'Multiple outputs',
-      }}
-      benefits={{
-        'One tool everything': 'Complete solution',
-        'Simplified workflow': 'No format switching',
-        'Time efficient': 'Unified process',
-        'Cost effective': 'Single tool',
-        'No complications': 'Format independence',
-        'Consistent quality': 'All formats equal',
-        'Enterprise ready': 'Scalable solution',
-        'Professional results': 'Quality guaranteed',
-      }}
-      faqs={{
-        'What formats work?': 'PDFs, Word docs, PowerPoints, images, and more. Virtually any document format.',
-        'Same quality?': 'Yes. Identical AI quality regardless of format.',
-        'Format stays?': 'Completely preserved. Downloads in original format.',
-      }}
+      useCase={`Mixed document formats
+Multi-format projects
+Workflow simplification
+Document variety
+Universal rewriting
+Format flexibility
+Enterprise documents
+Unified management`}
+      testimonials={[
+        {
+          name: 'Jennifer Martinez',
+          role: 'Document Manager',
+          text: 'Handles all our formats perfectly. Word, PDF, images—everything works. Simplified our entire workflow.',
+        },
+        {
+          name: 'Carlos Rodriguez',
+          role: 'Operations Director',
+          text: 'One tool for all document types. Eliminated need for multiple services. Cost effective and efficient.',
+        },
+      ]}
+      features={[
+        'Multi-format support',
+        'Image document handling',
+        'Format auto-detection',
+        'Format preservation',
+        'Single interface',
+        'Batch processing',
+        'Quality consistency',
+        'Export flexibility',
+      ]}
+      benefits={[
+        'One tool everything',
+        'Simplified workflow',
+        'Time efficient',
+        'Cost effective',
+        'No complications',
+        'Consistent quality',
+        'Enterprise ready',
+        'Professional results',
+      ]}
+      faqs={[
+        {
+          q: 'What formats work?',
+          a: 'PDFs, Word docs, PowerPoints, images, and more. Virtually any document format.',
+        },
+        {
+          q: 'Same quality?',
+          a: 'Yes. Identical AI quality regardless of format.',
+        },
+        {
+          q: 'Format stays?',
+          a: 'Completely preserved. Downloads in original format.',
+        },
+      ]}
       relatedTools={[
         { name: 'AI Rewrite PDF', slug: 'ai-rewrite-pdf' },
         { name: 'Rewrite PDF with AI', slug: 'rewrite-pdf-with-ai' },
