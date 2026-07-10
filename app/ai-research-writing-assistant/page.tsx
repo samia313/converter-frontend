@@ -44,22 +44,22 @@ Academic communication`}
           text: 'Writing process streamlined. Argument clarity enhanced. Research communication professional.',
         },
       ]}
-      features={{
-        'Writing improvement': 'Quality enhancement',
-        'Argument structuring': 'Logical organization',
-        'Clarity enhancement': 'Improved readability',
-        'Tone adjustment': 'Academic voice',
-        'Finding articulation': 'Clear communication',
-        'Publication preparation': 'Manuscript readiness',
-        'Academic standards': 'Scholarly quality',
-        'Writing support': 'Comprehensive assistance',
-      }}
-      benefits={{
-        'Writing quality': 'Academic excellence',
-        'Clarity': 'Better communication',
-        'Efficiency': 'Process acceleration',
-        'Success': 'Publication achievement',
-      }}
+      features={[
+        'Writing improvement',
+        'Argument structuring',
+        'Clarity enhancement',
+        'Tone adjustment',
+        'Finding articulation',
+        'Publication preparation',
+        'Academic standards',
+        'Writing support',
+      ]}
+      benefits={[
+        'Writing quality',
+        'Clarity',
+        'Efficiency',
+        'Success',
+      ]}
       faqs={[
         {
           q: 'Improve academic writing?',

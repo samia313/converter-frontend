@@ -44,22 +44,22 @@ Research authority`}
           text: 'Institution adopted best research platform. Researcher satisfaction exceptional. Outcomes transformed.',
         },
       ]}
-      features={{
-        'Industry-leading': 'Best-in-class',
-        'Premium analysis': 'Superior quality',
-        'Professional tools': 'Enterprise features',
-        'Advanced capabilities': 'Sophisticated analysis',
-        'Quality assurance': 'Excellence standards',
-        'Researcher trusted': 'Professional choice',
-        'Innovation': 'Technology leadership',
-        'Excellence': 'Quality commitment',
-      }}
-      benefits={{
-        'Research excellence': 'Best outcomes',
-        'Professional quality': 'Industry standard',
-        'Competitive advantage': 'Leadership position',
-        'Excellence': 'Premium results',
-      }}
+      features={[
+        'Industry-leading',
+        'Premium analysis',
+        'Professional tools',
+        'Advanced capabilities',
+        'Quality assurance',
+        'Researcher trusted',
+        'Innovation',
+        'Excellence',
+      ]}
+      benefits={[
+        'Research excellence',
+        'Professional quality',
+        'Competitive advantage',
+        'Excellence',
+      ]}
       faqs={[
         {
           q: 'Why best AI research assistant?',

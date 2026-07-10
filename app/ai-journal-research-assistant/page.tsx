@@ -44,22 +44,22 @@ Research landscape monitoring`}
           text: 'Portfolio research tracked comprehensively. Publication impact assessed automatically. Strategic research decisions informed.',
         },
       ]}
-      features={{
-        'Publication tracking': 'Real-time monitoring',
-        'Trend analysis': 'Pattern recognition',
-        'Impact assessment': 'Influence measurement',
-        'Network mapping': 'Author connections',
-        'Methodology evolution': 'Approach tracking',
-        'Field monitoring': 'Continuous scanning',
-        'Alert system': 'Trend notifications',
-        'Research mapping': 'Landscape visualization',
-      }}
-      benefits={{
-        'Stay current': 'Emerging awareness',
-        'Field understanding': 'Comprehensive view',
-        'Strategic planning': 'Informed decisions',
-        'Competitive edge': 'Early identification',
-      }}
+      features={[
+        'Publication tracking',
+        'Trend analysis',
+        'Impact assessment',
+        'Network mapping',
+        'Methodology evolution',
+        'Field monitoring',
+        'Alert system',
+        'Research mapping',
+      ]}
+      benefits={[
+        'Stay current',
+        'Field understanding',
+        'Strategic planning',
+        'Competitive edge',
+      ]}
       faqs={[
         {
           q: 'Multiple journal tracking?',

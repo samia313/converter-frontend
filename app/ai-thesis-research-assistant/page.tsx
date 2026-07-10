@@ -54,12 +54,12 @@ Publication preparation`}
         'Conclusion support',
         'Publication readiness',
       ]}
-      benefits={{
-        'Research organization': 'Systematic structure',
-        'Process efficiency': 'Timeline acceleration',
-        'Quality improvement': 'Better outcomes',
-        'Stress reduction': 'Support system',
-      }}
+      benefits={[
+        'Research organization',
+        'Process efficiency',
+        'Quality improvement',
+        'Stress reduction',
+      ]}
       faqs={[
         {
           q: 'Organize thesis research?',

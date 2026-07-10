@@ -44,22 +44,22 @@ Quick understanding`}
           text: 'Research materials suddenly manageable. Summarization quality professional. Understanding accelerated significantly.',
         },
       ]}
-      features={{
-        'Smart summarization': 'Intelligent condensing',
-        'Key point extraction': 'Essential information',
-        'Finding preservation': 'Critical content',
-        'Redundancy elimination': 'Concise output',
-        'Readability': 'Clear summaries',
-        'Multiple formats': 'Various summary types',
-        'Length customization': 'Flexible output',
-        'Quality assurance': 'Accuracy verification',
-      }}
-      benefits={{
-        'Time saving': 'Hours to minutes',
-        'Comprehension speed': 'Rapid understanding',
-        'Efficiency': 'Process acceleration',
-        'Quality': 'Accurate summaries',
-      }}
+      features={[
+        'Smart summarization',
+        'Key point extraction',
+        'Finding preservation',
+        'Redundancy elimination',
+        'Readability',
+        'Multiple formats',
+        'Length customization',
+        'Quality assurance',
+      ]}
+      benefits={[
+        'Time saving',
+        'Comprehension speed',
+        'Efficiency',
+        'Quality',
+      ]}
       faqs={[
         {
           q: 'Accurately summarize research?',

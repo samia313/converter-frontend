@@ -44,22 +44,22 @@ One-time access`}
           text: 'Frictionless experience. Research when needed without account complications.',
         },
       ]}
-      features={{
-        'No signup': 'Immediate access',
-        'Zero forms': 'Friction-free',
-        'Instant access': 'No delays',
-        'Full capabilities': 'Complete features',
-        'No email needed': 'Zero requirements',
-        'No account setup': 'Instant use',
-        'Guest research': 'Anonymous access',
-        'Quick start': 'Immediate productivity',
-      }}
-      benefits={{
-        'Zero barriers': 'Instant start',
-        'Time saving': 'No delays',
-        'Convenience': 'Friction-free',
-        'Simplicity': 'Pure access',
-      }}
+      features={[
+        'No signup',
+        'Zero forms',
+        'Instant access',
+        'Full capabilities',
+        'No email needed',
+        'No account setup',
+        'Guest research',
+        'Quick start',
+      ]}
+      benefits={[
+        'Zero barriers',
+        'Time saving',
+        'Convenience',
+        'Simplicity',
+      ]}
       faqs={[
         {
           q: 'Really no signup?',

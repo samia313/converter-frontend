@@ -44,22 +44,22 @@ Guest access`}
           text: 'Quick research needs met instantly. No setup hassle. Exactly right for occasional use.',
         },
       ]}
-      features={{
-        'No login required': 'Instant access',
-        'No registration': 'Zero setup',
-        'Full capabilities': 'Complete features',
-        'Anonymous': 'Privacy protected',
-        'No tracking': 'Data privacy',
-        'Instant start': 'Immediate use',
-        'No account': 'Guest access',
-        'Quick access': 'Friction-free',
-      }}
-      benefits={{
-        'Zero setup': 'Instant usage',
-        'Privacy': 'Anonymous research',
-        'Convenience': 'Immediate access',
-        'Simplicity': 'No friction',
-      }}
+      features={[
+        'No login required',
+        'No registration',
+        'Full capabilities',
+        'Anonymous',
+        'No tracking',
+        'Instant start',
+        'No account',
+        'Quick access',
+      ]}
+      benefits={[
+        'Zero setup',
+        'Privacy',
+        'Convenience',
+        'Simplicity',
+      ]}
       faqs={[
         {
           q: 'Really no login?',

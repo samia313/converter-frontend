@@ -44,22 +44,22 @@ Academic publication`}
           text: 'Overwhelming doctoral research became manageable. Support systemic and intelligent. Doctoral success achievable.',
         },
       ]}
-      features={{
-        'Extensive literature synthesis': 'Comprehensive analysis',
-        'Research organization': 'Systematic management',
-        'Original contribution': 'Scholarship identification',
-        'Methodology development': 'Rigorous approach',
-        'Defense preparation': 'Comprehensive readiness',
-        'Complex analysis': 'Sophisticated synthesis',
-        'Academic publishing': 'Publication support',
-        'Career launch': 'Post-doctoral support',
-      }}
-      benefits={{
-        'Research rigor': 'Doctoral standards',
-        'Organization clarity': 'Systematic structure',
-        'Timeline efficiency': 'On-track progress',
-        'Academic excellence': 'Superior outcomes',
-      }}
+      features={[
+        'Extensive literature synthesis',
+        'Research organization',
+        'Original contribution',
+        'Methodology development',
+        'Defense preparation',
+        'Complex analysis',
+        'Academic publishing',
+        'Career launch',
+      ]}
+      benefits={[
+        'Research rigor',
+        'Organization clarity',
+        'Timeline efficiency',
+        'Academic excellence',
+      ]}
       faqs={[
         {
           q: 'Manage complex dissertation research?',

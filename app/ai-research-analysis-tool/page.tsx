@@ -44,22 +44,22 @@ Strategic intelligence`}
           text: 'Pattern recognition identifies research relationships. Analysis comprehensive. Understanding transformed.',
         },
       ]}
-      features={{
-        'Advanced analysis': 'Professional-grade tools',
-        'Pattern recognition': 'Sophisticated algorithms',
-        'Insight generation': 'Comprehensive extraction',
-        'Relationship mapping': 'Connection discovery',
-        'Interpretation support': 'Understanding assistance',
-        'Data analysis': 'Statistical processing',
-        'Trend identification': 'Pattern discovery',
-        'Intelligence synthesis': 'Strategic insights',
-      }}
-      benefits={{
-        'Deep insights': 'Comprehensive understanding',
-        'Professional quality': 'Enterprise-grade analysis',
-        'Pattern discovery': 'Relationship identification',
-        'Strategic advantage': 'Informed decisions',
-      }}
+      features={[
+        'Advanced analysis',
+        'Pattern recognition',
+        'Insight generation',
+        'Relationship mapping',
+        'Interpretation support',
+        'Data analysis',
+        'Trend identification',
+        'Intelligence synthesis',
+      ]}
+      benefits={[
+        'Deep insights',
+        'Professional quality',
+        'Pattern discovery',
+        'Strategic advantage',
+      ]}
       faqs={[
         {
           q: 'Professional-grade analysis?',

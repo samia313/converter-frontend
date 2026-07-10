@@ -44,22 +44,22 @@ Universal research support`}
           text: 'Document collection research suddenly manageable. Format diversity no longer barrier. Research excellence achieved.',
         },
       ]}
-      features={{
-        'Multi-format support': 'All document types',
-        'Format detection': 'Automatic identification',
-        'Universal analysis': 'Format independence',
-        'Content extraction': 'Intelligent reading',
-        'Synthesis support': 'Finding organization',
-        'Comparison analysis': 'Document comparison',
-        'Research support': 'Comprehensive assistance',
-        'Finding compilation': 'Systematic organization',
-      }}
-      benefits={{
-        'No conversion': 'Direct analysis',
-        'Format freedom': 'Any document type',
-        'Research efficiency': 'Unified platform',
-        'Capability': 'Complete support',
-      }}
+      features={[
+        'Multi-format support',
+        'Format detection',
+        'Universal analysis',
+        'Content extraction',
+        'Synthesis support',
+        'Comparison analysis',
+        'Research support',
+        'Finding compilation',
+      ]}
+      benefits={[
+        'No conversion',
+        'Format freedom',
+        'Research efficiency',
+        'Capability',
+      ]}
       faqs={[
         {
           q: 'All formats supported?',

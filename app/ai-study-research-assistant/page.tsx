@@ -44,22 +44,22 @@ Study guide development`}
           text: 'Student academic performance improved. Learning support accessible 24/7. Student satisfaction exceptional.',
         },
       ]}
-      features={{
-        'Concept simplification': 'Complex made clear',
-        'Study notes generation': 'Automatic organization',
-        'Practice questions': 'Self-testing enabled',
-        'Gap identification': 'Weakness discovery',
-        'Material review': 'Comprehensive synthesis',
-        'Exam preparation': 'Systematic readiness',
-        'Learning support': 'Personalized help',
-        'Progress tracking': 'Improvement monitoring',
-      }}
-      benefits={{
-        'Study efficiency': 'Time optimization',
-        'Material mastery': 'Deep learning',
-        'Exam confidence': 'Preparation quality',
-        'Academic success': 'Performance improvement',
-      }}
+      features={[
+        'Concept simplification',
+        'Study notes generation',
+        'Practice questions',
+        'Gap identification',
+        'Material review',
+        'Exam preparation',
+        'Learning support',
+        'Progress tracking',
+      ]}
+      benefits={[
+        'Study efficiency',
+        'Material mastery',
+        'Exam confidence',
+        'Academic success',
+      ]}
       faqs={[
         {
           q: 'Simplify difficult material?',
