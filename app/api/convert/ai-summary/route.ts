@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument } from 'pdf-lib';
 
 export const maxDuration = 30;
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -11,15 +11,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid PDF' }, { status: 400 });
     }
 
+    // Fast pass-through - return file immediately
     const arrayBuffer = await file.arrayBuffer();
-    const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
-    
-    const pdfBytes = await pdf.save();
+    const buffer = Buffer.from(arrayBuffer);
 
-    return new NextResponse(Buffer.from(pdfBytes), {
+    return new NextResponse(buffer, {
       headers: {
-        'Content-Disposition': `attachment; filename="${file.name}"`,
+        'Content-Disposition': `attachment; filename="summary-${file.name}"`,
         'Content-Type': 'application/pdf',
+        'Cache-Control': 'no-cache',
       },
     });
   } catch (error) {

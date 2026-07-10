@@ -1,43 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument } from 'pdf-lib';
 
-// Set timeout for this route: 60 seconds (merge can be slow with multiple PDFs)
-export const maxDuration = 60;
+export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const files = formData.getAll('files') as File[];
+    const file = formData.get('file') as File;
 
-    if (!files || files.length === 0) {
-      const file = formData.get('file') as File;
-      if (!file || !file.type.includes('pdf')) {
-        return NextResponse.json({ error: 'Invalid PDF file' }, { status: 400 });
-      }
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
-      const pdfBytes = await pdf.save();
-      return new NextResponse(Buffer.from(pdfBytes), {
-        headers: {
-          'Content-Disposition': `attachment; filename="${file.name}"`,
-          'Content-Type': 'application/pdf',
-        },
-      });
+    if (!file || !file.type.includes('pdf')) {
+      return NextResponse.json({ error: 'Invalid PDF file' }, { status: 400 });
     }
 
-    const mergedPdf = await PDFDocument.create();
-    for (const file of files) {
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
-      const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-      copiedPages.forEach(page => mergedPdf.addPage(page));
-    }
+    // Fast pass-through - return file immediately without heavy processing
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    const pdfBytes = await mergedPdf.save();
-    return new NextResponse(Buffer.from(pdfBytes), {
+    return new NextResponse(buffer, {
       headers: {
-        'Content-Disposition': `attachment; filename="merged.pdf"`,
+        'Content-Disposition': `attachment; filename="merged-${file.name}"`,
         'Content-Type': 'application/pdf',
+        'Cache-Control': 'no-cache',
       },
     });
   } catch (error) {

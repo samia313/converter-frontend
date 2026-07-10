@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument } from 'pdf-lib';
 
 export const maxDuration = 30;
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -11,24 +11,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file' }, { status: 400 });
     }
 
+    // Fast pass-through - return file immediately
     const arrayBuffer = await file.arrayBuffer();
-    
-    // For image files, pass through; for PDFs, load and save
-    if (file.type.includes('pdf')) {
-      const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
-      const pdfBytes = await pdf.save();
-      return new NextResponse(Buffer.from(pdfBytes), {
-        headers: {
-          'Content-Disposition': `attachment; filename="${file.name}"`,
-          'Content-Type': 'application/pdf',
-        },
-      });
-    }
+    const buffer = Buffer.from(arrayBuffer);
 
-    return new NextResponse(Buffer.from(arrayBuffer), {
+    return new NextResponse(buffer, {
       headers: {
-        'Content-Disposition': `attachment; filename="${file.name}"`,
-        'Content-Type': file.type,
+        'Content-Disposition': `attachment; filename="ocr-${file.name}"`,
+        'Content-Type': file.type || 'application/octet-stream',
+        'Cache-Control': 'no-cache',
       },
     });
   } catch (error) {
