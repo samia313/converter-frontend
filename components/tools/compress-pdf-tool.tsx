@@ -2,7 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import FileUploader from '@/components/file-uploader';
-import { Download } from 'lucide-react';
+import { Download, CheckCircle, AlertCircle } from 'lucide-react';
+
+interface CompressionResult {
+  originalSize: number;
+  compressedSize: number;
+  reduction: number;
+}
 
 export default function CompressPDFTool() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -10,21 +16,27 @@ export default function CompressPDFTool() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [result, setResult] = useState<CompressionResult | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const handleCompress = async () => {
     if (!selectedFile) return;
 
     setIsProcessing(true);
     setError(null);
+    setResult(null);
+    setProgress(0);
 
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
       formData.append('quality', quality);
 
-      // Add abort signal for timeout (15 seconds max)
+      // Add abort signal for timeout (30 seconds max)
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+      setProgress(30); // Simulated progress
 
       const response = await fetch('/api/convert/compress-pdf', {
         method: 'POST',
@@ -35,15 +47,36 @@ export default function CompressPDFTool() {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        throw new Error(`Failed: ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Failed: ${response.statusText}`);
       }
 
+      setProgress(80);
+
       const blob = await response.blob();
+      const originalSize = selectedFile.size;
+      const compressedSize = blob.size;
+      const reduction = Math.round(((originalSize - compressedSize) / originalSize) * 100);
+
+      // Extract metrics from response headers
+      const xReduction = response.headers.get('X-Compression-Ratio');
+      const xOriginal = response.headers.get('X-Original-Size');
+      const xCompressed = response.headers.get('X-Compressed-Size');
+
+      setResult({
+        originalSize: parseInt(xOriginal || String(originalSize)),
+        compressedSize: parseInt(xCompressed || String(compressedSize)),
+        reduction: parseInt(xReduction || String(Math.max(0, reduction))),
+      });
+
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
+      setProgress(100);
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') {
-        setError('Processing timeout - file may be too large');
+        setError('Processing timeout - file may be too large or connection lost');
+      } else if (err instanceof Error && err.message.includes('429')) {
+        setError('Too many requests. Please wait a moment and try again.');
       } else {
         setError(err instanceof Error ? err.message : 'Compression failed');
       }
@@ -62,6 +95,14 @@ export default function CompressPDFTool() {
       document.body.removeChild(a);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (downloadUrl) {
+        window.URL.revokeObjectURL(downloadUrl);
+      }
+    };
+  }, [downloadUrl]);
 
   return (
     <section className="min-h-screen bg-gradient-to-b from-orange-50 to-white py-12 md:py-20">
@@ -139,30 +180,67 @@ export default function CompressPDFTool() {
                 <span>{isProcessing ? 'Processing...' : 'Compress PDF'}</span>
               </button>
               {isProcessing && (
-                <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="mt-4 space-y-3">
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-orange-600 h-2 rounded-full transition-all"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
                   <p className="text-blue-700 text-sm text-center">
-                    Converting your file... This usually takes less than a second.
+                    {progress < 50 && 'Reading your file...'}
+                    {progress >= 50 && progress < 90 && 'Compressing your PDF...'}
+                    {progress >= 90 && 'Finalizing...'}
                   </p>
                 </div>
               )}
             </>
           ) : (
-            <div className="text-center">
-              <p className="text-green-600 font-semibold mb-4">
-                Compression completed successfully!
-              </p>
+            <div className="text-center space-y-6">
+              <div className="flex items-center justify-center gap-2">
+                <CheckCircle className="w-6 h-6 text-green-600" />
+                <p className="text-green-600 font-semibold text-lg">
+                  Compression successful!
+                </p>
+              </div>
+
+              {result && (
+                <div className="grid grid-cols-3 gap-4 bg-gray-50 p-4 rounded-lg">
+                  <div>
+                    <p className="text-xs text-gray-600">Original</p>
+                    <p className="text-sm font-semibold text-gray-900">
+                      {(result.originalSize / 1024 / 1024).toFixed(2)} MB
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-600">Compressed</p>
+                    <p className="text-sm font-semibold text-gray-900">
+                      {(result.compressedSize / 1024 / 1024).toFixed(2)} MB
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-600">Reduction</p>
+                    <p className="text-sm font-semibold text-green-600">
+                      {result.reduction > 0 ? '-' : '+'}{Math.abs(result.reduction)}%
+                    </p>
+                  </div>
+                </div>
+              )}
+
               <div className="flex gap-4 justify-center">
                 <button
                   onClick={handleDownload}
                   className="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-8 rounded-lg"
                 >
                   <Download className="w-5 h-5" />
-                  Download Compressed
+                  Download
                 </button>
                 <button
                   onClick={() => {
                     setSelectedFile(null);
                     setDownloadUrl(null);
+                    setResult(null);
+                    if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
                   }}
                   className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg"
                 >
