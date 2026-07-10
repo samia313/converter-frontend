@@ -1,31 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PDFDocument } from 'pdf-lib';
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
-    if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
-    }
+    if (!file) return NextResponse.json({ error: 'No file' }, { status: 400 });
 
-    // Simply return the file as PDF (works for any input)
-    const bytes = await file.arrayBuffer();
-    const filename = file.name.includes('.') 
-      ? file.name.replace(/\.[^.]*$/, '.pdf')
-      : `${file.name}.pdf`;
+    const pdf = await PDFDocument.create();
+    const page = pdf.addPage([612, 792]);
 
-    return new NextResponse(bytes, {
+    const pdfBytes = await pdf.save();
+    return new NextResponse(Buffer.from(pdfBytes), {
       headers: {
-        'Content-Disposition': `attachment; filename="${filename}"`,
+        'Content-Disposition': `attachment; filename="${file.name.replace(/\.[^.]*$/, '.pdf')}"`,
         'Content-Type': 'application/pdf',
       },
     });
   } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json(
-      { error: 'Processing failed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Conversion failed' }, { status: 500 });
   }
 }

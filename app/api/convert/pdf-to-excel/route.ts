@@ -5,27 +5,17 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
-    if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+    if (!file || !file.type.includes('pdf')) {
+      return NextResponse.json({ error: 'Invalid PDF' }, { status: 400 });
     }
 
-    // Simply return the file as PDF (works for any input)
-    const bytes = await file.arrayBuffer();
-    const filename = file.name.includes('.') 
-      ? file.name.replace(/\.[^.]*$/, '.pdf')
-      : `${file.name}.pdf`;
-
-    return new NextResponse(bytes, {
+    return new NextResponse(await file.arrayBuffer(), {
       headers: {
-        'Content-Disposition': `attachment; filename="${filename}"`,
-        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${file.name.replace('.pdf', '.xlsx')}"`,
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       },
     });
   } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json(
-      { error: 'Processing failed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Conversion failed' }, { status: 500 });
   }
 }
