@@ -2,129 +2,88 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Research Assistant - Document Analysis & Insights | PDFilio',
-  description: 'Get AI-powered research assistance. Analyze documents, extract insights, and accelerate your research process.',
-  keywords: 'research assistant, document analysis, AI research, academic research',
+  title: 'AI Research Assistant - Intelligent Document Analysis | ConvertHub',
+  description: 'Transform research workflows with intelligent AI-powered analysis, synthesis, and comprehensive research support.',
 };
 
-export default function AIResearchAssistantPage() {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'AI Research Assistant',
-    description: 'AI-powered research document analysis and insights',
-    applicationCategory: 'Utility',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', ratingCount: '2200' },
-  };
-
+export default function Page() {
   return (
     <ToolLandingLayout
       toolName="AI Research Assistant"
       toolSlug="ai-research-assistant"
-      description="Accelerate your research with AI analysis. Extract insights, identify patterns, and get intelligent recommendations."
-      heroImage="/tool-images/ai-research-assistant-hero.png"
-      mainContent={`AI Research Assistant is your intelligent companion for document analysis and research. Analyze research papers, identify key concepts, extract methodology, and get AI-powered insights instantly.
+      description="Professional-grade AI research assistant for intelligent analysis, information synthesis, and strategic research insights."
+      mainContent={`Transform your research workflow with enterprise-grade AI assistance. Deep analysis powered by advanced algorithms designed for serious researchers.
 
-Perfect for academics, students, and professionals who need to stay on top of complex research. The AI identifies patterns, connections, and important findings across documents.
+Intelligent Analysis Engine:
+Context-aware AI understands domain-specific research patterns. Extract meaning from complex documents. Synthesize information across multiple sources. Generate actionable intelligence instantly.
 
-Upload research papers or documents and let AI provide comprehensive analysis. Get methodological summaries, key finding extraction, and intelligent recommendations. Accelerate your research workflow significantly.`}
-      useCase={[
-        'Analyzing research papers efficiently',
-        'Academic literature review',
-        'Identifying research trends',
-        'Extracting methodology information',
-        'Finding citations and references',
-        'Comparing multiple research papers',
-        'Background research for projects',
-        'Staying updated with field developments',
-      ].join('\n')}
+Strategic Research Support:
+Move beyond basic analysis. AI identifies emerging trends, correlations, and research opportunities. Make data-driven decisions with confidence based on comprehensive AI-powered insights.`}
+      useCase={`Complex research projects
+Multi-source synthesis
+Competitive intelligence
+Market research analysis
+Academic collaboration
+Strategic planning
+Insight generation
+Trend forecasting`}
       testimonials={[
         {
-          name: 'Professor James Wilson',
-          role: 'Academic Researcher',
-          text: 'AI Research Assistant transformed my literature review process. Analyzes papers instantly and identifies key concepts. Essential academic tool.',
+          name: 'Dr. David Patel',
+          role: 'Chief Research Officer',
+          text: 'Enterprise-level research capabilities transformed our analysis process. AI synthesizes complex information faster than human teams.',
         },
         {
-          name: 'Dr. Elena Martinez',
-          role: 'Research Scientist',
-          text: 'Perfect for research paper analysis. Saves weeks of manual reading. Highly accurate methodology extraction.',
+          name: 'Rachel Anderson',
+          role: 'Strategy Manager',
+          text: 'Actionable insights from AI analysis drive our strategic decisions. Intelligence quality rivals dedicated research departments.',
         },
         {
-          name: 'Alex Thompson',
-          role: 'Graduate Student',
-          text: 'Game-changer for thesis research. Quickly understands complex papers and extracts important information.',
+          name: 'Prof. Michael Zhang',
+          role: 'Research Dean',
+          text: 'Students and faculty benefit tremendously. Accelerates research cycles while improving analysis depth significantly.',
         },
       ]}
       features={[
-        'Comprehensive document analysis',
-        'Methodology extraction',
-        'Key finding identification',
-        'Pattern recognition',
-        'Citation extraction',
-        'Comparative analysis',
-        'Trend identification',
-        'Intelligent recommendations',
+        'Enterprise AI analysis',
+        'Multi-source synthesis',
+        'Domain recognition',
+        'Correlation discovery',
+        'Opportunity identification',
+        'Trend forecasting',
+        'Strategic synthesis',
+        'Advanced reporting',
       ]}
       benefits={[
-        'Accelerate research process',
-        'Comprehensive analysis quickly',
-        'Identify important concepts',
-        'Find research connections',
-        'Save time on literature review',
-        'Deeper document understanding',
-        'Stay current with field',
-        'Better research insights',
+        'Enterprise-grade results',
+        'Faster analysis cycles',
+        'Deeper insights',
+        'Strategic advantage',
+        'Competitive intelligence',
+        'Time efficiency',
+        'Quality acceleration',
+        'Decision clarity',
       ]}
       faqs={[
         {
-          q: 'What documents does AI analyze?',
-          a: 'Research papers, academic journals, technical documentation, reports, and any analytical document.',
+          q: 'Enterprise-grade analysis?',
+          a: 'Yes. Professional-level AI designed for complex research environments and strategic analysis.',
         },
         {
-          q: 'Can it extract methodology?',
-          a: 'Yes! AI identifies and extracts research methodology, procedures, and protocols.',
+          q: 'Multiple data sources?',
+          a: 'Absolutely. Synthesizes from diverse sources for comprehensive research perspectives.',
         },
         {
-          q: 'Find citations and references?',
-          a: 'Absolutely! Extracts all citations, references, and source attributions.',
-        },
-        {
-          q: 'Analyze multiple papers?',
-          a: 'Yes! Batch analysis allows comparing and analyzing multiple research papers simultaneously.',
-        },
-        {
-          q: 'Identify research trends?',
-          a: 'Yes! AI identifies emerging trends and patterns across multiple documents.',
-        },
-        {
-          q: 'Access detailed findings?',
-          a: 'Get detailed analysis with key findings, methodology, conclusions, and implications.',
-        },
-        {
-          q: 'Works with different fields?',
-          a: 'Perfect for any academic field: science, engineering, business, humanities, medicine.',
-        },
-        {
-          q: 'Research papers only?',
-          a: 'No! Analyzes any research document: reports, theses, journal articles, whitepapers.',
-        },
-        {
-          q: 'Is AI Research Assistant free?',
-          a: 'Completely free with unlimited document analysis, no registration needed.',
-        },
-        {
-          q: 'Best for literature review?',
-          a: 'Perfect! Dramatically speeds up literature review and analysis processes.',
+          q: 'Strategic recommendations?',
+          a: 'Yes. Generates actionable recommendations and opportunity identification automatically.',
         },
       ]}
       relatedTools={[
-        { name: 'AI Chat PDF', slug: 'ai-chat-pdf' },
-        { name: 'AI PDF Summary', slug: 'ai-pdf-summary' },
-        { name: 'AI OCR', slug: 'ai-ocr' },
+        { name: 'AI Research Paper Assistant', slug: 'ai-research-paper-assistant' },
+        { name: 'AI Scientific Research Assistant', slug: 'ai-scientific-research-assistant' },
       ]}
-      primaryKeyword="AI research assistant"
-      secondaryKeywords={['research paper analysis', 'academic analysis', 'literature review']}
+      primaryKeyword="ai research assistant"
+      secondaryKeywords={['research analysis', 'research intelligence', 'research automation']}
     />
   );
 }
