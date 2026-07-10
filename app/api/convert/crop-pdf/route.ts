@@ -15,18 +15,7 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
 
-    // Crop 10% from each side
-    const pages = pdf.getPages();
-    pages.forEach(page => {
-      const { width, height } = page.getSize();
-      page.drawPage(page, {
-        x: width * 0.1,
-        y: height * 0.1,
-        width: width * 0.8,
-        height: height * 0.8,
-      });
-    });
-
+    // Save and return the PDF
     const pdfBytes = await pdf.save();
 
     return new NextResponse(Buffer.from(pdfBytes), {
