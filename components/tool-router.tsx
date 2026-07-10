@@ -34,6 +34,11 @@ const PDFToExcelTool = dynamic(() => import('./tools/pdf-to-excel-tool'), { ssr:
 const PDFToPowerPointTool = dynamic(() => import('./tools/pdf-to-powerpoint-tool'), { ssr: false });
 const OCRTool = dynamic(() => import('./tools/ocr-tool'), { ssr: false });
 const PDFChatTool = dynamic(() => import('./tools/pdf-chat-tool'), { ssr: false });
+const AISummaryTool = dynamic(() => import('./tools/ai-summary-tool'), { ssr: false });
+const AIChatPDFTool = dynamic(() => import('./tools/ai-chat-pdf-tool'), { ssr: false });
+const AITranslateTool = dynamic(() => import('./tools/ai-translate-tool'), { ssr: false });
+const AIRewriteTool = dynamic(() => import('./tools/ai-rewrite-tool'), { ssr: false });
+const AIResearchTool = dynamic(() => import('./tools/ai-research-tool'), { ssr: false });
 
 interface ToolRouterProps {
   toolId: string;
@@ -114,6 +119,22 @@ export default function ToolRouter({ toolId, onBack }: ToolRouterProps) {
       return <OCRTool />;
     case 'pdf-chat':
       return <PDFChatTool />;
+    case 'summary':
+    case 'ai-pdf-summary':
+      return <AISummaryTool />;
+    case 'chat':
+    case 'ai-chat-pdf':
+    case 'chat-pdf':
+      return <AIChatPDFTool />;
+    case 'translate':
+    case 'ai-translate-pdf':
+      return <AITranslateTool />;
+    case 'rewrite':
+    case 'ai-rewrite-pdf':
+      return <AIRewriteTool />;
+    case 'research-assistant':
+    case 'ai-research-assistant':
+      return <AIResearchTool />;
 
     // Default: Show generic template for unimplemented tools
     default:
