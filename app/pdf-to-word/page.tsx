@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
+import PDFToWordTool from '@/components/tools/pdf-to-word-tool';
 
 export const metadata: Metadata = {
   title: 'PDF to Word Converter - Free Online | PDFilio',
@@ -36,11 +37,13 @@ export default function PDFToWordPage() {
   };
 
   return (
-    <ToolLandingLayout
-      toolName="PDF to Word Converter"
-      toolSlug="pdf-to-word"
-      description="Convert PDF documents to editable Word files in seconds. Maintain formatting, fonts, and layout. No sign-up required."
-      heroImage="/tool-images/pdf-to-word-hero.png"
+    <>
+      <PDFToWordTool />
+      <ToolLandingLayout
+        toolName="PDF to Word Converter"
+        toolSlug="pdf-to-word"
+        description="Convert PDF documents to editable Word files in seconds. Maintain formatting, fonts, and layout. No sign-up required."
+        heroImage="/tool-images/pdf-to-word-hero.png"
       mainContent={`PDF to Word Converter transforms your PDF files into fully editable Word documents instantly. Perfect for professionals who need to edit content, modify formatting, or repurpose PDF material.
 
 Our advanced conversion technology preserves all formatting, fonts, images, and layout perfectly. Your Word document looks exactly like your original PDF, and everything is fully editable and customizable.
@@ -146,5 +149,6 @@ Converting invoices to editable formats`}
       primaryKeyword="PDF to Word"
       secondaryKeywords={['convert PDF to Word', 'PDF to DOC', 'PDF to DOCX']}
     />
+    </>
   );
 }
