@@ -27,7 +27,6 @@ Speed preference
 Fast-paced work
 Rapid deployment
 Quick turnaround`}
-      }}
       testimonials={[
         {
           name: 'James Morrison',
