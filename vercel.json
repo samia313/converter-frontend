@@ -1,7 +1,10 @@
 {
   "buildCommand": "pnpm run build",
   "devCommand": "pnpm run dev",
-  "installCommand": "pnpm install",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "env": {
+    "PNPM_IGNORE_SCRIPTS": "false"
+  },
   "functions": {
     "app/api/convert/**": {
       "maxDuration": 30
