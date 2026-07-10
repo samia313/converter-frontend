@@ -2,9 +2,8 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Secure AI PDF Translator - Enterprise-Grade Security | TranslateHub',
-  description: 'Secure PDF translation with encryption. Enterprise security for confidential documents.',
-  keywords: 'secure pdf translator, encrypted translation, secure document translation',
+  title: 'Secure AI PDF Translator - Enterprise Security | ConvertHub',
+  description: 'Secure PDF translation with encryption. Enterprise-grade security for confidential documents.',
 };
 
 export default function Page() {
@@ -16,20 +15,32 @@ export default function Page() {
       mainContent={`Security-first design. Translate confidential documents with complete peace of mind.
 
 Enterprise Security:
-- End-to-end encryption
-- Secure servers
-- Zero-knowledge architecture
-- No data logging
-- Secure connections
-- Privacy compliance
-- Audit ready
-- GDPR compliant
+End-to-end encryption. Secure servers. Zero-knowledge architecture. No data logging. Privacy guaranteed.
 
 For Confidential Work:
-Legal documents, medical records, financial data, trade secrets—translate securely with confidence.
-
-Complete Privacy:
-Your documents stay yours. Encrypted, secure, never accessed by anyone else.`}
+Legal documents, medical records, financial data—translate securely with confidence.`}
+      useCase={[
+        'Legal document translation',
+        'Medical record translation',
+        'Financial data translation',
+        'Trade secret translation',
+        'Confidential report translation',
+        'Private communication translation',
+        'Sensitive material translation',
+        'Compliance document translation',
+      ].join('\n')}
+      testimonials={[
+        {
+          name: 'Victoria Thompson',
+          role: 'Chief Compliance Officer',
+          text: 'Security is paramount. Enterprise-grade encryption for confidential documents.',
+        },
+        {
+          name: 'Robert Chen',
+          role: 'Attorney',
+          text: 'Can confidently translate legal documents. Security and privacy guaranteed.',
+        },
+      ]}
       features={[
         'End-to-end encryption',
         'Secure servers',
@@ -40,53 +51,19 @@ Your documents stay yours. Encrypted, secure, never accessed by anyone else.`}
         'Compliance ready',
         'Audit trails',
       ]}
-      benefits={[
-        'Complete privacy',
-        'Secure translation',
-        'Confidential handling',
-        'Legal compliance',
-        'Peace of mind',
-        'Business safety',
-        'Trusted service',
-        'Enterprise grade',
-      ]}
-      useCase={[
-        'Legal documents',
-        'Medical records',
-        'Financial data',
-        'Trade secrets',
-        'Confidential reports',
-        'Private communications',
-        'Sensitive translation',
-        'Compliance needs',
-        'Corporate documents',
-        'Protected information',
-      ].join('\n')}
-      testimonials={[
-        {
-          name: 'Victoria Thompson',
-          role: 'Chief Compliance Officer',
-          text: 'Security is paramount. This tool provides enterprise-grade encryption for confidential documents.',
-        },
-        {
-          name: 'Robert Chen',
-          role: 'Attorney',
-          text: 'Can confidently translate legal documents. Security and privacy are guaranteed.',
-        },
-      ]}
-      faqs={[
-        {
-          q: 'How secure?',
-          a: 'Enterprise-grade with end-to-end encryption and zero-knowledge architecture.',
-        },
-        {
-          q: 'Compliance?',
-          a: 'Yes. GDPR compliant and ready for enterprise compliance requirements.',
-        },
-      ]}
+      benefits={{
+        'Complete privacy': 'Secure translation',
+        'Confidential handling': 'Legal compliance',
+        'Peace of mind': 'Business safety',
+        'Trusted service': 'Enterprise grade',
+      }}
+      faqs={{
+        'How secure?': 'Enterprise-grade with end-to-end encryption and zero-knowledge architecture.',
+        'Compliance?': 'Yes. GDPR compliant and ready for enterprise compliance requirements.',
+      }}
       relatedTools={[
-        { name: 'AI PDF Translator', slug: 'ai-pdf-translator' },
-        { name: 'Secure PDF Translation', slug: 'secure-ai-pdf-translator' },
+        { name: 'AI Translate PDF', slug: 'ai-translate-pdf' },
+        { name: 'AI PDF Translation', slug: 'ai-pdf-translation' },
       ]}
       primaryKeyword="secure ai pdf translator"
       secondaryKeywords={['encrypted translation', 'enterprise security']}

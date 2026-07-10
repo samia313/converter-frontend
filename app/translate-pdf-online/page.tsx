@@ -2,9 +2,8 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Translate PDF Online - Web-Based PDF Translation | TranslateHub',
-  description: 'Translate PDFs online instantly. No download needed, works in any browser.',
-  keywords: 'translate pdf online, online pdf translator, web pdf translation',
+  title: 'Translate PDF Online - Web-Based Translation | ConvertHub',
+  description: 'Translate PDF documents online instantly. No software installation needed. Works on any device, anywhere.',
 };
 
 export default function Page() {
@@ -12,84 +11,72 @@ export default function Page() {
     <ToolLandingLayout
       toolName="Translate PDF Online"
       toolSlug="translate-pdf-online"
-      description="Pure web-based PDF translation. Upload online and get instant translations in any browser, any device."
-      mainContent={`Browser-based translation for complete convenience. Upload your PDF and get translation instantly without installing software.
+      description="Pure web-based PDF translation. Upload and translate instantly from any browser, on any device, anywhere in the world."
+      mainContent={`Translation without barriers. No software to install, no accounts to create. Just upload your PDF and translate immediately.
 
-Complete Online Experience:
-- Works in any browser
-- No software installation
-- No app downloads
-- Mobile compatible
-- Cloud processing
-- Instant access anywhere
-- Cross-device support
-- Always available
+Complete Online Freedom:
+Works on desktop, laptop, tablet, smartphone. Chrome, Safari, Firefox, Edge—any browser works. Windows, Mac, Linux—any operating system supported.
 
-Work From Anywhere:
-Office, home, travel—wherever you have internet access, you can translate PDFs. Perfect for remote teams and distributed organizations.
-
-Seamless Cross-Device:
-Start translation on your desktop, check results on your phone. Cloud-based processing means your work is always synchronized.`}
-      features={[
-        'Browser-only access',
-        'No installation',
-        'Cloud processing',
-        'Mobile responsive',
-        'Cross-device sync',
-        'Instant startup',
-        'Universal compatibility',
-        'Real-time translation',
-      ]}
-      benefits={[
-        'Zero setup time',
-        'Works everywhere',
-        'Team friendly',
-        'No maintenance',
-        'Easy adoption',
-        'Remote work ready',
-        'Device flexible',
-        'Always available',
-      ]}
+Instant Access:
+Fastest translation. Upload, select language, translate. Results in seconds. No waiting, no complexity.`}
       useCase={[
-        'Remote teams',
-        'Mobile access',
-        'Travel translation',
-        'Quick translation',
-        'Cross-device work',
-        'No-installation need',
-        'Temporary access',
-        'Field work',
-        'Distributed teams',
-        'Anywhere access',
+        'Quick translation needs',
+        'Remote work translation',
+        'Mobile device access',
+        'Travel document translation',
+        'Quick reference translation',
+        'On-the-go translation',
+        'Multiple device support',
+        'Cross-platform access',
       ].join('\n')}
       testimonials={[
         {
-          name: 'Maria Santos',
-          role: 'Remote Coordinator',
-          text: 'Online translation is perfect for my distributed team. Everyone accesses from their device instantly.',
+          name: 'James Wilson',
+          role: 'Remote Worker',
+          text: 'Perfect for remote work. No installation, works on my laptop and phone. Translate documents instantly anywhere.',
         },
         {
-          name: 'Thomas Wheeler',
-          role: 'Travel Consultant',
-          text: 'Translate documents while traveling. No software, no hassle. Perfect for my mobile workflow.',
+          name: 'Nina Patel',
+          role: 'Traveling Consultant',
+          text: 'Used it while traveling. No software needed, works perfectly in any browser. Exactly what I needed.',
         },
+      ]}
+      features={[
+        'Works in any browser',
+        'No software installation',
+        'No registration required',
+        'Mobile responsive design',
+        'Cross-platform support',
+        'Instant results',
+        'Works offline preparation',
+        'Multiple language pairs',
+      ]}
+      benefits={[
+        'Complete convenience',
+        'No installation hassle',
+        'Access from anywhere',
+        'Works on all devices',
+        'Zero setup time',
+        'Instant translation',
+        'No system requirements',
+        'Truly portable',
       ]}
       faqs={[
         {
-          q: 'Do I need to install anything?',
-          a: 'No. Completely web-based. Works in any modern browser.',
+          q: 'Really no installation?',
+          a: 'No installation needed. Works directly in your browser. Open, upload, translate.',
         },
         {
-          q: 'Can I use it on my phone?',
-          a: 'Yes, fully responsive and optimized for mobile devices.',
+          q: 'Works on my phone?',
+          a: 'Yes! Fully responsive. Works perfectly on smartphones and tablets.',
         },
       ]}
       relatedTools={[
-        { name: 'AI PDF Translator', slug: 'ai-pdf-translator' },
-        { name: 'Instant PDF Translator', slug: 'instant-pdf-translator' },
+        { name: 'AI Translate PDF', slug: 'ai-translate-pdf' },
+        { name: 'Free AI Translate PDF', slug: 'free-ai-translate-pdf' },
       ]}
       primaryKeyword="translate pdf online"
-      secondaryKeywords={['online pdf translator', 'web translation']}
+      secondaryKeywords={['online translation', 'web based translator']}
     />
   );
 }

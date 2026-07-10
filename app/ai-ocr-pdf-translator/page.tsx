@@ -2,9 +2,8 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI OCR PDF Translator - Image to Translation in Seconds | TranslateHub',
-  description: 'Translate PDFs with advanced OCR and AI. Extract and translate images and scanned documents.',
-  keywords: 'ai ocr pdf translator, ocr translation, image translation',
+  title: 'AI OCR PDF Translator - Extract & Translate | ConvertHub',
+  description: 'Advanced OCR and AI translation. Extract text from images and translate instantly.',
 };
 
 export default function Page() {
@@ -12,26 +11,38 @@ export default function Page() {
     <ToolLandingLayout
       toolName="AI OCR PDF Translator"
       toolSlug="ai-ocr-pdf-translator"
-      description="Advanced OCR meets AI translation. Extract text from images and translate instantly with professional accuracy."
-      mainContent={`Image to translation in seconds. Advanced OCR recognizes text from any image, then AI translates perfectly.
+      description="Advanced OCR meets AI translation. Extract text from any image and translate to any language instantly."
+      mainContent={`From image to translation in seconds. Advanced OCR recognizes text from any image, then AI translates it perfectly.
 
-OCR + Translation:
-- Advanced OCR technology
-- Handwriting recognition
-- Multi-language OCR
-- Accurate extraction
-- Instant translation
-- High accuracy
-- Complex layouts
-- Table recognition
-
-Perfect For Image Documents:
-Photos of documents, scanned images, printed pages—OCR extracts everything, AI translates it.
+OCR Excellence:
+Handles complex layouts, tables, multiple columns, mixed languages. Advanced AI understands document structure and translates appropriately.
 
 Professional Accuracy:
-Handles complex layouts, tables, multiple columns, mixed languages—all extracted and translated correctly.`}
+Recognizes printed text, handwriting, and mixed content. Preserves document structure while translating perfectly.`}
+      useCase={[
+        'Image document translation',
+        'Scanned PDF translation',
+        'Photo document translation',
+        'Handwritten content translation',
+        'Complex layout translation',
+        'Table extraction and translation',
+        'Mixed language documents',
+        'Archive material translation',
+      ].join('\n')}
+      testimonials={[
+        {
+          name: 'Michael Chang',
+          role: 'Digitization Manager',
+          text: 'OCR accuracy is outstanding. Translates complex layouts and tables perfectly. Archive materials perfectly handled.',
+        },
+        {
+          name: 'Lucia Romano',
+          role: 'Archive Specialist',
+          text: 'Handles our scanned historical documents beautifully. Accurate extraction and translation every time.',
+        },
+      ]}
       features={[
-        'Advanced OCR',
+        'Advanced OCR technology',
         'Handwriting recognition',
         'Layout understanding',
         'Table extraction',
@@ -50,43 +61,19 @@ Handles complex layouts, tables, multiple columns, mixed languages—all extract
         'Instant results',
         'Quality accuracy',
       ]}
-      useCase={[
-        'Image documents',
-        'Scanned PDFs',
-        'Photo translation',
-        'Handwritten content',
-        'Complex layouts',
-        'Table documents',
-        'Mixed content',
-        'Archive scanning',
-        'Document photography',
-        'Image extraction',
-      ].join('\n')}
-      testimonials={[
-        {
-          name: 'Michael Chang',
-          role: 'Document Digitization Manager',
-          text: 'OCR accuracy is outstanding. Translates complex layouts and tables perfectly.',
-        },
-        {
-          name: 'Lucia Romano',
-          role: 'Archive Specialist',
-          text: 'Handles our scanned historical documents beautifully. Accurate extraction and translation.',
-        },
-      ]}
       faqs={[
         {
           q: 'How accurate is OCR?',
-          a: 'Very accurate, especially with standard printing. Handles handwriting too.',
+          a: 'Very accurate, especially with standard printing. Includes handwriting recognition.',
         },
         {
-          q: 'Complex layouts?',
-          a: 'Yes, understands tables, columns, and complex document structures.',
+          q: 'Complex layouts supported?',
+          a: 'Yes. Understands tables, columns, and complex document structures.',
         },
       ]}
       relatedTools={[
-        { name: 'Translate Scanned PDF', slug: 'translate-scanned-pdf' },
-        { name: 'AI PDF Translator', slug: 'ai-pdf-translator' },
+        { name: 'AI Translate Scanned PDF', slug: 'ai-translate-scanned-pdf' },
+        { name: 'AI Translate PDF', slug: 'ai-translate-pdf' },
       ]}
       primaryKeyword="ai ocr pdf translator"
       secondaryKeywords={['ocr translation', 'image translation']}

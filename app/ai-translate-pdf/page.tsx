@@ -8,121 +8,106 @@ export const metadata: Metadata = {
 };
 
 export default function AITranslatePDFPage() {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'AI Translate PDF',
-    description: 'Professional PDF translation powered by advanced AI',
-    applicationCategory: 'Utility',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.8', ratingCount: '2800' },
-  };
-
   return (
     <ToolLandingLayout
       toolName="AI Translate PDF"
       toolSlug="ai-translate-pdf"
-      description="Translate PDF documents to any language instantly. Professional AI translation maintaining formatting, style, and accuracy."
-      heroImage="/tool-images/ai-translate-pdf-hero.png"
-      mainContent={`AI Translate PDF breaks language barriers by instantly translating your documents to over 100 languages. Professional-quality translations powered by advanced neural AI technology.
+      description="Advanced AI-powered PDF translation for professionals. Translate documents into 100+ languages with perfect accuracy and formatting preservation."
+      mainContent={`Break language barriers instantly. Transform your PDFs into any language with professional-grade AI translation that understands context, terminology, and nuance.
 
-Our AI understands context and cultural nuances to provide accurate translations. Maintain all formatting, images, and layout - the translated PDF looks exactly like the original.
+Why Choose AI-Powered Translation:
+Traditional word-by-word translators miss meaning. Our advanced AI comprehends full context, understands industry terminology, and preserves your document's intent and tone. Every translation reads naturally in the target language.
 
-Upload any language PDF and translate it instantly. Perfect for international business, academic research, or personal documents. Get professional translations in seconds without hiring expensive translators.`}
-      useCase={`Translating business documents for international partners
-Converting academic papers to different languages
-Expanding products to international markets
-Making documents accessible to diverse audiences
+Professional Results:
+Business contracts, research papers, medical documents, legal agreements—whatever your document, get translation quality that matches professional human translators at a fraction of the cost.`}
+      useCase={`Global business communications and contracts
+Academic research paper translation
 Legal document translation
 Medical report translation
-Student research in foreign languages
-International collaboration and communication`}
+Marketing material localization
+Technical documentation
+International collaboration
+Financial documents and reports
+Patent documentation
+Scientific papers and journals`}
       testimonials={[
         {
-          name: 'Anna Kowalski',
-          role: 'International Business Owner',
-          text: 'AI Translate PDF is incredible! Translates contracts perfectly while maintaining formatting. Saved thousands on professional translators.',
+          name: 'Dr. Sarah Chen',
+          role: 'International Research Coordinator',
+          text: 'Absolutely transformative. We now review foreign research papers within minutes instead of waiting for translators. Translation quality rivals professional services.',
         },
         {
-          name: 'Carlos Rodriguez',
-          role: 'Academic Researcher',
-          text: 'Perfect for translating research papers. Supports 100+ languages and maintains academic formatting perfectly.',
+          name: 'Marco Rossi',
+          role: 'Legal Director',
+          text: 'For contracts and legal documents, the accuracy is impressive. Technical terminology is preserved perfectly. Our international team relies on this daily.',
         },
         {
-          name: 'Yuki Tanaka',
-          role: 'Student',
-          text: 'Makes international research accessible. Translates PDFs accurately and keeps original layout intact. Highly recommend.',
+          name: 'Emma Johnson',
+          role: 'Global Marketing Manager',
+          text: 'Translation quality maintains our brand voice perfectly. We've expanded to 15 new markets using this tool. Cost savings are enormous.',
         },
       ]}
       features={[
-        '100+ language support',
-        'AI-powered neural translation',
-        'Perfect formatting preservation',
+        'Advanced neural AI engine',
+        '100+ languages supported',
+        'Preserves all formatting and layout',
+        'Industry-specific terminology',
         'Context-aware translation',
-        'Professional quality output',
-        'Fast processing',
         'No file size limits',
-        'Batch translation available',
+        'Batch processing available',
+        'End-to-end encryption',
       ]}
       benefits={[
-        'Expand to international markets',
-        'Break language barriers',
-        'Save on professional translation costs',
-        'Communicate globally easily',
-        'Access international research',
+        'Professional translation quality',
+        'Instant translation delivery',
+        'Significant cost savings',
         'Maintain document formatting',
-        'Professional quality instantly',
-        'Quick turnaround time',
+        'Scale to global markets',
+        'Technical accuracy guaranteed',
+        'No hiring translation teams',
+        'Instant global communication',
       ]}
       faqs={[
         {
-          q: 'How many languages are supported?',
-          a: 'Over 100 languages! From Spanish and French to Mandarin, Japanese, and Arabic.',
+          q: 'How accurate is the AI translation?',
+          a: 'Professional-grade accuracy (95%+ for most language pairs). AI trained on millions of professional translations. Recommended for business-critical documents.',
         },
         {
-          q: 'Is formatting preserved?',
-          a: 'Perfectly! All formatting, images, tables, and layout remain exactly as in the original.',
+          q: 'Which 100+ languages are supported?',
+          a: 'All major languages: English, Spanish, French, German, Chinese, Japanese, Arabic, Korean, and many more including regional dialects.',
         },
         {
-          q: 'How accurate is the translation?',
-          a: 'Professional-grade accuracy. Our AI is trained on millions of documents for precision.',
+          q: 'Will formatting stay exactly the same?',
+          a: 'Yes. All formatting, images, tables, colors, fonts—everything preserved perfectly. Translated PDF looks identical to original.',
         },
         {
-          q: 'Can I translate PDFs back to original language?',
-          a: 'Yes! Translate to any language and back. Full bidirectional support.',
+          q: 'Is my document secure?',
+          a: 'Completely secure. End-to-end encryption, automatic deletion after 24 hours. GDPR and international privacy compliant.',
         },
         {
-          q: 'Works with scanned PDFs?',
-          a: 'Best with digital PDFs. For scanned documents, use AI OCR first then translate.',
+          q: 'Works with scanned or image PDFs?',
+          a: 'Best with digital PDFs. For scanned documents, combine with AI OCR first for optimal results.',
         },
         {
-          q: 'Maintain technical terminology?',
-          a: 'Yes! AI understands technical, legal, and specialized vocabulary perfectly.',
+          q: 'Can I translate multiple documents at once?',
+          a: 'Yes! Batch translation available. Process hundreds of documents simultaneously.',
         },
         {
-          q: 'Is translation secure?',
-          a: 'Completely secure and private. Documents are encrypted and deleted within 24 hours.',
+          q: 'Handles technical and legal terminology?',
+          a: 'Absolutely. Specialized training for legal, medical, technical, and industry-specific content.',
         },
         {
-          q: 'Can I translate multiple PDFs?',
-          a: 'Yes! Batch translate multiple documents at once to save time.',
-        },
-        {
-          q: 'Is AI Translate PDF free?',
-          a: 'Completely free! Unlimited translations, no registration required.',
-        },
-        {
-          q: 'Best for business documents?',
-          a: 'Perfect for contracts, proposals, reports, and international business communication.',
+          q: 'Can I export the translated file?',
+          a: 'Yes! Download as PDF maintaining all original formatting perfectly.',
         },
       ]}
       relatedTools={[
-        { name: 'AI Chat PDF', slug: 'ai-chat-pdf' },
-        { name: 'AI Rewrite PDF', slug: 'ai-rewrite-pdf' },
-        { name: 'AI OCR', slug: 'ai-ocr' },
+        { name: 'Translate PDF Online', slug: 'translate-pdf-online' },
+        { name: 'AI Document Translation Tool', slug: 'ai-document-translation-tool' },
+        { name: 'Smart AI PDF Translator', slug: 'smart-ai-pdf-translator' },
       ]}
-      primaryKeyword="AI translate PDF"
-      secondaryKeywords={['PDF translation', 'translate document', 'multi-language PDF']}
+      primaryKeyword="ai translate pdf"
+      secondaryKeywords={['pdf translation', 'translate document', 'ai translator']}
     />
   );
 }
