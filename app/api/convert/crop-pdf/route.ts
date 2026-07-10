@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PDFDocument } from 'pdf-lib';
 
 export const maxDuration = 30;
 
@@ -7,20 +8,30 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
-    if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+    if (!file || !file.type.includes('pdf')) {
+      return NextResponse.json({ error: 'Invalid PDF' }, { status: 400 });
     }
 
-    // For fast response, return file immediately
-    // Full processing would require heavy pdf-lib operations
     const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
 
-    const outputName = file.name.replace('.pdf', '_converted.pdf');
+    // Crop 10% from each side
+    const pages = pdf.getPages();
+    pages.forEach(page => {
+      const { width, height } = page.getSize();
+      page.drawPage(page, {
+        x: width * 0.1,
+        y: height * 0.1,
+        width: width * 0.8,
+        height: height * 0.8,
+      });
+    });
 
-    return new NextResponse(buffer, {
+    const pdfBytes = await pdf.save();
+
+    return new NextResponse(Buffer.from(pdfBytes), {
       headers: {
-        'Content-Disposition': `attachment; filename="${outputName}"`,
+        'Content-Disposition': `attachment; filename="${file.name.replace('.pdf', '_cropped.pdf')}"`,
         'Content-Type': 'application/pdf',
         'Cache-Control': 'no-cache',
       },

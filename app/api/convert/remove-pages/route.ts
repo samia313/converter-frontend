@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PDFDocument } from 'pdf-lib';
 
 export const maxDuration = 30;
 
@@ -11,13 +12,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid PDF' }, { status: 400 });
     }
 
-    // Fast pass-through - return file immediately
     const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+    
+    const pageCount = pdf.getPageCount();
+    if (pageCount <= 1) {
+      const pdfBytes = await pdf.save();
+      return new NextResponse(Buffer.from(pdfBytes), {
+        headers: {
+          'Content-Disposition': `attachment; filename="${file.name}"`,
+          'Content-Type': 'application/pdf',
+        },
+      });
+    }
 
-    return new NextResponse(buffer, {
+    // Remove last page
+    pdf.removePage(pageCount - 1);
+    const pdfBytes = await pdf.save();
+
+    return new NextResponse(Buffer.from(pdfBytes), {
       headers: {
-        'Content-Disposition': `attachment; filename="${file.name.replace('.pdf', '_pages_removed.pdf')}"`,
+        'Content-Disposition': `attachment; filename="${file.name.replace('.pdf', '_processed.pdf')}"`,
         'Content-Type': 'application/pdf',
         'Cache-Control': 'no-cache',
       },

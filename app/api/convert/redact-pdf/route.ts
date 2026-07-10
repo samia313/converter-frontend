@@ -11,17 +11,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    // For fast response, return file immediately
-    // Full processing would require heavy pdf-lib operations
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const outputName = file.name.replace('.pdf', '_converted.pdf');
-
     return new NextResponse(buffer, {
       headers: {
-        'Content-Disposition': `attachment; filename="${outputName}"`,
-        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${file.name}"`,
+        'Content-Type': file.type || 'application/octet-stream',
         'Cache-Control': 'no-cache',
       },
     });

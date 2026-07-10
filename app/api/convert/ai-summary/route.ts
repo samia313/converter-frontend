@@ -7,18 +7,17 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
-    if (!file || !file.type.includes('pdf')) {
-      return NextResponse.json({ error: 'Invalid PDF' }, { status: 400 });
+    if (!file) {
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    // Fast pass-through - return file immediately
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
     return new NextResponse(buffer, {
       headers: {
-        'Content-Disposition': `attachment; filename="summary-${file.name}"`,
-        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${file.name}"`,
+        'Content-Type': file.type || 'application/octet-stream',
         'Cache-Control': 'no-cache',
       },
     });

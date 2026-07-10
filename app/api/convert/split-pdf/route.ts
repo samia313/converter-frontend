@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PDFDocument } from 'pdf-lib';
 
 export const maxDuration = 30;
 
@@ -11,16 +12,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    // For fast response, return file immediately
-    // Full processing would require heavy pdf-lib operations
     const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+    
+    // Split the first half and second half
+    const pageCount = pdf.getPageCount();
+    const firstHalf = await PDFDocument.create();
+    const secondHalf = await PDFDocument.create();
 
-    const outputName = file.name.replace('.pdf', '_converted.pdf');
+    for (let i = 0; i < pageCount; i++) {
+      const [copiedPage] = await (i < pageCount / 2 ? firstHalf : secondHalf).copyPages(pdf, [i]);
+      (i < pageCount / 2 ? firstHalf : secondHalf).addPage(copiedPage);
+    }
 
-    return new NextResponse(buffer, {
+    const firstBytes = await firstHalf.save();
+    const fileName = file.name.replace('.pdf', '');
+
+    return new NextResponse(Buffer.from(firstBytes), {
       headers: {
-        'Content-Disposition': `attachment; filename="${outputName}"`,
+        'Content-Disposition': `attachment; filename="${fileName}_part1.pdf"`,
         'Content-Type': 'application/pdf',
         'Cache-Control': 'no-cache',
       },

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PDFDocument, degrees } from 'pdf-lib';
 
 export const maxDuration = 30;
 
@@ -7,20 +8,24 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
-    if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+    if (!file || !file.type.includes('pdf')) {
+      return NextResponse.json({ error: 'Invalid PDF' }, { status: 400 });
     }
 
-    // For fast response, return file immediately
-    // Full processing would require heavy pdf-lib operations
     const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
 
-    const outputName = file.name.replace('.pdf', '_converted.pdf');
+    // Rotate all pages 90 degrees
+    const pages = pdf.getPages();
+    pages.forEach(page => {
+      page.setRotation(degrees(90));
+    });
 
-    return new NextResponse(buffer, {
+    const pdfBytes = await pdf.save();
+
+    return new NextResponse(Buffer.from(pdfBytes), {
       headers: {
-        'Content-Disposition': `attachment; filename="${outputName}"`,
+        'Content-Disposition': `attachment; filename="${file.name.replace('.pdf', '_rotated.pdf')}"`,
         'Content-Type': 'application/pdf',
         'Cache-Control': 'no-cache',
       },

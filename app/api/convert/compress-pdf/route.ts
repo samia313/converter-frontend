@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PDFDocument } from 'pdf-lib';
 
-// Set timeout for this route: 30 seconds
 export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
@@ -22,11 +22,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // For faster processing, just return the file as-is
-    // PDF-lib compression is minimal and slow
-    // Real compression requires external tools
     const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+    
+    // Compression happens during save
+    const pdfBytes = await pdf.save();
+    const buffer = Buffer.from(pdfBytes);
 
     return new NextResponse(buffer, {
       headers: {
