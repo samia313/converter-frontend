@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument } from 'pdf-lib';
 
+// Set timeout for this route: 60 seconds (merge can be slow with multiple PDFs)
+export const maxDuration = 60;
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();

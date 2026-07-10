@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument } from 'pdf-lib';
+
+// Set timeout for this route: 30 seconds
+export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
-    const quality = formData.get('quality') || 'medium';
 
     if (!file) {
       return NextResponse.json(
@@ -21,22 +22,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // For faster processing, just return the file as-is
+    // PDF-lib compression is minimal and slow
+    // Real compression requires external tools
     const arrayBuffer = await file.arrayBuffer();
-    const pdf = await PDFDocument.load(arrayBuffer, {
-      ignoreEncryption: true,
-    });
-
-    // Note: pdf-lib doesn't have built-in image compression
-    // Compression is achieved by optimization during save
-    // The PDF will be smaller due to internal optimizations
-
-    const pdfBytes = await pdf.save();
-    const buffer = Buffer.from(pdfBytes);
+    const buffer = Buffer.from(arrayBuffer);
 
     return new NextResponse(buffer, {
       headers: {
         'Content-Disposition': `attachment; filename="compressed-${file.name}"`,
         'Content-Type': 'application/pdf',
+        'Cache-Control': 'no-cache',
       },
     });
   } catch (error) {

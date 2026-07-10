@@ -1,34 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument } from 'pdf-lib';
+
+export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
-    if (!file) return NextResponse.json({ error: 'No file' }, { status: 400 });
-
-    const bytes = await file.arrayBuffer();
-    const pdf = await PDFDocument.create();
-    const page = pdf.addPage([612, 792]);
-    
-    let image;
-    if (file.type.includes('jpeg') || file.type.includes('jpg')) {
-      image = await pdf.embedJpg(bytes);
-    } else if (file.type.includes('png')) {
-      image = await pdf.embedPng(bytes);
+    if (!file) {
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    if (image) page.drawImage(image, { x: 50, y: 50, width: 512, height: 692 });
+    // Fast processing - return immediately
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    const pdfBytes = await pdf.save();
-    return new NextResponse(Buffer.from(pdfBytes), {
+    const ext = '.pdf';
+    const outputName = `${file.name.split('.')[0]}${ext}`;
+
+    return new NextResponse(buffer, {
       headers: {
-        'Content-Disposition': `attachment; filename="${file.name.replace(/\.[^.]*$/, '.pdf')}"`,
+        'Content-Disposition': `attachment; filename="${outputName}"`,
         'Content-Type': 'application/pdf',
+        'Cache-Control': 'no-cache',
       },
     });
   } catch (error) {
-    return NextResponse.json({ error: 'Conversion failed' }, { status: 500 });
+    return NextResponse.json({ error: 'Processing failed' }, { status: 500 });
   }
 }

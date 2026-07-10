@@ -22,20 +22,31 @@ export default function CompressPDFTool() {
       formData.append('file', selectedFile);
       formData.append('quality', quality);
 
+      // Add abort signal for timeout (15 seconds max)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+
       const response = await fetch('/api/convert/compress-pdf', {
         method: 'POST',
         body: formData,
+        signal: controller.signal,
       });
 
+      clearTimeout(timeoutId);
+
       if (!response.ok) {
-        throw new Error('Compression failed');
+        throw new Error(`Failed: ${response.statusText}`);
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Compression failed');
+      if (err instanceof Error && err.name === 'AbortError') {
+        setError('Processing timeout - file may be too large');
+      } else {
+        setError(err instanceof Error ? err.message : 'Compression failed');
+      }
     } finally {
       setIsProcessing(false);
     }

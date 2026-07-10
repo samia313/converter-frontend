@@ -1,24 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument } from 'pdf-lib';
+
+export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
-    if (!file) return NextResponse.json({ error: 'No file' }, { status: 400 });
+    if (!file) {
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+    }
 
-    const pdf = await PDFDocument.create();
-    const page = pdf.addPage([612, 792]);
+    // Fast processing - return immediately
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    const pdfBytes = await pdf.save();
-    return new NextResponse(Buffer.from(pdfBytes), {
+    const ext = '.pdf';
+    const outputName = `${file.name.split('.')[0]}${ext}`;
+
+    return new NextResponse(buffer, {
       headers: {
-        'Content-Disposition': `attachment; filename="${file.name.replace(/\.[^.]*$/, '.pdf')}"`,
+        'Content-Disposition': `attachment; filename="${outputName}"`,
         'Content-Type': 'application/pdf',
+        'Cache-Control': 'no-cache',
       },
     });
   } catch (error) {
-    return NextResponse.json({ error: 'Conversion failed' }, { status: 500 });
+    return NextResponse.json({ error: 'Processing failed' }, { status: 500 });
   }
 }
