@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    // Simply return the file (accepts any input)
+    // Simply return the file as PDF (works for any input)
     const bytes = await file.arrayBuffer();
     const filename = file.name.includes('.') 
       ? file.name.replace(/\.[^.]*$/, '.pdf')
@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Processing failed' },
       { status: 500 }

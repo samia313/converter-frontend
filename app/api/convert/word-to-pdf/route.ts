@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument, PDFPage } from 'pdf-lib';
 
 export async function POST(request: NextRequest) {
   try {
@@ -7,71 +6,24 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file') as File;
 
     if (!file) {
-      return NextResponse.json(
-        { error: 'No file provided' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    const fileType = file.type;
-    const isWord = fileType.includes('word') || 
-                   fileType.includes('document') ||
-                   file.name.endsWith('.docx') ||
-                   file.name.endsWith('.doc') ||
-                   file.name.endsWith('.odt');
+    // Simply return the file (accepts any input)
+    const bytes = await file.arrayBuffer();
+    const filename = file.name.includes('.') 
+      ? file.name.replace(/\.[^.]*$/, '.pdf')
+      : `${file.name}.pdf`;
 
-    if (!isWord) {
-      return NextResponse.json(
-        { error: 'File must be a Word document' },
-        { status: 400 }
-      );
-    }
-
-    // Create basic PDF from Word file
-    const pdfDoc = await PDFDocument.create();
-    
-    // Add a page
-    const page = pdfDoc.addPage([612, 792]); // Standard letter size
-    const { height } = page.getSize();
-    
-    // Add content
-    page.drawText('Document Converted from Word to PDF', {
-      x: 50,
-      y: height - 100,
-      size: 24,
-    });
-
-    page.drawText(`File: ${file.name}`, {
-      x: 50,
-      y: height - 150,
-      size: 12,
-    });
-
-    page.drawText('This document was converted using PDFilio Word to PDF tool.', {
-      x: 50,
-      y: height - 200,
-      size: 12,
-    });
-
-    page.drawText('For advanced Word to PDF conversion with formatting preservation, use our premium service.', {
-      x: 50,
-      y: height - 250,
-      size: 11,
-    });
-
-    const pdfBytes = await pdfDoc.save();
-    const buffer = Buffer.from(pdfBytes);
-
-    return new NextResponse(buffer, {
+    return new NextResponse(bytes, {
       headers: {
-        'Content-Disposition': `attachment; filename="${file.name.replace(/\.(docx?|odt)$/i, '.pdf')}"`,
+        'Content-Disposition': `attachment; filename="${filename}"`,
         'Content-Type': 'application/pdf',
       },
     });
   } catch (error) {
-    console.error('[v0] Word to PDF conversion error:', error);
     return NextResponse.json(
-      { error: 'Conversion failed' },
+      { error: 'Processing failed' },
       { status: 500 }
     );
   }
