@@ -32,22 +32,22 @@ export default function PDFToExcelPage() {
       <PDFToExcelTool />
       <ToolLandingLayout
         toolName="PDF to Excel"
-      toolSlug="pdf-to-excel"
-      description="Convert PDF tables and data into editable Excel spreadsheets. Extract financial data, reports, and structured information from PDFs instantly with perfect formatting preserved."
-      heroImage="/tool-images/pdf-to-excel-hero.png"
-      mainContent={`PDF to Excel transforms your PDF tables into editable Excel spreadsheets instantly. Perfect for financial analysts, data entry professionals, and anyone who needs to work with data extracted from PDF reports.
+        toolSlug="pdf-to-excel"
+        description="Convert PDF tables and data into editable Excel spreadsheets. Extract financial data, reports, and structured information from PDFs instantly with perfect formatting preserved."
+        heroImage="/tool-images/pdf-to-excel-hero.png"
+        mainContent={`PDF to Excel transforms your PDF tables into editable Excel spreadsheets instantly. Perfect for financial analysts, data entry professionals, and anyone who needs to work with data extracted from PDF reports.
 
 Extract data from invoices, reports, financial statements, and any PDF with tables. Your data is converted to properly formatted Excel cells with all values intact and easily editable.
 
 Our advanced PDF parsing technology accurately detects table structures and converts them to Excel format. Process files of any size instantly, completely free, with no registration required. Your data stays secure - we delete files automatically after processing.`}
-      useCase={`Converting financial reports to editable spreadsheets
+        useCase={`Converting financial reports to editable spreadsheets
 Extracting invoice data for accounting systems
 Converting statistical tables from research papers
 Preparing data from PDF reports for analysis
 Automating data entry workflows
 Converting survey results from PDFs to Excel
 Processing bank statements and transaction data`}
-      features={[
+        features={[
         'Accurate table detection and conversion',
         'Preserve data formatting and structure',
         'Convert multiple tables per PDF',
@@ -57,7 +57,7 @@ Processing bank statements and transaction data`}
         'Batch convert multiple PDFs',
         'Instant processing',
       ]}
-      benefits={[
+        benefits={[
         'Save hours on manual data entry',
         'Accurate data extraction',
         'Editable spreadsheet output',
@@ -67,7 +67,7 @@ Processing bank statements and transaction data`}
         'Professional Excel formatting',
         'Improved productivity',
       ]}
-      testimonials={[
+        testimonials={[
         {
           name: 'David M.',
           role: 'Financial Analyst',
@@ -84,13 +84,13 @@ Processing bank statements and transaction data`}
           text: 'The best PDF to Excel converter I have used. Fast, accurate, and completely free. Makes our month-end closing much easier.',
         },
       ]}
-      relatedTools={[
+        relatedTools={[
         { name: 'Excel to PDF', slug: 'excel-to-pdf' },
         { name: 'PDF to Word', slug: 'pdf-to-word' },
         { name: 'Merge PDF', slug: 'merge-pdf' },
         { name: 'Compress PDF', slug: 'compress-pdf' },
       ]}
-      faqs={[
+        faqs={[
         {
           q: 'How does PDF to Excel extract tables?',
           a: 'Our advanced AI analyzes PDF structure, identifies tables and data cells, maintains formatting, and converts everything to Excel format with proper column alignment.',
@@ -140,7 +140,7 @@ Processing bank statements and transaction data`}
           a: 'You will need to unlock the PDF first (remove password protection) before we can extract data from it.',
         },
       ]}
-      primaryKeyword="PDF to Excel"
+        primaryKeyword="PDF to Excel"
         secondaryKeywords={['convert PDF to Excel', 'PDF table to Excel', 'extract data from PDF', 'PDF to spreadsheet']}
       />
     </>

@@ -16,23 +16,23 @@ export default function WordToPDFPage() {
     <>
       <WordToPDFTool />
       <ToolLandingLayout
-      toolName="Word to PDF Converter"
-      toolSlug="word-to-pdf"
-      description="Convert Word documents (DOC, DOCX) to PDF format instantly. Maintain perfect formatting and styling. Secure and completely free."
-      heroImage="/tool-images/word-to-pdf-hero.png"
-      mainContent={`Word to PDF Converter transforms your Word documents into professional PDF files instantly. Perfect for sharing documents securely, creating print-ready files, and protecting your content from editing.
+        toolName="Word to PDF Converter"
+        toolSlug="word-to-pdf"
+        description="Convert Word documents (DOC, DOCX) to PDF format instantly. Maintain perfect formatting and styling. Secure and completely free."
+        heroImage="/tool-images/word-to-pdf-hero.png"
+        mainContent={`Word to PDF Converter transforms your Word documents into professional PDF files instantly. Perfect for sharing documents securely, creating print-ready files, and protecting your content from editing.
 
 Our converter preserves all formatting including fonts, colors, images, layouts, tables, and special formatting. Your PDF looks exactly like your Word document, with perfect reproduction every time.
 
 Convert files instantly with enterprise-grade security. Your documents are encrypted and automatically deleted within 24 hours. No registration needed, no watermarks, completely free. Convert unlimited files.`}
-      useCase={`Converting resumes for job applications
+        useCase={`Converting resumes for job applications
 Creating professional proposals and quotes
 Finalizing contracts before signing
 Distributing reports to stakeholders
 Preparing documents for archival
 Sharing content with external parties
 Creating read-only document versions`}
-      testimonials={[
+        testimonials={[
         {
           name: 'Mark T.',
           role: 'HR Manager',
@@ -49,7 +49,7 @@ Creating read-only document versions`}
           text: 'Using Word to PDF for all client documents. Reliable, fast, and completely free. Highly satisfied.',
         },
       ]}
-      features={[
+        features={[
         'Converts DOC and DOCX files',
         'Preserves all formatting',
         'Batch conversion support',
@@ -57,7 +57,7 @@ Creating read-only document versions`}
         'AES-256 encryption',
         'Works on all devices',
       ]}
-      benefits={[
+        benefits={[
         'Create professional PDF documents',
         'Share documents safely',
         'Maintain document integrity',
@@ -65,7 +65,7 @@ Creating read-only document versions`}
         'Accessible anywhere, anytime',
         'Instant results',
       ]}
-      faqs={[
+        faqs={[
         {
           q: 'What Word formats are supported?',
           a: 'Support .DOC, .DOCX, .RTF and all common Word document formats.',
@@ -115,14 +115,14 @@ Creating read-only document versions`}
           a: '100% free! No hidden fees, no watermarks, no premium plans needed.',
         },
       ]}
-      relatedTools={[
+        relatedTools={[
         { name: 'PDF to Word', slug: 'pdf-to-word' },
         { name: 'Excel to PDF', slug: 'excel-to-pdf' },
         { name: 'Merge PDF', slug: 'merge-pdf' },
         { name: 'Compress PDF', slug: 'compress-pdf' },
       ]}
-      primaryKeyword="Word to PDF"
-      secondaryKeywords={['convert Word to PDF', 'DOC to PDF', 'DOCX to PDF']}
+        primaryKeyword="Word to PDF"
+        secondaryKeywords={['convert Word to PDF', 'DOC to PDF', 'DOCX to PDF']}
       />
     </>
   );

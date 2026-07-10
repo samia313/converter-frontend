@@ -57,7 +57,7 @@ Extracting specific pages as images for presentations`}
         'Download all at once',
         'Works on all devices',
       ]}
-      benefits={[
+        benefits={[
         'Share PDF content easily',
         'Edit pages in image editors',
         'Perfect for social media',
@@ -67,7 +67,7 @@ Extracting specific pages as images for presentations`}
         'Flexible editing options',
         'Professional image quality',
       ]}
-      testimonials={[
+        testimonials={[
         {
           name: 'Michelle D.',
           role: 'Content Creator',
@@ -84,13 +84,13 @@ Extracting specific pages as images for presentations`}
           text: 'Using PDF to Image daily to create visual content. Easy to use and produces perfect results every time.',
         },
       ]}
-      relatedTools={[
+        relatedTools={[
         { name: 'Image to PDF', slug: 'image-to-pdf' },
         { name: 'PDF to Word', slug: 'pdf-to-word' },
         { name: 'Compress PDF', slug: 'compress-pdf' },
         { name: 'Merge PDF', slug: 'merge-pdf' },
       ]}
-      faqs={[
+        faqs={[
         {
           q: 'How do I convert PDF pages to images?',
           a: 'Upload your PDF, choose image format (JPG, PNG, etc.), select which pages to convert (all or specific), choose quality, and download. Done in seconds!',

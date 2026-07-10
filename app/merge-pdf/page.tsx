@@ -16,23 +16,23 @@ export default function MergePDFPage() {
     <>
       <MergePDFTool />
       <ToolLandingLayout
-      toolName="Merge PDF"
-      toolSlug="merge-pdf"
-      description="Combine multiple PDF files into a single document instantly. Reorder pages, organize documents, and merge with just a few clicks."
-      heroImage="/tool-images/merge-pdf-hero.png"
-      mainContent={`Merge PDF is the simplest way to combine multiple PDF files into a single document. Perfect for organizing scattered documents, combining reports, and creating unified files.
+        toolName="Merge PDF"
+        toolSlug="merge-pdf"
+        description="Combine multiple PDF files into a single document instantly. Reorder pages, organize documents, and merge with just a few clicks."
+        heroImage="/tool-images/merge-pdf-hero.png"
+        mainContent={`Merge PDF is the simplest way to combine multiple PDF files into a single document. Perfect for organizing scattered documents, combining reports, and creating unified files.
 
 Upload multiple PDFs, arrange them in any order, and merge them instantly into one file. Drag and drop reordering lets you arrange pages exactly how you want them. All formatting and quality is preserved perfectly.
 
 Our merge tool supports unlimited file sizes and quantities. Process files instantly on secure servers with automatic deletion after 24 hours. No registration needed, no watermarks, completely free.`}
-      useCase={`Combining multiple reports into one document
+        useCase={`Combining multiple reports into one document
 Merging chapters from different sources into one book
 Organizing scattered contract pages
 Creating comprehensive proposal documents
 Combining meeting notes from multiple files
 Assembling project documentation
 Unifying financial statements from multiple periods`}
-      testimonials={[
+        testimonials={[
         {
           name: 'David P.',
           role: 'Document Manager',
@@ -49,7 +49,7 @@ Unifying financial statements from multiple periods`}
           text: 'Using Merge PDF daily for project documentation. Saves hours compared to manual merging. Highly recommended.',
         },
       ]}
-      features={[
+        features={[
         'Merge unlimited PDF files',
         'Drag and drop reordering',
         'Instant processing',
@@ -57,7 +57,7 @@ Unifying financial statements from multiple periods`}
         'No file size limits',
         'Works on all browsers',
       ]}
-      benefits={[
+        benefits={[
         'Organize scattered documents',
         'Create unified reports',
         'Reduce file clutter',
@@ -65,7 +65,7 @@ Unifying financial statements from multiple periods`}
         'Professional presentation',
         'Save time and effort',
       ]}
-      faqs={[
+        faqs={[
         {
           q: 'How many PDFs can I merge at once?',
           a: 'You can merge unlimited PDFs at once. There is no limit to the number of files.',
@@ -115,14 +115,14 @@ Unifying financial statements from multiple periods`}
           a: 'Yes! Merge PDF works perfectly on phones, tablets, and computers.',
         },
       ]}
-      relatedTools={[
+        relatedTools={[
         { name: 'Split PDF', slug: 'split-pdf' },
         { name: 'Compress PDF', slug: 'compress-pdf' },
         { name: 'PDF to Word', slug: 'pdf-to-word' },
         { name: 'Rotate PDF', slug: 'rotate-pdf' },
       ]}
-      primaryKeyword="merge PDF"
-      secondaryKeywords={['combine PDF', 'merge PDF online', 'join PDF files']}
+        primaryKeyword="merge PDF"
+        secondaryKeywords={['combine PDF', 'merge PDF online', 'join PDF files']}
       />
     </>
   );

@@ -32,22 +32,22 @@ export default function ImageToPDFPage() {
       <ImageToPDFTool />
       <ToolLandingLayout
         toolName="Image to PDF"
-      toolSlug="image-to-pdf"
-      description="Convert images to PDF instantly. Support for JPG, PNG, and all major image formats. Merge multiple images into one PDF document. Perfect for document scanning and photo organization."
-      heroImage="/tool-images/image-to-pdf-hero.png"
-      mainContent={`Image to PDF converts your photos and images into professional PDF documents instantly. Perfect for digitizing documents, creating photo albums, and combining multiple images into a single file.
+        toolSlug="image-to-pdf"
+        description="Convert images to PDF instantly. Support for JPG, PNG, and all major image formats. Merge multiple images into one PDF document. Perfect for document scanning and photo organization."
+        heroImage="/tool-images/image-to-pdf-hero.png"
+        mainContent={`Image to PDF converts your photos and images into professional PDF documents instantly. Perfect for digitizing documents, creating photo albums, and combining multiple images into a single file.
 
 Supports JPG, PNG, GIF, BMP, TIFF, and all major image formats. Merge multiple images into organized PDF pages or create individual PDFs for each image. Perfect quality and fast processing.
 
 Your images are processed securely and deleted automatically. No registration required, no watermarks, completely free. Convert single images or batch process dozens at once.`}
-      useCase={`Digitizing paper documents with camera photos
+        useCase={`Digitizing paper documents with camera photos
 Creating photo albums and galleries
 Scanning receipts and invoices
 Organizing document pages into one PDF
 Creating presentations from images
 Archiving photos as PDF files
 Converting whiteboard notes to documents`}
-      features={[
+        features={[
         'Support for JPG, PNG, GIF, BMP, TIFF',
         'Merge multiple images into one PDF',
         'Preserve image quality perfectly',
@@ -57,7 +57,7 @@ Converting whiteboard notes to documents`}
         'Instant processing',
         'Compress while converting',
       ]}
-      benefits={[
+        benefits={[
         'Create professional documents from photos',
         'Digitize paper documents easily',
         'Merge scattered images quickly',
@@ -67,7 +67,7 @@ Converting whiteboard notes to documents`}
         'Perfect for archiving',
         'Mobile-friendly scanning',
       ]}
-      testimonials={[
+        testimonials={[
         {
           name: 'Alex T.',
           role: 'Photographer',
@@ -84,13 +84,13 @@ Converting whiteboard notes to documents`}
           text: 'Perfect for digitizing receipts and documents. Fast, free, and always reliable. Now part of our document management process.',
         },
       ]}
-      relatedTools={[
+        relatedTools={[
         { name: 'PDF to Image', slug: 'pdf-to-image' },
         { name: 'Merge PDF', slug: 'merge-pdf' },
         { name: 'Compress PDF', slug: 'compress-pdf' },
         { name: 'PDF to Word', slug: 'pdf-to-word' },
       ]}
-      faqs={[
+        faqs={[
         {
           q: 'How do I convert images to PDF?',
           a: 'Upload your image files (JPG, PNG, etc.), arrange them in order, choose page settings, click Convert, and download your PDF. Simple and fast!',
@@ -140,7 +140,7 @@ Converting whiteboard notes to documents`}
           a: 'Completely free! No registration, no hidden fees, no limits. Convert unlimited images to PDF for free.',
         },
       ]}
-      primaryKeyword="image to PDF"
+        primaryKeyword="image to PDF"
         secondaryKeywords={['convert image to PDF', 'JPG to PDF', 'PNG to PDF', 'merge images into PDF']}
       />
     </>

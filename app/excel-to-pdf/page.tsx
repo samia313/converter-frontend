@@ -32,22 +32,22 @@ export default function ExcelToPDFPage() {
       <ExcelToPDFTool />
       <ToolLandingLayout
         toolName="Excel to PDF"
-      toolSlug="excel-to-pdf"
-      description="Convert Excel spreadsheets to PDF format instantly. Perfect for sharing reports, printing spreadsheets, and archiving data. Formatting preserved, security enhanced, and completely free."
-      heroImage="/tool-images/excel-to-pdf-hero.png"
-      mainContent={`Excel to PDF converts your spreadsheets into professional PDF documents instantly. Perfect for sharing financial reports, creating print-friendly spreadsheets, and archiving important data.
+        toolSlug="excel-to-pdf"
+        description="Convert Excel spreadsheets to PDF format instantly. Perfect for sharing reports, printing spreadsheets, and archiving data. Formatting preserved, security enhanced, and completely free."
+        heroImage="/tool-images/excel-to-pdf-hero.png"
+        mainContent={`Excel to PDF converts your spreadsheets into professional PDF documents instantly. Perfect for sharing financial reports, creating print-friendly spreadsheets, and archiving important data.
 
 Our converter preserves all Excel formatting including colors, fonts, borders, and calculations. Convert single sheets or entire workbooks with multiple sheets into organized PDF files.
 
 Convert spreadsheets securely with instant processing and automatic file deletion. No registration needed, no email verification, no hidden costs. Your files stay private throughout the conversion process.`}
-      useCase={`Converting financial reports for stakeholder distribution
+        useCase={`Converting financial reports for stakeholder distribution
 Creating print-friendly versions of budget spreadsheets
 Archiving sales data and performance metrics
 Sharing survey results in PDF format
 Creating professional invoices from Excel templates
 Distributing payroll reports securely
 Preparing spreadsheets for legal compliance`}
-      features={[
+        features={[
         'Convert Excel to professional PDF',
         'Preserve all formatting and styling',
         'Convert single sheets or entire workbooks',
@@ -57,7 +57,7 @@ Preparing spreadsheets for legal compliance`}
         'Instant download',
         'Works on all devices',
       ]}
-      benefits={[
+        benefits={[
         'Share spreadsheets safely',
         'Create print-ready documents',
         'Professional appearance',
@@ -67,7 +67,7 @@ Preparing spreadsheets for legal compliance`}
         'Universal file format',
         'Perfect formatting every time',
       ]}
-      testimonials={[
+        testimonials={[
         {
           name: 'Jennifer L.',
           role: 'Business Manager',
@@ -84,13 +84,13 @@ Preparing spreadsheets for legal compliance`}
           text: 'Converting 50+ spreadsheets monthly. Excel to PDF is the fastest solution. Formatting preserved perfectly every time.',
         },
       ]}
-      relatedTools={[
+        relatedTools={[
         { name: 'PDF to Excel', slug: 'pdf-to-excel' },
         { name: 'Word to PDF', slug: 'word-to-pdf' },
         { name: 'Compress PDF', slug: 'compress-pdf' },
         { name: 'Merge PDF', slug: 'merge-pdf' },
       ]}
-      faqs={[
+        faqs={[
         {
           q: 'How do I convert Excel files to PDF?',
           a: 'Upload your Excel file (.xls, .xlsx), choose your preferences (single sheet or all sheets), click Convert, and download your PDF. Takes just seconds!',
@@ -140,7 +140,7 @@ Preparing spreadsheets for legal compliance`}
           a: 'Charts, images, and all embedded objects are preserved perfectly in the PDF. Everything converts accurately.',
         },
       ]}
-      primaryKeyword="Excel to PDF"
+        primaryKeyword="Excel to PDF"
         secondaryKeywords={['convert Excel to PDF', 'spreadsheet to PDF', 'XLSX to PDF', 'Excel conversion']}
       />
     </>

@@ -13,22 +13,22 @@ export default function SplitPDFPage() {
     <>
       <SplitPDFTool />
       <ToolLandingLayout
-      toolName="Split PDF"
-      toolSlug="split-pdf"
-      description="Divide your PDF files into individual pages or extract specific page ranges. Perfect for organizing documents, extracting sections, and managing large PDF files with precision."
-      heroImage="/tool-images/split-pdf-hero.png"
-      mainContent={`Split PDF is the easiest way to divide your PDF documents into separate pages or extract specific ranges. Whether you need to isolate individual pages from a multi-page document or organize large PDFs into manageable sections, our tool handles everything instantly without compromising quality.
+        toolName="Split PDF"
+        toolSlug="split-pdf"
+        description="Divide your PDF files into individual pages or extract specific page ranges. Perfect for organizing documents, extracting sections, and managing large PDF files with precision."
+        heroImage="/tool-images/split-pdf-hero.png"
+        mainContent={`Split PDF is the easiest way to divide your PDF documents into separate pages or extract specific ranges. Whether you need to isolate individual pages from a multi-page document or organize large PDFs into manageable sections, our tool handles everything instantly without compromising quality.
 
 Our Split PDF tool is designed for professionals who work with large documents, students managing research papers, and anyone who needs to reorganize PDF files. With support for custom page ranges and batch processing, you can split files exactly the way you need.
 
 The splitting process is completely secure - your files are processed on our servers and automatically deleted after conversion. No registration required, no ads, no tracking. Split as many PDFs as you want, completely free.`}
-      useCase={`Students extracting specific chapters from textbooks or research papers
+        useCase={`Students extracting specific chapters from textbooks or research papers
 Business professionals isolating relevant documents from large reports
 Publishers and editors organizing multi-part publications
 Legal professionals extracting specific pages from contracts
 IT professionals managing technical documentation
 Content creators organizing multi-file publications`}
-      features={[
+        features={[
         'Split into individual pages instantly',
         'Extract custom page ranges',
         'Batch split multiple PDFs',
@@ -38,7 +38,7 @@ Content creators organizing multi-file publications`}
         'Automatic page detection',
         'Download instantly',
       ]}
-      benefits={[
+        benefits={[
         'Organize large documents efficiently',
         'Extract only needed pages',
         'Share individual sections easily',
@@ -48,7 +48,7 @@ Content creators organizing multi-file publications`}
         'Save time on manual splitting',
         'Maintain document integrity',
       ]}
-      testimonials={[
+        testimonials={[
         {
           name: 'Sarah M.',
           role: 'Legal Professional',
@@ -65,13 +65,13 @@ Content creators organizing multi-file publications`}
           text: 'Using Split PDF daily for document organization. Fast, reliable, and completely free. Exactly what we needed.',
         },
       ]}
-      relatedTools={[
+        relatedTools={[
         { name: 'Merge PDF', slug: 'merge-pdf' },
         { name: 'Compress PDF', slug: 'compress-pdf' },
         { name: 'PDF to Word', slug: 'pdf-to-word' },
         { name: 'Rotate PDF', slug: 'rotate-pdf' },
       ]}
-      faqs={[
+        faqs={[
         {
           q: 'How do I split a PDF into individual pages?',
           a: 'Upload your PDF file, select which pages you want to extract (individual pages or page ranges), click Split, and download your new PDF files. The process takes just seconds.',
@@ -121,8 +121,8 @@ Content creators organizing multi-file publications`}
           a: 'Yes! When you split a PDF, you get only the selected pages as a new file. Your original PDF remains untouched on your device.',
         },
       ]}
-      primaryKeyword="split PDF"
-      secondaryKeywords={['divide PDF', 'extract PDF pages', 'PDF splitter', 'separate PDF pages']}
+        primaryKeyword="split PDF"
+        secondaryKeywords={['divide PDF', 'extract PDF pages', 'PDF splitter', 'separate PDF pages']}
       />
     </>
   );

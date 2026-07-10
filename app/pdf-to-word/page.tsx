@@ -44,19 +44,19 @@ export default function PDFToWordPage() {
         toolSlug="pdf-to-word"
         description="Convert PDF documents to editable Word files in seconds. Maintain formatting, fonts, and layout. No sign-up required."
         heroImage="/tool-images/pdf-to-word-hero.png"
-      mainContent={`PDF to Word Converter transforms your PDF files into fully editable Word documents instantly. Perfect for professionals who need to edit content, modify formatting, or repurpose PDF material.
+        mainContent={`PDF to Word Converter transforms your PDF files into fully editable Word documents instantly. Perfect for professionals who need to edit content, modify formatting, or repurpose PDF material.
 
 Our advanced conversion technology preserves all formatting, fonts, images, and layout perfectly. Your Word document looks exactly like your original PDF, and everything is fully editable and customizable.
 
 Convert files of any size instantly with secure processing. Your files are encrypted and automatically deleted within 24 hours. No registration required, no watermarks, completely free. Convert unlimited PDFs to Word format.`}
-      useCase={`Editing content from PDF reports
+        useCase={`Editing content from PDF reports
 Repurposing PDF documents for new projects
 Converting scanned documents to editable files
 Extracting text from PDF forms
 Creating Word documents from PDF templates
 Modifying proposals and contracts
 Converting invoices to editable formats`}
-      testimonials={[
+        testimonials={[
         {
           name: 'Karen W.',
           role: 'Content Writer',
@@ -73,7 +73,7 @@ Converting invoices to editable formats`}
           text: 'Using PDF to Word daily for document conversions. Reliability is outstanding. No quality loss whatsoever.',
         },
       ]}
-      features={[
+        features={[
         'Instant PDF to Word conversion',
         'Preserves formatting and layout',
         'Supports batch conversion',
@@ -81,7 +81,7 @@ Converting invoices to editable formats`}
         'Secure file handling',
         'No software installation needed',
       ]}
-      benefits={[
+        benefits={[
         'Edit PDF content easily in Word',
         'Maintain professional formatting',
         'Support for all PDF types',
@@ -89,7 +89,7 @@ Converting invoices to editable formats`}
         'Compatible with all Word versions',
         'Download your files immediately',
       ]}
-      faqs={[
+        faqs={[
         {
           q: 'Can I convert large PDF files?',
           a: 'Yes, PDFilio supports conversion of large PDF files without size limitations. Handle any file size.',
@@ -139,14 +139,14 @@ Converting invoices to editable formats`}
           a: 'Our converter handles complex layouts including tables, columns, and images accurately.',
         },
       ]}
-      relatedTools={[
+        relatedTools={[
         { name: 'Word to PDF', slug: 'word-to-pdf' },
         { name: 'PDF to Excel', slug: 'pdf-to-excel' },
         { name: 'Compress PDF', slug: 'compress-pdf' },
         { name: 'Merge PDF', slug: 'merge-pdf' },
       ]}
-      primaryKeyword="PDF to Word"
-      secondaryKeywords={['convert PDF to Word', 'PDF to DOC', 'PDF to DOCX']}
+        primaryKeyword="PDF to Word"
+        secondaryKeywords={['convert PDF to Word', 'PDF to DOC', 'PDF to DOCX']}
     />
     </>
   );

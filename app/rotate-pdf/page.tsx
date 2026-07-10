@@ -32,22 +32,22 @@ export default function RotatePDFPage() {
       <RotatePDFTool />
       <ToolLandingLayout
         toolName="Rotate PDF"
-      toolSlug="rotate-pdf"
-      description="Rotate PDF pages to fix orientation and adjust page direction. Correct scanned documents, fix sideways pages, and organize your PDFs perfectly with precise rotation controls."
-      heroImage="/tool-images/rotate-pdf-hero.png"
-      mainContent={`Rotate PDF helps you fix page orientation issues in your PDF files. Whether you have scanned documents that are sideways, need to adjust page direction, or want to correct improperly oriented pages, our tool makes it simple.
+        toolSlug="rotate-pdf"
+        description="Rotate PDF pages to fix orientation and adjust page direction. Correct scanned documents, fix sideways pages, and organize your PDFs perfectly with precise rotation controls."
+        heroImage="/tool-images/rotate-pdf-hero.png"
+        mainContent={`Rotate PDF helps you fix page orientation issues in your PDF files. Whether you have scanned documents that are sideways, need to adjust page direction, or want to correct improperly oriented pages, our tool makes it simple.
 
 Rotate PDF pages individually or all at once by 90, 180, or 270 degrees. Perfect for fixing scanned documents from multi-function printers, organizing mixed-orientation PDFs, and preparing documents for professional use.
 
 Our rotation tool maintains 100% of your PDF quality and formatting. Process files of any size instantly without registration. Your documents stay private - we never store or share your files.`}
-      useCase={`Fixing scanned documents that came out sideways from the scanner
+        useCase={`Fixing scanned documents that came out sideways from the scanner
 Correcting portrait-oriented pages in landscape documents
 Preparing documents for professional printing
 Organizing mixed-orientation PDFs into consistent format
 Adjusting page orientation for eBook readers
 Preparing documents for tablet or mobile viewing
 Correcting camera scan photos converted to PDF`}
-      features={[
+        features={[
         'Rotate by 90, 180, or 270 degrees',
         'Rotate all pages or individual pages',
         'Batch rotate multiple PDFs',
@@ -57,7 +57,7 @@ Correcting camera scan photos converted to PDF`}
         'Works on all devices',
         'Automatic save after rotation',
       ]}
-      benefits={[
+        benefits={[
         'Fix improperly scanned documents',
         'Improve document readability',
         'Save time on manual corrections',
@@ -67,7 +67,7 @@ Correcting camera scan photos converted to PDF`}
         'Prepare for printing',
         'Consistent page orientation',
       ]}
-      testimonials={[
+        testimonials={[
         {
           name: 'Robert J.',
           role: 'Document Manager',
@@ -84,13 +84,13 @@ Correcting camera scan photos converted to PDF`}
           text: 'Free, fast, and no complicated menus. Rotate PDF does exactly what it should do perfectly.',
         },
       ]}
-      relatedTools={[
+        relatedTools={[
         { name: 'Merge PDF', slug: 'merge-pdf' },
         { name: 'Split PDF', slug: 'split-pdf' },
         { name: 'Compress PDF', slug: 'compress-pdf' },
         { name: 'PDF to Word', slug: 'pdf-to-word' },
       ]}
-      faqs={[
+        faqs={[
         {
           q: 'How do I rotate PDF pages?',
           a: 'Upload your PDF, select rotation angle (90, 180, or 270 degrees), choose whether to rotate all pages or specific pages, and download. Done in seconds!',
@@ -140,7 +140,7 @@ Correcting camera scan photos converted to PDF`}
           a: 'Rotate PDF works with standard PDF files (.pdf). For other formats, first convert them to PDF using our conversion tools.',
         },
       ]}
-      primaryKeyword="rotate PDF"
+        primaryKeyword="rotate PDF"
         secondaryKeywords={['fix PDF orientation', 'rotate PDF pages', 'PDF page rotation', 'fix sideways PDF']}
       />
     </>
