@@ -19,45 +19,60 @@ Formal language. Proper structure. Citation compatibility. Academic conventions.
 
 Student Ready:
 Perfect for essays, papers, research projects, dissertations. Academic quality guaranteed. Citation ready.`}
-      useCase={{
-        'Essay rewriting': 'Academic excellence',
-        'Research paper rewriting': 'Scholarly quality',
-        'Dissertation enhancement': 'Professional standard',
-        'Thesis improvement': 'Academic polish',
-        'Academic writing refinement': 'Scholarly tone',
-        'Citation compatibility': 'Research integrity',
-        'Academic standards': 'Formal quality',
-        'Scholarly communication': 'Expert expression',
-      }}
-      testimonials={{
-        'Dr. Alexandra Price': 'Professor - Students submit improved work. Academic quality enhanced. Learning support excellent.',
-        'Michael Lee': 'PhD Student - Dissertation improved significantly. Maintains academic integrity perfectly.',
-      }}
-      features={{
-        'Academic tone': 'Formal language',
-        'Scholarly style': 'Expert expression',
-        'Citation ready': 'Research compatible',
-        'Academic standards': 'Formal conventions',
-        'Research integrity': 'Citation maintained',
-        'Thesis ready': 'Professional quality',
-        'Academic structure': 'Proper organization',
-        'Scholarly vocabulary': 'Expert language',
-      }}
-      benefits={{
-        'Academic quality': 'Scholarly excellence',
-        'Thesis ready': 'Professional standard',
-        'Citation compatible': 'Research ready',
-        'Academic credibility': 'Expert tone',
-        'Learning support': 'Skill development',
-        'Research integrity': 'Citation maintained',
-        'Professional quality': 'Academic standard',
-        'Time efficient': 'Quick processing',
-      }}
-      faqs={{
-        'Academic appropriate?': 'Yes. Specialized for academic writing with proper scholarly tone.',
-        'Citation compatible?': 'Yes. Maintains citation format and research integrity.',
-        'Thesis ready?': 'Yes. Professional academic quality throughout.',
-      }}
+      useCase={`Essay rewriting
+Research paper rewriting
+Dissertation enhancement
+Thesis improvement
+Academic writing refinement
+Citation compatibility
+Academic standards
+Scholarly communication`}
+      testimonials={[
+        {
+          name: 'Dr. Alexandra Price',
+          role: 'Professor',
+          text: 'Students submit improved work. Academic quality enhanced. Learning support excellent.',
+        },
+        {
+          name: 'Michael Lee',
+          role: 'PhD Student',
+          text: 'Dissertation improved significantly. Maintains academic integrity perfectly.',
+        },
+      ]}
+      features={[
+        'Academic tone',
+        'Scholarly style',
+        'Citation ready',
+        'Academic standards',
+        'Research integrity',
+        'Thesis ready',
+        'Academic structure',
+        'Scholarly vocabulary',
+      ]}
+      benefits={[
+        'Academic quality',
+        'Thesis ready',
+        'Citation compatible',
+        'Academic credibility',
+        'Learning support',
+        'Research integrity',
+        'Professional quality',
+        'Time efficient',
+      ]}
+      faqs={[
+        {
+          q: 'Academic appropriate?',
+          a: 'Yes. Specialized for academic writing with proper scholarly tone.',
+        },
+        {
+          q: 'Citation compatible?',
+          a: 'Yes. Maintains citation format and research integrity.',
+        },
+        {
+          q: 'Thesis ready?',
+          a: 'Yes. Professional academic quality throughout.',
+        },
+      ]}
       relatedTools={[
         { name: 'AI Rewrite PDF', slug: 'ai-rewrite-pdf' },
         { name: 'Research Paper Rewriter', slug: 'research-paper-rewriter' },
