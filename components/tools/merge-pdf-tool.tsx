@@ -1,13 +1,21 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Download, Trash2, GripVertical } from 'lucide-react';
+import { Download, Trash2, GripVertical, CheckCircle, AlertCircle } from 'lucide-react';
+
+interface MergeResult {
+  filesCount: number;
+  totalPages: number;
+  outputSize: number;
+}
 
 export default function MergePDFTool() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [result, setResult] = useState<MergeResult | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -28,6 +36,8 @@ export default function MergePDFTool() {
 
     setIsProcessing(true);
     setError(null);
+    setResult(null);
+    setProgress(0);
 
     try {
       const formData = new FormData();
@@ -35,20 +45,48 @@ export default function MergePDFTool() {
         formData.append('files', file);
       });
 
+      setProgress(30);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60000);
+
       const response = await fetch('/api/convert/merge-pdf', {
         method: 'POST',
         body: formData,
+        signal: controller.signal,
       });
 
+      clearTimeout(timeoutId);
+
       if (!response.ok) {
-        throw new Error('Merge failed');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Failed: ${response.statusText}`);
       }
 
+      setProgress(80);
+
       const blob = await response.blob();
+      const filesCount = parseInt(response.headers.get('X-Merged-Files') || '0');
+      const totalPages = parseInt(response.headers.get('X-Total-Pages') || '0');
+      const outputSize = parseInt(response.headers.get('X-Output-Size') || String(blob.size));
+
+      setResult({
+        filesCount,
+        totalPages,
+        outputSize,
+      });
+
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
+      setProgress(100);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Merge failed');
+      if (err instanceof Error && err.name === 'AbortError') {
+        setError('Processing timeout - merge took too long. Try with fewer files.');
+      } else if (err instanceof Error && err.message.includes('429')) {
+        setError('Too many requests. Please wait a moment and try again.');
+      } else {
+        setError(err instanceof Error ? err.message : 'Merge failed');
+      }
     } finally {
       setIsProcessing(false);
     }
@@ -64,6 +102,16 @@ export default function MergePDFTool() {
       document.body.removeChild(a);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (downloadUrl) {
+        window.URL.revokeObjectURL(downloadUrl);
+      }
+    };
+  }, [downloadUrl]);
+
+  const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
 
   return (
     <section className="min-h-screen bg-gradient-to-b from-green-50 to-white py-12 md:py-20">
@@ -138,22 +186,84 @@ export default function MergePDFTool() {
             </div>
           )}
 
+          {/* Stats */}
+          {selectedFiles.length > 0 && !downloadUrl && (
+            <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs text-blue-600 font-semibold">TOTAL FILES</p>
+                  <p className="text-2xl font-bold text-blue-900">{selectedFiles.length}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-blue-600 font-semibold">TOTAL SIZE</p>
+                  <p className="text-2xl font-bold text-blue-900">
+                    {(totalSize / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Action Buttons */}
           {!downloadUrl ? (
-            <div className="flex gap-4">
+            <>
               <button
                 onClick={handleMerge}
                 disabled={selectedFiles.length < 2 || isProcessing}
-                className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition"
+                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition flex items-center justify-center gap-2"
               >
-                {isProcessing ? 'Merging...' : 'Merge PDF Files'}
+                {isProcessing && (
+                  <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                )}
+                <span>{isProcessing ? 'Merging PDFs...' : 'Merge PDF Files'}</span>
               </button>
-            </div>
+              {isProcessing && (
+                <div className="mt-4 space-y-3">
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-green-600 h-2 rounded-full transition-all"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-green-700 text-sm text-center font-medium">
+                    {progress < 50 && 'Reading PDF files...'}
+                    {progress >= 50 && progress < 90 && 'Merging pages...'}
+                    {progress >= 90 && 'Finalizing...'}
+                  </p>
+                </div>
+              )}
+            </>
           ) : (
-            <div className="text-center">
-              <p className="text-green-600 font-semibold mb-4">
-                Merge completed successfully!
-              </p>
+            <div className="text-center space-y-6">
+              <div className="flex items-center justify-center gap-2">
+                <CheckCircle className="w-6 h-6 text-green-600" />
+                <p className="text-green-600 font-semibold text-lg">
+                  PDFs merged successfully!
+                </p>
+              </div>
+
+              {result && (
+                <div className="grid grid-cols-3 gap-4 bg-green-50 p-4 rounded-lg">
+                  <div>
+                    <p className="text-xs text-green-600">FILES MERGED</p>
+                    <p className="text-2xl font-bold text-green-900">{result.filesCount}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-green-600">TOTAL PAGES</p>
+                    <p className="text-2xl font-bold text-green-900">{result.totalPages}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-green-600">OUTPUT SIZE</p>
+                    <p className="text-2xl font-bold text-green-900">
+                      {(result.outputSize / 1024 / 1024).toFixed(2)} MB
+                    </p>
+                  </div>
+                </div>
+              )}
+
               <div className="flex gap-4 justify-center">
                 <button
                   onClick={handleDownload}
@@ -166,6 +276,8 @@ export default function MergePDFTool() {
                   onClick={() => {
                     setSelectedFiles([]);
                     setDownloadUrl(null);
+                    setResult(null);
+                    if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
                   }}
                   className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg"
                 >
