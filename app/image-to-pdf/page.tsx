@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
+import ImageToPDFTool from '@/components/tools/image-to-pdf-tool';
 
 export const metadata: Metadata = {
   title: 'Image to PDF - Convert Images to PDF | PDFilio',
@@ -27,8 +28,10 @@ export default function ImageToPDFPage() {
   };
 
   return (
-    <ToolLandingLayout
-      toolName="Image to PDF"
+    <>
+      <ImageToPDFTool />
+      <ToolLandingLayout
+        toolName="Image to PDF"
       toolSlug="image-to-pdf"
       description="Convert images to PDF instantly. Support for JPG, PNG, and all major image formats. Merge multiple images into one PDF document. Perfect for document scanning and photo organization."
       heroImage="/tool-images/image-to-pdf-hero.png"
@@ -138,7 +141,8 @@ Converting whiteboard notes to documents`}
         },
       ]}
       primaryKeyword="image to PDF"
-      secondaryKeywords={['convert image to PDF', 'JPG to PDF', 'PNG to PDF', 'merge images into PDF']}
-    />
+        secondaryKeywords={['convert image to PDF', 'JPG to PDF', 'PNG to PDF', 'merge images into PDF']}
+      />
+    </>
   );
 }

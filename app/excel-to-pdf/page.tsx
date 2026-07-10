@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
+import ExcelToPDFTool from '@/components/tools/excel-to-pdf-tool';
 
 export const metadata: Metadata = {
   title: 'Excel to PDF - Convert Spreadsheets to PDF | PDFilio',
@@ -27,8 +28,10 @@ export default function ExcelToPDFPage() {
   };
 
   return (
-    <ToolLandingLayout
-      toolName="Excel to PDF"
+    <>
+      <ExcelToPDFTool />
+      <ToolLandingLayout
+        toolName="Excel to PDF"
       toolSlug="excel-to-pdf"
       description="Convert Excel spreadsheets to PDF format instantly. Perfect for sharing reports, printing spreadsheets, and archiving data. Formatting preserved, security enhanced, and completely free."
       heroImage="/tool-images/excel-to-pdf-hero.png"
@@ -138,7 +141,8 @@ Preparing spreadsheets for legal compliance`}
         },
       ]}
       primaryKeyword="Excel to PDF"
-      secondaryKeywords={['convert Excel to PDF', 'spreadsheet to PDF', 'XLSX to PDF', 'Excel conversion']}
-    />
+        secondaryKeywords={['convert Excel to PDF', 'spreadsheet to PDF', 'XLSX to PDF', 'Excel conversion']}
+      />
+    </>
   );
 }

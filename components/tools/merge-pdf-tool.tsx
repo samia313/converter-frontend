@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Download, Trash2, GripVertical } from 'lucide-react';
 
 export default function MergePDFTool() {

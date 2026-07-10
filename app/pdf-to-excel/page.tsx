@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
+import PDFToExcelTool from '@/components/tools/pdf-to-excel-tool';
 
 export const metadata: Metadata = {
   title: 'PDF to Excel - Convert Tables to Spreadsheets | PDFilio',
@@ -27,8 +28,10 @@ export default function PDFToExcelPage() {
   };
 
   return (
-    <ToolLandingLayout
-      toolName="PDF to Excel"
+    <>
+      <PDFToExcelTool />
+      <ToolLandingLayout
+        toolName="PDF to Excel"
       toolSlug="pdf-to-excel"
       description="Convert PDF tables and data into editable Excel spreadsheets. Extract financial data, reports, and structured information from PDFs instantly with perfect formatting preserved."
       heroImage="/tool-images/pdf-to-excel-hero.png"
@@ -138,7 +141,8 @@ Processing bank statements and transaction data`}
         },
       ]}
       primaryKeyword="PDF to Excel"
-      secondaryKeywords={['convert PDF to Excel', 'PDF table to Excel', 'extract data from PDF', 'PDF to spreadsheet']}
-    />
+        secondaryKeywords={['convert PDF to Excel', 'PDF table to Excel', 'extract data from PDF', 'PDF to spreadsheet']}
+      />
+    </>
   );
 }

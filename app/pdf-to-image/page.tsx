@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
+import PdfToImageTool from '@/components/tools/pdf-to-image-tool';
 
 export const metadata: Metadata = {
   title: 'PDF to Image - Convert PDF Pages to Images | PDFilio',
@@ -27,24 +28,26 @@ export default function PDFToImagePage() {
   };
 
   return (
-    <ToolLandingLayout
-      toolName="PDF to Image"
-      toolSlug="pdf-to-image"
-      description="Convert PDF pages to images instantly. Download as JPG, PNG, or other formats. Extract individual pages or convert entire documents. Perfect for sharing, editing, and web use."
-      heroImage="/tool-images/pdf-to-image-hero.png"
-      mainContent={`PDF to Image converts your PDF pages into high-quality image files instantly. Perfect for sharing PDF content on social media, editing pages in image editors, or creating visual previews.
+    <>
+      <PdfToImageTool />
+      <ToolLandingLayout
+        toolName="PDF to Image"
+        toolSlug="pdf-to-image"
+        description="Convert PDF pages to images instantly. Download as JPG, PNG, or other formats. Extract individual pages or convert entire documents. Perfect for sharing, editing, and web use."
+        heroImage="/tool-images/pdf-to-image-hero.png"
+        mainContent={`PDF to Image converts your PDF pages into high-quality image files instantly. Perfect for sharing PDF content on social media, editing pages in image editors, or creating visual previews.
 
 Convert individual PDF pages or entire documents to JPG, PNG, or other image formats. Choose quality and resolution settings to match your needs. Perfect for web use, email sharing, or print preparation.
 
 Our conversion process is fast and secure. Your files are processed instantly and deleted automatically. No registration required, no watermarks, completely free.`}
-      useCase={`Converting PDF pages for social media sharing
+        useCase={`Converting PDF pages for social media sharing
 Creating image previews of PDF documents
 Editing PDF pages in photo editors
 Preparing documents for web display
 Archiving documents as image files
 Creating thumbnails from PDF pages
 Extracting specific pages as images for presentations`}
-      features={[
+        features={[
         'Convert to JPG, PNG, or WebP',
         'Convert all pages or select individual pages',
         'High-quality image output',
@@ -137,8 +140,9 @@ Extracting specific pages as images for presentations`}
           a: '100% free! Unlimited conversions, no registration, no hidden fees. Convert as many PDFs as you need.',
         },
       ]}
-      primaryKeyword="PDF to image"
-      secondaryKeywords={['convert PDF to image', 'PDF to JPG', 'PDF to PNG', 'extract PDF as image']}
-    />
+        primaryKeyword="PDF to image"
+        secondaryKeywords={['convert PDF to image', 'PDF to JPG', 'PDF to PNG', 'extract PDF as image']}
+      />
+    </>
   );
 }

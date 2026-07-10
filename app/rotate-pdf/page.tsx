@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
+import RotatePDFTool from '@/components/tools/rotate-pdf-tool';
 
 export const metadata: Metadata = {
   title: 'Rotate PDF - Fix Page Orientation | PDFilio',
@@ -27,8 +28,10 @@ export default function RotatePDFPage() {
   };
 
   return (
-    <ToolLandingLayout
-      toolName="Rotate PDF"
+    <>
+      <RotatePDFTool />
+      <ToolLandingLayout
+        toolName="Rotate PDF"
       toolSlug="rotate-pdf"
       description="Rotate PDF pages to fix orientation and adjust page direction. Correct scanned documents, fix sideways pages, and organize your PDFs perfectly with precise rotation controls."
       heroImage="/tool-images/rotate-pdf-hero.png"
@@ -138,7 +141,8 @@ Correcting camera scan photos converted to PDF`}
         },
       ]}
       primaryKeyword="rotate PDF"
-      secondaryKeywords={['fix PDF orientation', 'rotate PDF pages', 'PDF page rotation', 'fix sideways PDF']}
-    />
+        secondaryKeywords={['fix PDF orientation', 'rotate PDF pages', 'PDF page rotation', 'fix sideways PDF']}
+      />
+    </>
   );
 }

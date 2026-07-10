@@ -4,14 +4,14 @@ import { useState, useEffect } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
 
-export default function CompressPDFTool() {
+export default function RotatePDFTool() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [quality, setQuality] = useState<'high' | 'medium' | 'low'>('medium');
+  const [rotation, setRotation] = useState<90 | 180 | 270>(90);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
-  const handleCompress = async () => {
+  const handleRotate = async () => {
     if (!selectedFile) return;
 
     setIsProcessing(true);
@@ -20,22 +20,22 @@ export default function CompressPDFTool() {
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
-      formData.append('quality', quality);
+      formData.append('rotation', rotation.toString());
 
-      const response = await fetch('/api/convert/compress-pdf', {
+      const response = await fetch('/api/convert/rotate-pdf', {
         method: 'POST',
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error('Compression failed');
+        throw new Error('Rotation failed');
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Compression failed');
+      setError(err instanceof Error ? err.message : 'Rotation failed');
     } finally {
       setIsProcessing(false);
     }
@@ -45,7 +45,7 @@ export default function CompressPDFTool() {
     if (downloadUrl && selectedFile) {
       const a = document.createElement('a');
       a.href = downloadUrl;
-      a.download = selectedFile.name.replace('.pdf', '_compressed.pdf');
+      a.download = selectedFile.name.replace('.pdf', '_rotated.pdf');
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -53,14 +53,14 @@ export default function CompressPDFTool() {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-orange-50 to-white py-12 md:py-20">
+    <section className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 md:py-20">
       <div className="container mx-auto max-w-2xl px-4">
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Compress PDF
+            Rotate PDF
           </h1>
           <p className="text-lg text-gray-600">
-            Reduce PDF file size without losing quality
+            Fix PDF page orientation
           </p>
         </div>
 
@@ -68,39 +68,32 @@ export default function CompressPDFTool() {
           <FileUploader
             accept=".pdf"
             onFileSelected={(files) => setSelectedFile(files[0] || null)}
-            
             maxSize={50}
           />
 
-          {/* Quality Selection */}
           <div className="mt-8 mb-8">
             <label className="block text-sm font-semibold text-gray-700 mb-4">
-              Compression Quality
+              Rotation Angle
             </label>
             <div className="grid grid-cols-3 gap-4">
-              {(['high', 'medium', 'low'] as const).map((q) => (
+              {([90, 180, 270] as const).map((angle) => (
                 <label
-                  key={q}
+                  key={angle}
                   className={`p-4 text-center cursor-pointer rounded-lg border-2 transition ${
-                    quality === q
-                      ? 'border-orange-600 bg-orange-50'
-                      : 'border-gray-200 hover:border-orange-300'
+                    rotation === angle
+                      ? 'border-blue-600 bg-blue-50'
+                      : 'border-gray-200 hover:border-blue-300'
                   }`}
                 >
                   <input
                     type="radio"
-                    name="quality"
-                    value={q}
-                    checked={quality === q}
-                    onChange={(e) => setQuality(e.target.value as typeof quality)}
+                    name="rotation"
+                    value={angle}
+                    checked={rotation === angle}
+                    onChange={(e) => setRotation(Number(e.target.value) as typeof rotation)}
                     className="hidden"
                   />
-                  <div className="font-semibold text-gray-900 capitalize">{q}</div>
-                  <div className="text-xs text-gray-600 mt-1">
-                    {q === 'high' && 'Best Quality'}
-                    {q === 'medium' && 'Balanced'}
-                    {q === 'low' && 'Smaller Size'}
-                  </div>
+                  <div className="font-semibold text-gray-900">{angle}°</div>
                 </label>
               ))}
             </div>
@@ -114,24 +107,24 @@ export default function CompressPDFTool() {
 
           {!downloadUrl ? (
             <button
-              onClick={handleCompress}
+              onClick={handleRotate}
               disabled={!selectedFile || isProcessing}
-              className="w-full bg-orange-600 hover:bg-orange-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition"
             >
-              {isProcessing ? 'Compressing...' : 'Compress PDF'}
+              {isProcessing ? 'Rotating...' : 'Rotate PDF'}
             </button>
           ) : (
             <div className="text-center">
               <p className="text-green-600 font-semibold mb-4">
-                Compression completed successfully!
+                Rotation completed successfully!
               </p>
               <div className="flex gap-4 justify-center">
                 <button
                   onClick={handleDownload}
-                  className="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-8 rounded-lg"
+                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg"
                 >
                   <Download className="w-5 h-5" />
-                  Download Compressed
+                  Download Rotated
                 </button>
                 <button
                   onClick={() => {
@@ -140,7 +133,7 @@ export default function CompressPDFTool() {
                   }}
                   className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg"
                 >
-                  Compress Another
+                  Rotate Another
                 </button>
               </div>
             </div>
