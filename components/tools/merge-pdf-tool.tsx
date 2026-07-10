@@ -20,7 +20,38 @@ export default function MergePDFTool() {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      setSelectedFiles([...selectedFiles, ...newFiles]);
+      
+      // Validate file types
+      const validFiles: File[] = [];
+      const invalidFiles: File[] = [];
+      
+      newFiles.forEach(file => {
+        const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+        if (isPDF) {
+          validFiles.push(file);
+        } else {
+          invalidFiles.push(file);
+        }
+      });
+      
+      // Show error if there are invalid files
+      if (invalidFiles.length > 0) {
+        const invalidNames = invalidFiles.map(f => f.name).join(', ');
+        const hasDocx = invalidFiles.some(f => f.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || f.name.toLowerCase().endsWith('.docx'));
+        
+        if (hasDocx) {
+          setError(`Word documents detected: ${invalidNames}\n\nTo merge Word files: First convert them to PDF using the "Word to PDF" tool, then merge them together.`);
+        } else {
+          setError(`Invalid file format: ${invalidNames}\n\nOnly PDF files can be merged. Please select PDF files.`);
+        }
+      } else {
+        setError(null);
+      }
+      
+      // Add only valid PDF files
+      if (validFiles.length > 0) {
+        setSelectedFiles([...selectedFiles, ...validFiles]);
+      }
     }
   };
 
@@ -128,6 +159,11 @@ export default function MergePDFTool() {
         <div className="bg-white rounded-2xl shadow-lg p-8">
           {/* File Upload Area */}
           <div className="mb-8">
+            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-blue-700 text-sm">
+                <strong>Only PDF files can be merged.</strong> If you have Word documents, Excel files, or images, use the appropriate conversion tool first (Word to PDF, Excel to PDF, Image to PDF) to convert them to PDF format.
+              </p>
+            </div>
             <label className="flex items-center justify-center w-full p-8 border-2 border-dashed border-green-300 rounded-lg cursor-pointer hover:bg-green-50 transition">
               <div className="text-center">
                 <p className="text-gray-600 font-semibold">
@@ -140,7 +176,7 @@ export default function MergePDFTool() {
               <input
                 type="file"
                 multiple
-                accept=".pdf"
+                accept=".pdf,application/pdf"
                 onChange={handleFileSelect}
                 className="hidden"
               />
@@ -182,7 +218,7 @@ export default function MergePDFTool() {
 
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-700 text-sm">{error}</p>
+              <p className="text-red-700 text-sm whitespace-pre-wrap">{error}</p>
             </div>
           )}
 
