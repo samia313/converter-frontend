@@ -18,8 +18,11 @@ export default function PDFToWordTool() {
     setIsProcessing(true);
     setError(null);
     setDownloadUrl(null);
+    setIsComplete(false);
 
     try {
+      console.log('[v0] Starting PDF to Word conversion for:', selectedFile.name);
+      
       const formData = new FormData();
       formData.append('file', selectedFile);
 
@@ -29,16 +32,31 @@ export default function PDFToWordTool() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Conversion failed');
+        let errorMessage = 'Conversion failed';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorData.details || errorMessage;
+        } catch {
+          errorMessage = `Server error: ${response.status} ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
       }
 
       const blob = await response.blob();
+      console.log('[v0] Received converted file, size:', blob.size);
+      
+      if (blob.size === 0) {
+        throw new Error('Converted file is empty');
+      }
+      
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
       setIsComplete(true);
+      setIsProcessing(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const errorMsg = err instanceof Error ? err.message : 'An error occurred';
+      console.error('[v0] Conversion error:', errorMsg);
+      setError(errorMsg);
       setIsProcessing(false);
     }
   };
