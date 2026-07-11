@@ -124,12 +124,9 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
         {/* Google AdSense */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3342033551482593"
-          crossOrigin="anonymous"
-        />
-        
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3342033551482593"
+          crossorigin="anonymous"></script>
+
         {/* Favicons */}
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
@@ -137,7 +134,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-icon-180x180.png" sizes="180x180" />
         <link rel="apple-touch-icon" href="/favicon.png?v=3" />
         <link rel="sitemap" href="/sitemap.xml" />
-        
+
         {/* JSON-LD Structured Data */}
         <script
           type="application/ld+json"
