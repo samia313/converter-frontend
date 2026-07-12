@@ -22,7 +22,7 @@ export default function AISummaryTool() {
       formData.append('file', selectedFile);
       formData.append('length', summaryLength);
 
-      const response = await fetch('/api/convert/ai-summary', {
+      const response = await fetch('/api/ai/summarize', {
         method: 'POST',
         body: formData,
       });
@@ -32,7 +32,7 @@ export default function AISummaryTool() {
       }
 
       const data = await response.json();
-      setSummary(data.summary || 'Could not generate summary');
+      setSummary(data.summary || data.response || 'Could not generate summary');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate summary');
     } finally {

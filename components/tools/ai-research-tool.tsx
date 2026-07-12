@@ -22,7 +22,7 @@ export default function AIResearchTool() {
       formData.append('file', selectedFile);
       formData.append('type', researchType);
 
-      const response = await fetch('/api/convert/ai-research', {
+      const response = await fetch('/api/ai/research', {
         method: 'POST',
         body: formData,
       });
@@ -32,7 +32,7 @@ export default function AIResearchTool() {
       }
 
       const data = await response.json();
-      setResults(data.analysis || 'Could not analyze document');
+      setResults(data.analysis || data.response || 'Could not analyze document');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to analyze document');
     } finally {

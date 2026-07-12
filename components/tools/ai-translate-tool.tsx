@@ -37,7 +37,7 @@ export default function AITranslateTool() {
       formData.append('file', selectedFile);
       formData.append('language', targetLanguage);
 
-      const response = await fetch('/api/convert/ai-translate', {
+      const response = await fetch('/api/ai/translate', {
         method: 'POST',
         body: formData,
       });
@@ -47,7 +47,7 @@ export default function AITranslateTool() {
       }
 
       const data = await response.json();
-      setTranslatedText(data.translatedText || 'Translation could not be completed');
+      setTranslatedText(data.translatedText || data.response || 'Translation could not be completed');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to translate document');
     } finally {

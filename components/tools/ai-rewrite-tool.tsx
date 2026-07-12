@@ -22,7 +22,7 @@ export default function AIRewriteTool() {
       formData.append('file', selectedFile);
       formData.append('tone', tone);
 
-      const response = await fetch('/api/convert/ai-rewrite', {
+      const response = await fetch('/api/ai/analyze', {
         method: 'POST',
         body: formData,
       });
@@ -32,7 +32,7 @@ export default function AIRewriteTool() {
       }
 
       const data = await response.json();
-      setRewrittenText(data.rewrittenText || 'Could not rewrite document');
+      setRewrittenText(data.rewrittenText || data.response || 'Could not rewrite document');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to rewrite document');
     } finally {
