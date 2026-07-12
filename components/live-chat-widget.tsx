@@ -67,7 +67,7 @@ export default function LiveChatWidget() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-red-600 text-white rounded-full shadow-lg hover:bg-red-700 transition-all flex items-center justify-center z-40 hover:scale-110"
+        className="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all flex items-center justify-center z-40 hover:scale-110"
         title="Open chat"
       >
         <MessageCircle className="w-7 h-7" />
@@ -80,25 +80,25 @@ export default function LiveChatWidget() {
       isMinimized ? 'h-14' : 'h-96'
     }`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white p-4 rounded-t-lg flex items-center justify-between">
+      <div className="bg-gradient-to-r from-blue-600 to-sky-700 text-white p-4 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
           <div>
             <h3 className="font-bold">PDFilio Support</h3>
-            <p className="text-xs text-red-100">We're online</p>
+            <p className="text-xs text-blue-100">We're online</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsMinimized(!isMinimized)}
-            className="p-1 hover:bg-red-500 rounded transition-colors"
+            className="p-1 hover:bg-blue-500 rounded transition-colors"
             title={isMinimized ? 'Expand' : 'Minimize'}
           >
             {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
           </button>
           <button
             onClick={() => setIsOpen(false)}
-            className="p-1 hover:bg-red-500 rounded transition-colors"
+            className="p-1 hover:bg-blue-500 rounded transition-colors"
             title="Close"
           >
             <X className="w-4 h-4" />
@@ -118,13 +118,13 @@ export default function LiveChatWidget() {
                 <div
                   className={`max-w-xs px-4 py-2 rounded-lg ${
                     message.sender === 'user'
-                      ? 'bg-red-600 text-white rounded-br-none'
+                      ? 'bg-blue-600 text-white rounded-br-none'
                       : 'bg-white border border-gray-200 text-gray-900 rounded-bl-none'
                   }`}
                 >
                   <p className="text-sm">{message.text}</p>
                   <p className={`text-xs mt-1 ${
-                    message.sender === 'user' ? 'text-red-100' : 'text-gray-500'
+                    message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
                   }`}>
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
@@ -153,13 +153,13 @@ export default function LiveChatWidget() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Type a message..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={isLoading}
               />
               <button
                 type="submit"
                 disabled={isLoading || !inputValue.trim()}
-                className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send className="w-4 h-4" />
               </button>

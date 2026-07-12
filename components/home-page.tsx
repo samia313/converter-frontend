@@ -110,7 +110,7 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
               onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:shadow-2xl shadow-lg font-bold transition-all duration-200 flex items-center justify-center gap-2 text-base"
+              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-sky-600 text-white rounded-lg hover:shadow-2xl shadow-lg font-bold transition-all duration-200 flex items-center justify-center gap-2 text-base"
             >
               Explore All Tools
               <ChevronRight className="w-5 h-5" />
@@ -118,7 +118,7 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 border-2 border-red-500 text-red-400 rounded-lg hover:bg-red-500/10 font-bold transition-all duration-200 text-base backdrop-blur-sm"
+              className="px-8 py-4 border-2 border-sky-500 text-sky-400 rounded-lg hover:bg-sky-500/10 font-bold transition-all duration-200 text-base backdrop-blur-sm"
             >
               Explore Premium
             </motion.button>
