@@ -112,7 +112,7 @@ export default function CompressPDFTool() {
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* File Upload */}
           <div className="p-8 border-b border-gray-200">
-            <label 
+            <div 
               onClick={() => fileInputRef.current?.click()}
               className="flex items-center justify-center w-full p-10 border-2 border-dashed border-blue-300 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-blue-500 transition-all"
             >
@@ -121,14 +121,14 @@ export default function CompressPDFTool() {
                 <p className="text-lg font-semibold text-gray-900">Click to select PDF</p>
                 <p className="text-sm text-gray-500 mt-1">Select a PDF file to compress</p>
               </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".pdf"
-                onChange={handleFileSelect}
-                className="hidden"
-              />
-            </label>
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
           </div>
 
           {/* Selected File */}
