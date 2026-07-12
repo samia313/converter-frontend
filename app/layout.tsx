@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'PDFilio - Free AI-Powered PDF Tools & Editor | Convert, Merge, Compress',
-  description: 'PDFilio - Complete PDF solution with 45+ free professional tools. Convert PDF to Word, merge, split, compress, edit, OCR, protect and more with AI. No sign-up required. Enterprise-grade security.',
+  title: 'PDFilio - Free AI-Powered PDF Tools & Editor | Convert, Merge, Compress | Modern Blue Design',
+  description: 'PDFilio - Complete PDF solution with 60+ free professional AI-powered tools. Convert PDF to Word, merge, split, compress, edit, translate, summarize, OCR, and more. No sign-up required. Enterprise-grade security. Professional blue theme.',
   keywords: 'PDF converter, PDF editor, merge PDF, compress PDF, PDF to Word, Word to PDF, OCR PDF, protect PDF, unlock PDF, split PDF, rotate PDF, free PDF tools, online PDF editor, best PDF converter, secure PDF converter, convert PDF online, edit PDF online, compress PDF free, merge PDF online, split PDF online',
   generator: 'v0.app',
   applicationName: 'PDFilio',

@@ -73,7 +73,7 @@ export default function Navbar({ onSelectTool, onNavigateBlog }: NavbarProps) {
             href="/"
             className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0"
           >
-            <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center shadow-sm">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
               <FileText className="w-5 h-5 text-white font-bold" />
             </div>
             <span className="text-xl font-bold text-gray-900">PDFilio</span>

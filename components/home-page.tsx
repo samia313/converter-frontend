@@ -19,37 +19,37 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
     {
       key: 'organize',
       title: 'Organize PDF',
-      color: '#cc0000',
+      color: '#0369a1',
       tools: toolsByCategory.organize,
     },
     {
       key: 'optimize',
       title: 'Optimize',
-      color: '#ff9900',
+      color: '#0ea5e9',
       tools: toolsByCategory.optimize,
     },
     {
       key: 'convert_to',
       title: 'Convert to PDF',
-      color: '#0066cc',
+      color: '#0369a1',
       tools: toolsByCategory.convert_to,
     },
     {
       key: 'convert_from',
       title: 'Convert from PDF',
-      color: '#00aa00',
+      color: '#0ea5e9',
       tools: toolsByCategory.convert_from,
     },
     {
       key: 'edit',
       title: 'Edit & Manage',
-      color: '#9933cc',
+      color: '#0369a1',
       tools: toolsByCategory.edit,
     },
     {
       key: 'ai',
       title: 'AI Features',
-      color: '#cc00cc',
+      color: '#0ea5e9',
       tools: toolsByCategory.ai,
     },
   ];
@@ -60,7 +60,7 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
       <section className="relative py-12 px-4 sm:px-6 lg:px-8 text-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden flex items-center justify-center" style={{ minHeight: '450px' }}>
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-sky-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
           <div className="absolute -bottom-8 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{animationDelay: '2s'}} />
         </div>
 
@@ -72,9 +72,9 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 border border-red-500/50 text-red-300 rounded-full font-bold text-xs mb-8 tracking-widest backdrop-blur-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-sky-500/20 border border-sky-500/50 text-sky-300 rounded-full font-bold text-xs mb-8 tracking-widest backdrop-blur-sm"
           >
-            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+            <span className="w-2 h-2 bg-sky-500 rounded-full animate-pulse" />
             FASTEST AI PDF TOOLKIT
           </motion.div>
 
@@ -86,7 +86,7 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
           >
             Your Complete
             <br />
-            <span className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-sky-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">
               PDF Superpower
             </span>
           </motion.h1>
