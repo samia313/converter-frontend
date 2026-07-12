@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { OpenAI } from 'openai'
 
 export const maxDuration = 60
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+})
 
 interface TranslateRequest {
   documentContent: string
@@ -48,9 +53,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log(`[v0] Translator - Translating to ${targetLanguage}`)
+    console.log(`[v0] Translator - Translating to ${targetLanguage} with OpenAI`)
 
-    const translation = generateTranslation(documentContent, targetLanguage, sourceLanguage)
+    const translation = await generateTranslationWithOpenAI(documentContent, targetLanguage, sourceLanguage)
 
     return NextResponse.json({
       success: true,
@@ -76,49 +81,40 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * Framework implementation for translation
- * In production, use Google Translate API, OpenAI, or Claude
+ * OpenAI integration for document translation
+ * Supports 15+ languages with context preservation
  */
-function generateTranslation(
+async function generateTranslationWithOpenAI(
   content: string,
   targetLanguage: string,
   sourceLanguage: string
-): string {
-  const targetLangName = SUPPORTED_LANGUAGES[targetLanguage]
+): Promise<string> {
+  try {
+    const targetLangName = SUPPORTED_LANGUAGES[targetLanguage]
+    const sourceLangName = SUPPORTED_LANGUAGES[sourceLanguage]
 
-  return `DOCUMENT TRANSLATION FRAMEWORK
-${'='.repeat(60)}
+    const prompt = `Please translate the following document from ${sourceLangName} to ${targetLangName}. 
+Preserve all formatting, structure, and technical terms.
+Provide only the translation without any explanations or meta-commentary.
 
-Source Language: ${SUPPORTED_LANGUAGES[sourceLanguage]} (${sourceLanguage})
-Target Language: ${targetLangName} (${targetLanguage})
-Original Length: ${content.length} characters
+Document to translate:
 
-TRANSLATION RESULT:
-[Framework ready for LLM translation]
+${content.substring(0, 3500)}`
 
-Original Content Preview:
-${content.substring(0, 300)}...
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.3,
+      max_tokens: Math.min(content.length, 4000),
+    })
 
-Translation Quality Indicators:
-✓ Language pair supported
-✓ Content ready for processing
-✓ Formatting preserved
-✓ Character encoding handled
-
-For Production Translation:
-1. Google Cloud Translation API - Most languages, good quality
-2. OpenAI API - Context-aware, better for technical docs
-3. Claude API - Excellent for complex documents
-4. Amazon Translate - Enterprise option
-5. DeepL API - High quality for European languages
-
-Current Status: Framework ready for API integration
-
-Recommended Implementation:
-- Use batching for large documents
-- Preserve formatting and special characters
-- Add glossary for technical terms
-- Implement caching for repeated translations`
+    const translation = completion.choices[0].message.content || 'Unable to generate translation'
+    console.log('[v0] OpenAI translation completed successfully')
+    return translation
+  } catch (error) {
+    console.error('[v0] OpenAI API error:', error)
+    throw error
+  }
 }
 
 function estimateTokens(text: string): number {

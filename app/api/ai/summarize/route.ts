@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { OpenAI } from 'openai'
 
 export const maxDuration = 60
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+})
 
 interface SummarizeRequest {
   documentContent: string
@@ -20,9 +25,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log('[v0] PDF Summarizer - Generating summary')
+    console.log('[v0] PDF Summarizer - Generating summary with OpenAI')
 
-    const summary = generateSummary(documentContent, summaryLength)
+    const summary = await generateSummaryWithOpenAI(documentContent, summaryLength)
 
     return NextResponse.json({
       success: true,
@@ -46,51 +51,40 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * Framework implementation for summarization
- * In production, use extractive/abstractive summarization
+ * OpenAI integration for PDF Summarization
+ * Uses GPT-3.5-turbo for abstractive summarization
  */
-function generateSummary(
+async function generateSummaryWithOpenAI(
   content: string,
   length: 'short' | 'medium' | 'long'
-): string {
-  const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 0)
+): Promise<string> {
+  try {
+    const lengthInstructions = {
+      short: '100-150 words',
+      medium: '200-300 words',
+      long: '400-500 words',
+    }
 
-  let summaryLength: number
-  switch (length) {
-    case 'short':
-      summaryLength = Math.ceil(sentences.length * 0.2)
-      break
-    case 'long':
-      summaryLength = Math.ceil(sentences.length * 0.6)
-      break
-    case 'medium':
-    default:
-      summaryLength = Math.ceil(sentences.length * 0.4)
+    const prompt = `Please provide a clear and concise ${length} summary (${lengthInstructions[length]}) of the following document:
+
+${content.substring(0, 4000)}
+
+Focus on the main points and key takeaways.`
+
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.7,
+      max_tokens: length === 'short' ? 200 : length === 'medium' ? 400 : 600,
+    })
+
+    const summary = completion.choices[0].message.content || 'Unable to generate summary'
+    console.log('[v0] OpenAI summary generated successfully')
+    return summary
+  } catch (error) {
+    console.error('[v0] OpenAI API error:', error)
+    throw error
   }
-
-  const summary = sentences
-    .slice(0, Math.min(summaryLength, sentences.length))
-    .map(s => s.trim())
-    .filter(s => s.length > 10)
-    .join('. ')
-
-  return `DOCUMENT SUMMARY
-${'='.repeat(50)}
-
-Original Length: ${content.length} characters
-Summarization Level: ${length}
-Sentences Selected: ${Math.min(summaryLength, sentences.length)} of ${sentences.length}
-
-SUMMARY:
-${summary || 'Content summary framework ready for LLM integration'}
-
-For Production Enhancement:
-1. Use OpenAI Completions API for abstractive summaries
-2. Claude API for better context understanding
-3. Google PaLM for multilingual summaries
-4. Implement extractive + abstractive hybrid
-
-Current Status: Framework ready with sentence extraction`
 }
 
 function estimateTokens(text: string): number {
