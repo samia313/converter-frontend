@@ -145,18 +145,17 @@ export default function CompressPDFTool() {
           {/* Quality Selection */}
           {selectedFile && (
             <div className="p-8 border-b border-gray-200">
-              <label className="block text-sm font-semibold text-gray-700 mb-4">Compression Quality</label>
+              <div className="block text-sm font-semibold text-gray-700 mb-4">Compression Quality</div>
               <div className="grid grid-cols-3 gap-4">
                 {(['high', 'medium', 'low'] as const).map((q) => (
-                  <label key={q} className={`p-4 text-center cursor-pointer rounded-lg border-2 transition ${quality === q ? 'border-blue-600 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}>
-                    <input type="radio" name="quality" value={q} checked={quality === q} onChange={(e) => setQuality(e.target.value as typeof quality)} className="hidden" />
+                  <div key={q} onClick={() => setQuality(q)} className={`p-4 text-center cursor-pointer rounded-lg border-2 transition ${quality === q ? 'border-blue-600 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}>
                     <div className="font-semibold text-gray-900 capitalize">{q}</div>
                     <div className="text-xs text-gray-600 mt-1">
                       {q === 'high' && 'Best Quality'}
                       {q === 'medium' && 'Balanced'}
                       {q === 'low' && 'Smaller Size'}
                     </div>
-                  </label>
+                  </div>
                 ))}
               </div>
             </div>
