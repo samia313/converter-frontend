@@ -26,23 +26,23 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/favicon-16x16.png',
+        url: '/favicon-16x16.png?v=2',
         sizes: '16x16',
         type: 'image/png',
       },
       {
-        url: '/favicon-32x32.png',
+        url: '/favicon-32x32.png?v=2',
         sizes: '32x32',
         type: 'image/png',
       },
       {
-        url: '/favicon.svg',
+        url: '/favicon.svg?v=2',
         type: 'image/svg+xml',
       },
     ],
     apple: [
       {
-        url: '/apple-icon-180x180.png',
+        url: '/apple-icon-180x180.png?v=2',
         sizes: '180x180',
         type: 'image/png',
       },
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     other: [
       {
         rel: 'icon',
-        url: '/icon-512x512.png',
+        url: '/icon-512x512.png?v=2',
         sizes: '512x512',
         type: 'image/png',
       },
