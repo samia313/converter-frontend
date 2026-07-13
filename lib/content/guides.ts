@@ -202,6 +202,10 @@ export function getAllGuideUrls(): string[] {
   return guides.map((guide) => guide.url)
 }
 
+export function getGuideBySlug(slug: string): Guide | undefined {
+  return guides.find((guide) => guide.slug === slug)
+}
+
 export function getGuidesByTool(tool: string): Guide[] {
   return guides.filter((guide) => guide.tool === tool)
 }

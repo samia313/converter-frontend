@@ -31,6 +31,10 @@ export function getAllUseCaseUrls(): string[] {
   return useCases.map((uc) => uc.url)
 }
 
+export function getUseCaseBySlug(slug: string): UseCase | undefined {
+  return useCases.find((uc) => uc.slug === slug)
+}
+
 export function getUseCasesByTool(tool: string): UseCase[] {
   return useCases.filter((uc) => uc.tool === tool)
 }

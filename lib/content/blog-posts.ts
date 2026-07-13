@@ -329,6 +329,18 @@ export function getAllBlogUrls(): string[] {
   return blogPosts.map((post) => post.url)
 }
 
+export function getBlogPostBySlug(slug: string): BlogPost | undefined {
+  return blogPosts.find((post) => post.slug === slug)
+}
+
+export function getBlogPostsByTool(tool: string): BlogPost[] {
+  return blogPosts.filter((post) => post.tool === tool)
+}
+
+export function getBlogPostsByCategory(category: string): BlogPost[] {
+  return blogPosts.filter((post) => post.category === category)
+}
+
 // Helper function to get blog posts by tool
 export function getBlogPostsByTool(tool: string): BlogPost[] {
   return blogPosts.filter((post) => post.tool === tool)

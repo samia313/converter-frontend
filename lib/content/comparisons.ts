@@ -32,6 +32,10 @@ export function getAllComparisonUrls(): string[] {
   return comparisons.map((comp) => comp.url)
 }
 
+export function getComparisonBySlug(slug: string): Comparison | undefined {
+  return comparisons.find((comp) => comp.slug === slug)
+}
+
 export function getComparisonsByCompetitor(competitor: string): Comparison[] {
   return comparisons.filter((comp) => comp.competitor.toLowerCase().includes(competitor.toLowerCase()))
 }
