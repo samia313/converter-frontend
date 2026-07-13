@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { featurePages, getFeatureBySlug, getAllFeatureSlugs } from '@/lib/content/features';
+import { featurePages, getFeatureBySlug } from '@/lib/content/features';
 import Link from 'next/link';
 
 export const dynamicParams = true;
@@ -12,8 +12,8 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return getAllFeatureSlugs().map((slug) => ({
-    slug,
+  return featurePages.map((feature) => ({
+    slug: feature.slug,
   }));
 }
 

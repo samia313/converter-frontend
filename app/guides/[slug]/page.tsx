@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { guides, getGuideBySlug, getAllGuideSlugs } from '@/lib/content/how-to-guides';
+import { guides, getGuideBySlug } from '@/lib/content/how-to-guides';
 import Link from 'next/link';
 
 export const dynamicParams = true;
@@ -12,8 +12,8 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return getAllGuideSlugs().map((slug) => ({
-    slug,
+  return guides.map((guide) => ({
+    slug: guide.slug,
   }));
 }
 

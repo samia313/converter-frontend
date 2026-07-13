@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { comparisons, getComparisonBySlug, getAllComparisonSlugs } from '@/lib/content/comparisons';
+import { comparisons, getComparisonBySlug } from '@/lib/content/comparisons';
 import Link from 'next/link';
 
 export const dynamicParams = true;
@@ -12,8 +12,8 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return getAllComparisonSlugs().map((slug) => ({
-    slug,
+  return comparisons.map((comp) => ({
+    slug: comp.slug,
   }));
 }
 
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props) {
 
   return {
     title: comparison.title,
-    description: comparison.description,
+    description: `Compare ${comparison.competitor} with PDFilio - See the differences`,
     keywords: comparison.keywords.join(', '),
   };
 }

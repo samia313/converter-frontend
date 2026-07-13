@@ -26,7 +26,7 @@ export default function ComparisonsPage() {
                 <h3 className="font-semibold text-foreground group-hover:text-blue-400 transition-colors mb-2">
                   {comp.title}
                 </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">{comp.description}</p>
+                <p className="text-sm text-muted-foreground line-clamp-2">PDFilio vs {comp.competitor}</p>
               </div>
             </Link>
           ))}

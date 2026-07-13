@@ -40,7 +40,7 @@ export default function UseCasesPage() {
                         {useCase.title}
                       </h3>
                       <p className="text-sm text-muted-foreground line-clamp-2">
-                        {useCase.description}
+                        {useCase.tool.replace('-', ' ')} - {useCase.category.replace('-', ' ')}
                       </p>
                     </div>
                   </Link>

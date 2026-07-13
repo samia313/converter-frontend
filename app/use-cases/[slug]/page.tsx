@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { useCases, getUseCaseBySlug, getAllUseCaseSlugs } from '@/lib/content/use-cases';
+import { useCases, getUseCaseBySlug } from '@/lib/content/use-cases';
 import Link from 'next/link';
 
 export const dynamicParams = true;
@@ -12,8 +12,8 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return getAllUseCaseSlugs().map((slug) => ({
-    slug,
+  return useCases.map((useCase) => ({
+    slug: useCase.slug,
   }));
 }
 
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props) {
 
   return {
     title: useCase.title,
-    description: useCase.description,
+    description: `How to use ${useCase.tool} - PDFilio Use Case`,
     keywords: useCase.keywords.join(', '),
   };
 }
@@ -48,7 +48,7 @@ export default function UseCasePage({ params }: Props) {
         {/* Header */}
         <header className="mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">{useCase.title}</h1>
-          <p className="text-lg text-muted-foreground">{useCase.description}</p>
+          <p className="text-lg text-muted-foreground">Explore how to use {useCase.tool.replace('-', ' ')} with PDFilio</p>
           <div className="mt-4 flex gap-2">
             <Link
               href={`/tools/${useCase.tool}`}
@@ -64,7 +64,12 @@ export default function UseCasePage({ params }: Props) {
 
         {/* Content */}
         <div className="prose prose-invert max-w-none mb-12">
-          <div dangerouslySetInnerHTML={{ __html: useCase.content }} />
+          <section>
+            <h2 className="text-2xl font-semibold mb-4">Overview</h2>
+            <p className="text-muted-foreground mb-4">
+              Learn how to make the most of the {useCase.tool.replace('-', ' ')} tool with PDFilio. This comprehensive guide covers best practices, tips, and real-world applications.
+            </p>
+          </section>
         </div>
 
         {/* CTA */}
@@ -90,7 +95,7 @@ export default function UseCasePage({ params }: Props) {
                   className="p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
                 >
                   <h4 className="font-semibold text-sm text-foreground mb-2">{uc.title}</h4>
-                  <p className="text-xs text-muted-foreground line-clamp-1">{uc.description}</p>
+                  <p className="text-xs text-muted-foreground line-clamp-1">Using {uc.tool.replace('-', ' ')}</p>
                 </Link>
               ))}
             </div>
