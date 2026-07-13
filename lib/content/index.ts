@@ -148,6 +148,20 @@ export const toolHubPages = toolsArray.flatMap((tool, toolIdx) =>
 )
 
 /**
+ * Get feature URLs
+ */
+export function getAllFeatureUrls(): string[] {
+  return extendedFeaturePages.map((p) => p.url)
+}
+
+/**
+ * Get tool hub URLs
+ */
+export function getAllToolUrls(): string[] {
+  return toolHubPages.map((p) => p.url)
+}
+
+/**
  * Get all URLs for sitemap generation
  */
 export function getAllUrls(): string[] {
@@ -199,4 +213,4 @@ export function getUrlStats() {
  * Export everything for dynamic route generation
  */
 export { blogPosts, guides, comparisons, useCases }
-export { getAllBlogUrls, getAllGuideUrls, getAllComparisonUrls, getAllUseCaseUrls }
+export { getAllBlogUrls, getAllGuideUrls, getAllComparisonUrls, getAllUseCaseUrls, getAllFeatureUrls, getAllToolUrls }
