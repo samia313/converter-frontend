@@ -50,17 +50,23 @@ export default function ComparisonPage({ params }: Props) {
         {/* Header */}
         <header className="mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">{comparison.title}</h1>
-          <p className="text-lg text-muted-foreground">{comparison.description}</p>
+          <p className="text-lg text-muted-foreground">PDFilio vs {comparison.competitor} - Detailed comparison</p>
           <div className="mt-4 flex gap-4">
             <span className="px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg text-sm">
-              Updated: {new Date(comparison.publishedAt).toLocaleDateString()}
+              Competitor: {comparison.competitor}
             </span>
           </div>
         </header>
 
         {/* Content */}
         <div className="prose prose-invert max-w-none mb-12">
-          <div dangerouslySetInnerHTML={{ __html: comparison.content }} />
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">Why Choose PDFilio?</h2>
+            <p className="text-muted-foreground mb-4">
+              PDFilio offers a modern, user-friendly interface with powerful PDF tools that rival {comparison.competitor} and more. 
+              All tools are free, no registration required, and your files are secure with enterprise-grade encryption.
+            </p>
+          </section>
         </div>
 
         {/* CTA */}

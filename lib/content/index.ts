@@ -213,4 +213,9 @@ export function getUrlStats() {
  * Export everything for dynamic route generation
  */
 export { blogPosts, guides, comparisons, useCases }
-export { getAllBlogUrls, getAllGuideUrls, getAllComparisonUrls, getAllUseCaseUrls, getAllFeatureUrls, getAllToolUrls }
+
+// Re-export individual getAll* functions for use in dynamic routes
+export { getAllBlogUrls } from './blog-posts'
+export { getAllGuideUrls } from './guides'
+export { getAllComparisonUrls } from './comparisons'
+export { getAllUseCaseUrls } from './use-cases'

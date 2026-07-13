@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { OpenAI } from 'openai'
 
 export const maxDuration = 60
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+let openai: any = null
+
+// Initialize OpenAI client only if API key is available
+if (process.env.OPENAI_API_KEY) {
+  const { OpenAI } = require('openai')
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
+}
 
 interface ChatRequest {
   query: string
@@ -15,6 +20,13 @@ interface ChatRequest {
 
 export async function POST(request: NextRequest) {
   try {
+    if (!openai) {
+      return NextResponse.json(
+        { error: 'OpenAI API is not configured' },
+        { status: 503 }
+      )
+    }
+
     const body = (await request.json()) as ChatRequest
     const { query, documentContent, context } = body
 

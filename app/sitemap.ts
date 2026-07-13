@@ -4,8 +4,6 @@ import {
   getAllGuideUrls,
   getAllComparisonUrls,
   getAllUseCaseUrls,
-  getAllFeatureUrls,
-  getAllToolUrls,
 } from '@/lib/content'
 
 const BASE_URL = 'https://pdfilio.com'
@@ -34,8 +32,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const guideUrls = getAllGuideUrls()
     const comparisonUrls = getAllComparisonUrls()
     const useCaseUrls = getAllUseCaseUrls()
-    const featureUrls = getAllFeatureUrls()
-    const toolUrls = getAllToolUrls()
 
     // Create static entries
     const staticEntries: MetadataRoute.Sitemap = staticPages.map((page) => ({
@@ -77,22 +73,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }))
 
-    // Feature entries (150 pages)
-    const featureEntries: MetadataRoute.Sitemap = featureUrls.map((url) => ({
-      url: `${BASE_URL}${url}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    }))
-
-    // Tool hub entries (400+ pages)
-    const toolEntries: MetadataRoute.Sitemap = toolUrls.map((url) => ({
-      url: `${BASE_URL}${url}`,
-      lastModified: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
-      changeFrequency: 'daily' as const,
-      priority: 0.8,
-    }))
-
     // Combine all entries
     const allEntries = [
       ...staticEntries,
@@ -100,8 +80,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...guideEntries,
       ...comparisonEntries,
       ...useCaseEntries,
-      ...featureEntries,
-      ...toolEntries,
     ]
 
     console.log(`[SITEMAP] Generated sitemap with ${allEntries.length} URLs`)

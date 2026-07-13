@@ -122,7 +122,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <head>
+      <head suppressHydrationWarning>
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
@@ -179,7 +179,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         />
         <StructuredData />
       </head>
-      <body className="font-sans antialiased bg-white">
+      <body suppressHydrationWarning className="font-sans antialiased bg-white">
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
