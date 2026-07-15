@@ -6,6 +6,7 @@ import {
   getAllUseCaseUrls,
 } from '@/lib/content'
 import { blogPosts } from '@/lib/content/blog-posts-1000'
+import { chatPdfBlogPosts } from '@/lib/content/blog-posts-200-chat-pdf'
 
 const BASE_URL = 'https://pdfilio.com'
 
@@ -42,7 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
 
     // Blog entries - Generate from actual blog posts (1000 pages)
-    const blogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => {
+    const existingBlogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => {
       const priority = post.featured ? 0.85 : 0.8
       return {
         url: `${BASE_URL}/blog/${post.slug}`,
@@ -51,6 +52,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority,
       }
     })
+
+    // Chat with PDF blog entries - Generate from 200 new Chat with PDF posts
+    const chatPdfBlogEntries: MetadataRoute.Sitemap = chatPdfBlogPosts.map((post) => {
+      const priority = post.featured ? 0.85 : 0.8
+      return {
+        url: `${BASE_URL}/blog/${post.slug}`,
+        lastModified: new Date(post.updatedAt),
+        changeFrequency: 'weekly' as const,
+        priority,
+      }
+    })
+
+    // Combine all blog entries (1000 + 200 = 1200 pages)
+    const blogEntries = [...existingBlogEntries, ...chatPdfBlogEntries]
 
     // Guide entries (150 pages)
     const guideEntries: MetadataRoute.Sitemap = guideUrls.map((url) => ({
@@ -85,7 +100,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...useCaseEntries,
     ]
 
-    console.log(`[SITEMAP] Generated sitemap with ${allEntries.length} URLs (${blogEntries.length} blog posts)`)
+    console.log(`[SITEMAP] Generated sitemap with ${allEntries.length} URLs (${blogEntries.length} blog posts: 1000 existing + 200 Chat with PDF)`)
 
     return allEntries
   } catch (error) {
