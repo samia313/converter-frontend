@@ -107,6 +107,9 @@ export const metadata: Metadata = {
   },
   category: 'Productivity',
   classification: 'PDF Tools, Document Management, Online Editor',
+  verification: {
+    google: 'A4lEEeE2F892vUX8oGfyr9CE_iqjfSe-7hPl511bR6g',
+  },
 }
 
 export const viewport: Viewport = {
