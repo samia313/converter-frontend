@@ -1,41 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument } from 'pdf-lib';
+import { validatePdfFile, splitPdf, getDownloadHeaders } from '@/lib/pdf-utils';
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
+    const splitPageStr = formData.get('splitPage') as string;
 
-    if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+    // Validate file
+    const validation = await validatePdfFile(file);
+    if (!validation.valid) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
+    // Convert to buffer
     const arrayBuffer = await file.arrayBuffer();
-    const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
-    
-    // Split the first half and second half
-    const pageCount = pdf.getPageCount();
-    const firstHalf = await PDFDocument.create();
-    const secondHalf = await PDFDocument.create();
+    const buffer = Buffer.from(arrayBuffer);
+    const splitPage = splitPageStr ? parseInt(splitPageStr, 10) : undefined;
 
-    for (let i = 0; i < pageCount; i++) {
-      const [copiedPage] = await (i < pageCount / 2 ? firstHalf : secondHalf).copyPages(pdf, [i]);
-      (i < pageCount / 2 ? firstHalf : secondHalf).addPage(copiedPage);
+    // Split
+    const result = await splitPdf(buffer, splitPage);
+    if (!result.success) {
+      console.error('[v0] Split error:', result.error);
+      return NextResponse.json({ error: result.error }, { status: 400 });
     }
 
-    const firstBytes = await firstHalf.save();
-    const fileName = file.name.replace('.pdf', '');
+    const fileName = file.name.replace(/\.pdf$/i, '');
+    const filename = `${fileName}-part1-${Date.now()}.pdf`;
 
-    return new NextResponse(Buffer.from(firstBytes), {
-      headers: {
-        'Content-Disposition': `attachment; filename="${fileName}_part1.pdf"`,
-        'Content-Type': 'application/pdf',
-        'Cache-Control': 'no-cache',
-      },
+    return new NextResponse(result.data, {
+      headers: getDownloadHeaders(filename, result.data!.length),
+      status: 200,
     });
   } catch (error) {
-    return NextResponse.json({ error: 'Processing failed' }, { status: 500 });
+    console.error('[v0] Split PDF error:', error);
+    return NextResponse.json(
+      { error: 'Split failed. Please try again.' },
+      { status: 500 }
+    );
   }
 }

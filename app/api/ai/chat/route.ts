@@ -2,6 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const maxDuration = 60
 
+let openai: any = null
+
+// Initialize OpenAI client only if API key is available
+if (process.env.OPENAI_API_KEY) {
+  const { OpenAI } = require('openai')
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
+}
+
 interface ChatRequest {
   query: string
   documentContent: string
@@ -10,6 +20,13 @@ interface ChatRequest {
 
 export async function POST(request: NextRequest) {
   try {
+    if (!openai) {
+      return NextResponse.json(
+        { error: 'OpenAI API is not configured' },
+        { status: 503 }
+      )
+    }
+
     const body = (await request.json()) as ChatRequest
     const { query, documentContent, context } = body
 
@@ -20,10 +37,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log('[v0] PDF Chat - Processing query:', query.substring(0, 50) + '...')
+    console.log('[v0] PDF Chat - Processing query with OpenAI:', query.substring(0, 50) + '...')
 
-    // Framework implementation - ready for LLM integration
-    const response = generateChatResponse(query, documentContent, context)
+    // Call OpenAI API
+    const response = await generateChatResponseWithOpenAI(query, documentContent, context)
 
     return NextResponse.json({
       success: true,
@@ -44,36 +61,42 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * Framework implementation for chat
- * In production, integrate with OpenAI, Claude, or other LLM
+ * OpenAI integration for PDF Chat
+ * Uses GPT-3.5-turbo for document analysis and Q&A
  */
-function generateChatResponse(
+async function generateChatResponseWithOpenAI(
   query: string,
   documentContent: string,
   context?: string
-): string {
-  // Extract relevant information from document
-  const docSummary = extractDocumentContext(documentContent)
+): Promise<string> {
+  try {
+    const systemPrompt = `You are a helpful AI assistant specialized in analyzing PDF documents. 
+Your task is to answer questions about the provided document content accurately and helpfully.
+Keep your responses concise and relevant to the query.
+${context ? `Additional context: ${context}` : ''}`
 
-  return `Based on the provided document, here's my analysis:
+    const userMessage = `Document Content:
+${documentContent.substring(0, 3000)}
 
-Query: "${query}"
+Question: ${query}`
 
-Document Analysis:
-- Document length: ${documentContent.length} characters
-- Content preview: ${documentContent.substring(0, 200)}...
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMessage },
+      ],
+      temperature: 0.7,
+      max_tokens: 500,
+    })
 
-Response Framework:
-For production LLM integration:
-1. OpenAI API: GPT-4/3.5-turbo with document context
-2. Anthropic Claude: Better for long documents
-3. Google Vertex AI: Cost-effective for batch processing
-4. AWS Bedrock: Enterprise-grade options
-
-Current Status: Framework ready for LLM connection
-${context ? `\nAdditional Context: ${context}` : ''}
-
-Note: This is a framework response. Integrate with your preferred LLM API for intelligent answers.`
+    const response = completion.choices[0].message.content || 'Unable to generate response'
+    console.log('[v0] OpenAI response generated successfully')
+    return response
+  } catch (error) {
+    console.error('[v0] OpenAI API error:', error)
+    throw error
+  }
 }
 
 function extractDocumentContext(content: string): string {

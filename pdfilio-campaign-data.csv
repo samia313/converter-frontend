@@ -1,0 +1,16 @@
+Campaign,Source,Medium,Content,Conversions,Cost,Impressions,Clicks
+PDF-Compress-Google,google,cpc,compress-pdf-ad,150,450,2500,180
+PDF-Merge-Google,google,cpc,merge-pdf-ad,120,360,2000,145
+PDF-Split-Google,google,cpc,split-pdf-ad,95,285,1500,110
+PDF-Convert-Google,google,cpc,convert-pdf-ad,85,255,1200,95
+Facebook-PDF-Tools,facebook,social,facebook-campaign-1,80,200,3000,280
+Instagram-PDF-Ads,instagram,social,instagram-story-ads,65,150,2500,220
+LinkedIn-B2B,linkedin,social,linkedin-business,45,180,1000,85
+Email-Newsletter,email,newsletter,email-promo-july,200,0,5000,1200
+Email-Announcement,email,newsletter,email-launch,180,0,4500,1100
+Organic-Search,organic,organic,organic-traffic,500,0,15000,2800
+Direct-Traffic,direct,direct,direct-visits,300,0,8000,2100
+Twitter-Campaign,twitter,social,twitter-pdf-tools,55,120,1800,150
+YouTube-Channel,youtube,video,youtube-promo,75,400,5000,320
+Affiliate-Marketing,affiliate,referral,affiliate-partners,95,0,2000,500
+Webinar-Signup,webinar,event,webinar-registration,120,600,3500,450

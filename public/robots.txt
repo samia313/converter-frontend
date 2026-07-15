@@ -1,30 +1,40 @@
-# PDFilio Robots.txt Configuration
+# PDFilio Robots.txt - Optimized for 2500 Page Crawling
+# Allows Google and Bing to crawl and index all pages
+
+# Allow all bots by default
 User-agent: *
 Allow: /
-Disallow: /api/private/
+
+# Disallow private/admin areas
 Disallow: /admin/
-Disallow: /*.json$
+Disallow: /api/private/
+Disallow: /api/auth/
+Disallow: /_next/
+Disallow: /.well-known/except/.well-known/robots.txt
+
+# Block parameter-based duplicate pages
 Disallow: /*?*sort=
 Disallow: /*?*filter=
+Disallow: /*?*page=
+Disallow: /*?*ref=
 
-# Crawl delay for bots
+# Crawl delay for general bots (1 second)
 Crawl-delay: 1
+Request-rate: 30/60
 
-# Sitemap locations
-Sitemap: https://pdfilio.com/sitemap.xml
-Sitemap: https://pdfilio.com/tools-sitemap.xml
-Sitemap: https://pdfilio.com/blog-sitemap.xml
-
-# Allow specific search engines
+# GOOGLE SPECIFIC - PRIORITY
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 0
+Request-rate: 100/60
 
+# BING SPECIFIC - PRIORITY
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 1
+Crawl-delay: 0
+Request-rate: 100/60
 
-# Block bad bots
+# Block bad/harmful bots
 User-agent: MJ12bot
 Disallow: /
 
@@ -34,6 +44,15 @@ Disallow: /
 User-agent: SemrushBot
 Disallow: /
 
-# Rate limiting for other bots
-User-agent: *
-Request-rate: 10/1m
+User-agent: DotBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+# SITEMAP LOCATIONS - CRITICAL FOR 2500 PAGE DISCOVERY
+# Main sitemap with all 2500+ pages
+Sitemap: https://pdfilio.com/sitemap.xml
+
+# Backup sitemaps by category (if needed)
+Sitemap: https://pdfilio.com/api/sitemap

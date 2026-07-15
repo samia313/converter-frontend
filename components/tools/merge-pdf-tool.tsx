@@ -1,125 +1,193 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Download, Trash2, Plus, AlertCircle, CheckCircle } from 'lucide-react';
+import { Download, X, AlertCircle, CheckCircle } from 'lucide-react';
 
-interface MergeResult {
-  filesCount: number;
-  totalPages: number;
-  outputSize: number;
+interface FileItem {
+  file: File;
+  id: string;
+  size: number;
+  name: string;
 }
 
 export default function MergePDFTool() {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<FileItem[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-  const [result, setResult] = useState<MergeResult | null>(null);
   const [progress, setProgress] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newFiles = Array.from(e.target.files);
-      const validFiles = newFiles.filter(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
-      
-      if (validFiles.length !== newFiles.length) {
-        setError('Some files were skipped. Only PDF files are supported.');
-      } else {
-        setError(null);
-      }
-      
-      if (validFiles.length > 0) {
-        setSelectedFiles([...selectedFiles, ...validFiles]);
-      }
-    }
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
   };
 
-  const handleRemoveFile = (index: number) => {
-    setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
+  const addFiles = (newFiles: FileList | null) => {
+    if (!newFiles) return;
+
+    const newFileItems: FileItem[] = [];
+    
+    for (let i = 0; i < newFiles.length; i++) {
+      const file = newFiles[i];
+      
+      if (file.type !== 'application/pdf') {
+        setError(`"${file.name}" is not a PDF`);
+        continue;
+      }
+
+      if (file.size > 100 * 1024 * 1024) {
+        setError(`"${file.name}" exceeds 100MB limit`);
+        continue;
+      }
+
+      newFileItems.push({
+        file,
+        id: `${file.name}-${Date.now()}-${Math.random()}`,
+        size: file.size,
+        name: file.name,
+      });
+    }
+
+    setFiles(prev => [...prev, ...newFileItems]);
+    setError(null);
+  };
+
+  const removeFile = (id: string) => {
+    setFiles(prev => prev.filter(f => f.id !== id));
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    addFiles(e.dataTransfer.files);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    addFiles(e.target.files);
   };
 
   const handleMerge = async () => {
-    if (selectedFiles.length < 2) {
-      setError('Please select at least 2 PDF files');
+    console.log('[v0] Merge button clicked');
+    console.log('[v0] Files count:', files.length);
+
+    if (files.length < 2) {
+      setError('Select at least 2 PDF files');
+      return;
+    }
+
+    const totalSize = files.reduce((sum, f) => sum + f.size, 0);
+    if (totalSize > 500 * 1024 * 1024) {
+      setError('Total size exceeds 500MB');
       return;
     }
 
     setIsProcessing(true);
     setError(null);
-    setProgress(0);
+    setSuccess(null);
+    setProgress(10);
 
     try {
+      console.log('[v0] Creating form data');
       const formData = new FormData();
-      selectedFiles.forEach(file => formData.append('files', file));
+      files.forEach((fileItem) => {
+        console.log('[v0] Adding:', fileItem.name);
+        formData.append('files', fileItem.file);
+      });
 
       setProgress(30);
+      console.log('[v0] Sending to API...');
 
       const response = await fetch('/api/convert/merge-pdf', {
         method: 'POST',
         body: formData,
       });
 
+      console.log('[v0] Response status:', response.status);
       setProgress(70);
 
       if (!response.ok) {
-        throw new Error('Merge failed');
+        const text = await response.text();
+        console.error('[v0] Error response:', text);
+        throw new Error(`Status ${response.status}: ${text}`);
       }
 
       const blob = await response.blob();
+      console.log('[v0] Blob size:', blob.size);
+
+      if (blob.size === 0) {
+        throw new Error('Empty result');
+      }
+
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
-      
-      setResult({
-        filesCount: selectedFiles.length,
-        totalPages: parseInt(response.headers.get('X-Total-Pages') || '0'),
-        outputSize: blob.size,
-      });
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `merged-${Date.now()}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
       setProgress(100);
+      setSuccess(`Merged ${files.length} files!`);
+      console.log('[v0] Success!');
+
+      setTimeout(() => {
+        setFiles([]);
+        setProgress(0);
+        setSuccess(null);
+      }, 2000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Merge failed');
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      console.error('[v0] Error:', msg);
+      setError(msg);
       setProgress(0);
     } finally {
       setIsProcessing(false);
     }
   };
 
-  const handleDownload = () => {
-    if (downloadUrl) {
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = 'merged.pdf';
-      link.click();
-    }
-  };
-
-  const totalSize = selectedFiles.reduce((sum, f) => sum + f.size, 0);
+  const totalSize = files.reduce((sum, f) => sum + f.size, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-sky-50 py-8 md:py-12">
-      <div className="max-w-3xl mx-auto px-4">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-3">
-            Merge PDF Files
-          </h1>
-          <p className="text-lg text-gray-600">
-            Combine multiple PDFs into one file instantly
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-red-600 to-red-700 px-8 py-12 text-white">
+            <h1 className="text-4xl font-bold mb-2">Merge PDF</h1>
+            <p className="text-red-100">Combine multiple PDFs into one</p>
+          </div>
 
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          {/* Upload Area */}
-          <div className="p-8 border-b border-gray-200">
-            <label 
+          {/* Content */}
+          <div className="p-8">
+            {/* Upload Area */}
+            <div
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center justify-center w-full p-10 border-2 border-dashed border-blue-300 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-blue-500 transition-all"
+              className={`border-2 border-dashed rounded-lg p-12 text-center cursor-pointer transition ${
+                isDragging ? 'border-red-600 bg-red-50' : 'border-gray-300 bg-gray-50'
+              }`}
             >
-              <div className="text-center">
-                <Plus className="w-12 h-12 text-blue-500 mx-auto mb-3" />
-                <p className="text-lg font-semibold text-gray-900">Click to add PDF files</p>
-                <p className="text-sm text-gray-500 mt-1">Or drag and drop files here</p>
-              </div>
+              <p className="text-gray-600 text-lg font-medium">Drag PDFs here or click</p>
+              <p className="text-gray-500 text-sm mt-2">Max 100MB per file</p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -128,133 +196,103 @@ export default function MergePDFTool() {
                 onChange={handleFileSelect}
                 className="hidden"
               />
-            </label>
-          </div>
+            </div>
 
-          {/* Selected Files */}
-          {selectedFiles.length > 0 && (
-            <div className="p-8 bg-blue-50 border-b border-gray-200">
-              <h3 className="font-semibold text-gray-900 mb-4">
-                Selected Files ({selectedFiles.length})
-              </h3>
-              <div className="space-y-2 max-h-64 overflow-y-auto">
-                {selectedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between bg-white p-3 rounded-lg">
-                    <span className="text-sm text-gray-700 truncate flex-1">
-                      {index + 1}. {file.name}
-                    </span>
-                    <span className="text-xs text-gray-500 ml-2">
-                      {(file.size / 1024 / 1024).toFixed(2)}MB
-                    </span>
-                    <button
-                      onClick={() => handleRemoveFile(index)}
-                      className="ml-3 p-1 hover:bg-red-100 rounded"
-                    >
-                      <Trash2 className="w-4 h-4 text-red-600" />
-                    </button>
+            {/* Error */}
+            {error && (
+              <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4 flex gap-3">
+                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                <p className="text-red-800 text-sm">{error}</p>
+              </div>
+            )}
+
+            {/* Success */}
+            {success && (
+              <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4 flex gap-3">
+                <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                <p className="text-green-800 text-sm">{success}</p>
+              </div>
+            )}
+
+            {/* Files List */}
+            {files.length > 0 && (
+              <div className="mt-8">
+                <h3 className="font-semibold text-gray-900 mb-4">
+                  Selected ({files.length})
+                </h3>
+                <div className="space-y-2 bg-gray-50 rounded-lg p-4">
+                  {files.map((fileItem, index) => (
+                    <div key={fileItem.id} className="flex items-center justify-between bg-white rounded p-3 border border-gray-200">
+                      <div className="flex items-center gap-3 flex-1">
+                        <span className="bg-gray-200 text-gray-700 rounded px-2 py-1 text-sm font-medium w-6 h-6 flex items-center justify-center">
+                          {index + 1}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-gray-900 font-medium truncate">{fileItem.name}</p>
+                          <p className="text-gray-500 text-sm">{formatFileSize(fileItem.size)}</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => removeFile(fileItem.id)}
+                        className="ml-2 text-gray-400 hover:text-red-600"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+                  ))}
+                  <div className="text-sm text-gray-600 pt-2 border-t border-gray-200 mt-4">
+                    Total: <span className="font-semibold">{formatFileSize(totalSize)}</span>
                   </div>
-                ))}
-              </div>
-              <div className="mt-4 pt-4 border-t border-gray-200 grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-xs font-semibold text-blue-600">TOTAL FILES</p>
-                  <p className="text-2xl font-bold text-blue-900">{selectedFiles.length}</p>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-blue-600">TOTAL SIZE</p>
-                  <p className="text-2xl font-bold text-blue-900">
-                    {(totalSize / 1024 / 1024).toFixed(2)}MB
-                  </p>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Error Message */}
-          {error && (
-            <div className="p-4 mx-8 mt-8 bg-red-50 border border-red-200 rounded-lg flex gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
-          )}
-
-          {/* Success Message */}
-          {downloadUrl && result && (
-            <div className="p-8 text-center">
-              <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
-              <p className="text-lg font-semibold text-green-700 mb-6">
-                PDFs merged successfully!
-              </p>
-              <div className="grid grid-cols-3 gap-4 mb-8 bg-green-50 p-4 rounded-lg">
-                <div>
-                  <p className="text-xs font-semibold text-green-600">FILES</p>
-                  <p className="text-2xl font-bold text-green-900">{result.filesCount}</p>
+            {/* Progress */}
+            {isProcessing && (
+              <div className="mt-8">
+                <div className="flex justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-700">Processing...</span>
+                  <span className="text-sm font-medium text-gray-700">{progress}%</span>
                 </div>
-                <div>
-                  <p className="text-xs font-semibold text-green-600">PAGES</p>
-                  <p className="text-2xl font-bold text-green-900">{result.totalPages}</p>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-green-600">SIZE</p>
-                  <p className="text-2xl font-bold text-green-900">
-                    {(result.outputSize / 1024 / 1024).toFixed(2)}MB
-                  </p>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-red-600 h-2 transition-all duration-300" style={{ width: `${progress}%` }} />
                 </div>
               </div>
-              <div className="flex gap-4 justify-center">
+            )}
+
+            {/* Buttons */}
+            {files.length > 0 && (
+              <div className="mt-8 flex gap-4">
                 <button
-                  onClick={handleDownload}
-                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition"
+                  onClick={handleMerge}
+                  disabled={isProcessing || files.length < 2}
+                  className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-bold py-4 rounded-lg transition flex items-center justify-center gap-2"
                 >
-                  <Download className="w-5 h-5" />
-                  Download PDF
+                  {isProcessing ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                      </svg>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-5 h-5" />
+                      Process Files
+                    </>
+                  )}
                 </button>
                 <button
-                  onClick={() => {
-                    setSelectedFiles([]);
-                    setDownloadUrl(null);
-                    setResult(null);
-                    setError(null);
-                    if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
-                  }}
-                  className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg transition"
+                  onClick={() => setFiles([])}
+                  disabled={isProcessing}
+                  className="px-8 bg-gray-300 hover:bg-gray-400 disabled:bg-gray-200 text-gray-900 font-semibold py-4 rounded-lg transition"
                 >
-                  Merge More
+                  Clear
                 </button>
               </div>
-            </div>
-          )}
-
-          {/* Merge Button */}
-          {!downloadUrl && selectedFiles.length > 0 && (
-            <div className="p-8">
-              <button
-                onClick={handleMerge}
-                disabled={isProcessing || selectedFiles.length < 2}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-4 px-6 rounded-lg transition flex items-center justify-center gap-3"
-              >
-                {isProcessing ? (
-                  <>
-                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                    </svg>
-                    Merging PDFs...
-                  </>
-                ) : (
-                  'Merge PDF Files'
-                )}
-              </button>
-              {isProcessing && (
-                <div className="mt-4 w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div 
-                    className="bg-blue-600 h-2 transition-all" 
-                    style={{width: `${progress}%`}}
-                  />
-                </div>
-              )}
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -1,45 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument } from 'pdf-lib';
+import { validatePdfFile, compressPdf, getDownloadHeaders } from '@/lib/pdf-utils';
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
-    if (!file) {
-      return NextResponse.json(
-        { error: 'No file provided' },
-        { status: 400 }
-      );
+    // Validate file
+    const validation = await validatePdfFile(file);
+    if (!validation.valid) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
-    if (!file.type.includes('pdf')) {
-      return NextResponse.json(
-        { error: 'File must be a PDF' },
-        { status: 400 }
-      );
-    }
-
+    // Convert to buffer
     const arrayBuffer = await file.arrayBuffer();
-    const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
-    
-    // Compression happens during save
-    const pdfBytes = await pdf.save();
-    const buffer = Buffer.from(pdfBytes);
+    const buffer = Buffer.from(arrayBuffer);
 
-    return new NextResponse(buffer, {
-      headers: {
-        'Content-Disposition': `attachment; filename="compressed-${file.name}"`,
-        'Content-Type': 'application/pdf',
-        'Cache-Control': 'no-cache',
-      },
+    // Compress
+    const result = await compressPdf(buffer);
+    if (!result.success) {
+      console.error('[v0] Compress error:', result.error);
+      return NextResponse.json({ error: result.error }, { status: 400 });
+    }
+
+    const filename = `compressed-${Date.now()}-${file.name}`;
+    return new NextResponse(result.data, {
+      headers: getDownloadHeaders(filename, result.data!.length),
+      status: 200,
     });
   } catch (error) {
     console.error('[v0] Compress PDF error:', error);
     return NextResponse.json(
-      { error: 'Compression failed' },
+      { error: 'Compression failed. Please try again.' },
       { status: 500 }
     );
   }
