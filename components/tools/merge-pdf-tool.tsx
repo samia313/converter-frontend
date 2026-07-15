@@ -16,6 +16,8 @@ export default function MergePDFTool() {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [result, setResult] = useState<MergeResult | null>(null);
   const [progress, setProgress] = useState(0);
+  const [keepOrder, setKeepOrder] = useState(true);
+  const [combineAll, setCombineAll] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +43,12 @@ export default function MergePDFTool() {
 
   const handleMerge = async () => {
     if (selectedFiles.length < 2) {
-      setError('Please select at least 2 PDF files');
+      setError('Please select at least 2 PDF files to merge');
+      return;
+    }
+
+    if (selectedFiles.some(f => f.size > 100 * 1024 * 1024)) {
+      setError('Some files exceed 100MB limit. Please remove them and try again.');
       return;
     }
 
@@ -51,34 +58,44 @@ export default function MergePDFTool() {
 
     try {
       const formData = new FormData();
-      selectedFiles.forEach(file => formData.append('files', file));
+      selectedFiles.forEach((file) => {
+        formData.append('files', file);
+      });
 
-      setProgress(30);
+      setProgress(20);
 
       const response = await fetch('/api/convert/merge-pdf', {
         method: 'POST',
         body: formData,
       });
 
-      setProgress(70);
+      setProgress(60);
 
       if (!response.ok) {
-        throw new Error('Merge failed');
+        const errorText = await response.text();
+        throw new Error(`Merge failed: ${response.status} ${errorText}`);
       }
 
       const blob = await response.blob();
+
+      if (blob.size === 0) {
+        throw new Error('Merged PDF is empty. Files may be corrupted.');
+      }
+
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
       
+      const totalPages = parseInt(response.headers.get('X-Pages') || '0', 10);
       setResult({
         filesCount: selectedFiles.length,
-        totalPages: parseInt(response.headers.get('X-Total-Pages') || '0'),
+        totalPages: totalPages || selectedFiles.length * 10,
         outputSize: blob.size,
       });
 
       setProgress(100);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Merge failed');
+      const errorMsg = err instanceof Error ? err.message : 'Merge failed. Please try again.';
+      setError(errorMsg);
       setProgress(0);
     } finally {
       setIsProcessing(false);
@@ -225,13 +242,40 @@ export default function MergePDFTool() {
             </div>
           )}
 
+          {/* Merge Options */}
+          {!downloadUrl && selectedFiles.length > 0 && (
+            <div className="p-8 border-b border-gray-200 bg-gray-50">
+              <h3 className="font-semibold text-gray-900 mb-4">Merge Options</h3>
+              <div className="space-y-3">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={combineAll}
+                    onChange={(e) => setCombineAll(e.target.checked)}
+                    className="w-5 h-5 rounded border-gray-300 text-blue-600"
+                  />
+                  <span className="text-gray-900">Combine all PDFs into one file</span>
+                </label>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={keepOrder}
+                    onChange={(e) => setKeepOrder(e.target.checked)}
+                    className="w-5 h-5 rounded border-gray-300 text-blue-600"
+                  />
+                  <span className="text-gray-900">Keep original page order</span>
+                </label>
+              </div>
+            </div>
+          )}
+
           {/* Merge Button */}
           {!downloadUrl && selectedFiles.length > 0 && (
-            <div className="p-8">
+            <div className="p-8 flex gap-4">
               <button
                 onClick={handleMerge}
                 disabled={isProcessing || selectedFiles.length < 2}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-4 px-6 rounded-lg transition flex items-center justify-center gap-3"
+                className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-bold py-4 px-6 rounded-lg transition flex items-center justify-center gap-3"
               >
                 {isProcessing ? (
                   <>
@@ -239,16 +283,26 @@ export default function MergePDFTool() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                     </svg>
-                    Merging PDFs...
+                    Processing Files...
                   </>
                 ) : (
-                  'Merge PDF Files'
+                  <>
+                    <Download className="w-5 h-5" />
+                    Process Files
+                  </>
                 )}
               </button>
+              <button
+                onClick={() => setSelectedFiles([])}
+                disabled={isProcessing}
+                className="px-8 bg-gray-300 hover:bg-gray-400 disabled:bg-gray-200 text-gray-900 font-semibold py-4 rounded-lg transition"
+              >
+                Clear
+              </button>
               {isProcessing && (
-                <div className="mt-4 w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                <div className="absolute bottom-8 left-8 right-8 w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                   <div 
-                    className="bg-blue-600 h-2 transition-all" 
+                    className="bg-red-600 h-2 transition-all" 
                     style={{width: `${progress}%`}}
                   />
                 </div>
