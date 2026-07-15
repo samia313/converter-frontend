@@ -1,92 +1,75 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument } from 'pdf-lib';
-import { extractFormFiles, createDownloadHeaders } from '@/lib/file-upload-handler';
-import { sendErrorResponse, ConversionError, ERROR_MESSAGES } from '@/lib/error-handler';
 
 export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
   try {
-    const uploadedFiles = await extractFormFiles(request, 'files', {
-      acceptedTypes: ['pdf'],
-      maxSizeMB: 100,
-      maxFiles: 20,
-    });
+    const formData = await request.formData();
+    const files = (formData.getAll('files') as File[]) || [];
 
-    if (uploadedFiles.length < 2) {
-      throw new ConversionError(
-        ERROR_MESSAGES.INVALID_REQUEST.code,
-        'Please provide at least 2 PDF files to merge',
-        ERROR_MESSAGES.INVALID_REQUEST.status
+    if (!files || files.length === 0) {
+      return NextResponse.json(
+        { error: 'No PDF files provided' },
+        { status: 400 }
       );
     }
 
-    const totalSize = uploadedFiles.reduce((sum, f) => sum + f.size, 0);
-    const maxTotalSize = 500 * 1024 * 1024; // 500MB total
-    
+    if (files.length < 2) {
+      return NextResponse.json(
+        { error: 'Please provide at least 2 PDF files to merge' },
+        { status: 400 }
+      );
+    }
+
+    const validFiles = files.filter(file => file.type.includes('pdf'));
+    if (validFiles.length < 2) {
+      return NextResponse.json(
+        { error: 'Please provide at least 2 valid PDF files' },
+        { status: 400 }
+      );
+    }
+
+    const totalSize = validFiles.reduce((sum, file) => sum + file.size, 0);
+    const maxTotalSize = 500 * 1024 * 1024;
     if (totalSize > maxTotalSize) {
-      throw new ConversionError(
-        ERROR_MESSAGES.FILE_TOO_LARGE.code,
-        `Total file size ${(totalSize / 1024 / 1024).toFixed(2)}MB exceeds limit of 500MB`,
-        ERROR_MESSAGES.FILE_TOO_LARGE.status
+      return NextResponse.json(
+        { error: 'Total file size exceeds 500MB limit' },
+        { status: 413 }
       );
     }
 
-    try {
-      const mergedPdf = await PDFDocument.create();
-      let totalPages = 0;
-      const processedFiles: string[] = [];
-
-      for (const uploadedFile of uploadedFiles) {
-        try {
-          const pdf = await PDFDocument.load(uploadedFile.arrayBuffer, { ignoreEncryption: true });
-          const pageCount = pdf.getPageCount();
-
-          if (pageCount === 0) {
-            throw new Error('PDF has no pages');
-          }
-
-          const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-          copiedPages.forEach((page) => mergedPdf.addPage(page));
-
-          totalPages += pageCount;
-          processedFiles.push(uploadedFile.file.name);
-        } catch (err) {
-          throw new ConversionError(
-            ERROR_MESSAGES.PROCESSING_FAILED.code,
-            `Failed to process file "${uploadedFile.file.name}": ${err instanceof Error ? err.message : 'Unknown error'}`,
-            ERROR_MESSAGES.PROCESSING_FAILED.status
-          );
-        }
-      }
-
-      const pdfBytes = await mergedPdf.save({ useObjectStreams: true });
-      const buffer = Buffer.from(pdfBytes);
-
-      return new NextResponse(buffer, {
-        headers: createDownloadHeaders(
-          `merged-${Date.now()}.pdf`,
-          'application/pdf',
-          buffer.length
-        ),
-        status: 200,
-      });
-    } catch (error) {
-      if (error instanceof ConversionError) {
-        throw error;
-      }
-      
-      if (error instanceof Error) {
-        throw new ConversionError(
-          ERROR_MESSAGES.PROCESSING_FAILED.code,
-          `Merge failed: ${error.message}`,
-          ERROR_MESSAGES.PROCESSING_FAILED.status,
-          error.message
+    const mergedPdf = await PDFDocument.create();
+    
+    for (const file of validFiles) {
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach((page) => mergedPdf.addPage(page));
+      } catch (err) {
+        return NextResponse.json(
+          { error: `Failed to process file: ${file.name}` },
+          { status: 400 }
         );
       }
-      throw error;
     }
+
+    const pdfBytes = await mergedPdf.save();
+    const buffer = Buffer.from(pdfBytes);
+
+    return new NextResponse(buffer, {
+      headers: {
+        'Content-Disposition': 'attachment; filename="merged.pdf"',
+        'Content-Type': 'application/pdf',
+        'Cache-Control': 'no-cache',
+      },
+    });
   } catch (error) {
-    return sendErrorResponse(error);
+    console.error('[v0] Merge PDF error:', error);
+    return NextResponse.json(
+      { error: 'Merging failed' },
+      { status: 500 }
+    );
   }
 }
