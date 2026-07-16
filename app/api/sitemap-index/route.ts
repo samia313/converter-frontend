@@ -27,11 +27,17 @@ export async function GET() {
       lastmod: today,
       description: 'PDF tools and features sitemap'
     },
+    // Blog Post Sitemap - 1200 individual posts
+    {
+      loc: `${SITE_URL}/api/sitemaps/blog-posts`,
+      lastmod: today,
+      description: 'Individual blog post pages (1200 URLs)'
+    },
     // Category sitemaps
     {
       loc: `${SITE_URL}/api/sitemaps/blog`,
       lastmod: today,
-      description: 'All blog posts (1200 URLs)'
+      description: 'Blog collection pages (10+ URLs)'
     },
     {
       loc: `${SITE_URL}/api/sitemaps/guides`,

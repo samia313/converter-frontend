@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { blogPosts } from '@/lib/content/blog-posts-1000';
+import { chatPdfBlogPosts } from '@/lib/content/blog-posts-200-chat-pdf';
 import Link from 'next/link';
-import { getRelatedBlogPosts } from '@/lib/blog-utils';
+import { getRelatedBlogPosts, getBlogPostsByTool, getBlogPostsByCategory } from '@/lib/blog-utils';
 
 export const dynamicParams = true;
 export const revalidate = 3600; // ISR: revalidate every hour
@@ -14,14 +15,16 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
+  const allPosts = [...blogPosts, ...chatPdfBlogPosts];
+  return allPosts.map((post) => ({
     slug: post.slug,
   }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const allPosts = [...blogPosts, ...chatPdfBlogPosts];
+  const post = allPosts.find((p) => p.slug === slug);
 
   if (!post) {
     return {
@@ -67,13 +70,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPage({ params }: Props) {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const allPosts = [...blogPosts, ...chatPdfBlogPosts];
+  const post = allPosts.find((p) => p.slug === slug);
 
   if (!post) {
     notFound();
   }
 
   const relatedPosts = getRelatedBlogPosts(post, 4);
+  
+  // Get 3 related blog posts (same tool and category)
+  const toolBlogs = allPosts
+    .filter(p => p.tool === post.tool && p.slug !== post.slug)
+    .slice(0, 3);
+  
+  // Get 3 category blogs
+  const categoryBlogs = allPosts
+    .filter(p => p.category === post.category && p.slug !== post.slug)
+    .slice(0, 3);
+  
+  // Get related tool pages (first 3 tools)
+  const tools = ['compress-pdf', 'merge-pdf', 'split-pdf'];
+  const toolLinks = tools.slice(0, 3);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -250,6 +268,127 @@ export default async function BlogPage({ params }: Props) {
           </div>
         </section>
       )}
+
+      {/* Internal Links Section */}
+      <section className="max-w-6xl mx-auto px-4 py-16 border-t border-border">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Related Blog Posts */}
+          <div>
+            <h3 className="text-lg font-bold text-foreground mb-4">Related Articles</h3>
+            <ul className="space-y-3">
+              {toolBlogs.map((blog) => (
+                <li key={blog.slug}>
+                  <Link 
+                    href={`/blog/${blog.slug}`}
+                    className="text-blue-600 hover:text-blue-700 hover:underline text-sm"
+                  >
+                    {blog.title}
+                  </Link>
+                </li>
+              ))}
+              {toolBlogs.length === 0 && (
+                <li>
+                  <Link 
+                    href="/blog"
+                    className="text-blue-600 hover:text-blue-700 hover:underline text-sm"
+                  >
+                    View More Articles
+                  </Link>
+                </li>
+              )}
+            </ul>
+          </div>
+
+          {/* Category Articles */}
+          <div>
+            <h3 className="text-lg font-bold text-foreground mb-4">{post.category.replace('-', ' ')}</h3>
+            <ul className="space-y-3">
+              {categoryBlogs.map((blog) => (
+                <li key={blog.slug}>
+                  <Link 
+                    href={`/blog/${blog.slug}`}
+                    className="text-blue-600 hover:text-blue-700 hover:underline text-sm"
+                  >
+                    {blog.title}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link 
+                  href={`/blog?category=${post.category}`}
+                  className="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium"
+                >
+                  View all {post.category.replace('-', ' ')} →
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Tool Links */}
+          <div>
+            <h3 className="text-lg font-bold text-foreground mb-4">Popular Tools</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link 
+                  href={`/${post.tool}`}
+                  className="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium"
+                >
+                  {post.tool.replace('-', ' ')} Tool
+                </Link>
+              </li>
+              {toolLinks.map((tool) => (
+                <li key={tool}>
+                  <Link 
+                    href={`/${tool}`}
+                    className="text-blue-600 hover:text-blue-700 hover:underline text-sm"
+                  >
+                    {tool.replace('-', ' ')}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Navigation Links */}
+          <div>
+            <h3 className="text-lg font-bold text-foreground mb-4">Navigation</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link 
+                  href="/"
+                  className="text-blue-600 hover:text-blue-700 hover:underline text-sm"
+                >
+                  Homepage
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/blog"
+                  className="text-blue-600 hover:text-blue-700 hover:underline text-sm"
+                >
+                  Blog Home
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/tools"
+                  className="text-blue-600 hover:text-blue-700 hover:underline text-sm"
+                >
+                  All Tools
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/guides"
+                  className="text-blue-600 hover:text-blue-700 hover:underline text-sm"
+                >
+                  Guides
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="max-w-6xl mx-auto px-4 py-12">
