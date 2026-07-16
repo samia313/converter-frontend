@@ -50,12 +50,15 @@ Disallow: /
 User-agent: PetalBot
 Disallow: /
 
-# SITEMAP LOCATIONS - CRITICAL FOR 2500+ PAGE DISCOVERY
+# SITEMAP LOCATIONS - CRITICAL FOR 2700+ PAGE DISCOVERY
 # Master sitemap index - Use this in GSC, Bing, and Google Analytics
 Sitemap: https://pdfilio.com/api/sitemap-index
 
-# Main sitemap with all 2500+ pages
+# Main sitemaps
 Sitemap: https://pdfilio.com/sitemap.xml
+
+# Blog Post Sitemaps (1200+ individual blog post pages)
+Sitemap: https://pdfilio.com/api/sitemaps/blog-posts
 
 # Category-specific sitemaps for better crawling
 Sitemap: https://pdfilio.com/api/sitemaps/blog
