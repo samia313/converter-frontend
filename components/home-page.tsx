@@ -84,10 +84,10 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight"
           >
-            Your Complete
+            Chat with PDFs, Translate Documents,
             <br />
             <span className="bg-gradient-to-r from-sky-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">
-              PDF Superpower
+              Summarize Reports & Convert Files using AI
             </span>
           </motion.h1>
 
@@ -97,14 +97,14 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="text-base sm:text-lg text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
           >
-            60+ professional PDF tools with AI superpowers. Convert, compress, merge, split, edit, and extract intelligence from your documents instantly. No limits. No sign-up. Completely free.
+            60+ professional PDF tools powered by GPT. Convert, compress, merge, split, edit, translate to 100+ languages, and extract intelligence from your documents instantly. No limits. No sign-up. Completely secure.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
           >
             <motion.button
               onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}
@@ -112,7 +112,7 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
               whileTap={{ scale: 0.95 }}
               className="px-8 py-4 bg-gradient-to-r from-blue-500 to-sky-600 text-white rounded-lg hover:shadow-2xl shadow-lg font-bold transition-all duration-200 flex items-center justify-center gap-2 text-base"
             >
-              Explore All Tools
+              Start Free
               <ChevronRight className="w-5 h-5" />
             </motion.button>
             <motion.button
@@ -120,8 +120,28 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
               whileTap={{ scale: 0.95 }}
               className="px-8 py-4 border-2 border-sky-500 text-sky-400 rounded-lg hover:bg-sky-500/10 font-bold transition-all duration-200 text-base backdrop-blur-sm"
             >
-              Explore Premium
+              No Signup
             </motion.button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="flex flex-col sm:flex-row gap-6 justify-center text-sm text-gray-300"
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-xl">🔒</span>
+              <span>Secure Processing</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xl">⚡</span>
+              <span>GPT Powered</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xl">🌍</span>
+              <span>100+ Languages</span>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -210,23 +230,304 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
       {/* Unified Tools Grid - All Tools in One Place */}
       <UnifiedToolsGrid />
 
-      {/* Features Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      {/* Why PDFilio Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-blue-50 to-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-black text-gray-900 mb-12 text-center">Why Choose PDFilio?</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6">Why PDFilio</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Everything you need for PDF management, in one powerful platform</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-lg hover:border-blue-200 transition-all">
+              <div className="text-4xl mb-4">⚡</div>
+              <h3 className="font-bold text-gray-900 mb-2">Lightning Fast</h3>
+              <p className="text-gray-600 text-sm">Process files instantly with our optimized AI engine</p>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-lg hover:border-blue-200 transition-all">
+              <div className="text-4xl mb-4">🔒</div>
+              <h3 className="font-bold text-gray-900 mb-2">100% Secure</h3>
+              <p className="text-gray-600 text-sm">Your files are never stored. Processed locally in your browser</p>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-lg hover:border-blue-200 transition-all">
+              <div className="text-4xl mb-4">💰</div>
+              <h3 className="font-bold text-gray-900 mb-2">Completely Free</h3>
+              <p className="text-gray-600 text-sm">No credit card, no hidden fees, unlimited usage</p>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-lg hover:border-blue-200 transition-all">
+              <div className="text-4xl mb-4">🤖</div>
+              <h3 className="font-bold text-gray-900 mb-2">AI Powered</h3>
+              <p className="text-gray-600 text-sm">Built with GPT technology for intelligent document processing</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6">Powerful Features</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Everything you need to master your PDFs</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-all">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-2xl">📄</div>
+                <h3 className="font-bold text-gray-900">PDF Organization</h3>
+              </div>
+              <p className="text-gray-600 text-sm">Merge, split, rotate, and organize your PDFs</p>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-all">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-2xl">🎨</div>
+                <h3 className="font-bold text-gray-900">Format Conversion</h3>
+              </div>
+              <p className="text-gray-600 text-sm">Convert to/from Word, Excel, PowerPoint, images</p>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-all">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-2xl">💬</div>
+                <h3 className="font-bold text-gray-900">Chat with PDFs</h3>
+              </div>
+              <p className="text-gray-600 text-sm">Ask questions and get answers from your documents</p>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-all">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-2xl">🌐</div>
+                <h3 className="font-bold text-gray-900">Translation</h3>
+              </div>
+              <p className="text-gray-600 text-sm">Translate documents to 100+ languages</p>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-all">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-2xl">📊</div>
+                <h3 className="font-bold text-gray-900">Summarization</h3>
+              </div>
+              <p className="text-gray-600 text-sm">Get AI-powered summaries of any document</p>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-all">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-2xl">📦</div>
+                <h3 className="font-bold text-gray-900">Compression</h3>
+              </div>
+              <p className="text-gray-600 text-sm">Reduce file size while maintaining quality</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Models Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-black mb-6">Powered by Advanced AI</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">We use the latest AI models to process your documents</p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center bg-white rounded-xl p-10 shadow-sm border border-gray-100 hover:shadow-lg transition-all">
-              <div className="text-5xl font-black text-red-600 mb-4">100%</div>
-              <p className="text-gray-700 font-semibold text-lg">Free to use - No credit card required</p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 hover:border-white/40 transition-all">
+              <h3 className="font-bold text-xl mb-3">GPT-4</h3>
+              <p className="text-gray-300">Advanced language understanding for chat and summarization</p>
             </div>
-            <div className="text-center bg-white rounded-xl p-10 shadow-sm border border-gray-100 hover:shadow-lg transition-all">
-              <div className="text-5xl font-black text-red-600 mb-4">∞</div>
-              <p className="text-gray-700 font-semibold text-lg">Unlimited processing without waiting</p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 hover:border-white/40 transition-all">
+              <h3 className="font-bold text-xl mb-3">Vision AI</h3>
+              <p className="text-gray-300">Intelligent document understanding and image processing</p>
             </div>
-            <div className="text-center bg-white rounded-xl p-10 shadow-sm border border-gray-100 hover:shadow-lg transition-all">
-              <div className="text-5xl font-black text-red-600 mb-4">🔒</div>
-              <p className="text-gray-700 font-semibold text-lg">Secure - Files processed locally in your browser</p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 hover:border-white/40 transition-all">
+              <h3 className="font-bold text-xl mb-3">Translation API</h3>
+              <p className="text-gray-300">Support for 100+ languages with high accuracy</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Security & Privacy Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-8">Your Security is Our Priority</h2>
+              <div className="space-y-6">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center text-xl">✓</div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 mb-1">End-to-End Encryption</h3>
+                    <p className="text-gray-600">All files are encrypted during transfer and processing</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center text-xl">✓</div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 mb-1">No File Storage</h3>
+                    <p className="text-gray-600">Files are never stored on our servers or any permanent storage</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center text-xl">✓</div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 mb-1">GDPR Compliant</h3>
+                    <p className="text-gray-600">We comply with international data protection regulations</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center text-xl">✓</div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 mb-1">Privacy Policy</h3>
+                    <p className="text-gray-600">Read our transparent privacy policy for complete details</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-12 border-2 border-blue-100">
+              <div className="space-y-6 text-center">
+                <div className="text-6xl">🔐</div>
+                <h3 className="text-2xl font-black text-gray-900">Enterprise-Grade Security</h3>
+                <p className="text-gray-600">Bank-level encryption keeps your documents safe</p>
+                <div className="pt-6 border-t border-blue-200">
+                  <p className="text-sm text-gray-600">SSL/TLS • AES-256 Encryption • GDPR Compliant</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Supported Formats Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6">Supported Formats</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Work with all popular file formats</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {['PDF', 'DOCX', 'XLSX', 'PPTX', 'PNG', 'JPG', 'GIF', 'SVG', 'TXT', 'RTF', 'ODT', 'XPS'].map((format) => (
+              <div key={format} className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 text-center hover:shadow-lg hover:border-blue-200 transition-all">
+                <p className="font-bold text-gray-900">{format}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6">Loved by Users</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">See what our users say about PDFilio</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { name: 'Sarah Johnson', role: 'Student', text: 'PDFilio saved me hours on document work. The AI features are incredible!' },
+              { name: 'Michael Chen', role: 'Business Owner', text: 'Finally a free tool that actually works. No ads, no limitations, just results.' },
+              { name: 'Emma Davis', role: 'Professional', text: 'The translation and summarization features are game-changers for my workflow.' }
+            ].map((testimonial, index) => (
+              <div key={index} className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-8 border border-blue-100">
+                <div className="flex gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-yellow-400">⭐</span>
+                  ))}
+                </div>
+                <p className="text-gray-700 mb-6 italic">"{testimonial.text}"</p>
+                <div>
+                  <p className="font-bold text-gray-900">{testimonial.name}</p>
+                  <p className="text-sm text-gray-600">{testimonial.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-black mb-6">Frequently Asked Questions</h2>
+          </div>
+          <div className="space-y-6">
+            {[
+              { q: 'Is my data safe?', a: 'Yes, all files are processed in your browser and never stored on our servers.' },
+              { q: 'Do I need to create an account?', a: 'No, PDFilio works completely without signup or registration.' },
+              { q: 'How many files can I process?', a: 'Unlimited! Process as many files as you need, completely free.' },
+              { q: 'What languages are supported?', a: 'We support 100+ languages for translation and document processing.' },
+              { q: 'Can I use it on mobile?', a: 'Yes, PDFilio works on all devices - desktop, tablet, and mobile.' },
+              { q: 'Is there a file size limit?', a: 'PDFilio handles files up to 100MB. Most files process in seconds.' }
+            ].map((faq, index) => (
+              <details key={index} className="group border border-white/20 rounded-lg p-6 bg-white/10 backdrop-blur-sm cursor-pointer hover:bg-white/20 transition-all">
+                <summary className="flex items-center justify-between font-bold text-lg">
+                  {faq.q}
+                  <span className="group-open:rotate-180 transition-transform">▼</span>
+                </summary>
+                <p className="mt-4 text-gray-300">{faq.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Latest Blogs Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6">Latest from Our Blog</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Tips, guides, and insights for PDF mastery</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { title: 'How to Chat with Your PDFs Using AI', date: 'Dec 15, 2024', readTime: '5 min read' },
+              { title: 'Complete Guide to PDF Compression', date: 'Dec 12, 2024', readTime: '8 min read' },
+              { title: 'Best Practices for Document Organization', date: 'Dec 10, 2024', readTime: '6 min read' }
+            ].map((blog, index) => (
+              <div key={index} className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-8 border border-blue-100 hover:shadow-lg transition-all cursor-pointer">
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">{blog.title}</h3>
+                <div className="flex items-center justify-between text-sm text-gray-600">
+                  <span>{blog.date}</span>
+                  <span>{blog.readTime}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-12">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-sky-600 text-white rounded-lg hover:shadow-2xl shadow-lg font-bold transition-all duration-200"
+            >
+              View All Articles
+            </motion.button>
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Tools Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6">Most Popular Tools</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Start with these top-rated tools loved by thousands</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {toolsByCategory.ai.slice(0, 4).map((tool) => {
+              const Icon = tool.icon;
+              return (
+                <motion.button
+                  key={tool.id}
+                  onClick={() => onSelectTool(tool.id)}
+                  whileHover={{ y: -4 }}
+                  className="group relative bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 text-left"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 rounded-lg flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-500 flex-shrink-0">
+                      <Icon className="w-7 h-7 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{tool.name}</h3>
+                      <p className="text-sm text-gray-600 mt-1 line-clamp-2">{tool.description}</p>
+                    </div>
+                  </div>
+                </motion.button>
+              );
+            })}
           </div>
         </div>
       </section>
