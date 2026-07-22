@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, integer, uuid } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, boolean, integer, uuid, varchar } from 'drizzle-orm/pg-core'
 
 // --- Better Auth required tables -------------------------------------------
 // Column names are camelCase to match Better Auth's defaults. Do not rename.
@@ -119,4 +119,90 @@ export const subscription = pgTable('subscriptions', {
   canceledAt: timestamp('canceledAt'),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),
+})
+
+// --- Production Pipeline Tables -------------------------------------------
+
+// Job tracking table (for Redis queue integration)
+export const processingJobs = pgTable('processingJobs', {
+  id: text('id').primaryKey(),
+  userId: text('userId'),
+  jobId: text('jobId').unique().notNull(),
+  type: text('type').notNull(), // compress, merge, split, etc.
+  status: text('status').notNull().default('pending'), // pending, processing, completed, failed, retry
+  inputSize: integer('inputSize').notNull(),
+  outputSize: integer('outputSize'),
+  inputFileUrl: text('inputFileUrl'),
+  outputFileUrl: text('outputFileUrl'),
+  errorMessage: text('errorMessage'),
+  retries: integer('retries').default(0),
+  maxRetries: integer('maxRetries').default(3),
+  processingTimeMs: integer('processingTimeMs'),
+  metadata: text('metadata'), // JSON string
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  startedAt: timestamp('startedAt'),
+  completedAt: timestamp('completedAt'),
+  expiresAt: timestamp('expiresAt').notNull(),
+})
+
+// Detailed conversion logs
+export const conversionLogs = pgTable('conversionLogs', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  conversionId: text('conversionId').notNull(),
+  level: text('level').notNull(), // info, warn, error, debug
+  message: text('message').notNull(),
+  details: text('details'), // JSON string
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+})
+
+// Processing metrics and statistics
+export const processingMetrics = pgTable('processingMetrics', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  timestamp: timestamp('timestamp').notNull().defaultNow(),
+  type: text('type').notNull(), // Tool type (compress, merge, etc.)
+  successCount: integer('successCount').default(0),
+  failureCount: integer('failureCount').default(0),
+  totalProcessingTimeMs: integer('totalProcessingTimeMs').default(0),
+  averageFileSize: integer('averageFileSize'),
+  peakConcurrency: integer('peakConcurrency'),
+  metadata: text('metadata'), // JSON string
+})
+
+// Error tracking and alerts
+export const errorLogs = pgTable('errorLogs', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  conversionId: text('conversionId'),
+  errorType: text('errorType').notNull(),
+  errorMessage: text('errorMessage').notNull(),
+  stackTrace: text('stackTrace'),
+  metadata: text('metadata'), // JSON string
+  isResolved: boolean('isResolved').default(false),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  resolvedAt: timestamp('resolvedAt'),
+})
+
+// File storage metadata for Vercel Blob
+export const fileStorageMetadata = pgTable('fileStorageMetadata', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  conversionId: text('conversionId').notNull(),
+  fileType: text('fileType').notNull(), // input, output
+  fileName: varchar('fileName').notNull(),
+  mimeType: varchar('mimeType'),
+  fileSize: integer('fileSize').notNull(),
+  blobUrl: text('blobUrl').notNull(),
+  checksum: varchar('checksum'), // For integrity verification
+  uploadedAt: timestamp('uploadedAt').notNull().defaultNow(),
+  expiresAt: timestamp('expiresAt').notNull(),
+})
+
+// System health checks
+export const healthCheckLogs = pgTable('healthCheckLogs', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  status: text('status').notNull(), // healthy, degraded, unhealthy
+  queueHealth: text('queueHealth'),
+  storageHealth: text('storageHealth'),
+  databaseHealth: text('databaseHealth'),
+  message: text('message'),
+  metrics: text('metrics'), // JSON string
+  checkedAt: timestamp('checkedAt').notNull().defaultNow(),
 })
