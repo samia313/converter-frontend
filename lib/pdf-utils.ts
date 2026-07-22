@@ -99,16 +99,30 @@ export async function loadPdf(data: ArrayBuffer | SharedArrayBuffer | Uint8Array
 
 export async function compressPdf(buffer: Buffer): Promise<ProcessingResult> {
   const startTime = Date.now();
+  const operation = 'compressPdf';
+  
   try {
+    console.log('[v0] Starting PDF compression. Input size:', buffer.length, 'bytes');
+    
     const arrayBuffer = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
     const { pdf, error: loadError } = await loadPdf(arrayBuffer);
     if (loadError) {
+      logProcessingError(operation, loadError, buffer.length);
       return { success: false, error: loadError };
     }
 
     const compressedBytes = await pdf.save({ useObjectStreams: true });
     const outputBuffer = Buffer.from(compressedBytes);
+    
+    // CRITICAL FIX: Validate output buffer
+    const validation = validateOutputBuffer(outputBuffer, operation);
+    if (!validation.valid) {
+      logProcessingError(operation, validation.error, buffer.length, outputBuffer.length);
+      return { success: false, error: validation.error };
+    }
+
     const compressionRatio = Math.round((1 - outputBuffer.length / buffer.length) * 100);
+    console.log('[v0] Compression successful. Output size:', outputBuffer.length, 'bytes. Ratio:', compressionRatio + '%');
 
     return {
       success: true,
@@ -121,18 +135,24 @@ export async function compressPdf(buffer: Buffer): Promise<ProcessingResult> {
       },
     };
   } catch (error) {
+    logProcessingError(operation, error, buffer.length);
     return {
       success: false,
-      error: `Compression failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      error: `Compression failed: ${error instanceof Error ? error.message : 'Unknown error'}. The input PDF may be corrupted or in an unsupported format.`,
     };
   }
 }
 
 export async function mergePdfs(files: File[]): Promise<ProcessingResult> {
   const startTime = Date.now();
+  const operation = 'mergePdfs';
+  
   try {
+    console.log('[v0] Starting PDF merge. Files count:', files.length);
+    
     const validation = await validatePdfFiles(files);
     if (!validation.valid) {
+      logProcessingError(operation, validation.error);
       return { success: false, error: validation.error };
     }
 
@@ -142,9 +162,11 @@ export async function mergePdfs(files: File[]): Promise<ProcessingResult> {
 
     for (const file of validFiles) {
       try {
+        console.log('[v0] Processing file:', file.name, 'Size:', file.size);
         const arrayBuffer = await file.arrayBuffer();
         const { pdf, error: loadError } = await loadPdf(arrayBuffer);
         if (loadError) {
+          logProcessingError(operation, `Error in ${file.name}: ${loadError}`, file.size);
           return { success: false, error: `Error in ${file.name}: ${loadError}` };
         }
 
@@ -153,6 +175,7 @@ export async function mergePdfs(files: File[]): Promise<ProcessingResult> {
         copiedPages.forEach((page) => mergedPdf.addPage(page));
         totalPages += pageCount;
       } catch (err) {
+        logProcessingError(operation, `Failed to process ${file.name}`, file.size);
         return {
           success: false,
           error: `Failed to process ${file.name}: ${err instanceof Error ? err.message : 'Unknown error'}`,
@@ -162,36 +185,54 @@ export async function mergePdfs(files: File[]): Promise<ProcessingResult> {
 
     const mergedBytes = await mergedPdf.save();
     const outputBuffer = Buffer.from(mergedBytes);
+    
+    // CRITICAL FIX: Validate output buffer
+    const outputValidation = validateOutputBuffer(outputBuffer, operation);
+    if (!outputValidation.valid) {
+      logProcessingError(operation, outputValidation.error, validFiles.reduce((sum, f) => sum + f.size, 0), outputBuffer.length);
+      return { success: false, error: outputValidation.error };
+    }
+
+    const totalInputSize = validFiles.reduce((sum, f) => sum + f.size, 0);
+    console.log('[v0] Merge successful. Total pages:', totalPages, 'Output size:', outputBuffer.length, 'bytes');
 
     return {
       success: true,
       data: outputBuffer,
       metadata: {
-        originalSize: validFiles.reduce((sum, f) => sum + f.size, 0),
+        originalSize: totalInputSize,
         outputSize: outputBuffer.length,
         pages: totalPages,
         duration: Date.now() - startTime,
       },
     };
   } catch (error) {
+    logProcessingError(operation, error);
     return {
       success: false,
-      error: `Merge failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      error: `Merge failed: ${error instanceof Error ? error.message : 'Unknown error'}. Some PDFs may be corrupted or in unsupported formats.`,
     };
   }
 }
 
 export async function splitPdf(buffer: Buffer, splitPage?: number): Promise<ProcessingResult> {
   const startTime = Date.now();
+  const operation = 'splitPdf';
+  
   try {
+    console.log('[v0] Starting PDF split. Input size:', buffer.length, 'bytes. Split page:', splitPage);
+    
     const arrayBuffer = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
     const { pdf, error: loadError } = await loadPdf(arrayBuffer);
     if (loadError) {
+      logProcessingError(operation, loadError, buffer.length);
       return { success: false, error: loadError };
     }
 
     const pageCount = pdf.getPageCount();
     const splitAt = splitPage ? Math.max(1, Math.min(splitPage, pageCount - 1)) : Math.ceil(pageCount / 2);
+    
+    console.log('[v0] PDF has', pageCount, 'pages. Splitting at page:', splitAt);
 
     const part1 = await PDFDocument.create();
     for (let i = 0; i < splitAt; i++) {
@@ -201,6 +242,15 @@ export async function splitPdf(buffer: Buffer, splitPage?: number): Promise<Proc
 
     const part1Bytes = await part1.save();
     const outputBuffer = Buffer.from(part1Bytes);
+    
+    // CRITICAL FIX: Validate output buffer
+    const validation = validateOutputBuffer(outputBuffer, operation);
+    if (!validation.valid) {
+      logProcessingError(operation, validation.error, buffer.length, outputBuffer.length);
+      return { success: false, error: validation.error };
+    }
+
+    console.log('[v0] Split successful. Output pages:', splitAt, 'Output size:', outputBuffer.length, 'bytes');
 
     return {
       success: true,
@@ -213,9 +263,10 @@ export async function splitPdf(buffer: Buffer, splitPage?: number): Promise<Proc
       },
     };
   } catch (error) {
+    logProcessingError(operation, error, buffer.length);
     return {
       success: false,
-      error: `Split failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      error: `Split failed: ${error instanceof Error ? error.message : 'Unknown error'}. The input PDF may be corrupted or in an unsupported format.`,
     };
   }
 }
@@ -227,4 +278,57 @@ export function getDownloadHeaders(filename: string, size: number) {
     'Content-Length': String(size),
     'Cache-Control': 'no-cache, no-store, must-revalidate',
   };
+}
+
+// ============================================================================
+// CRITICAL FIX: Output Validation & Error Detection
+// ============================================================================
+
+// Validate output buffer is not empty and contains valid PDF data
+export function validateOutputBuffer(buffer: Buffer | Uint8Array, operation: string): { valid: boolean; error?: string } {
+  // Check if buffer exists
+  if (!buffer) {
+    return { valid: false, error: `${operation}: Output buffer is null or undefined` };
+  }
+
+  // Check if buffer has content
+  const bufferLength = buffer instanceof Buffer ? buffer.length : buffer.byteLength;
+  if (bufferLength === 0) {
+    return { valid: false, error: `${operation}: Output PDF is empty (0 bytes). The input PDF may be corrupted or unsupported.` };
+  }
+
+  // Check minimum PDF size (valid PDF must be at least 9 bytes "%PDF-1.0")
+  if (bufferLength < 9) {
+    return { valid: false, error: `${operation}: Output PDF is too small (${bufferLength} bytes). Output may be corrupted.` };
+  }
+
+  // Check PDF header
+  const bufferView = buffer instanceof Buffer ? new Uint8Array(buffer) : buffer;
+  const headerStr = String.fromCharCode(...bufferView.slice(0, 5));
+  if (headerStr !== '%PDF-') {
+    console.error('[v0] Invalid PDF header:', headerStr, 'hex:', bufferView.slice(0, 5).toString());
+    return { valid: false, error: `${operation}: Output is not a valid PDF file. Header: ${headerStr}` };
+  }
+
+  // Check PDF footer (valid PDF must end with "%%EOF")
+  const footerStr = String.fromCharCode(...bufferView.slice(-5));
+  if (!footerStr.includes('EOF')) {
+    console.warn('[v0] Invalid PDF footer:', footerStr, 'Buffer ends with:', String.fromCharCode(...bufferView.slice(-20)));
+  }
+
+  return { valid: true };
+}
+
+// Detailed error handler for processing operations
+export function logProcessingError(operation: string, error: any, inputSize?: number, outputSize?: number) {
+  const errorMsg = error instanceof Error ? error.message : String(error);
+  const details = {
+    operation,
+    errorMessage: errorMsg,
+    inputSize,
+    outputSize,
+    timestamp: new Date().toISOString(),
+  };
+  console.error('[v0] Processing error:', JSON.stringify(details, null, 2));
+  return details;
 }
