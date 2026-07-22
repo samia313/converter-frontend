@@ -1,90 +1,302 @@
-# PDFilio - Quick Start Guide
+# Production Pipeline - Quick Start Guide
 
-## All Tools are Working - Here's How to Use Them
+## 1. Health Check (Test Everything)
 
-### Available Tools (All Functional):
+```bash
+# Check if system is working
+curl http://localhost:3000/api/health | jq '.'
 
-1. **PDF to Word** - Convert PDF files to editable Word documents
-2. **Word to PDF** - Convert Word documents to PDF format
-3. **Merge PDF** - Combine multiple PDF files into one
-4. **Split PDF** - Extract individual pages from a PDF
-5. **Compress PDF** - Reduce PDF file size
-6. **OCR** - Extract text from scanned PDFs
-7. **AI Summary** - Generate intelligent summaries of documents
-8. **PDF Chat** - Ask questions about your PDF documents
-
-### Quick Start - How Visitors Use:
-
-#### Step 1: Visit a Tool Page
-```
-http://localhost:3000/pdf-to-word
-http://localhost:3000/word-to-pdf
-http://localhost:3000/merge-pdf
-http://localhost:3000/split-pdf
-http://localhost:3000/compress-pdf
-http://localhost:3000/ocr
-http://localhost:3000/ai-summary
-http://localhost:3000/pdf-chat
+# Response: Shows queue status, storage usage, logs, metrics, alerts
 ```
 
-#### Step 2: Upload Your File
-- Look for the "Drop your files here" upload box at the top of the page
-- Either:
-  - Drag and drop your file directly into the box, OR
-  - Click "or click to browse" to select a file from your computer
+## 2. Submit a Conversion Job
 
-#### Step 3: Click Convert
-- After selecting a file, a "Convert" or "Process" button appears
-- Click the button to start the conversion
-- You'll see "Converting..." while the process runs
+```typescript
+import { getConversionService } from '@/lib/services/conversion-service';
 
-#### Step 4: Download Result
-- Once complete, your converted file downloads automatically
-- Or click the download button to manually get your file
+const conversion = getConversionService();
 
-### API Endpoints (For Developers):
+// Submit job
+const result = await conversion.submitConversion({
+  type: 'compress',        // Tool type: compress|merge|split|convert|ocr
+  buffer: pdfBuffer,       // File content
+  userId: 'user-123',      // User ID (optional)
+  options: {
+    inputFileName: 'document.pdf'
+  },
+  metadata: {
+    customField: 'value'
+  }
+});
 
-All APIs are available at:
+console.log(result.jobId);   // Track this ID
+console.log(result.status);  // 'queued'
+```
 
-- `POST /api/convert/pdf-to-word` - PDF → DOCX
-- `POST /api/convert/word-to-pdf` - DOCX → PDF
-- `POST /api/convert/merge-pdf` - Merge multiple PDFs
-- `POST /api/convert/split-pdf` - Extract PDF pages
-- `POST /api/convert/compress-pdf` - Compress PDF
-- `POST /api/convert/ocr` - Extract text from PDF
-- `POST /api/convert/ai-summary` - Generate summary
-- `POST /api/convert/pdf-chat` - Q&A with PDF
+## 3. Check Job Status
 
-### Verification: All Systems Working
+```typescript
+const conversion = getConversionService();
+const status = await conversion.getConversionStatus(jobId);
 
-✅ Backend APIs: 8/8 functional
-✅ Frontend Pages: 8/8 accessible
-✅ File Uploads: Working with drag-drop
-✅ Conversions: Creating valid output files
-✅ Downloads: Automatic file downloads
+console.log(status.status);        // 'queued', 'processing', 'completed', 'failed'
+console.log(status.outputUrl);     // URL to download file
+console.log(status.processingTime); // Time in ms
+console.log(status.error);         // Error message if failed
+```
 
-### Common Issues & Solutions
+## 4. Get System Health
 
-**Issue: Upload area not visible**
-- Solution: Scroll to the top of the page - it's there!
+```typescript
+const conversion = getConversionService();
+const health = await conversion.getSystemHealth();
 
-**Issue: File didn't convert**
-- Solution: Make sure you:
-  1. Uploaded the correct file type (PDF, DOCX, etc.)
-  2. Clicked the Convert button (not just uploaded)
-  3. Waited for "Converting..." to complete
+console.log(health.status);        // 'healthy', 'degraded', 'unhealthy'
+console.log(health.queue);         // Queue health details
+console.log(health.metrics);       // Performance metrics
+```
 
-**Issue: Download didn't start**
-- Solution: Check your browser's download folder - it should be there
+## 5. View Processing Logs
 
-### Support
+```typescript
+import { getLoggingService } from '@/lib/services/logging-service';
 
-All tools are fully functional. If you encounter any issues:
-1. Try refreshing the page
-2. Try uploading a different file
-3. Check that your file is the correct format
-4. Verify your internet connection is stable
+const logging = getLoggingService();
+const logs = await logging.getConversionLogs(jobId, 50);
+
+logs.forEach(log => {
+  console.log(`[${log.level}] ${log.message}`, log.context);
+});
+```
+
+## 6. Get Metrics
+
+```typescript
+import { getMetricsService } from '@/lib/services/metrics-service';
+
+const metrics = getMetricsService();
+
+// By tool type
+const compressMetrics = metrics.getMetrics('compress');
+console.log(compressMetrics.successCount);
+console.log(compressMetrics.averageCompressionRatio);
+
+// All metrics
+const summary = metrics.getPerformanceSummary();
+console.log(summary.successRate);
+console.log(summary.byType);
+```
+
+## 7. Handle Errors
+
+```typescript
+try {
+  const result = await conversion.submitConversion({
+    type: 'compress',
+    buffer: pdfBuffer,
+  });
+} catch (error) {
+  const message = error instanceof Error ? error.message : 'Unknown error';
+  
+  if (message.includes('File size')) {
+    // Handle file size error
+  } else if (message.includes('Input file')) {
+    // Handle invalid input
+  } else {
+    // Handle other errors
+  }
+}
+```
+
+## 8. Run Maintenance Tasks
+
+```bash
+# Run cleanup (removes old jobs, files, logs)
+curl -X POST http://localhost:3000/api/health \
+  -H "Content-Type: application/json" \
+  -d '{"action":"cleanup"}'
+
+# Reset metrics
+curl -X POST http://localhost:3000/api/health \
+  -H "Content-Type: application/json" \
+  -d '{"action":"reset-metrics"}'
+```
+
+## 9. Integration with API Routes
+
+```typescript
+// app/api/convert/compress-pdf/route.ts
+import { getConversionService } from '@/lib/services/conversion-service';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  try {
+    const formData = await request.formData();
+    const file = formData.get('file') as File;
+    const userId = formData.get('userId') as string;
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    const conversion = getConversionService();
+    const result = await conversion.submitConversion({
+      type: 'compress',
+      buffer,
+      userId,
+      options: { inputFileName: file.name },
+      metadata: { mimeType: file.type }
+    });
+
+    return NextResponse.json(result);
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## 10. Key Commands
+
+```bash
+# Test the build
+npm run build
+
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Check TypeScript
+npx tsc --noEmit
+
+# Dev server
+npm run dev
+
+# Production build
+npm run build
+npm start
+```
+
+## Service Architecture
+
+```
+ConversionService (Orchestrator)
+  ├── Queue Service (Redis - Upstash)
+  │   └── Job enqueue, tracking, retries
+  ├── Storage Service (Vercel Blob)
+  │   └── File upload, download, integrity check
+  ├── Logging Service (Redis - Upstash)
+  │   └── Structured logs, search, analytics
+  └── Metrics Service (In-memory)
+      └── Performance tracking, alerts
+```
+
+## Configuration
+
+```env
+# Already configured
+REDIS_URL=rediss://...
+KV_REST_API_TOKEN=...
+DATABASE_URL=postgresql://...
+
+# Optional tunables
+MAX_FILE_SIZE=500MB
+LOG_LEVEL=info
+JOB_RETENTION_DAYS=7
+LOG_RETENTION_DAYS=30
+```
+
+## Testing Examples
+
+```bash
+# Submit a test conversion
+curl -X POST http://localhost:3000/api/health
+
+# Check system health
+curl http://localhost:3000/api/health | jq '.status'
+
+# View queue metrics
+curl http://localhost:3000/api/health | jq '.components.queue.metrics'
+
+# View performance
+curl http://localhost:3000/api/health | jq '.performance'
+```
+
+## API Response Examples
+
+### Success
+```json
+{
+  "jobId": "job-1721755200000-abc123",
+  "status": "queued"
+}
+```
+
+### Completed
+```json
+{
+  "jobId": "job-1721755200000-abc123",
+  "status": "completed",
+  "outputUrl": "https://...",
+  "outputSize": 1024000,
+  "processingTime": 2500
+}
+```
+
+### Error
+```json
+{
+  "error": "File size exceeds maximum limit of 500MB"
+}
+```
+
+## Common Patterns
+
+**Fire and Forget:**
+```typescript
+const result = await conversion.submitConversion({ ... });
+// Returns immediately with jobId
+```
+
+**Poll for Completion:**
+```typescript
+const poll = setInterval(async () => {
+  const status = await conversion.getConversionStatus(result.jobId);
+  if (status.status === 'completed') {
+    clearInterval(poll);
+    downloadFile(status.outputUrl);
+  }
+}, 2000);
+```
+
+**WebSocket Updates:**
+```typescript
+const ws = new WebSocket('ws://localhost:3000/ws/conversion');
+ws.send(JSON.stringify({ jobId }));
+ws.onmessage = (e) => console.log(JSON.parse(e.data));
+```
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| Queue not processing | Check `/api/health` → `components.queue` |
+| High memory usage | Run cleanup via `POST /api/health` |
+| Slow processing | Review metrics at `/api/health` |
+| File not uploading | Check storage health at `/api/health` |
+
+## Key Files
+
+- `lib/services/conversion-service.ts` - Main API
+- `lib/services/queue.ts` - Job queue
+- `lib/services/storage-service.ts` - File storage
+- `lib/services/logging-service.ts` - Event logging
+- `lib/services/metrics-service.ts` - Performance metrics
+- `app/api/health/route.ts` - Monitoring endpoint
+- `PRODUCTION_PIPELINE.md` - Full documentation
 
 ---
 
-**All 8 tools are ready to use right now!**
+**Ready to use! Start with step 1 (Health Check) to verify everything is working.**
