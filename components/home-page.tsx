@@ -82,7 +82,7 @@ export default function HomePage({ onSelectTool }: HomePageProps) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight"
+            className="text-[34px] font-black text-white mb-4 leading-tight"
           >
             Chat with PDFs, Translate Documents,
             <br />
