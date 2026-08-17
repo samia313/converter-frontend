@@ -8,91 +8,43 @@ import Footer from '@/components/footer'
 import './globals.css'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-})
+const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
+
+const SITE_URL = 'https://pdfilio.com'
+const SITE_TITLE = 'PDFilio - Free PDF Tools Online'
+const SITE_DESCRIPTION = 'Free online PDF tools for converting, merging, splitting, compressing, editing, OCR, and managing PDF files.'
 
 export const metadata: Metadata = {
-  title: 'PDFilio - Free AI-Powered PDF Tools & Editor | Convert, Merge, Compress | Modern Blue Design',
-  description: 'PDFilio - Complete PDF solution with 60+ free professional AI-powered tools. Convert PDF to Word, merge, split, compress, edit, translate, summarize, OCR, and more. No sign-up required. Enterprise-grade security. Professional blue theme.',
-  keywords: 'PDF converter, PDF editor, merge PDF, compress PDF, PDF to Word, Word to PDF, OCR PDF, protect PDF, unlock PDF, split PDF, rotate PDF, free PDF tools, online PDF editor, best PDF converter, secure PDF converter, convert PDF online, edit PDF online, compress PDF free, merge PDF online, split PDF online',
-  generator: 'v0.app',
+  title: {
+    default: SITE_TITLE,
+    template: '%s | PDFilio',
+  },
+  description: SITE_DESCRIPTION,
   applicationName: 'PDFilio',
   referrer: 'strict-origin-when-cross-origin',
-  formatDetection: {
-    email: false,
-    telephone: false,
-  },
-  icons: {
-    icon: [
-      {
-        url: '/favicon-16x16.png?v=2',
-        sizes: '16x16',
-        type: 'image/png',
-      },
-      {
-        url: '/favicon-32x32.png?v=2',
-        sizes: '32x32',
-        type: 'image/png',
-      },
-      {
-        url: '/favicon.svg?v=2',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: [
-      {
-        url: '/apple-icon-180x180.png?v=2',
-        sizes: '180x180',
-        type: 'image/png',
-      },
-    ],
-    other: [
-      {
-        rel: 'icon',
-        url: '/icon-512x512.png?v=2',
-        sizes: '512x512',
-        type: 'image/png',
-      },
-    ],
-  },
-  authors: [
-    {
-      name: 'PDFilio Team',
-      url: 'https://pdfilio.com',
-    },
-  ],
+  formatDetection: { email: false, telephone: false },
+  authors: [{ name: 'PDFilio Team', url: SITE_URL }],
   creator: 'PDFilio Team',
   publisher: 'PDFilio',
+  metadataBase: new URL(SITE_URL),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://pdfilio.com',
-    title: 'PDFilio - Free AI-Powered PDF Tools & Editor',
-    description: 'Complete PDF solution with 45+ free tools. Convert, merge, split, compress, edit, OCR, protect PDFs and more. No sign-up required.',
+    url: SITE_URL,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     siteName: 'PDFilio',
-    images: [
-      {
-        url: 'https://pdfilio.com/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'PDFilio - Free PDF Tools',
-        type: 'image/png',
-      },
-    ],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'PDFilio - Free PDF Tools' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PDFilio - Free PDF Tools with AI',
-    description: 'Convert, merge, compress, edit, OCR and protect PDFs online. 45+ professional tools, no sign-up required.',
-    creator: '@PDFilio',
-    images: ['https://pdfilio.com/og-image.png'],
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
     follow: true,
-    nocache: false,
     googleBot: {
       index: true,
       follow: true,
@@ -102,58 +54,27 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
     },
   },
-  alternates: {
-    canonical: 'https://pdfilio.com',
-  },
+  alternates: { canonical: SITE_URL },
   category: 'Productivity',
-  classification: 'PDF Tools, Document Management, Online Editor',
-  verification: {
-    google: 'A4lEEeE2F892vUX8oGfyr9CE_iqjfSe-7hPl511bR6g',
-  },
+  verification: { google: 'A4lEEeE2F892vUX8oGfyr9CE_iqjfSe-7hPl511bR6g' },
 }
 
 export const viewport: Viewport = {
   colorScheme: 'light',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-  ],
+  themeColor: [{ media: '(prefers-color-scheme: light)', color: '#ffffff' }],
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head suppressHydrationWarning>
-        {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-T9N4TQVD');`,
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T9N4TQVD');`,
           }}
         />
-
-        {/* Google AdSense */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3342033551482593"
-          crossOrigin="anonymous"
-        />
-
-        {/* Favicons */}
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
-        <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
-        <link rel="apple-touch-icon" href="/apple-icon-180x180.png" sizes="180x180" />
-        <link rel="apple-touch-icon" href="/favicon.png?v=3" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3342033551482593" crossOrigin="anonymous" />
         <link rel="sitemap" href="/sitemap.xml" />
-
-        {/* JSON-LD Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -161,42 +82,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               '@context': 'https://schema.org',
               '@type': 'WebApplication',
               name: 'PDFilio',
-              url: 'https://pdfilio.com',
-              description: 'Complete PDF solution with 19+ free tools. Convert, merge, split, compress, edit, and OCR PDFs online.',
+              url: SITE_URL,
+              description: SITE_DESCRIPTION,
               applicationCategory: 'Utility',
               browserRequirements: 'Requires JavaScript, HTML5',
-              offers: {
-                '@type': 'Offer',
-                price: '0',
-                priceCurrency: 'USD',
-              },
+              offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
               operatingSystem: 'All',
-              aggregateRating: {
-                '@type': 'AggregateRating',
-                ratingValue: '4.8',
-                bestRating: '5',
-                worstRating: '1',
-                ratingCount: '5000',
-              },
             }),
           }}
         />
         <StructuredData />
       </head>
       <body suppressHydrationWarning className="font-sans antialiased bg-white">
-        {/* Google Analytics 4 */}
         <GA4Analytics />
-
-        {/* Google Tag Manager (noscript) */}
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-T9N4TQVD"
-            height="0"
-            width="0"
-            style={{ display: 'none', visibility: 'hidden' }}
-          />
-        </noscript>
-
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9N4TQVD" height="0" width="0" style={{ display: 'none', visibility: 'hidden' }} /></noscript>
         {children}
         <Footer />
         <LiveChatWidget />
@@ -205,5 +104,3 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </html>
   )
 }
-
-// Deployment trigger - 1783692721
