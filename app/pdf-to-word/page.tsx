@@ -29,11 +29,6 @@ export default function PDFToWordPage() {
       price: '0',
       priceCurrency: 'USD',
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      ratingCount: '4500',
-    },
   };
 
   return (
