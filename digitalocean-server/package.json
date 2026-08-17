@@ -1,11 +1,12 @@
 {
   "name": "pdffilio-conversion-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "PDF Conversion Server for PDFilio",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "check": "node --check server.js && node --check routes/convert.js && node --check converters/index.js && node --check utils/spaces.js && node --check middleware/auth.js && node --check config/settings.js"
   },
   "keywords": ["pdf", "conversion", "server"],
   "author": "PDFilio",
