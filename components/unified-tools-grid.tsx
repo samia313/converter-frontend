@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
   Merge, Scissors, RotateCw, Trash2, Zap, FileDown, FileUp, Grid, Image, Code,
-  Edit, Stamp, Hash, Eye, Crop, Lock, Unlock, PenTool,
+  Edit, Stamp, Hash, Eye, Crop, Lock, Unlock, PenTool, ScanText, Sparkles, MessageCircle,
 } from 'lucide-react';
 import { animationVariants } from '@/lib/animations';
 
@@ -19,11 +19,15 @@ const allTools = [
   { name: 'PowerPoint to PDF', id: 'powerpoint-to-pdf', href: '/powerpoint-to-pdf', icon: FileUp, color: 'bg-blue-500', description: 'From presentations' },
   { name: 'JPG to PDF', id: 'jpg-to-pdf', href: '/jpg-to-pdf', icon: Image, color: 'bg-blue-500', description: 'From images' },
   { name: 'HTML to PDF', id: 'html-to-pdf', href: '/html-to-pdf', icon: Code, color: 'bg-blue-500', description: 'From web pages' },
+  { name: 'Image to PDF', id: 'image-to-pdf', href: '/image-to-pdf', icon: Image, color: 'bg-blue-500', description: 'Convert images to PDF' },
   { name: 'PDF to Word', id: 'pdf-to-word', href: '/pdf-to-word', icon: FileDown, color: 'bg-indigo-500', description: 'To documents' },
   { name: 'PDF to Excel', id: 'pdf-to-excel', href: '/pdf-to-excel', icon: Grid, color: 'bg-indigo-500', description: 'To spreadsheets' },
   { name: 'PDF to PowerPoint', id: 'pdf-to-powerpoint', href: '/pdf-to-powerpoint', icon: FileUp, color: 'bg-indigo-500', description: 'To presentations' },
   { name: 'PDF to JPG', id: 'pdf-to-jpg', href: '/pdf-to-jpg', icon: Image, color: 'bg-indigo-500', description: 'To images' },
   { name: 'PDF to PNG', id: 'pdf-to-png', href: '/pdf-to-png', icon: Image, color: 'bg-indigo-500', description: 'To PNG images' },
+  { name: 'OCR PDF', id: 'ocr', href: '/ocr', icon: ScanText, color: 'bg-indigo-500', description: 'Extract text from scanned PDFs' },
+  { name: 'AI PDF Summary', id: 'ai-summary', href: '/ai-summary', icon: Sparkles, color: 'bg-purple-500', description: 'Summarize documents with AI' },
+  { name: 'Chat with PDF', id: 'pdf-chat', href: '/pdf-chat', icon: MessageCircle, color: 'bg-purple-500', description: 'Ask questions about PDFs' },
   { name: 'Edit PDF', id: 'edit-pdf', href: '/edit-pdf', icon: Edit, color: 'bg-purple-500', description: 'Add & modify content' },
   { name: 'Watermark PDF', id: 'watermark-pdf', href: '/watermark-pdf', icon: Stamp, color: 'bg-purple-500', description: 'Add watermarks' },
   { name: 'Page Numbers', id: 'page-numbers', href: '/page-numbers', icon: Hash, color: 'bg-purple-500', description: 'Add numbering' },
@@ -40,7 +44,7 @@ export default function UnifiedToolsGrid() {
       <div className="max-w-7xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
           <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6">Your Complete PDF Toolkit</h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">23+ professional tools to handle any PDF task. Convert, merge, split, compress, protect, and more - all free and easy to use.</p>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">27+ professional tools to handle any PDF task. Convert, merge, split, compress, protect, and more - all free and easy to use.</p>
         </motion.div>
 
         <motion.div variants={animationVariants.staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
