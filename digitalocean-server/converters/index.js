@@ -1,128 +1,114 @@
-const { exec } = require('child_process')
-const { promisify } = require('util')
+const { spawn } = require('child_process')
 const fs = require('fs')
 const path = require('path')
-const sharp = require('sharp')
-const Tesseract = require('tesseract.js')
-const pdfreader = require('pdf-parse')
+const pdfParse = require('pdf-parse')
 const settings = require('../config/settings')
 
-const execAsync = promisify(exec)
+let activeConversions = 0
+const waiters = []
 
-// PDF to Word (.docx)
-const pdfToWord = async (inputPath, outputPath) => {
+async function acquireSlot() {
+  if (activeConversions < settings.maxConcurrentConversions) {
+    activeConversions += 1
+    return
+  }
+  await new Promise((resolve) => waiters.push(resolve))
+  activeConversions += 1
+}
+
+function releaseSlot() {
+  activeConversions = Math.max(0, activeConversions - 1)
+  const next = waiters.shift()
+  if (next) next()
+}
+
+function runCommand(command, args, timeoutMs = settings.conversionTimeout) {
   return new Promise((resolve, reject) => {
-    const command = `libreoffice --headless --convert-to docx --outdir ${path.dirname(outputPath)} "${inputPath}"`
-    exec(command, (error) => {
-      if (error) return reject(error)
-      
-      // LibreOffice creates file with same name but different extension
-      const tempOutput = inputPath.replace(/\.[^.]+$/, '.docx')
-      fs.renameSync(tempOutput, outputPath)
-      resolve()
+    const child = spawn(command, args, { stdio: ['ignore', 'pipe', 'pipe'] })
+    let stdout = ''
+    let stderr = ''
+    let settled = false
+    const timer = setTimeout(() => {
+      child.kill('SIGKILL')
+      if (!settled) {
+        settled = true
+        const error = new Error(`Conversion timed out after ${timeoutMs}ms`)
+        error.code = 'CONVERSION_TIMEOUT'
+        reject(error)
+      }
+    }, timeoutMs)
+    child.stdout.on('data', (chunk) => { stdout += chunk.toString() })
+    child.stderr.on('data', (chunk) => { stderr += chunk.toString() })
+    child.on('error', (error) => {
+      clearTimeout(timer)
+      if (!settled) { settled = true; reject(error) }
+    })
+    child.on('close', (code, signal) => {
+      clearTimeout(timer)
+      if (settled) return
+      settled = true
+      if (code === 0) return resolve({ stdout, stderr })
+      const error = new Error(stderr.trim() || `Command exited with code ${code}${signal ? ` (${signal})` : ''}`)
+      error.code = code === null ? 'COMMAND_TERMINATED' : 'CONVERSION_FAILED'
+      reject(error)
     })
   })
 }
 
-// PDF to Excel (.xlsx)
-const pdfToExcel = async (inputPath, outputPath) => {
-  return new Promise((resolve, reject) => {
-    const command = `libreoffice --headless --convert-to xlsx --outdir ${path.dirname(outputPath)} "${inputPath}"`
-    exec(command, (error) => {
-      if (error) return reject(error)
-      
-      const tempOutput = inputPath.replace(/\.[^.]+$/, '.xlsx')
-      fs.renameSync(tempOutput, outputPath)
-      resolve()
-    })
+async function withConversionSlot(task) {
+  await acquireSlot()
+  try { return await task() } finally { releaseSlot() }
+}
+
+function ensureOutput(outputPath) {
+  if (!fs.existsSync(outputPath)) throw new Error(`Converter did not produce expected output: ${path.basename(outputPath)}`)
+  const stat = fs.statSync(outputPath)
+  if (!stat.isFile() || stat.size === 0) throw new Error(`Converter produced an empty output: ${path.basename(outputPath)}`)
+}
+
+async function libreOfficeConvert(inputPath, outputPath, format) {
+  return withConversionSlot(async () => {
+    const outputDir = path.dirname(outputPath)
+    await runCommand('libreoffice', ['--headless', '--convert-to', format, '--outdir', outputDir, inputPath])
+    const generated = path.join(outputDir, `${path.basename(inputPath, path.extname(inputPath))}.${format.split(':')[0]}`)
+    ensureOutput(generated)
+    if (generated !== outputPath) fs.renameSync(generated, outputPath)
+    ensureOutput(outputPath)
   })
 }
 
-// PDF to PowerPoint (.pptx)
-const pdfToPowerPoint = async (inputPath, outputPath) => {
-  return new Promise((resolve, reject) => {
-    const command = `libreoffice --headless --convert-to pptx --outdir ${path.dirname(outputPath)} "${inputPath}"`
-    exec(command, (error) => {
-      if (error) return reject(error)
-      
-      const tempOutput = inputPath.replace(/\.[^.]+$/, '.pptx')
-      fs.renameSync(tempOutput, outputPath)
-      resolve()
-    })
-  })
-}
+const pdfToWord = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'docx')
+const pdfToExcel = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'xlsx')
+const pdfToPowerPoint = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'pptx')
 
-// PDF to Images (PNG)
-const pdfToImages = async (inputPath, outputDir) => {
-  return new Promise((resolve, reject) => {
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true })
-    }
-
-    const command = `pdftoppm "${inputPath}" ${path.join(outputDir, 'page')} -png`
-    exec(command, async (error) => {
-      if (error) return reject(error)
-
-      // Upload images to Spaces
-      const files = fs.readdirSync(outputDir).filter((f) => f.endsWith('.png'))
+async function pdfToImages(inputPath, outputDir) {
+  return withConversionSlot(async () => {
+    fs.mkdirSync(outputDir, { recursive: true })
+    try {
+      await runCommand('pdftoppm', [inputPath, path.join(outputDir, 'page'), '-png'])
+      const files = fs.readdirSync(outputDir).filter((f) => f.endsWith('.png')).sort()
+      if (!files.length) throw new Error('PDF to images produced no output files')
       const spacesService = require('../utils/spaces')
-      
       const imageUrls = []
       for (const file of files) {
         const filePath = path.join(outputDir, file)
-        const fileBuffer = fs.readFileSync(filePath)
-        const url = await spacesService.uploadFile(fileBuffer, file, 'image/png')
-        imageUrls.push(url)
+        imageUrls.push(await spacesService.uploadFile(filePath, `images/${file}`, 'image/png'))
       }
-
-      // Cleanup output directory
-      files.forEach((f) => fs.unlinkSync(path.join(outputDir, f)))
-      fs.rmdirSync(outputDir)
-
-      resolve(imageUrls)
-    })
+      return imageUrls
+    } finally {
+      fs.rmSync(outputDir, { recursive: true, force: true })
+    }
   })
 }
 
-// PDF OCR (Extract text)
-const pdfOCR = async (inputPath, outputPath) => {
-  try {
-    // Convert PDF to images first
-    const tempDir = path.join(settings.uploadTempDir, `ocr-${Date.now()}`)
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir, { recursive: true })
-    }
-
-    // Convert PDF to images
-    await execAsync(`pdftoppm "${inputPath}" ${path.join(tempDir, 'page')} -png`)
-
-    // Extract text from all images
-    const imageFiles = fs.readdirSync(tempDir).filter((f) => f.endsWith('.png'))
-    let allText = ''
-
-    for (const imageFile of imageFiles) {
-      const imagePath = path.join(tempDir, imageFile)
-      const { data } = await Tesseract.recognize(imagePath, 'eng')
-      allText += data.text + '\n---PAGE BREAK---\n'
-      fs.unlinkSync(imagePath)
-    }
-
-    fs.rmdirSync(tempDir)
-
-    // Create searchable PDF using ghostscript
-    fs.writeFileSync(outputPath, allText)
-
-    return allText
-  } catch (error) {
-    console.error('[OCR] Error:', error)
-    throw error
-  }
+async function pdfOCR(inputPath, outputPath, language = 'eng') {
+  return withConversionSlot(async () => {
+    const safeLanguage = String(language || 'eng').trim().replace(/[^a-zA-Z0-9_+.-]/g, '') || 'eng'
+    await runCommand('ocrmypdf', ['--skip-text', '--language', safeLanguage, inputPath, outputPath])
+    ensureOutput(outputPath)
+    const parsed = await pdfParse(fs.readFileSync(outputPath))
+    return parsed.text || ''
+  })
 }
 
-module.exports = {
-  pdfToWord,
-  pdfToExcel,
-  pdfToPowerPoint,
-  pdfToImages,
-  pdfOCR,
-}
+module.exports = { pdfToWord, pdfToExcel, pdfToPowerPoint, pdfToImages, pdfOCR }
