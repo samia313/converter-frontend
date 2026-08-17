@@ -23,11 +23,6 @@ export default function StructuredData() {
         'https://facebook.com/PDFilio',
       ],
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      ratingCount: '10000',
-    },
   };
 
   const webSiteSchema = {
@@ -75,26 +70,11 @@ export default function StructuredData() {
   };
 
   const faqs = [
-    {
-      question: 'Is PDFilio free to use?',
-      answer: 'Yes, PDFilio is completely free. All 60+ tools are available without any cost or registration required.',
-    },
-    {
-      question: 'Is my data secure on PDFilio?',
-      answer: 'Absolutely. All files are encrypted with 256-bit encryption and automatically deleted within 1 hour.',
-    },
-    {
-      question: 'Do I need to create an account?',
-      answer: 'No, PDFilio requires no registration. You can start using tools immediately.',
-    },
-    {
-      question: 'What PDF tools does PDFilio offer?',
-      answer: 'PDFilio offers 60+ tools including PDF conversion, compression, merging, splitting, editing, OCR, AI features, and more.',
-    },
-    {
-      question: 'Can I use PDFilio on mobile?',
-      answer: 'Yes, PDFilio works on all devices including mobile phones, tablets, and desktops.',
-    },
+    { question: 'Is PDFilio free to use?', answer: 'Yes, PDFilio is completely free. All 60+ tools are available without any cost or registration required.' },
+    { question: 'Is my data secure on PDFilio?', answer: 'Absolutely. All files are encrypted with 256-bit encryption and automatically deleted within 1 hour.' },
+    { question: 'Do I need to create an account?', answer: 'No, PDFilio requires no registration. You can start using tools immediately.' },
+    { question: 'What PDF tools does PDFilio offer?', answer: 'PDFilio offers 60+ tools including PDF conversion, compression, merging, splitting, editing, OCR, AI features, and more.' },
+    { question: 'Can I use PDFilio on mobile?', answer: 'Yes, PDFilio works on all devices including mobile phones, tablets, and desktops.' },
   ];
 
   const faqSchema = {
@@ -103,31 +83,16 @@ export default function StructuredData() {
     mainEntity: faqs.map((faq) => ({
       '@type': 'Question',
       name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
     })),
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(businessSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(businessSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </>
   );
 }
