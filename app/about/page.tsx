@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Navbar from '@/components/navbar'
-import { ArrowRight, FileText, ShieldCheck, Sparkles } from 'lucide-react'
+import { FileText, ShieldCheck, Sparkles, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'About PDFilio | Online PDF Tools',
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
-      <Navbar onSelectTool={() => {}} onNavigateBlog={() => {}} />
+      <Navbar />
       <main className="pt-28 pb-20">
         <section className="mx-auto max-w-5xl px-6 py-16 text-center">
           <h1 className="text-5xl font-black text-gray-900">About PDFilio</h1>
