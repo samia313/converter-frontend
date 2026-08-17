@@ -1,5 +1,4 @@
 import type { MetadataRoute } from 'next'
-import { getAllGuideUrls, getAllComparisonUrls, getAllUseCaseUrls } from '@/lib/content'
 
 const BASE_URL = 'https://pdfilio.com'
 
@@ -10,8 +9,8 @@ const staticPages = [
   { path: '/pricing', priority: 0.8, changeFrequency: 'weekly' as const },
   { path: '/blog', priority: 0.85, changeFrequency: 'weekly' as const },
   { path: '/guides', priority: 0.8, changeFrequency: 'weekly' as const },
-  { path: '/vs', priority: 0.7, changeFrequency: 'weekly' as const },
-  { path: '/use-cases', priority: 0.8, changeFrequency: 'weekly' as const },
+  { path: '/vs', priority: 0.7, changeFrequency: 'monthly' as const },
+  { path: '/use-cases', priority: 0.8, changeFrequency: 'monthly' as const },
   { path: '/about', priority: 0.5, changeFrequency: 'monthly' as const },
   { path: '/contact', priority: 0.5, changeFrequency: 'monthly' as const },
   { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' as const },
@@ -19,8 +18,7 @@ const staticPages = [
   { path: '/faq', priority: 0.6, changeFrequency: 'monthly' as const },
 ]
 
-// Verified production tool routes. These are the real tool pages and avoid
-// duplicating the SEO-only /tools/[slug] landing routes in the sitemap.
+// Verified production tool routes. Only real tool pages are included here.
 const toolPages = [
   'merge-pdf', 'split-pdf', 'rotate-pdf', 'remove-pages', 'crop-pdf', 'page-numbers',
   'compress-pdf',
@@ -29,6 +27,10 @@ const toolPages = [
   'ocr', 'ai-summary', 'pdf-chat', 'watermark-pdf', 'redact-pdf', 'protect-pdf',
   'unlock-pdf', 'sign-pdf', 'edit-pdf',
 ].map((slug) => ({ path: `/${slug}`, priority: 0.9, changeFrequency: 'monthly' as const }))
+
+// Programmatically generated comparison/use-case URL sets are intentionally
+// excluded until each page has unique, human-reviewed content. This keeps the
+// sitemap focused on genuinely index-worthy URLs instead of thin templates.
 
 function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
   const seen = new Set<string>()
@@ -40,38 +42,11 @@ function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  try {
-    const staticEntries: MetadataRoute.Sitemap = [...staticPages, ...toolPages].map((page) => ({
-      url: `${BASE_URL}${page.path}`,
-      changeFrequency: page.changeFrequency,
-      priority: page.priority,
-    }))
+  const entries: MetadataRoute.Sitemap = [...staticPages, ...toolPages].map((page) => ({
+    url: `${BASE_URL}${page.path}`,
+    changeFrequency: page.changeFrequency,
+    priority: page.priority,
+  }))
 
-    const guideEntries: MetadataRoute.Sitemap = getAllGuideUrls().map((url) => ({
-      url: `${BASE_URL}${url}`,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    }))
-
-    const comparisonEntries: MetadataRoute.Sitemap = getAllComparisonUrls().map((url) => ({
-      url: `${BASE_URL}${url}`,
-      changeFrequency: 'monthly' as const,
-      priority: 0.65,
-    }))
-
-    const useCaseEntries: MetadataRoute.Sitemap = getAllUseCaseUrls().map((url) => ({
-      url: `${BASE_URL}${url}`,
-      changeFrequency: 'monthly' as const,
-      priority: 0.65,
-    }))
-
-    return uniqueEntries([...staticEntries, ...guideEntries, ...comparisonEntries, ...useCaseEntries])
-  } catch (error) {
-    console.error('[SITEMAP] Error generating sitemap:', error)
-    return [...staticPages, ...toolPages].map((page) => ({
-      url: `${BASE_URL}${page.path}`,
-      changeFrequency: page.changeFrequency,
-      priority: page.priority,
-    }))
-  }
+  return uniqueEntries(entries)
 }
