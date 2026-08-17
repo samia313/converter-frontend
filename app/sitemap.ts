@@ -1,10 +1,5 @@
 import type { MetadataRoute } from 'next'
-import {
-  getAllBlogUrls,
-  getAllGuideUrls,
-  getAllComparisonUrls,
-  getAllUseCaseUrls,
-} from '@/lib/content'
+import { getAllGuideUrls, getAllComparisonUrls, getAllUseCaseUrls } from '@/lib/content'
 import { blogPosts } from '@/lib/content/blog-posts-1000'
 import { chatPdfBlogPosts } from '@/lib/content/blog-posts-200-chat-pdf'
 
@@ -15,7 +10,7 @@ const staticPages = [
   { path: '/tools', priority: 0.9, changeFrequency: 'weekly' as const },
   { path: '/features', priority: 0.8, changeFrequency: 'monthly' as const },
   { path: '/pricing', priority: 0.8, changeFrequency: 'weekly' as const },
-  { path: '/blog', priority: 0.85, changeFrequency: 'daily' as const },
+  { path: '/blog', priority: 0.85, changeFrequency: 'weekly' as const },
   { path: '/guides', priority: 0.8, changeFrequency: 'weekly' as const },
   { path: '/vs', priority: 0.7, changeFrequency: 'weekly' as const },
   { path: '/use-cases', priority: 0.8, changeFrequency: 'weekly' as const },
@@ -37,38 +32,38 @@ function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   try {
+    // Do not emit artificial "last modified" dates. Google gets a more
+    // trustworthy freshness signal when lastModified is based on real content changes.
     const staticEntries: MetadataRoute.Sitemap = staticPages.map((page) => ({
       url: `${BASE_URL}${page.path}`,
-      lastModified: new Date(),
       changeFrequency: page.changeFrequency,
       priority: page.priority,
     }))
 
-    const blogEntries: MetadataRoute.Sitemap = [...blogPosts, ...chatPdfBlogPosts].map((post) => ({
-      url: `${BASE_URL}/blog/${post.slug}`,
-      lastModified: new Date(post.updatedAt),
-      changeFrequency: 'weekly' as const,
-      priority: post.featured ? 0.85 : 0.75,
-    }))
+    const blogEntries: MetadataRoute.Sitemap = [...blogPosts, ...chatPdfBlogPosts]
+      .filter((post) => Boolean(post.slug))
+      .map((post) => ({
+        url: `${BASE_URL}/blog/${post.slug}`,
+        ...(post.updatedAt ? { lastModified: new Date(post.updatedAt) } : {}),
+        changeFrequency: 'weekly' as const,
+        priority: post.featured ? 0.85 : 0.75,
+      }))
 
     const guideEntries: MetadataRoute.Sitemap = getAllGuideUrls().map((url) => ({
       url: `${BASE_URL}${url}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'monthly' as const,
       priority: 0.7,
     }))
 
     const comparisonEntries: MetadataRoute.Sitemap = getAllComparisonUrls().map((url) => ({
       url: `${BASE_URL}${url}`,
-      lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.65,
     }))
 
     const useCaseEntries: MetadataRoute.Sitemap = getAllUseCaseUrls().map((url) => ({
       url: `${BASE_URL}${url}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'monthly' as const,
       priority: 0.65,
     }))
 
@@ -83,7 +78,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     console.error('[SITEMAP] Error generating sitemap:', error)
     return staticPages.map((page) => ({
       url: `${BASE_URL}${page.path}`,
-      lastModified: new Date(),
       changeFrequency: page.changeFrequency,
       priority: page.priority,
     }))
