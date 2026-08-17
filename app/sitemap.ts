@@ -19,15 +19,16 @@ const staticPages = [
   { path: '/faq', priority: 0.6, changeFrequency: 'monthly' as const },
 ]
 
-// Only include tool landing pages that have verified dedicated content.
+// Verified production tool routes. These are the real tool pages and avoid
+// duplicating the SEO-only /tools/[slug] landing routes in the sitemap.
 const toolPages = [
-  'pdf-to-word', 'word-to-pdf', 'merge-pdf', 'split-pdf', 'compress-pdf',
-  'ocr-pdf', 'pdf-editor', 'protect-pdf', 'unlock-pdf', 'rotate-pdf',
-].map((slug) => ({
-  path: `/tools/${slug}`,
-  priority: 0.85,
-  changeFrequency: 'monthly' as const,
-}))
+  'merge-pdf', 'split-pdf', 'rotate-pdf', 'remove-pages', 'crop-pdf', 'page-numbers',
+  'compress-pdf',
+  'word-to-pdf', 'excel-to-pdf', 'powerpoint-to-pdf', 'jpg-to-pdf', 'html-to-pdf', 'image-to-pdf',
+  'pdf-to-word', 'pdf-to-excel', 'pdf-to-powerpoint', 'pdf-to-jpg', 'pdf-to-png',
+  'ocr', 'ai-summary', 'pdf-chat', 'watermark-pdf', 'redact-pdf', 'protect-pdf',
+  'unlock-pdf', 'sign-pdf', 'edit-pdf',
+].map((slug) => ({ path: `/${slug}`, priority: 0.9, changeFrequency: 'monthly' as const }))
 
 function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
   const seen = new Set<string>()
@@ -64,12 +65,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.65,
     }))
 
-    return uniqueEntries([
-      ...staticEntries,
-      ...guideEntries,
-      ...comparisonEntries,
-      ...useCaseEntries,
-    ])
+    return uniqueEntries([...staticEntries, ...guideEntries, ...comparisonEntries, ...useCaseEntries])
   } catch (error) {
     console.error('[SITEMAP] Error generating sitemap:', error)
     return [...staticPages, ...toolPages].map((page) => ({
