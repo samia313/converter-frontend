@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Download, X, AlertCircle, CheckCircle, Loader } from 'lucide-react';
 
 interface UniversalToolProps {
@@ -10,7 +10,7 @@ interface UniversalToolProps {
   icon: React.ReactNode;
   acceptedFileTypes?: string[];
   allowMultipleFiles?: boolean;
-  maxFileSize?: number; // in MB
+  maxFileSize?: number;
   toolColor?: string;
 }
 
@@ -37,18 +37,34 @@ export function UniversalTool({
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [downloadFileName, setDownloadFileName] = useState('converted-file');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    return () => {
+      if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    };
+  }, [downloadUrl]);
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
   const addFiles = (newFiles: FileList | null) => {
     if (!newFiles) return;
+
+    setError(null);
+    setSuccess(null);
+    if (downloadUrl) {
+      URL.revokeObjectURL(downloadUrl);
+      setDownloadUrl(null);
+    }
+
     if (!allowMultipleFiles && files.length > 0) {
       setError('Only one file allowed for this tool');
       return;
@@ -57,15 +73,13 @@ export function UniversalTool({
     const newFileItems: FileItem[] = [];
     for (let i = 0; i < newFiles.length; i++) {
       const file = newFiles[i];
-      
-      // Check file type
       const fileExt = '.' + file.name.split('.').pop()?.toLowerCase();
+
       if (!acceptedFileTypes.includes(fileExt)) {
         setError(`${file.name} is not supported. Accepted: ${acceptedFileTypes.join(', ')}`);
         continue;
       }
 
-      // Check file size
       if (file.size > maxFileSize * 1024 * 1024) {
         setError(`${file.name} exceeds ${maxFileSize}MB limit`);
         continue;
@@ -85,12 +99,12 @@ export function UniversalTool({
     } else {
       setFiles(prev => [...prev, ...newFileItems]);
     }
-
-    setError(null);
   };
 
   const removeFile = (id: string) => {
     setFiles(prev => prev.filter(f => f.id !== id));
+    setDownloadUrl(null);
+    setSuccess(null);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -98,9 +112,7 @@ export function UniversalTool({
     setIsDragging(true);
   };
 
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
+  const handleDragLeave = () => setIsDragging(false);
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -110,6 +122,7 @@ export function UniversalTool({
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     addFiles(e.target.files);
+    e.target.value = '';
   };
 
   const handleProcess = async () => {
@@ -121,6 +134,7 @@ export function UniversalTool({
     setIsProcessing(true);
     setError(null);
     setSuccess(null);
+    setDownloadUrl(null);
     setProgress(10);
 
     try {
@@ -147,37 +161,53 @@ export function UniversalTool({
         throw new Error(errorData.error || 'Processing failed');
       }
 
-      // Check if response is a file download
-      const contentType = response.headers.get('content-type');
-      if (contentType?.includes('application/pdf') || contentType?.includes('application/octet-stream')) {
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/pdf') || contentType.includes('application/octet-stream') || contentType.includes('application/')) {
         const blob = await response.blob();
+        if (blob.size === 0) throw new Error('Converted file is empty');
+
         const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${toolId}-${Date.now()}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
+        setDownloadUrl(url);
+
+        const disposition = response.headers.get('content-disposition');
+        const match = disposition?.match(/filename\*?=(?:UTF-8''|"?)([^";]+)/i);
+        const originalName = match?.[1] ? decodeURIComponent(match[1].replace(/"/g, '')) : `${toolId}-${Date.now()}`;
+        setDownloadFileName(originalName);
+        setSuccess('File converted successfully! Your file is ready to download.');
       } else {
         const data = await response.json();
         setSuccess(data.message || 'Processing completed successfully');
       }
 
       setProgress(100);
-      setTimeout(() => {
-        setFiles([]);
-        setProgress(0);
-        setSuccess(null);
-      }, 2000);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Processing failed';
-      console.error('[v0] Error:', msg);
+      console.error('[UniversalTool] Error:', msg);
       setError(msg);
       setProgress(0);
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleDownload = () => {
+    if (!downloadUrl) return;
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = downloadFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleReset = () => {
+    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    setFiles([]);
+    setError(null);
+    setSuccess(null);
+    setDownloadUrl(null);
+    setProgress(0);
+    setDownloadFileName('converted-file');
   };
 
   const totalSize = files.reduce((sum, f) => sum + f.size, 0);
@@ -186,7 +216,6 @@ export function UniversalTool({
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Header */}
           <div className="px-8 py-12 text-white" style={{ background: `linear-gradient(135deg, ${toolColor}, ${toolColor}dd)` }}>
             <div className="flex items-center gap-4 mb-4">
               <div className="text-4xl">{icon}</div>
@@ -197,14 +226,12 @@ export function UniversalTool({
             </div>
           </div>
 
-          {/* Content */}
           <div className="p-8">
-            {/* Upload Area */}
             <div
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
-              onClick={() => fileInputRef.current?.click()}
+              onClick={() => !isProcessing && fileInputRef.current?.click()}
               className={`border-2 border-dashed rounded-lg p-12 text-center cursor-pointer transition ${
                 isDragging ? 'border-blue-600 bg-blue-50' : 'border-gray-300 bg-gray-50'
               }`}
@@ -219,10 +246,10 @@ export function UniversalTool({
                 accept={acceptedFileTypes.join(',')}
                 onChange={handleFileSelect}
                 className="hidden"
+                disabled={isProcessing}
               />
             </div>
 
-            {/* Error */}
             {error && (
               <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4 flex gap-3">
                 <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
@@ -230,7 +257,6 @@ export function UniversalTool({
               </div>
             )}
 
-            {/* Success */}
             {success && (
               <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4 flex gap-3">
                 <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
@@ -238,28 +264,20 @@ export function UniversalTool({
               </div>
             )}
 
-            {/* Files List */}
             {files.length > 0 && (
               <div className="mt-8">
-                <h3 className="font-semibold text-gray-900 mb-4">
-                  Selected ({files.length})
-                </h3>
+                <h3 className="font-semibold text-gray-900 mb-4">Selected ({files.length})</h3>
                 <div className="space-y-2 bg-gray-50 rounded-lg p-4">
                   {files.map((fileItem, index) => (
                     <div key={fileItem.id} className="flex items-center justify-between bg-white rounded p-3 border border-gray-200">
                       <div className="flex items-center gap-3 flex-1">
-                        <span className="bg-gray-200 text-gray-700 rounded px-2 py-1 text-sm font-medium">
-                          {index + 1}
-                        </span>
+                        <span className="bg-gray-200 text-gray-700 rounded px-2 py-1 text-sm font-medium">{index + 1}</span>
                         <div className="flex-1 min-w-0">
                           <p className="text-gray-900 font-medium truncate">{fileItem.name}</p>
                           <p className="text-gray-500 text-sm">{formatFileSize(fileItem.size)}</p>
                         </div>
                       </div>
-                      <button
-                        onClick={() => removeFile(fileItem.id)}
-                        className="ml-2 text-gray-400 hover:text-red-600"
-                      >
+                      <button onClick={(e) => { e.stopPropagation(); removeFile(fileItem.id); }} disabled={isProcessing} className="ml-2 text-gray-400 hover:text-red-600 disabled:opacity-50">
                         <X className="w-5 h-5" />
                       </button>
                     </div>
@@ -273,7 +291,6 @@ export function UniversalTool({
               </div>
             )}
 
-            {/* Progress */}
             {isProcessing && (
               <div className="mt-8">
                 <div className="flex justify-between mb-2">
@@ -281,47 +298,37 @@ export function UniversalTool({
                   <span className="text-sm font-medium text-gray-700">{progress}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="h-2 transition-all duration-300"
-                    style={{ width: `${progress}%`, background: toolColor }}
-                  />
+                  <div className="h-2 transition-all duration-300" style={{ width: `${progress}%`, background: toolColor }} />
                 </div>
               </div>
             )}
 
-            {/* Buttons */}
-            {files.length > 0 && (
+            {files.length > 0 && !downloadUrl && (
               <div className="mt-8 flex gap-4">
                 <button
                   onClick={handleProcess}
-                  disabled={isProcessing || files.length === 0}
-                  className="flex-1 text-white font-bold py-4 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{
-                    background: `linear-gradient(135deg, ${toolColor}, ${toolColor}dd)`,
-                    opacity: isProcessing ? 0.7 : 1,
-                  }}
-                >
-                  {isProcessing ? (
-                    <>
-                      <Loader className="w-5 h-5 animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <Download className="w-5 h-5" />
-                      Process
-                    </>
-                  )}
-                </button>
-                <button
-                  onClick={() => {
-                    setFiles([]);
-                    setError(null);
-                  }}
                   disabled={isProcessing}
-                  className="px-8 bg-gray-300 hover:bg-gray-400 disabled:bg-gray-200 text-gray-900 font-semibold py-4 rounded-lg transition"
+                  className="flex-1 text-white font-bold py-4 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ background: `linear-gradient(135deg, ${toolColor}, ${toolColor}dd)` }}
                 >
-                  Clear
+                  {isProcessing ? <><Loader className="w-5 h-5 animate-spin" /> Converting...</> : <>Convert File</>}
+                </button>
+                <button onClick={handleReset} disabled={isProcessing} className="px-8 bg-gray-300 hover:bg-gray-400 disabled:bg-gray-200 text-gray-900 font-semibold py-4 rounded-lg transition">Clear</button>
+              </div>
+            )}
+
+            {downloadUrl && (
+              <div className="mt-8 space-y-3">
+                <button
+                  onClick={handleDownload}
+                  className="w-full text-white font-bold py-4 rounded-lg transition flex items-center justify-center gap-2 text-lg"
+                  style={{ background: `linear-gradient(135deg, ${toolColor}, ${toolColor}dd)` }}
+                >
+                  <Download className="w-6 h-6" />
+                  Download Your File
+                </button>
+                <button onClick={handleReset} className="w-full border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-semibold py-3 rounded-lg transition">
+                  Convert Another File
                 </button>
               </div>
             )}
