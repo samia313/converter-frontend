@@ -42,7 +42,17 @@ export default function ToolLandingLayout({
 
   return (
     <div className="min-h-screen bg-white">
-      <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <nav aria-label="Breadcrumb" className="px-4 sm:px-6 lg:px-8 pt-6">
+        <div className="max-w-5xl mx-auto flex items-center gap-2 text-sm text-gray-600">
+          <Link href="/" className="hover:text-red-600">Home</Link>
+          <ChevronRight className="w-4 h-4" aria-hidden="true" />
+          <Link href="/tools" className="hover:text-red-600">PDF Tools</Link>
+          <ChevronRight className="w-4 h-4" aria-hidden="true" />
+          <span aria-current="page" className="text-gray-900 font-medium">{toolName}</span>
+        </div>
+      </nav>
+
+      <section className="pt-12 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
