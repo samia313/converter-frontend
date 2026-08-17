@@ -17,7 +17,7 @@ const SITE_DESCRIPTION = 'Free online PDF tools for converting, merging, splitti
 export const metadata: Metadata = {
   title: {
     default: SITE_TITLE,
-    template: '%s | PDFilio',
+    template: '%s',
   },
   description: SITE_DESCRIPTION,
   applicationName: 'PDFilio',
@@ -30,7 +30,6 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: SITE_URL,
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     siteName: 'PDFilio',
