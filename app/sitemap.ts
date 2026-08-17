@@ -1,7 +1,5 @@
 import type { MetadataRoute } from 'next'
 import { getAllGuideUrls, getAllComparisonUrls, getAllUseCaseUrls } from '@/lib/content'
-import { blogPosts } from '@/lib/content/blog-posts-1000'
-import { chatPdfBlogPosts } from '@/lib/content/blog-posts-200-chat-pdf'
 
 const BASE_URL = 'https://pdfilio.com'
 
@@ -21,6 +19,16 @@ const staticPages = [
   { path: '/faq', priority: 0.6, changeFrequency: 'monthly' as const },
 ]
 
+// Only include tool landing pages that have verified dedicated content.
+const toolPages = [
+  'pdf-to-word', 'word-to-pdf', 'merge-pdf', 'split-pdf', 'compress-pdf',
+  'ocr-pdf', 'pdf-editor', 'protect-pdf', 'unlock-pdf', 'rotate-pdf',
+].map((slug) => ({
+  path: `/tools/${slug}`,
+  priority: 0.85,
+  changeFrequency: 'monthly' as const,
+}))
+
 function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
   const seen = new Set<string>()
   return entries.filter((entry) => {
@@ -32,22 +40,11 @@ function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   try {
-    // Do not emit artificial "last modified" dates. Google gets a more
-    // trustworthy freshness signal when lastModified is based on real content changes.
-    const staticEntries: MetadataRoute.Sitemap = staticPages.map((page) => ({
+    const staticEntries: MetadataRoute.Sitemap = [...staticPages, ...toolPages].map((page) => ({
       url: `${BASE_URL}${page.path}`,
       changeFrequency: page.changeFrequency,
       priority: page.priority,
     }))
-
-    const blogEntries: MetadataRoute.Sitemap = [...blogPosts, ...chatPdfBlogPosts]
-      .filter((post) => Boolean(post.slug))
-      .map((post) => ({
-        url: `${BASE_URL}/blog/${post.slug}`,
-        ...(post.updatedAt ? { lastModified: new Date(post.updatedAt) } : {}),
-        changeFrequency: 'weekly' as const,
-        priority: post.featured ? 0.85 : 0.75,
-      }))
 
     const guideEntries: MetadataRoute.Sitemap = getAllGuideUrls().map((url) => ({
       url: `${BASE_URL}${url}`,
@@ -69,14 +66,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     return uniqueEntries([
       ...staticEntries,
-      ...blogEntries,
       ...guideEntries,
       ...comparisonEntries,
       ...useCaseEntries,
     ])
   } catch (error) {
     console.error('[SITEMAP] Error generating sitemap:', error)
-    return staticPages.map((page) => ({
+    return [...staticPages, ...toolPages].map((page) => ({
       url: `${BASE_URL}${page.path}`,
       changeFrequency: page.changeFrequency,
       priority: page.priority,
