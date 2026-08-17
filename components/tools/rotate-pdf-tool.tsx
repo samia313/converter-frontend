@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
 
@@ -10,6 +10,19 @@ export default function RotatePDFTool() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
+    };
+  }, [downloadUrl]);
+
+  const reset = () => {
+    if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
+    setSelectedFile(null);
+    setDownloadUrl(null);
+    setError(null);
+  };
 
   const handleRotate = async () => {
     if (!selectedFile) return;
@@ -28,7 +41,14 @@ export default function RotatePDFTool() {
       });
 
       if (!response.ok) {
-        throw new Error('Rotation failed');
+        let message = 'Rotation failed';
+        try {
+          const data = await response.json();
+          if (typeof data?.error === 'string') message = data.error;
+        } catch {
+          // Keep the generic error when the response is not JSON.
+        }
+        throw new Error(message);
       }
 
       const blob = await response.blob();
@@ -42,14 +62,14 @@ export default function RotatePDFTool() {
   };
 
   const handleDownload = () => {
-    if (downloadUrl && selectedFile) {
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-      a.download = selectedFile.name.replace('.pdf', '_rotated.pdf');
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
+    if (!downloadUrl || !selectedFile) return;
+
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = selectedFile.name.replace(/\.pdf$/i, '_rotated.pdf');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   return (
@@ -67,7 +87,12 @@ export default function RotatePDFTool() {
         <div className="bg-white rounded-2xl shadow-lg p-8">
           <FileUploader
             accept=".pdf"
-            onFileSelected={(files) => setSelectedFile(files[0] || null)}
+            onFileSelected={(files) => {
+              if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
+              setDownloadUrl(null);
+              setError(null);
+              setSelectedFile(files[0] || null);
+            }}
             maxSize={50}
           />
 
@@ -90,8 +115,8 @@ export default function RotatePDFTool() {
                     name="rotation"
                     value={angle}
                     checked={rotation === angle}
-                    onChange={(e) => setRotation(Number(e.target.value) as typeof rotation)}
-                    className="hidden"
+                    onChange={() => setRotation(angle)}
+                    className="sr-only"
                   />
                   <div className="font-semibold text-gray-900">{angle}°</div>
                 </label>
@@ -127,10 +152,7 @@ export default function RotatePDFTool() {
                   Download Rotated
                 </button>
                 <button
-                  onClick={() => {
-                    setSelectedFile(null);
-                    setDownloadUrl(null);
-                  }}
+                  onClick={reset}
                   className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg"
                 >
                   Rotate Another

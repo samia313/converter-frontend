@@ -1,96 +1,116 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { validatePdfFile, splitPdf, getDownloadHeaders, validateOutputBuffer } from '@/lib/pdf-utils';
+import JSZip from 'jszip';
+import { PDFDocument } from 'pdf-lib';
+import { validatePdfFile, validateOutputBuffer } from '@/lib/pdf-utils';
 
 export const maxDuration = 120;
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
-  const timeout = 110 * 1000; // 110 seconds timeout
-  
-  try {
-    console.log('[v0] Split PDF request received');
-    
-    const formData = await request.formData();
-    const file = formData.get('file') as File;
-    const splitPageStr = formData.get('splitPage') as string;
+  const timeout = 110 * 1000;
 
-    // CRITICAL FIX: Check if file exists
-    if (!file) {
-      console.error('[v0] No file provided in request');
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+  try {
+    const formData = await request.formData();
+    const file = formData.get('file');
+    const splitPageValue = formData.get('splitPage');
+
+    if (!(file instanceof File) || file.size === 0) {
+      return NextResponse.json({ error: 'No PDF file provided' }, { status: 400 });
     }
 
-    // Validate file
     const validation = await validatePdfFile(file);
     if (!validation.valid) {
-      console.warn('[v0] File validation failed:', validation.error);
       return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
-    console.log('[v0] File validated:', file.name, 'Size:', file.size);
-
-    // Convert to buffer
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const splitPage = splitPageStr ? parseInt(splitPageStr, 10) : undefined;
-
-    // Check timeout
     if (Date.now() - startTime > timeout) {
-      console.error('[v0] Request timeout during file conversion');
       return NextResponse.json({ error: 'Processing timeout. File may be too large.' }, { status: 504 });
     }
 
-    // Split
-    const result = await splitPdf(buffer, splitPage);
-    if (!result.success) {
-      console.error('[v0] Split operation failed:', result.error);
-      return NextResponse.json({ error: result.error }, { status: 400 });
+    const inputBytes = new Uint8Array(await file.arrayBuffer());
+    const sourcePdf = await PDFDocument.load(inputBytes, { ignoreEncryption: true });
+    const pageCount = sourcePdf.getPageCount();
+
+    if (pageCount < 2) {
+      return NextResponse.json(
+        { error: 'A PDF must contain at least 2 pages to split.' },
+        { status: 400 },
+      );
     }
 
-    // CRITICAL FIX: Validate output has content
-    if (!result.data || result.data.length === 0) {
-      console.error('[v0] Split produced empty output');
-      return NextResponse.json({ 
-        error: 'Split failed: Output PDF is empty. The input file may be corrupted.' 
-      }, { status: 400 });
+    const parsedSplitPage = splitPageValue ? Number(splitPageValue) : Math.ceil(pageCount / 2);
+    if (!Number.isInteger(parsedSplitPage) || parsedSplitPage < 1 || parsedSplitPage >= pageCount) {
+      return NextResponse.json(
+        { error: `Split page must be an integer from 1 to ${pageCount - 1}.` },
+        { status: 400 },
+      );
     }
 
-    // Additional validation
-    const outputValidation = validateOutputBuffer(result.data, 'split-pdf');
-    if (!outputValidation.valid) {
-      console.error('[v0] Output validation failed:', outputValidation.error);
-      return NextResponse.json({ error: outputValidation.error }, { status: 400 });
+    const part1 = await PDFDocument.create();
+    const part2 = await PDFDocument.create();
+
+    const firstPageIndices = Array.from({ length: parsedSplitPage }, (_, index) => index);
+    const secondPageIndices = Array.from(
+      { length: pageCount - parsedSplitPage },
+      (_, index) => parsedSplitPage + index,
+    );
+
+    const firstPages = await part1.copyPages(sourcePdf, firstPageIndices);
+    firstPages.forEach((page) => part1.addPage(page));
+
+    const secondPages = await part2.copyPages(sourcePdf, secondPageIndices);
+    secondPages.forEach((page) => part2.addPage(page));
+
+    const [part1Bytes, part2Bytes] = await Promise.all([part1.save(), part2.save()]);
+    const part1Buffer = Buffer.from(part1Bytes);
+    const part2Buffer = Buffer.from(part2Bytes);
+
+    const part1Validation = validateOutputBuffer(part1Buffer, 'split-pdf part 1');
+    const part2Validation = validateOutputBuffer(part2Buffer, 'split-pdf part 2');
+    if (!part1Validation.valid || !part2Validation.valid) {
+      return NextResponse.json(
+        { error: part1Validation.error || part2Validation.error || 'Split produced invalid output.' },
+        { status: 500 },
+      );
     }
 
-    // Check timeout before returning
     if (Date.now() - startTime > timeout) {
-      console.error('[v0] Request timeout before download');
       return NextResponse.json({ error: 'Processing timeout' }, { status: 504 });
     }
 
-    const fileName = file.name.replace(/\.pdf$/i, '');
-    const filename = `${fileName}-part1-${Date.now()}.pdf`;
+    const baseName = file.name
+      .replace(/\.pdf$/i, '')
+      .replace(/[\\/\r\n"]/g, '_');
+    const zip = new JSZip();
+    zip.file(`${baseName}-part1.pdf`, part1Buffer);
+    zip.file(`${baseName}-part2.pdf`, part2Buffer);
+
+    const zipBytes = await zip.generateAsync({
+      type: 'uint8array',
+      compression: 'DEFLATE',
+      compressionOptions: { level: 6 },
+    });
     const processingTime = Date.now() - startTime;
+    const filename = `${baseName}-split.zip`;
 
-    console.log('[v0] Split successful. Output pages:', result.metadata?.pages, 'Processing time:', processingTime, 'ms. Output:', result.data.length, 'bytes');
-
-    return new NextResponse(result.data, {
+    return new NextResponse(zipBytes, {
+      status: 200,
       headers: {
-        ...getDownloadHeaders(filename, result.data.length),
-        'X-Pages': String(result.metadata?.pages || 0),
+        'Content-Type': 'application/zip',
+        'Content-Disposition': `attachment; filename="${filename}"`,
+        'Content-Length': String(zipBytes.length),
+        'Cache-Control': 'no-store',
+        'X-Pages-Part1': String(parsedSplitPage),
+        'X-Pages-Part2': String(pageCount - parsedSplitPage),
         'X-Processing-Time': String(processingTime),
       },
-      status: 200,
     });
   } catch (error) {
     const processingTime = Date.now() - startTime;
-    console.error('[v0] Split PDF error after', processingTime, 'ms:', error);
+    console.error('[split-pdf] Processing failed after', processingTime, 'ms:', error);
     return NextResponse.json(
-      { 
-        error: 'Split failed. ' + (error instanceof Error ? error.message : 'Unknown error'),
-        details: error instanceof Error ? error.stack : undefined
-      },
-      { status: 500 }
+      { error: error instanceof Error ? error.message : 'Split failed' },
+      { status: 500 },
     );
   }
 }
