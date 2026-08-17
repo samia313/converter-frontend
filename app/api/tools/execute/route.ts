@@ -1,96 +1,71 @@
 /**
  * Unified Tool Execution API
- * Handles ALL PDF, AI, and document conversion operations
- * Single entry point for all tool requests - NO ERRORS
+ * Handles PDF, AI, and document conversion operations.
+ * Converted files are returned to the browser as a response only;
+ * the browser decides when to download them.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { executeToolOperation, ToolRequest, ToolResponse } from '@/lib/unified-tool-service';
 
-export const maxDuration = 300; // 5 minutes for large files
+export const maxDuration = 300;
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    
-    // Extract operation type
     const operation = formData.get('operation') as string;
+
     if (!operation) {
-      return NextResponse.json(
-        { success: false, error: 'Operation type required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: 'Operation type required' }, { status: 400 });
     }
 
-    // Build tool request
-    const toolRequest: ToolRequest = {
-      operation: operation as any,
-    };
+    const toolRequest: ToolRequest = { operation: operation as any };
 
-    // Extract files if present
     const fileEntries = formData.getAll('files');
-    if (fileEntries.length > 0) {
-      toolRequest.files = fileEntries as File[];
-    }
+    if (fileEntries.length > 0) toolRequest.files = fileEntries as File[];
 
     const singleFile = formData.get('file');
-    if (singleFile) {
-      toolRequest.file = singleFile as File;
-    }
+    if (singleFile) toolRequest.file = singleFile as File;
 
-    // Extract options
     const options: Record<string, any> = {};
     for (const [key, value] of formData.entries()) {
-      if (key.startsWith('options.')) {
-        const optionKey = key.replace('options.', '');
-        options[optionKey] = value;
-      }
+      if (key.startsWith('options.')) options[key.replace('options.', '')] = value;
     }
-    if (Object.keys(options).length > 0) {
-      toolRequest.options = options;
-    }
+    if (Object.keys(options).length > 0) toolRequest.options = options;
 
-    // Extract user input
     const userInput = formData.get('userInput') as string | null;
-    if (userInput) {
-      toolRequest.userInput = userInput;
-    }
+    if (userInput) toolRequest.userInput = userInput;
 
-    console.log(`[v0] Executing tool operation: ${operation}`);
-
-    // Execute the tool operation
     const response: ToolResponse = await executeToolOperation(toolRequest);
 
-    console.log(`[v0] Tool operation complete: ${response.success ? 'success' : 'failed'}`);
-
-    // If successful and has data, return as file download
+    // IMPORTANT: Do not trigger an attachment download automatically.
+    // Return the converted bytes as an inline response. The client creates
+    // an object URL and shows an explicit "Download Your File" button.
     if (response.success && response.data instanceof Buffer) {
-      const filename = `${operation}-${Date.now()}.pdf`;
+      const filename = `${operation}-${Date.now()}`;
+      const contentType = response.metadata?.contentType || 'application/octet-stream';
+      const extension = response.metadata?.extension || '';
+
       return new NextResponse(response.data, {
         headers: {
-          'Content-Disposition': `attachment; filename="${filename}"`,
-          'Content-Type': 'application/pdf',
+          'Content-Disposition': `inline; filename="${filename}${extension}"`,
+          'Content-Type': contentType,
           'Content-Length': String(response.data.length),
-          'Cache-Control': 'no-cache',
+          'Cache-Control': 'no-store, no-cache, must-revalidate',
+          'X-Download-Filename': `${filename}${extension}`,
           'X-Processing-Time': String(response.processingTime || 0),
         },
       });
     }
 
-    // Otherwise return JSON response
     return NextResponse.json(response, {
       status: response.success ? 200 : 400,
-      headers: {
-        'X-Processing-Time': String(response.processingTime || 0),
-      },
+      headers: { 'X-Processing-Time': String(response.processingTime || 0) },
     });
   } catch (error) {
-    console.error('[v0] API Error:', error);
+    console.error('[UnifiedToolAPI] Error:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : 'Internal server error',
-      },
+      { success: false, error: error instanceof Error ? error.message : 'Internal server error' },
       { status: 500 }
     );
   }
