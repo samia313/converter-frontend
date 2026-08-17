@@ -19,7 +19,8 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run lint
+      - name: TypeScript validation
+        run: pnpm exec tsc --noEmit
       - run: pnpm run build
 
   conversion-server:
