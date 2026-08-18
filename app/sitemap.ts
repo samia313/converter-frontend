@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { guides } from '@/lib/content/how-to-guides'
 
 const BASE_URL = 'https://pdfilio.com'
 
@@ -25,10 +26,11 @@ const toolPages = [
   'pdf-chat','watermark-pdf','redact-pdf','protect-pdf','unlock-pdf','sign-pdf','edit-pdf',
 ].map((slug) => ({ path: `/${slug}`, priority: 0.9, changeFrequency: 'monthly' as const }))
 
-const longTailGuides = [
-  'how-to-compress-pdf','how-to-merge-pdf','how-to-split-pdf','how-to-convert-pdf-to-word',
-  'how-to-compress-pdf-for-email','how-to-compress-pdf-on-mobile',
-].map((slug) => ({ path: `/guides/${slug}`, priority: 0.75, changeFrequency: 'monthly' as const }))
+const longTailGuides = guides.map((guide) => ({
+  path: `/guides/${guide.slug}`,
+  priority: 0.75,
+  changeFrequency: 'monthly' as const,
+}))
 
 function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
   const seen = new Set<string>()
