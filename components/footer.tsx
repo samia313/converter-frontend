@@ -91,7 +91,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center text-sm">
             <p className="text-gray-400 mb-4 md:mb-0">
-              &copy; 2024 PDFilio. All rights reserved. | Trusted by millions worldwide
+              &copy; 2024 PDFilio. All rights reserved.
             </p>
             <div className="flex gap-6">
               <Link href="/" className="hover:text-red-600 transition">Home</Link>
