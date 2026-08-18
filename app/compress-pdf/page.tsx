@@ -4,7 +4,7 @@ import CompressPDFTool from '@/components/tools/compress-pdf-tool';
 
 export const metadata: Metadata = {
   title: 'Compress PDF Online - Reduce File Size Free | PDFilio',
-  description: 'Compress PDF files online and reduce file size without losing quality. Free PDF compressor. Compress to any size instantly.',
+  description: 'Compress PDF files online and reduce file size with selectable quality levels. Free PDF compressor.',
   keywords: 'compress PDF, reduce PDF size, compress PDF online, free PDF compressor',
   alternates: {
     canonical: 'https://pdfilio.com/compress-pdf',
@@ -18,56 +18,55 @@ export default function CompressPDFPage() {
       <ToolLandingLayout
         toolName="Compress PDF"
         toolSlug="compress-pdf"
-        description="Reduce PDF file size instantly without compromising quality. Compress large PDFs to email-friendly sizes in seconds. Completely free."
+        description="Reduce PDF file size with selectable compression quality levels. Upload a PDF, choose a quality setting, and download the compressed result."
         heroImage="/tool-images/compress-pdf-hero.png"
-        mainContent={`Compress PDF is the easiest way to reduce your PDF file size without losing any quality. Whether you need to email large documents, upload files with size restrictions, or save storage space, our tool handles everything instantly.
+        mainContent={`Compress PDF lets you reduce the size of a PDF while choosing the compression quality that fits your needs. It can help when you need a smaller document for sharing, uploading, storage, or transfer.
 
-Our advanced compression algorithm analyzes your PDF structure and removes unnecessary data while preserving all text, images, and formatting. Most PDFs can be reduced by 50-80% without any visible quality loss.
+Choose from high, medium, or low compression quality. The tool processes your PDF and reports the original size, compressed size, and resulting reduction before you download the file.
 
-The compression process is completely secure. Your files are processed on encrypted servers and automatically deleted after 24 hours. No registration required, no email verification, and completely free. Compress as many PDFs as you need.`}
+Processing is performed through PDFilio's PDF conversion service. If a file cannot be processed, the tool reports an error so you can try another PDF or a smaller file.`}
         useCase={`Reducing attachment size for email
 Meeting file upload size limits
-Saving cloud storage space
-Preparing documents for slow connections
-Archiving large PDF files
-Sharing documents with file size restrictions
-Improving website performance by reducing PDF sizes`}
+Saving storage space
+Preparing documents for sharing
+Making PDF transfers more convenient
+Reducing PDF size before uploading to a website`}
         features={[
-          'Compress to any size',
-          'Multiple quality levels',
-          'Batch compression',
-          'Lightning-fast processing',
-          'Zero quality loss option',
-          'No file size restrictions',
+          'High, medium, and low quality levels',
+          'Shows original and compressed file sizes',
+          'Reports the resulting size reduction',
+          'Download the compressed PDF',
+          'Compress another PDF without leaving the page',
+          'PDF-only file validation',
         ]}
         benefits={[
           'Reduce storage space',
           'Email smaller files',
           'Faster file transfers',
-          'Share documents easily',
+          'Share documents more easily',
           'Save bandwidth',
-          'Maintain readability',
+          'Choose the quality level you need',
         ]}
         faqs={[
           {
             q: 'How much can I compress a PDF?',
-            a: 'Compression depends on content. Images are compressed more than text. Most PDFs can be reduced by 50-80%.',
+            a: 'The reduction depends on the PDF content and the selected quality level. The tool shows the actual reduction after processing.',
           },
           {
             q: 'Will quality be affected?',
-            a: 'Our smart compression preserves text clarity while optimizing images. You can choose compression level.',
+            a: 'Compression can affect file size and visual quality differently depending on the selected setting. High quality prioritizes preserving quality, while low quality prioritizes a smaller file.',
           },
           {
-            q: 'Can I compress to specific sizes?',
-            a: 'Yes, we offer presets (e.g., compress to 100KB, 200KB) and custom compression levels.',
+            q: 'Can I compress to a specific file size such as 100KB or 200KB?',
+            a: 'The current tool provides quality-level choices rather than a guaranteed target file-size setting.',
           },
           {
             q: 'What is the maximum file size?',
-            a: 'There is no limit. We can compress files of any size up to several GB.',
+            a: 'Very large files may take longer to process or may fail due to processing limits. If a file cannot be processed, try a smaller PDF.',
           },
           {
             q: 'How do I choose compression quality?',
-            a: 'Select from low, medium, or high quality options based on your needs and desired file size.',
+            a: 'Select High for stronger quality preservation, Medium for a balance, or Low when reducing file size is the priority.',
           },
         ]}
         relatedTools={[
