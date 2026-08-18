@@ -3,8 +3,9 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'AI OCR - Optical Character Recognition | PDFilio',
-  description: 'Convert scanned documents and images to editable text with AI-powered OCR. Extract text from any image instantly.',
+  description: 'Convert supported scanned documents and images to editable text with AI-powered OCR.',
   keywords: 'OCR, optical character recognition, text extraction, scan to text',
+  alternates: { canonical: 'https://pdfilio.com/ai-ocr' },
 };
 
 export default function AIOCRPage() {
@@ -12,119 +13,54 @@ export default function AIOCRPage() {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: 'AI OCR',
-    description: 'Advanced optical character recognition powered by AI',
+    description: 'Optical character recognition for supported documents and images.',
     applicationCategory: 'Utility',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', ratingCount: '3500' },
   };
 
   return (
     <ToolLandingLayout
       toolName="AI OCR"
       toolSlug="ai-ocr"
-      description="Advanced optical character recognition that converts scanned documents, images, and handwriting to editable digital text."
+      description="Convert supported scanned documents and images into editable text with OCR."
       heroImage="/tool-images/ai-ocr-hero.png"
-      mainContent={`AI OCR uses cutting-edge optical character recognition technology to convert any image or scanned document into editable text. Perfect for digitizing old documents, extracting text from photos, or making scanned PDFs searchable.
+      mainContent={`AI OCR can help extract text from supported scanned documents and images for editing, searching, and reuse. Results can vary with scan quality, layout, language, handwriting, and other document characteristics.
 
-Our advanced AI recognizes text with exceptional accuracy, even in challenging conditions. Handles multiple languages, different fonts, handwriting, and complex layouts perfectly.
-
-Upload any image or scanned PDF and instantly get editable text. Preserve formatting, recognize tables, and extract structured data automatically. Make your entire document library searchable and manageable.`}
+Use the tool to digitize supported documents, extract text from images, and make scanned content easier to work with.`}
       useCase={[
-        'Digitizing old paper documents',
+        'Digitizing paper documents',
         'Extracting text from photos and screenshots',
         'Making scanned PDFs searchable',
-        'Converting receipts and invoices',
-        'Digitizing handwritten notes',
-        'Extracting data from business cards',
-        'Converting images to editable documents',
-        'Batch processing large document collections',
+        'Extracting text from receipts and invoices',
+        'Digitizing supported handwritten content',
+        'Converting images to editable text',
       ].join('\n')}
-      testimonials={[
-        {
-          name: 'Patricia Adams',
-          role: 'Document Manager',
-          text: 'AI OCR digitized our entire paper archive in days! Highly accurate text recognition. Best investment for document management.',
-        },
-        {
-          name: 'Robert Chang',
-          role: 'Accountant',
-          text: 'Perfect for invoice and receipt extraction. Converts images to editable text instantly. Saves hours of manual data entry.',
-        },
-        {
-          name: 'Maria Santos',
-          role: 'Archivist',
-          text: 'Exceptional OCR accuracy on historical documents. Handles old prints beautifully. Professional-grade text recognition.',
-        },
-      ]}
       features={[
-        'Multi-language OCR support',
-        'Handwriting recognition',
-        'Table and layout detection',
-        'Automatic formatting preservation',
-        'High accuracy recognition',
-        'Batch processing',
-        'Editable text extraction',
-        'Searchable document conversion',
+        'OCR text extraction',
+        'Supported document and image inputs',
+        'Editable text output',
+        'Text extraction for scanned content',
       ]}
       benefits={[
-        'Digitize paper documents easily',
-        'Make documents searchable',
-        'Reduce manual data entry',
-        'Improve document organization',
-        'Save storage space',
-        'Enable document sharing digitally',
-        'Increase productivity',
-        'Professional text quality',
+        'Reduce manual text entry',
+        'Make scanned content easier to search',
+        'Reuse extracted text',
+        'Digitize supported documents',
       ]}
       faqs={[
-        {
-          q: 'How accurate is AI OCR?',
-          a: '99%+ accuracy on clear documents. Even complex layouts and multiple languages are recognized precisely.',
-        },
-        {
-          q: 'Can it recognize handwriting?',
-          a: 'Yes! Advanced handwriting recognition works on handwritten notes and signatures.',
-        },
-        {
-          q: 'What image formats work?',
-          a: 'All formats supported: JPG, PNG, GIF, TIFF, BMP, PDF, and more.',
-        },
-        {
-          q: 'How many languages supported?',
-          a: '130+ languages! Perfect for international documents and multilingual text.',
-        },
-        {
-          q: 'Recognizes tables?',
-          a: 'Yes! Tables and structured data are recognized and formatted correctly.',
-        },
-        {
-          q: 'Can I batch process documents?',
-          a: 'Absolutely! Process hundreds of documents automatically.',
-        },
-        {
-          q: 'Output format options?',
-          a: 'Text, Word, PDF, Excel - choose any format you need.',
-        },
-        {
-          q: 'Works on low quality scans?',
-          a: 'Yes! AI handles poor quality scans and unclear images intelligently.',
-        },
-        {
-          q: 'Is OCR data secure?',
-          a: 'Completely secure. All processing is encrypted and deleted within 24 hours.',
-        },
-        {
-          q: 'Is AI OCR free?',
-          a: 'Completely free with unlimited OCR processing, no registration needed.',
-        },
+        { q: 'How accurate is AI OCR?', a: 'Accuracy depends on scan quality, language, layout, and other document characteristics. Review extracted text before relying on it.' },
+        { q: 'Can it recognize handwriting?', a: 'Handwriting support depends on the current OCR implementation and the quality of the source.' },
+        { q: 'What files can I use?', a: 'Use the formats accepted by the AI OCR uploader. The available input formats are shown in the tool interface.' },
+        { q: 'Does OCR work on low-quality scans?', a: 'It may work, but lower-quality or complex scans can produce less accurate results.' },
+        { q: 'Is OCR free?', a: 'The page is available without a paid claim here; any usage limits shown by the product should be followed.' },
       ]}
       relatedTools={[
-        { name: 'AI Chat PDF', slug: 'ai-chat-pdf' },
-        { name: 'AI Translate PDF', slug: 'ai-translate-pdf' },
+        { name: 'PDF Chat', slug: 'pdf-chat' },
         { name: 'PDF to Word', slug: 'pdf-to-word' },
       ]}
       primaryKeyword="AI OCR"
       secondaryKeywords={['optical character recognition', 'text extraction', 'scan to text']}
+      schema={schema}
     />
   );
 }
