@@ -18,35 +18,25 @@ const staticPages = [
   { path: '/faq', priority: 0.6, changeFrequency: 'monthly' as const },
 ]
 
-// Verified production tool routes. Only real tool pages are included here.
 const toolPages = [
-  'merge-pdf', 'split-pdf', 'rotate-pdf', 'remove-pages', 'crop-pdf', 'page-numbers',
-  'compress-pdf',
-  'word-to-pdf', 'excel-to-pdf', 'powerpoint-to-pdf', 'jpg-to-pdf', 'html-to-pdf', 'image-to-pdf',
-  'pdf-to-word', 'pdf-to-excel', 'pdf-to-powerpoint', 'pdf-to-jpg', 'pdf-to-png',
-  'ocr', 'ai-summary', 'pdf-chat', 'watermark-pdf', 'redact-pdf', 'protect-pdf',
-  'unlock-pdf', 'sign-pdf', 'edit-pdf',
+  'merge-pdf','split-pdf','rotate-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf',
+  'word-to-pdf','excel-to-pdf','powerpoint-to-pdf','jpg-to-pdf','html-to-pdf','image-to-pdf',
+  'pdf-to-word','pdf-to-excel','pdf-to-powerpoint','pdf-to-jpg','pdf-to-png','ocr','ai-summary',
+  'pdf-chat','watermark-pdf','redact-pdf','protect-pdf','unlock-pdf','sign-pdf','edit-pdf',
 ].map((slug) => ({ path: `/${slug}`, priority: 0.9, changeFrequency: 'monthly' as const }))
 
-// Programmatically generated comparison/use-case URL sets are intentionally
-// excluded until each page has unique, human-reviewed content. This keeps the
-// sitemap focused on genuinely index-worthy URLs instead of thin templates.
+const longTailGuides = [
+  'how-to-compress-pdf','how-to-merge-pdf','how-to-split-pdf','how-to-convert-pdf-to-word',
+  'how-to-compress-pdf-for-email','how-to-compress-pdf-on-mobile',
+].map((slug) => ({ path: `/guides/${slug}`, priority: 0.75, changeFrequency: 'monthly' as const }))
 
 function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
   const seen = new Set<string>()
-  return entries.filter((entry) => {
-    if (seen.has(entry.url)) return false
-    seen.add(entry.url)
-    return true
-  })
+  return entries.filter((entry) => { if (seen.has(entry.url)) return false; seen.add(entry.url); return true })
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const entries: MetadataRoute.Sitemap = [...staticPages, ...toolPages].map((page) => ({
-    url: `${BASE_URL}${page.path}`,
-    changeFrequency: page.changeFrequency,
-    priority: page.priority,
-  }))
-
-  return uniqueEntries(entries)
+  return uniqueEntries([...staticPages, ...toolPages, ...longTailGuides].map((page) => ({
+    url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority,
+  })))
 }
