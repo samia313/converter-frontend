@@ -13,11 +13,12 @@ const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin']
 const SITE_URL = 'https://pdfilio.com'
 const SITE_TITLE = 'PDFilio - Free PDF Tools Online'
 const SITE_DESCRIPTION = 'Free online PDF tools for converting, merging, splitting, compressing, editing, OCR, and managing PDF files.'
+const OG_IMAGE = '/og-image.png'
 
 export const metadata: Metadata = {
   title: {
     default: SITE_TITLE,
-    template: '%s',
+    template: '%s | PDFilio',
   },
   description: SITE_DESCRIPTION,
   applicationName: 'PDFilio',
@@ -27,15 +28,21 @@ export const metadata: Metadata = {
   creator: 'PDFilio Team',
   publisher: 'PDFilio',
   metadataBase: new URL(SITE_URL),
+  keywords: ['PDF tools', 'PDF converter', 'free PDF tools', 'merge PDF', 'split PDF', 'compress PDF', 'PDF to Word', 'Word to PDF', 'PDF editor', 'OCR PDF'],
   openGraph: {
     type: 'website',
     locale: 'en_US',
+    url: SITE_URL,
     siteName: 'PDFilio',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'PDFilio - Free PDF Tools' }],
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'PDFilio - Free PDF Tools Online' }],
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['/og-image.png'],
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
   },
   robots: {
     index: true,
