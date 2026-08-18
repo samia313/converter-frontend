@@ -1,35 +1,35 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Lock, Trash2, UserCheck, Shield, Zap } from 'lucide-react';
+import { Lock, UserCheck, Shield, Zap, FileCheck } from 'lucide-react';
 import { animationVariants } from '@/lib/animations';
 
 export default function TrustIndicators() {
   const indicators = [
     {
       icon: Lock,
-      title: '256-bit Encryption',
-      description: 'Bank-level security for your files',
+      title: 'Secure Processing',
+      description: 'Files are handled through secure processing flows',
     },
     {
-      icon: Trash2,
-      title: 'Auto Delete',
-      description: 'Files deleted after 1 hour',
+      icon: FileCheck,
+      title: 'No Registration',
+      description: 'Start using available tools without creating an account',
     },
     {
       icon: UserCheck,
-      title: 'No Registration',
-      description: 'Start converting instantly',
+      title: 'Easy to Use',
+      description: 'Simple upload and processing experience',
     },
     {
       icon: Shield,
-      title: 'SSL Secure',
-      description: 'Encrypted data transmission',
+      title: 'Privacy Focused',
+      description: 'We avoid making unsupported storage or deletion promises',
     },
     {
       icon: Zap,
       title: 'Fast Processing',
-      description: 'Efficient browser-based document processing',
+      description: 'Efficient document processing for supported tools',
     },
   ];
 
@@ -49,7 +49,7 @@ export default function TrustIndicators() {
           className="text-center mb-10"
         >
           <h2 className="text-4xl font-bold text-white mb-4">Why Trust PDFilio?</h2>
-          <p className="text-lg text-slate-300">Enterprise-grade security and reliability for your documents</p>
+          <p className="text-lg text-slate-300">A simple, secure experience for supported document tools</p>
         </motion.div>
 
         <motion.div
