@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import ToolTemplate from '@/components/tool-template';
 import { tools } from '@/lib/tools-config';
 
-// Dynamically import all tool components
 const MergeTool = dynamic(() => import('./tools/merge-tool'), { ssr: false });
 const SplitTool = dynamic(() => import('./tools/split-tool'), { ssr: false });
 const CompressTool = dynamic(() => import('./tools/compress-tool'), { ssr: false });
@@ -59,7 +58,7 @@ export default function ToolRouter({ toolId, onBack }: ToolRouterProps) {
     );
   }
 
-  // Route to specific tool components
+  // Keep the home-page tool IDs in sync with their actual implementations.
   switch (toolId) {
     case 'merge':
       return <MergeTool onBack={onBack} />;
@@ -73,22 +72,29 @@ export default function ToolRouter({ toolId, onBack }: ToolRouterProps) {
       return <MergePDFTool />;
     case 'split-pdf':
       return <SplitPDFTool />;
+    case 'rotate':
     case 'rotate-pdf':
       return <RotatePDFTool />;
     case 'remove-pages':
       return <RemovePagesTool />;
+    case 'crop':
     case 'crop-pdf':
       return <CropPDFTool />;
+    case 'watermark':
     case 'watermark-pdf':
       return <WatermarkPDFTool />;
     case 'page-numbers':
       return <PageNumbersTool />;
+    case 'redact':
     case 'redact-pdf':
       return <RedactPDFTool />;
+    case 'protect':
     case 'protect-pdf':
       return <ProtectPDFTool />;
+    case 'unlock':
     case 'unlock-pdf':
       return <UnlockPDFTool />;
+    case 'sign':
     case 'sign-pdf':
       return <SignPDFTool />;
     case 'edit-pdf':
@@ -103,6 +109,7 @@ export default function ToolRouter({ toolId, onBack }: ToolRouterProps) {
       return <ExcelToPDFTool />;
     case 'word-to-pdf':
       return <WordToPDFTool />;
+    case 'ppt-to-pdf':
     case 'powerpoint-to-pdf':
       return <PowerPointToPDFTool />;
     case 'pdf-to-word':
@@ -113,18 +120,20 @@ export default function ToolRouter({ toolId, onBack }: ToolRouterProps) {
       return <PDFToPNGTool />;
     case 'pdf-to-excel':
       return <PDFToExcelTool />;
+    case 'pdf-to-ppt':
     case 'pdf-to-powerpoint':
       return <PDFToPowerPointTool />;
     case 'ocr':
       return <OCRTool />;
     case 'pdf-chat':
+    case 'chat-pdf':
       return <PDFChatTool />;
     case 'summary':
+    case 'ai-summary':
     case 'ai-pdf-summary':
       return <AISummaryTool />;
     case 'chat':
     case 'ai-chat-pdf':
-    case 'chat-pdf':
       return <AIChatPDFTool />;
     case 'translate':
     case 'ai-translate-pdf':
@@ -136,7 +145,6 @@ export default function ToolRouter({ toolId, onBack }: ToolRouterProps) {
     case 'ai-research-assistant':
       return <AIResearchTool />;
 
-    // Default: Show generic template for unimplemented tools
     default:
       return (
         <ToolTemplate
