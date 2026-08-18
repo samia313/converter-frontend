@@ -32,23 +32,6 @@ Preparing documents for slow connections
 Archiving large PDF files
 Sharing documents with file size restrictions
 Improving website performance by reducing PDF sizes`}
-        testimonials={[
-        {
-          name: 'Jonathan M.',
-          role: 'Business Professional',
-          text: 'Compress PDF is amazing! Reduced my 50MB files to under 10MB without quality loss. Now I can email large documents without issues.',
-        },
-        {
-          name: 'Rachel S.',
-          role: 'Teacher',
-          text: 'Perfect for compressing student submissions. Saves so much cloud storage space and everything works seamlessly.',
-        },
-        {
-          name: 'Michael T.',
-          role: 'IT Manager',
-          text: 'Best PDF compression tool available. We use it company-wide to reduce storage costs. No complaints, highly reliable.',
-        },
-      ]}
         features={[
           'Compress to any size',
           'Multiple quality levels',
@@ -58,12 +41,12 @@ Improving website performance by reducing PDF sizes`}
           'No file size restrictions',
         ]}
         benefits={[
-        'Reduce storage space',
-        'Email smaller files',
-        'Faster file transfers',
-        'Share documents easily',
-        'Save bandwidth',
-        'Maintain readability',
+          'Reduce storage space',
+          'Email smaller files',
+          'Faster file transfers',
+          'Share documents easily',
+          'Save bandwidth',
+          'Maintain readability',
         ]}
         faqs={[
           {
