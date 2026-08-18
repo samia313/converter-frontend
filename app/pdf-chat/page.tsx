@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: 'PDF Chat - Ask Questions About Your PDFs | PDFilio',
   description: 'Chat with your PDF documents. Ask questions and get instant answers from your PDF content using AI.',
   keywords: 'PDF chat, ask PDF questions, document chatbot, AI PDF reader',
+  alternates: {
+    canonical: 'https://pdfilio.com/pdf-chat',
+  },
 };
 
 export default function PDFChatPage() {
