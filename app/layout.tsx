@@ -70,22 +70,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3342033551482593" crossOrigin="anonymous" />
         <link rel="sitemap" href="/sitemap.xml" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'WebApplication',
-              name: 'PDFilio',
-              url: SITE_URL,
-              description: SITE_DESCRIPTION,
-              applicationCategory: 'Utility',
-              browserRequirements: 'Requires JavaScript, HTML5',
-              offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-              operatingSystem: 'All',
-            }),
-          }}
-        />
         <StructuredData />
       </head>
       <body suppressHydrationWarning className="font-sans antialiased bg-white">
