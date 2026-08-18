@@ -68,6 +68,22 @@ Reducing PDF size before uploading to a website`}
             q: 'How do I choose compression quality?',
             a: 'Select High for stronger quality preservation, Medium for a balance, or Low when reducing file size is the priority.',
           },
+          {
+            q: 'Can I compress a PDF on my phone?',
+            a: 'Yes. The Compress PDF page is designed to work on modern phones, tablets, and desktop browsers without requiring separate software.',
+          },
+          {
+            q: 'Do I need to install an app or create an account?',
+            a: 'No. You can use the web tool directly from your browser. No desktop application is required for PDF compression.',
+          },
+          {
+            q: 'How do I know how much the PDF was reduced?',
+            a: 'After processing, the tool reports the original file size, compressed file size, and resulting reduction so you can compare the result before downloading.',
+          },
+          {
+            q: 'Can I compress another PDF after downloading one?',
+            a: 'Yes. You can process another PDF from the same page without navigating away from the Compress PDF tool.',
+          },
         ]}
         relatedTools={[
           { name: 'Split PDF', slug: 'split-pdf' },
