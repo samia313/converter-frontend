@@ -28,14 +28,13 @@ export default function TrustIndicators() {
     },
     {
       icon: Zap,
-      title: 'Millions Converted',
-      description: 'Trusted by millions worldwide',
+      title: 'Fast Processing',
+      description: 'Efficient browser-based document processing',
     },
   ];
 
   return (
     <section className="pt-2 pb-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-y border-slate-700 relative overflow-hidden">
-      {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-96 h-96 bg-red-500/10 rounded-full mix-blend-screen filter blur-3xl" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full mix-blend-screen filter blur-3xl" />
@@ -63,11 +62,7 @@ export default function TrustIndicators() {
           {indicators.map((indicator, index) => {
             const Icon = indicator.icon;
             return (
-              <motion.div
-                key={index}
-                variants={animationVariants.staggerItem}
-                className="group relative"
-              >
+              <motion.div key={index} variants={animationVariants.staggerItem} className="group relative">
                 <div className="flex flex-col items-center text-center p-6 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-red-500/50 transition-colors duration-300 backdrop-blur-sm">
                   <motion.div
                     whileHover={{ scale: 1.15, rotate: 10 }}
