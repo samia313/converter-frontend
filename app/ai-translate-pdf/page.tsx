@@ -2,9 +2,16 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Translate PDF - Multi-Language PDF Translation | PDFilio',
-  description: 'Translate PDF documents to any language with AI-powered translation. Maintain formatting and accuracy across 100+ languages.',
-  keywords: 'translate PDF, PDF translation, document translation, AI translator',
+  title: 'AI Translate PDF Online – Translate PDF Documents | PDFilio',
+  description: 'Translate supported PDF documents with AI into your target language. Explore business, research, technical, and other documents online.',
+  keywords: ['AI translate PDF', 'translate PDF online', 'PDF translation', 'AI PDF translator', 'document translation', 'translate PDF document', 'PDF translator'],
+  alternates: { canonical: 'https://pdfilio.com/ai-translate-pdf' },
+  openGraph: {
+    title: 'AI Translate PDF Online | PDFilio',
+    description: 'Translate supported PDF documents with an AI-assisted document translation workflow.',
+    url: 'https://pdfilio.com/ai-translate-pdf',
+    type: 'website',
+  },
 };
 
 export default function AITranslatePDFPage() {
@@ -12,102 +19,64 @@ export default function AITranslatePDFPage() {
     <ToolLandingLayout
       toolName="AI Translate PDF"
       toolSlug="ai-translate-pdf"
-      description="Advanced AI-powered PDF translation for professionals. Translate documents into 100+ languages with perfect accuracy and formatting preservation."
-      mainContent={`Break language barriers instantly. Transform your PDFs into any language with professional-grade AI translation that understands context, terminology, and nuance.
+      description="Translate supported PDF documents into your target language with an AI-assisted workflow designed for easier multilingual document review."
+      mainContent={`AI Translate PDF helps you work with supported PDF documents in another language. Upload a document, select the target language available in the tool, and review the translated result.
 
-Why Choose AI-Powered Translation:
-Traditional word-by-word translators miss meaning. Our advanced AI comprehends full context, understands industry terminology, and preserves your document's intent and tone. Every translation reads naturally in the target language.
+Useful for research papers, business documents, technical material, educational content, reports, and other supported PDFs. Translation quality can vary by language pair, document quality, terminology, formatting, and source text, so important legal, medical, financial, or contractual translations should be reviewed by a qualified human professional.
 
-Professional Results:
-Business contracts, research papers, medical documents, legal agreements—whatever your document, get translation quality that matches professional human translators at a fraction of the cost.`}
-      useCase={`Global business communications and contracts
-Academic research paper translation
-Legal document translation
-Medical report translation
-Marketing material localization
-Technical documentation
-International collaboration
-Financial documents and reports
-Patent documentation
-Scientific papers and journals`}
-      testimonials={[
-        {
-          name: 'Dr. Sarah Chen',
-          role: 'International Research Coordinator',
-          text: 'Absolutely transformative. We now review foreign research papers within minutes instead of waiting for translators. Translation quality rivals professional services.',
-        },
-        {
-          name: 'Marco Rossi',
-          role: 'Legal Director',
-          text: 'For contracts and legal documents, the accuracy is impressive. Technical terminology is preserved perfectly. Our international team relies on this daily.',
-        },
-        {
-          name: 'Emma Johnson',
-          role: 'Global Marketing Manager',
-          text: 'Translation quality maintains our brand voice perfectly. We&apos;ve expanded to 15 new markets using this tool. Cost savings are enormous.',
-        },
-      ]}
+For scanned PDFs, OCR may be needed before translation so the text can be recognized accurately.`}
+      useCase={[
+        'Translating research papers',
+        'Reviewing international business documents',
+        'Understanding technical documentation',
+        'Translating educational material',
+        'Preparing multilingual reports',
+        'Reviewing international contracts before professional review',
+        'Translating marketing and informational content',
+        'Supporting international collaboration',
+      ].join('\n')}
+      testimonials={[]}
       features={[
-        'Advanced neural AI engine',
-        '100+ languages supported',
-        'Preserves all formatting and layout',
-        'Industry-specific terminology',
-        'Context-aware translation',
-        'No file size limits',
-        'Batch processing available',
-        'End-to-end encryption',
+        'AI-assisted PDF translation',
+        'Multiple target-language options',
+        'Context-aware document translation',
+        'PDF document workflow',
+        'Browser-based processing',
+        'Useful for multilingual document review',
+        'Support for common professional document types',
+        'OCR-compatible workflow for scanned PDFs',
       ]}
       benefits={[
-        'Professional translation quality',
-        'Instant translation delivery',
-        'Significant cost savings',
-        'Maintain document formatting',
-        'Scale to global markets',
-        'Technical accuracy guaranteed',
-        'No hiring translation teams',
-        'Instant global communication',
+        'Understand foreign-language PDFs faster',
+        'Reduce manual copy-and-paste translation work',
+        'Review international documents in your preferred language',
+        'Speed up initial research and document review',
+        'Support multilingual business and academic workflows',
+        'Keep translation and PDF processing in one workflow',
       ]}
       faqs={[
-        {
-          q: 'How accurate is the AI translation?',
-          a: 'Professional-grade accuracy (95%+ for most language pairs). AI trained on millions of professional translations. Recommended for business-critical documents.',
-        },
-        {
-          q: 'Which 100+ languages are supported?',
-          a: 'All major languages: English, Spanish, French, German, Chinese, Japanese, Arabic, Korean, and many more including regional dialects.',
-        },
-        {
-          q: 'Will formatting stay exactly the same?',
-          a: 'Yes. All formatting, images, tables, colors, fonts—everything preserved perfectly. Translated PDF looks identical to original.',
-        },
-        {
-          q: 'Is my document secure?',
-          a: 'Completely secure. End-to-end encryption, automatic deletion after 24 hours. GDPR and international privacy compliant.',
-        },
-        {
-          q: 'Works with scanned or image PDFs?',
-          a: 'Best with digital PDFs. For scanned documents, combine with AI OCR first for optimal results.',
-        },
-        {
-          q: 'Can I translate multiple documents at once?',
-          a: 'Yes! Batch translation available. Process hundreds of documents simultaneously.',
-        },
-        {
-          q: 'Handles technical and legal terminology?',
-          a: 'Absolutely. Specialized training for legal, medical, technical, and industry-specific content.',
-        },
-        {
-          q: 'Can I export the translated file?',
-          a: 'Yes! Download as PDF maintaining all original formatting perfectly.',
-        },
+        { q: 'What is AI Translate PDF?', a: 'It is an AI-assisted tool for translating supported PDF documents from one language into another.' },
+        { q: 'Can I translate a PDF online?', a: 'Yes. PDFilio provides a browser-based workflow for translating supported PDF documents.' },
+        { q: 'Which languages are supported?', a: 'Available languages depend on the current PDFilio translation implementation. Use the language selector in the tool to see the currently supported options.' },
+        { q: 'Is the AI translation always accurate?', a: 'No. Translation quality varies by language pair, source quality, terminology, and document context. Important translations should receive appropriate human review.' },
+        { q: 'Can I translate a scanned PDF?', a: 'Scanned PDFs may require OCR first so their image-based text can be recognized before translation.' },
+        { q: 'Can I translate research papers?', a: 'Yes. Research papers are a useful application for getting an initial translation or understanding foreign-language research.' },
+        { q: 'Can I translate legal documents?', a: 'You can use the tool for an initial translation, but legal documents should be reviewed by a qualified professional before being relied upon.' },
+        { q: 'Can I translate medical documents?', a: 'The tool can help with initial understanding of supported medical documents, but important medical information should be verified by a qualified professional.' },
+        { q: 'Will the original formatting always remain identical?', a: 'Formatting preservation can depend on the PDF structure, language, fonts, tables, and processing workflow. Do not assume perfect visual identity for every document.' },
+        { q: 'Can I translate technical PDFs?', a: 'Yes. Technical documentation can be translated, although specialized terminology should be reviewed for accuracy.' },
+        { q: 'Do I need OCR for an image-based PDF?', a: 'Usually, OCR is helpful or necessary when the PDF contains scanned page images instead of selectable text.' },
+        { q: 'Can AI Translate PDF replace a professional translator?', a: 'It is useful for fast understanding and first-pass translation, but it should not automatically replace qualified human translation for high-stakes or publication-ready work.' },
       ]}
       relatedTools={[
-        { name: 'Translate PDF Online', slug: 'translate-pdf-online' },
-        { name: 'AI Document Translation Tool', slug: 'ai-document-translation-tool' },
-        { name: 'Smart AI PDF Translator', slug: 'smart-ai-pdf-translator' },
+        { name: 'AI OCR', slug: 'ai-ocr' },
+        { name: 'Chat with Scanned PDF', slug: 'chat-with-scanned-pdf' },
+        { name: 'AI Document Summarizer', slug: 'ai-document-summarizer' },
+        { name: 'AI PDF Summary', slug: 'ai-pdf-summary' },
+        { name: 'PDF to Word', slug: 'pdf-to-word' },
       ]}
-      primaryKeyword="ai translate pdf"
-      secondaryKeywords={['pdf translation', 'translate document', 'ai translator']}
+      primaryKeyword="AI translate PDF"
+      secondaryKeywords={['translate PDF online', 'PDF translation', 'AI PDF translator', 'document translation', 'translate PDF document', 'PDF translator']}
     />
   );
 }
