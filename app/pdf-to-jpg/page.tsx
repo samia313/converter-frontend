@@ -3,96 +3,95 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import PDFToJpgTool from '@/components/tools/pdf-to-jpg-tool';
 
 export const metadata: Metadata = {
-  title: 'PDF to JPG Converter - Free Online | PDFilio',
-  description: 'Convert PDF pages to high-quality JPG images online for free. Fast, secure, easy to use, and works on phones, tablets, and computers.',
-  keywords: ['PDF to JPG', 'PDF to JPG converter', 'convert PDF to JPG', 'PDF pages to images', 'free PDF to JPG'],
-  alternates: {
-    canonical: 'https://pdfilio.com/pdf-to-jpg',
-  },
+  title: 'PDF to JPG Converter Online – Convert PDF Pages to JPG | PDFilio',
+  description: 'Convert supported PDF pages to JPG images online for presentations, previews, sharing, websites, and design workflows. Use a browser-based PDF to JPG converter.',
+  keywords: ['PDF to JPG', 'PDF to JPG converter', 'convert PDF to JPG', 'PDF pages to images', 'PDF to image', 'PDF JPG converter'],
+  alternates: { canonical: 'https://pdfilio.com/pdf-to-jpg' },
   openGraph: {
-    title: 'PDF to JPG Converter - Free Online | PDFilio',
-    description: 'Convert PDF pages to high-quality JPG images online for free.',
+    title: 'PDF to JPG Converter Online | PDFilio',
+    description: 'Convert supported PDF pages into JPG images for sharing, previews, presentations, and design workflows.',
     url: 'https://pdfilio.com/pdf-to-jpg',
     type: 'website',
   },
 };
 
 export default function PDFToJpgToolPage() {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'PDF to JPG Converter',
+    description: 'Convert supported PDF pages into JPG images.',
+    applicationCategory: 'Utility',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  };
+
   return (
     <>
       <PDFToJpgTool />
       <ToolLandingLayout
         toolName="PDF to JPG Converter"
         toolSlug="pdf-to-jpg"
-        description="Convert PDF pages into high-quality JPG images in seconds. PDFilio is free, secure, browser-based, and requires no registration."
+        description="Convert supported PDF pages into JPG images for previews, presentations, sharing, websites, and design workflows."
         heroImage="/tool-images/pdf-to-jpg-hero.png"
-        mainContent={`PDF to JPG Converter turns PDF pages into JPG images that are easy to share, upload, preview, and use in other projects. It is useful when you need an image version of a document page instead of the original PDF format.
+        mainContent={`PDF to JPG Converter turns supported PDF pages into JPG images that are easier to preview, share, upload, and use in image-based workflows. It is useful when a document page needs to be used as an image instead of remaining in PDF format.
 
-PDFilio is designed for quick online conversion while keeping the workflow simple. Upload your PDF, convert the pages, and download the JPG images without installing desktop software. The tool works directly in a modern web browser on computers, phones, and tablets.
+Common uses include presentation slides, document previews, websites, design projects, social media assets, reports, forms, and image-based uploads. Output quality and processing time can vary with page size, embedded images, fonts, transparency, and the structure of the source PDF.
 
-Use PDF to JPG for presentations, document previews, social media uploads, image-based forms, screenshots, reports, and other workflows where JPG images are more convenient than PDF files.`}
-        useCase={`Creating JPG images from PDF pages
-Preparing PDF pages for presentations
-Creating image previews of documents
-Sharing document pages in image format
-Using PDF pages in social media or design projects
-Converting reports and forms into image files
-Preparing document images for websites and uploads`}
-        features={['Fast PDF to JPG conversion', 'High-quality image output', 'Simple browser-based workflow', 'No software installation required', 'Secure file processing', 'Works across desktop and mobile devices']}
-        benefits={['Turn PDF pages into shareable images', 'Save time with an online converter', 'Use JPG files in design and presentation workflows', 'Access the tool from any modern browser', 'No registration required to start', 'Convenient for previews and image-based uploads']}
-        testimonials={[
-          {
-            name: 'John D.',
-            role: 'Professional',
-            text: 'This tool makes converting PDF pages to images quick and simple. Very useful for my document workflow.',
-          },
+Typical workflow: upload a supported PDF, start the conversion, review the generated JPG images, and download the output. For important documents, check the images before publishing or printing to make sure text and visual details are clear.`}
+        useCase={[
+          'Creating JPG images from PDF pages',
+          'Preparing document pages for presentations',
+          'Creating image previews for websites',
+          'Sharing selected document pages as images',
+          'Using PDF pages in design projects',
+          'Preparing image-based uploads',
+          'Converting reports and forms into image files',
+          'Creating visual references from PDF documents',
+        ].join('\n')}
+        features={[
+          'PDF page to JPG conversion',
+          'Image output for supported PDF pages',
+          'Browser-based workflow',
+          'Simple upload and conversion process',
+          'Downloadable JPG output',
+          'Desktop and mobile browser support',
+          'Useful for previews and design workflows',
+          'No separate converter application required',
         ]}
+        benefits={[
+          'Turn PDF pages into easy-to-share images',
+          'Reuse document pages in image-based workflows',
+          'Prepare previews for websites and presentations',
+          'Reduce manual screenshot work',
+          'Access conversion from a modern browser',
+          'Create JPG copies without editing the original PDF',
+        ]}
+        testimonials={[]}
         faqs={[
-          {
-            q: 'Is PDF to JPG free?',
-            a: 'Yes. PDFilio provides a free online PDF to JPG conversion tool with no registration required to get started.',
-          },
-          {
-            q: 'How do I convert a PDF to JPG?',
-            a: 'Upload your PDF to the PDF to JPG tool, start the conversion, and download the resulting JPG images when processing is complete.',
-          },
-          {
-            q: 'Will each PDF page become a JPG image?',
-            a: 'The converter processes PDF pages into JPG image output, making individual document pages available in an image-friendly format.',
-          },
-          {
-            q: 'Is my PDF secure?',
-            a: 'PDFilio is designed to process files securely. Avoid uploading documents containing information you do not want processed by an online service.',
-          },
-          {
-            q: 'Can I use PDF to JPG on my phone?',
-            a: 'Yes. The tool is browser-based and can be used on supported smartphones and tablets as well as desktop computers.',
-          },
-          {
-            q: 'Do I need to install software?',
-            a: 'No. PDF to JPG works online in a modern web browser, so you do not need to install a desktop converter.',
-          },
-          {
-            q: 'What can JPG images from a PDF be used for?',
-            a: 'JPG output is useful for document previews, presentations, websites, design projects, sharing, and platforms that accept images instead of PDF files.',
-          },
-          {
-            q: 'Does PDF to JPG reduce document quality?',
-            a: 'The tool is designed to produce high-quality JPG images suitable for common sharing, presentation, and document workflows.',
-          },
-          {
-            q: 'Can I convert a PDF without creating an account?',
-            a: 'Yes. PDFilio is designed so you can start the conversion without creating an account.',
-          },
+          { q: 'How do I convert PDF to JPG?', a: 'Upload a supported PDF, start the conversion, then review and download the resulting JPG images.' },
+          { q: 'Does each PDF page become a JPG?', a: 'The converter processes supported PDF pages into JPG image output. The exact output structure depends on the current tool workflow.' },
+          { q: 'Can I convert a PDF to JPG online?', a: 'Yes. PDFilio provides a browser-based PDF to JPG conversion workflow.' },
+          { q: 'Can I use PDF to JPG on my phone?', a: 'Yes. The browser-based workflow can be accessed from supported phones and tablets as well as desktop browsers.' },
+          { q: 'Do I need to install software?', a: 'No separate desktop converter is required for the online workflow.' },
+          { q: 'Will JPG quality be identical to the original PDF?', a: 'JPG is an image format, so conversion can change how text, images, transparency, and other PDF features are represented. Review important output before use.' },
+          { q: 'Can I convert a scanned PDF to JPG?', a: 'Yes, supported scanned PDFs can be converted page-by-page because the scan is already represented as page content. The resulting JPG quality depends on the source scan and processing.' },
+          { q: 'Can I convert a PDF for a presentation?', a: 'Yes. JPG images can be convenient for presentation software that accepts image files.' },
+          { q: 'Can I use PDF pages as website images?', a: 'Yes. JPG output can be useful for previews and image-based website content, subject to your own image-quality and file-size requirements.' },
+          { q: 'Can I convert a PDF report to JPG?', a: 'Yes. Supported report pages can be converted to JPG images for previews, sharing, or other image-based workflows.' },
+          { q: 'Does PDF to JPG preserve links and interactive PDF features?', a: 'No. JPG is a static image format, so interactive PDF elements such as clickable links, form fields, and embedded actions are not preserved as interactive features.' },
+          { q: 'Can I edit the JPG after conversion?', a: 'Yes. Once downloaded, JPG images can be edited with compatible image-editing software or online design tools.' },
+          { q: 'Is PDF to JPG free?', a: 'PDFilio provides the online converter; current usage limits, account requirements, and availability are determined by the product configuration shown in the tool interface.' },
         ]}
         relatedTools={[
-          { name: 'Merge PDF', slug: 'merge-pdf' },
+          { name: 'PDF to PNG', slug: 'pdf-to-png' },
+          { name: 'PDF to Word', slug: 'pdf-to-word' },
           { name: 'Compress PDF', slug: 'compress-pdf' },
           { name: 'Split PDF', slug: 'split-pdf' },
-          { name: 'PDF to Word', slug: 'pdf-to-word' },
+          { name: 'Merge PDF', slug: 'merge-pdf' },
         ]}
         primaryKeyword="PDF to JPG"
-        secondaryKeywords={['PDF to JPG converter', 'convert PDF to JPG', 'free PDF to JPG', 'PDF pages to images']}
+        secondaryKeywords={['PDF to JPG converter', 'convert PDF to JPG', 'PDF pages to images', 'PDF to image', 'PDF JPG converter']}
+        schema={schema}
       />
     </>
   );
