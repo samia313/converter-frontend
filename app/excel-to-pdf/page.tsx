@@ -3,9 +3,16 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import ExcelToPDFTool from '@/components/tools/excel-to-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Excel to PDF - Convert Spreadsheets to PDF | PDFilio',
-  description: 'Convert Excel spreadsheets to PDF instantly. Preserve formatting, share spreadsheets securely, and print Excel files perfectly. Free and easy conversion.',
-  keywords: ['Excel to PDF', 'convert Excel to PDF', 'spreadsheet to PDF', 'XLSX to PDF'],
+  title: 'Excel to PDF Converter Online – Convert XLS & XLSX to PDF | PDFilio',
+  description: 'Convert supported Excel XLS and XLSX spreadsheets to PDF online. Prepare reports, tables, budgets, invoices, and workbooks for sharing, printing, and archiving.',
+  keywords: ['Excel to PDF', 'Excel to PDF converter', 'convert Excel to PDF', 'XLS to PDF', 'XLSX to PDF', 'spreadsheet to PDF', 'Excel to PDF online'],
+  alternates: { canonical: 'https://pdfilio.com/excel-to-pdf' },
+  openGraph: {
+    title: 'Excel to PDF Converter Online | PDFilio',
+    description: 'Convert supported Excel spreadsheets into PDF files for sharing, printing, and document workflows.',
+    url: 'https://pdfilio.com/excel-to-pdf',
+    type: 'website',
+  },
 };
 
 export default function ExcelToPDFPage() {
@@ -13,18 +20,9 @@ export default function ExcelToPDFPage() {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: 'Excel to PDF',
-    description: 'Convert Excel spreadsheets to PDF format',
+    description: 'Convert supported Excel spreadsheets to PDF format.',
     applicationCategory: 'Utility',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      ratingCount: '1850',
-    },
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   };
 
   return (
@@ -33,115 +31,67 @@ export default function ExcelToPDFPage() {
       <ToolLandingLayout
         toolName="Excel to PDF"
         toolSlug="excel-to-pdf"
-        description="Convert Excel spreadsheets to PDF format instantly. Perfect for sharing reports, printing spreadsheets, and archiving data. Formatting preserved, security enhanced, and completely free."
+        description="Convert supported Excel spreadsheets into PDF files for reports, printing, sharing, submissions, and archiving."
         heroImage="/tool-images/excel-to-pdf-hero.png"
-        mainContent={`Excel to PDF converts your spreadsheets into professional PDF documents instantly. Perfect for sharing financial reports, creating print-friendly spreadsheets, and archiving important data.
+        mainContent={`Excel to PDF converts supported Excel spreadsheets into PDF documents. PDF is useful when you want to share a report, prepare a spreadsheet for printing, submit a document through an upload portal, or keep a fixed-format copy of a workbook.
 
-Our converter preserves all Excel formatting including colors, fonts, borders, and calculations. Convert single sheets or entire workbooks with multiple sheets into organized PDF files.
+The final PDF can depend on the workbook structure, print settings, page breaks, formulas, fonts, charts, images, hidden content, and the conversion engine. For important reports, review page orientation, pagination, tables, totals, charts, and other critical content before distributing the PDF.
 
-Convert spreadsheets securely with instant processing and automatic file deletion. No registration needed, no email verification, no hidden costs. Your files stay private throughout the conversion process.`}
-        useCase={`Converting financial reports for stakeholder distribution
-Creating print-friendly versions of budget spreadsheets
-Archiving sales data and performance metrics
-Sharing survey results in PDF format
-Creating professional invoices from Excel templates
-Distributing payroll reports securely
-Preparing spreadsheets for legal compliance`}
+Typical workflow: upload a supported XLS or XLSX file, start the conversion, review the generated PDF, and download it for your next document workflow. Current input formats and processing limits depend on the tool configuration shown in the interface.`}
+        useCase={[
+          'Converting financial reports to PDF',
+          'Preparing budgets for printing',
+          'Sharing sales and performance reports',
+          'Creating PDF invoices from spreadsheet templates',
+          'Preparing tables for submissions',
+          'Archiving spreadsheet reports',
+          'Sharing workbook data with clients or teams',
+          'Creating fixed-format copies of spreadsheets',
+        ].join('\n')}
         features={[
-        'Convert Excel to professional PDF',
-        'Preserve all formatting and styling',
-        'Convert single sheets or entire workbooks',
-        'Maintain colors, fonts, and borders',
-        'Handle large spreadsheets',
-        'Batch convert multiple files',
-        'Instant download',
-        'Works on all devices',
-      ]}
+          'XLS and XLSX to PDF conversion',
+          'PDF document output',
+          'Browser-based workflow',
+          'Useful for tables and reports',
+          'Support for common desktop and mobile browsers',
+          'Downloadable PDF output',
+          'Simple upload and conversion process',
+          'Related PDF document tools',
+        ]}
         benefits={[
-        'Share spreadsheets safely',
-        'Create print-ready documents',
-        'Professional appearance',
-        'Easy distribution',
-        'Secure data sharing',
-        'Prevent accidental modifications',
-        'Universal file format',
-        'Perfect formatting every time',
-      ]}
-        testimonials={[
-        {
-          name: 'Jennifer L.',
-          role: 'Business Manager',
-          text: 'Excel to PDF is our go-to tool for converting financial reports. The formatting always looks perfect, and sharing PDF is more secure than Excel files.',
-        },
-        {
-          name: 'Thomas P.',
-          role: 'Financial Analyst',
-          text: 'Fast, reliable, and the output looks exactly like my Excel file. Perfect for converting reports before sending to executives.',
-        },
-        {
-          name: 'Sophie B.',
-          role: 'Operations Manager',
-          text: 'Converting 50+ spreadsheets monthly. Excel to PDF is the fastest solution. Formatting preserved perfectly every time.',
-        },
-      ]}
+          'Create a shareable PDF version of spreadsheet data',
+          'Prepare reports for printing and submission',
+          'Reduce manual spreadsheet-to-PDF work',
+          'Keep finalized reports in a common distribution format',
+          'Make spreadsheet sharing easier across devices',
+          'Create fixed-format copies for review and archiving',
+        ]}
+        testimonials={[]}
         relatedTools={[
-        { name: 'PDF to Excel', slug: 'pdf-to-excel' },
-        { name: 'Word to PDF', slug: 'word-to-pdf' },
-        { name: 'Compress PDF', slug: 'compress-pdf' },
-        { name: 'Merge PDF', slug: 'merge-pdf' },
-      ]}
+          { name: 'PDF to Excel', slug: 'pdf-to-excel' },
+          { name: 'Word to PDF', slug: 'word-to-pdf' },
+          { name: 'PDF to Word', slug: 'pdf-to-word' },
+          { name: 'Compress PDF', slug: 'compress-pdf' },
+          { name: 'Merge PDF', slug: 'merge-pdf' },
+        ]}
         faqs={[
-        {
-          q: 'How do I convert Excel files to PDF?',
-          a: 'Upload your Excel file (.xls, .xlsx), choose your preferences (single sheet or all sheets), click Convert, and download your PDF. Takes just seconds!',
-        },
-        {
-          q: 'Does it preserve Excel formatting?',
-          a: 'Yes! All colors, fonts, borders, images, and formatting are preserved perfectly. Your PDF looks exactly like your Excel spreadsheet.',
-        },
-        {
-          q: 'Can I convert multiple sheets from one workbook?',
-          a: 'Yes! Convert single sheets or entire workbooks with multiple sheets. Each sheet becomes a PDF page.',
-        },
-        {
-          q: 'What about formulas and calculations?',
-          a: 'Formulas are calculated and results are shown as values in the PDF. The formula bar will not appear in the PDF.',
-        },
-        {
-          q: 'Can I convert multiple Excel files at once?',
-          a: 'Yes! Batch convert multiple Excel files. Upload all files and download all PDFs at the same time.',
-        },
-        {
-          q: 'Does it work with all Excel versions?',
-          a: 'Yes! Converts Excel 97-2003 (.xls), Excel 2007+ (.xlsx), and Excel macro files (.xlsm). All formats supported.',
-        },
-        {
-          q: 'How large can Excel files be?',
-          a: 'No file size limits! Convert spreadsheets with thousands of rows, complex formulas, and multiple sheets.',
-        },
-        {
-          q: 'Is the PDF editable after conversion?',
-          a: 'PDFs are not editable by default, which is perfect for sharing finalized reports. You can always convert again if needed.',
-        },
-        {
-          q: 'How secure is the conversion?',
-          a: 'Your files are encrypted during processing and automatically deleted within 24 hours. We never store files or share data.',
-        },
-        {
-          q: 'Works on mobile devices?',
-          a: 'Absolutely! Convert Excel files on phones, tablets, and computers. All processing happens online through your browser.',
-        },
-        {
-          q: 'Is there any cost?',
-          a: '100% free! No registration, no subscription, no hidden fees. Convert unlimited Excel files to PDF completely free.',
-        },
-        {
-          q: 'What about Excel charts and images?',
-          a: 'Charts, images, and all embedded objects are preserved perfectly in the PDF. Everything converts accurately.',
-        },
-      ]}
+          { q: 'How do I convert Excel to PDF online?', a: 'Upload a supported Excel spreadsheet, start the conversion, review the generated PDF, and download the result.' },
+          { q: 'Can I convert XLSX to PDF?', a: 'Yes. Supported XLSX workbooks can be converted into PDF files through the Excel-to-PDF workflow.' },
+          { q: 'Can I convert XLS to PDF?', a: 'If the current uploader accepts XLS files, they can be processed through the same conversion workflow. Follow the formats displayed by the tool.' },
+          { q: 'Will Excel formatting be preserved exactly?', a: 'Exact preservation is not guaranteed for every workbook. Page breaks, print areas, fonts, formulas, charts, images, and complex layouts can affect the final PDF.' },
+          { q: 'Can I convert a workbook with multiple sheets?', a: 'Supported workbooks can contain multiple sheets, but the final PDF structure depends on the current conversion workflow and workbook settings. Review the output before sharing.' },
+          { q: 'What happens to Excel formulas?', a: 'The PDF represents the spreadsheet as a document rather than an editable workbook. Formula results may be rendered as displayed values, depending on the conversion process.' },
+          { q: 'Can I convert Excel charts to PDF?', a: 'Charts and other visual spreadsheet elements may be rendered in the PDF, but complex workbooks should be reviewed after conversion.' },
+          { q: 'Can I convert Excel invoices to PDF?', a: 'Yes. Supported spreadsheet invoices are a common use case for creating a shareable or printable PDF copy.' },
+          { q: 'Can I use Excel to PDF on my phone?', a: 'Yes. The browser-based workflow can be accessed from supported phones, tablets, and desktop browsers.' },
+          { q: 'Do I need Microsoft Excel installed?', a: 'No separate Excel installation is required to use the online conversion workflow, provided your file is in a supported format.' },
+          { q: 'How long does Excel to PDF conversion take?', a: 'Processing time depends on workbook size, number of sheets, complexity, and current system resources.' },
+          { q: 'Is Excel to PDF free?', a: 'PDFilio provides the online converter; current usage limits, account requirements, and availability are determined by the product configuration shown in the tool interface.' },
+          { q: 'Should I check the PDF after conversion?', a: 'Yes. For important spreadsheets, check page breaks, orientation, totals, charts, tables, headers, footers, and other critical content before distributing the PDF.' },
+        ]}
         primaryKeyword="Excel to PDF"
-        secondaryKeywords={['convert Excel to PDF', 'spreadsheet to PDF', 'XLSX to PDF', 'Excel conversion']}
+        secondaryKeywords={['convert Excel to PDF', 'spreadsheet to PDF', 'XLS to PDF', 'XLSX to PDF', 'Excel conversion', 'Excel to PDF online']}
+        schema={schema}
       />
     </>
   );
