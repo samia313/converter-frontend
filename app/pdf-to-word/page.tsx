@@ -3,15 +3,13 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import PDFToWordTool from '@/components/tools/pdf-to-word-tool';
 
 export const metadata: Metadata = {
-  title: 'PDF to Word Converter - Free Online | PDFilio',
-  description: 'Convert PDF to Word documents instantly. Free, fast, and secure PDF to Word conversion online. No sign-up required.',
-  keywords: 'PDF to Word, Convert PDF to Word, PDF to DOC, PDF to DOCX, free PDF converter',
-  alternates: {
-    canonical: 'https://pdfilio.com/pdf-to-word',
-  },
+  title: 'PDF to Word Converter Online – Convert PDF to DOCX | PDFilio',
+  description: 'Convert supported PDF documents to editable Word DOCX files online. Extract text and content from reports, forms, and business documents in your browser.',
+  keywords: ['PDF to Word', 'convert PDF to Word', 'PDF to DOCX', 'PDF to DOC', 'PDF Word converter', 'PDF to editable Word', 'PDF to Word online'],
+  alternates: { canonical: 'https://pdfilio.com/pdf-to-word' },
   openGraph: {
-    title: 'PDF to Word Converter - Free Online | PDFilio',
-    description: 'Convert PDF to Word documents instantly without losing formatting.',
+    title: 'PDF to Word Converter Online | PDFilio',
+    description: 'Convert supported PDFs into editable Word documents online.',
     url: 'https://pdfilio.com/pdf-to-word',
     type: 'website',
   },
@@ -22,13 +20,9 @@ export default function PDFToWordPage() {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: 'PDF to Word Converter',
-    description: 'Convert PDF documents to editable Word files instantly',
+    description: 'Convert supported PDF documents to editable Word files.',
     applicationCategory: 'Utility',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   };
 
   return (
@@ -37,112 +31,68 @@ export default function PDFToWordPage() {
       <ToolLandingLayout
         toolName="PDF to Word Converter"
         toolSlug="pdf-to-word"
-        description="Convert PDF documents to editable Word files in seconds. Maintain formatting, fonts, and layout. No sign-up required."
+        description="Convert supported PDF documents into editable Word files for editing, reuse, document preparation, and business workflows."
         heroImage="/tool-images/pdf-to-word-hero.png"
-        mainContent={`PDF to Word Converter transforms your PDF files into fully editable Word documents instantly. Perfect for professionals who need to edit content, modify formatting, or repurpose PDF material.
+        mainContent={`PDF to Word Converter helps turn supported PDF documents into editable Word files. It is useful when you need to edit text, reuse content, update a report, or move information from a PDF into a Word document.
 
-Our advanced conversion technology preserves all formatting, fonts, images, and layout perfectly. Your Word document looks exactly like your original PDF, and everything is fully editable and customizable.
+Digital PDFs with clear text generally provide better conversion results than scanned or unusually complex files. Tables, columns, images, fonts, forms, and other layout elements can affect the final Word document, so important documents should be reviewed after conversion.
 
-Convert files of any size instantly with secure processing. Your files are encrypted and automatically deleted within 24 hours. No registration required, no watermarks, completely free. Convert unlimited PDFs to Word format.`}
-        useCase={`Editing content from PDF reports
-Repurposing PDF documents for new projects
-Converting scanned documents to editable files
-Extracting text from PDF forms
-Creating Word documents from PDF templates
-Modifying proposals and contracts
-Converting invoices to editable formats`}
-        testimonials={[
-        {
-          name: 'Karen W.',
-          role: 'Content Writer',
-          text: 'PDF to Word is essential for my workflow. Converts perfectly with formatting intact. Saves me hours every week.',
-        },
-        {
-          name: 'Steve J.',
-          role: 'Business Analyst',
-          text: 'The best PDF to Word converter I have used. Accurate, fast, and maintains perfect formatting. Highly recommended.',
-        },
-        {
-          name: 'Lisa B.',
-          role: 'Legal Secretary',
-          text: 'Using PDF to Word daily for document conversions. Reliability is outstanding. No quality loss whatsoever.',
-        },
-      ]}
+For scanned PDFs, OCR may be needed to recognize image-based text before or during document processing, depending on the current PDFilio workflow. The practical goal is an editable Word starting point rather than a guarantee of pixel-perfect reproduction for every PDF.`}
+        useCase={[
+          'Editing PDF reports in Word',
+          'Updating business documents',
+          'Repurposing PDF content',
+          'Working with PDF forms and templates',
+          'Editing text from invoices and reports',
+          'Preparing documents for collaboration',
+          'Moving PDF content into Word-based workflows',
+          'Creating editable versions of supported PDFs',
+        ].join('\n')}
+        testimonials={[]}
         features={[
-        'Instant PDF to Word conversion',
-        'Preserves formatting and layout',
-        'Supports batch conversion',
-        'Fast processing speed',
-        'Secure file handling',
-        'No software installation needed',
-      ]}
+          'PDF to editable Word conversion',
+          'DOCX document output',
+          'Text and content extraction',
+          'Support for common PDF layouts',
+          'Browser-based conversion',
+          'No software installation required',
+          'Useful on desktop and mobile browsers',
+          'Workflow for supported scanned documents',
+        ]}
         benefits={[
-        'Edit PDF content easily in Word',
-        'Maintain professional formatting',
-        'Support for all PDF types',
-        'Keep original styling intact',
-        'Compatible with all Word versions',
-        'Download your files immediately',
-      ]}
+          'Edit PDF content more easily in Word',
+          'Reduce manual copying and retyping',
+          'Reuse document content for new work',
+          'Prepare PDFs for collaborative editing',
+          'Move supported document text into familiar Word workflows',
+          'Create an editable starting point for document updates',
+        ]}
         faqs={[
-        {
-          q: 'Can I convert large PDF files?',
-          a: 'Yes, PDFilio supports conversion of large PDF files without size limitations. Handle any file size.',
-        },
-        {
-          q: 'Is my data secure?',
-          a: 'Yes, all conversions are processed securely using encryption. Files are deleted within 24 hours.',
-        },
-        {
-          q: 'Do I need to sign up?',
-          a: 'No registration required! PDFilio is completely free. Start converting immediately.',
-        },
-        {
-          q: 'What Word format is supported?',
-          a: 'Convert to both .DOC and .DOCX formats. Choose your preferred Word version.',
-        },
-        {
-          q: 'How long does conversion take?',
-          a: 'Most conversions complete in seconds depending on file size and complexity.',
-        },
-        {
-          q: 'Will formatting be preserved?',
-          a: 'Yes! All fonts, colors, images, and formatting are preserved perfectly in the Word document.',
-        },
-        {
-          q: 'Can I edit after conversion?',
-          a: 'Absolutely! The converted Word document is fully editable. Make any changes you need.',
-        },
-        {
-          q: 'Does it work with scanned PDFs?',
-          a: 'Best results with digital PDFs. For scanned images, consider OCR before conversion.',
-        },
-        {
-          q: 'How many files can I convert?',
-          a: 'Unlimited! Convert as many PDFs as you need. No limits on quantity.',
-        },
-        {
-          q: 'Is PDF to Word free?',
-          a: 'Completely free! No hidden charges, no watermarks, no premium features.',
-        },
-        {
-          q: 'Works on all devices?',
-          a: 'Yes! Convert on computers, phones, and tablets through your web browser.',
-        },
-        {
-          q: 'What about complex PDF layouts?',
-          a: 'Our converter handles complex layouts including tables, columns, and images accurately.',
-        },
-      ]}
+          { q: 'Can I convert PDF to Word online?', a: 'Yes. PDFilio provides a browser-based workflow for converting supported PDF documents into editable Word files.' },
+          { q: 'Can I convert PDF to DOCX?', a: 'Yes. Supported PDFs can be converted into Word-compatible DOCX documents.' },
+          { q: 'Can I convert PDF to DOC?', a: 'The current output format depends on the PDFilio tool interface and supported conversion workflow. Use the available download format shown by the converter.' },
+          { q: 'Will formatting be preserved exactly?', a: 'Not necessarily. Conversion quality depends on the PDF structure, fonts, tables, columns, images, and other layout elements.' },
+          { q: 'Can I edit the converted Word file?', a: 'Yes. The purpose of the conversion is to create an editable Word document from supported PDF content.' },
+          { q: 'Does PDF to Word work with scanned PDFs?', a: 'Scanned PDFs may require OCR because their text is stored as page images. Results depend on scan quality and recognition accuracy.' },
+          { q: 'Can I convert PDFs with tables?', a: 'Supported PDFs containing tables can be converted, but complex tables or unusual layouts may require manual cleanup in Word.' },
+          { q: 'Can I convert a PDF report to Word?', a: 'Yes. Reports are a common use case when the PDF contains readable, structured text.' },
+          { q: 'Can I convert invoices to Word?', a: 'Supported invoices can be converted, although the final layout may vary depending on the invoice design and PDF structure.' },
+          { q: 'Can I use PDF to Word on my phone?', a: 'Yes. The browser-based workflow can be accessed from supported phones and tablets as well as desktop computers.' },
+          { q: 'How long does PDF to Word conversion take?', a: 'Processing time depends on file size, page count, document complexity, and current system resources.' },
+          { q: 'Is PDF to Word free?', a: 'PDFilio provides the online converter; current usage limits, account requirements, and availability are determined by the product configuration shown in the tool interface.' },
+          { q: 'What should I do if the converted document needs cleanup?', a: 'Review headings, tables, spacing, images, fonts, and page breaks in Word. Complex PDF layouts can require manual formatting adjustments after conversion.' },
+        ]}
         relatedTools={[
-        { name: 'Word to PDF', slug: 'word-to-pdf' },
-        { name: 'PDF to Excel', slug: 'pdf-to-excel' },
-        { name: 'Compress PDF', slug: 'compress-pdf' },
-        { name: 'Merge PDF', slug: 'merge-pdf' },
-      ]}
+          { name: 'Word to PDF', slug: 'word-to-pdf' },
+          { name: 'PDF to Excel', slug: 'pdf-to-excel' },
+          { name: 'AI OCR', slug: 'ai-ocr' },
+          { name: 'Compress PDF', slug: 'compress-pdf' },
+          { name: 'Merge PDF', slug: 'merge-pdf' },
+        ]}
         primaryKeyword="PDF to Word"
-        secondaryKeywords={['convert PDF to Word', 'PDF to DOC', 'PDF to DOCX']}
-    />
+        secondaryKeywords={['convert PDF to Word', 'PDF to DOCX', 'PDF to DOC', 'PDF Word converter', 'PDF to editable Word', 'PDF to Word online']}
+        schema={schema}
+      />
     </>
   );
 }
