@@ -3,11 +3,15 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import MergePDFTool from '@/components/tools/merge-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Merge PDF Files - Free Online | PDFilio',
-  description: 'Merge multiple PDF files into one instantly. Free, fast, and secure PDF merging. No sign-up required. Combine PDFs in seconds.',
-  keywords: 'merge PDF, combine PDF, merge PDF files online, free PDF merger',
-  alternates: {
-    canonical: 'https://pdfilio.com/merge-pdf',
+  title: 'Merge PDF Online – Combine PDF Files into One | PDFilio',
+  description: 'Combine supported PDF files into one document online. Arrange files in the required order and create a single PDF for sharing, printing, submission, or archiving.',
+  keywords: ['merge PDF', 'merge PDF online', 'combine PDF', 'combine PDF files', 'PDF merger', 'join PDF files', 'merge PDF documents'],
+  alternates: { canonical: 'https://pdfilio.com/merge-pdf' },
+  openGraph: {
+    title: 'Merge PDF Online – Combine PDF Files | PDFilio',
+    description: 'Combine supported PDF files into one document and organize their order before creating the final PDF.',
+    url: 'https://pdfilio.com/merge-pdf',
+    type: 'website',
   },
 };
 
@@ -18,111 +22,66 @@ export default function MergePDFPage() {
       <ToolLandingLayout
         toolName="Merge PDF"
         toolSlug="merge-pdf"
-        description="Combine multiple PDF files into a single document instantly. Reorder pages, organize documents, and merge with just a few clicks."
+        description="Combine supported PDF files into a single document for easier sharing, printing, submission, review, and archiving."
         heroImage="/tool-images/merge-pdf-hero.png"
-        mainContent={`Merge PDF is the simplest way to combine multiple PDF files into a single document. Perfect for organizing scattered documents, combining reports, and creating unified files.
+        mainContent={`Merge PDF helps you combine multiple supported PDF files into one document. This is useful when related reports, chapters, forms, receipts, contracts, or project documents are stored as separate PDF files and need to be shared or managed together.
 
-Upload multiple PDFs, arrange them in any order, and merge them instantly into one file. Drag and drop reordering lets you arrange pages exactly how you want them. All formatting and quality is preserved perfectly.
+A typical workflow is to upload the PDFs, arrange them in the required order when the interface provides reordering controls, create the merged document, review the result, and download the final PDF. The final output can depend on the source PDFs and the current processing workflow.
 
-Our merge tool supports unlimited file sizes and quantities. Process files instantly on secure servers with automatic deletion after 24 hours. No registration needed, no watermarks, completely free.`}
-        useCase={`Combining multiple reports into one document
-Merging chapters from different sources into one book
-Organizing scattered contract pages
-Creating comprehensive proposal documents
-Combining meeting notes from multiple files
-Assembling project documentation
-Unifying financial statements from multiple periods`}
-        testimonials={[
-        {
-          name: 'David P.',
-          role: 'Document Manager',
-          text: 'Merge PDF is incredibly useful for organizing files. Combined 50+ documents into organized PDFs. The drag-and-drop reordering is a lifesaver.',
-        },
-        {
-          name: 'Elena R.',
-          role: 'Consultant',
-          text: 'Perfect for combining client documents and proposals. Does exactly what it promises, no complications, completely free.',
-        },
-        {
-          name: 'Frank J.',
-          role: 'Project Manager',
-          text: 'Using Merge PDF daily for project documentation. Saves hours compared to manual merging. Highly recommended.',
-        },
-      ]}
+For important documents, review page order, page size, orientation, bookmarks, forms, links, annotations, and other document features after merging. Keep the original files if you may need to create a different combined document later.`}
+        useCase={[
+          'Combining reports into one document',
+          'Merging chapters or sections into a single PDF',
+          'Organizing contract and application documents',
+          'Creating a unified project document',
+          'Combining meeting notes and supporting files',
+          'Assembling financial statements and reports',
+          'Preparing documents for submission',
+          'Creating a single PDF for sharing and archiving',
+        ].join('\n')}
         features={[
-        'Merge unlimited PDF files',
-        'Drag and drop reordering',
-        'Instant processing',
-        'Preserve quality',
-        'No file size limits',
-        'Works on all browsers',
-      ]}
+          'Combine supported PDF files',
+          'Arrange PDF files before merging when supported',
+          'Single PDF output',
+          'Browser-based workflow',
+          'Mobile and desktop browser support',
+          'Useful for multi-document workflows',
+          'Downloadable merged PDF',
+          'Related PDF organization tools',
+        ]}
         benefits={[
-        'Organize scattered documents',
-        'Create unified reports',
-        'Reduce file clutter',
-        'Share single document easily',
-        'Professional presentation',
-        'Save time and effort',
-      ]}
+          'Keep related PDFs together in one file',
+          'Simplify document sharing and submission',
+          'Reduce repetitive manual document handling',
+          'Create organized project and business documents',
+          'Prepare a single file for printing or archiving',
+          'Make multi-file document workflows easier to manage',
+        ]}
+        testimonials={[]}
         faqs={[
-        {
-          q: 'How many PDFs can I merge at once?',
-          a: 'You can merge unlimited PDFs at once. There is no limit to the number of files.',
-        },
-        {
-          q: 'Can I reorder pages before merging?',
-          a: 'Yes, you can drag and drop pages to reorder them before merging. Arrange them exactly how you want.',
-        },
-        {
-          q: 'Will quality be affected?',
-          a: 'No, we maintain 100% quality. Your merged PDF will be identical to the originals.',
-        },
-        {
-          q: 'Can I preview before merging?',
-          a: 'Yes, you can preview all pages and make changes before creating the final merged document.',
-        },
-        {
-          q: 'How long does merging take?',
-          a: 'Most merges complete in seconds, regardless of the number of files or total pages.',
-        },
-        {
-          q: 'Can I merge PDFs from different sources?',
-          a: 'Yes! Merge any PDF files from any source. All formatting is preserved perfectly.',
-        },
-        {
-          q: 'Is my data secure?',
-          a: 'Completely secure. Your files are encrypted during processing and deleted within 24 hours.',
-        },
-        {
-          q: 'Do I need to register?',
-          a: 'No registration, no email verification, no sign-up required. Just upload and merge.',
-        },
-        {
-          q: 'Is Merge PDF free?',
-          a: 'Yes, completely free! Unlimited merges, no hidden fees, no premium features.',
-        },
-        {
-          q: 'What about large files?',
-          a: 'No file size limits! Merge PDFs of any size. Process as many as you need.',
-        },
-        {
-          q: 'Can I undo after merging?',
-          a: 'You can always re-upload the original files to merge differently.',
-        },
-        {
-          q: 'Works on mobile?',
-          a: 'Yes! Merge PDF works perfectly on phones, tablets, and computers.',
-        },
-      ]}
+          { q: 'How do I merge PDF files online?', a: 'Upload supported PDF files, arrange them in the required order when available, start the merge process, review the resulting document, and download it.' },
+          { q: 'Can I combine multiple PDFs into one?', a: 'Yes. The Merge PDF workflow is designed to combine supported PDF files into a single PDF document.' },
+          { q: 'Can I reorder PDFs before merging?', a: 'If reordering controls are available in the current interface, use them to place the source files in the required sequence before merging.' },
+          { q: 'Will the original PDF files be changed?', a: 'Creating a merged output does not intentionally modify the original files stored on your device. Keep the originals if you may need them again.' },
+          { q: 'Will PDF quality remain exactly the same?', a: 'The goal is to combine the documents without intentionally reducing quality, but output behavior can depend on the source PDFs and processing workflow. Review important files.' },
+          { q: 'Can I merge PDFs with different page sizes?', a: 'PDFs with different page dimensions can be combined, but the resulting document may contain mixed page sizes. Review the output before printing.' },
+          { q: 'Can I merge portrait and landscape PDFs?', a: 'Yes, supported PDFs can be combined, and the resulting document can contain pages with different orientations.' },
+          { q: 'Can I merge scanned PDFs?', a: 'Yes. Scanned PDFs can be combined as PDF pages. OCR is only needed if you also want to extract or search their image-based text.' },
+          { q: 'Can I merge PDFs on my phone?', a: 'Yes. The browser-based workflow can be accessed from supported phones, tablets, and desktop browsers.' },
+          { q: 'Do I need to install PDF software?', a: 'No separate PDF-merging application is required for the browser-based workflow.' },
+          { q: 'How long does PDF merging take?', a: 'Processing time depends on the number and size of the PDFs, page count, document complexity, and current system resources.' },
+          { q: 'Is Merge PDF free?', a: 'PDFilio provides the online merger; current usage limits, account requirements, and availability are determined by the product configuration shown in the tool interface.' },
+          { q: 'Can I merge password-protected PDFs?', a: 'Password-protected or restricted PDFs may require access permissions before they can be processed. Follow any instructions shown by the tool if a file cannot be read.' },
+        ]}
         relatedTools={[
-        { name: 'Split PDF', slug: 'split-pdf' },
-        { name: 'Compress PDF', slug: 'compress-pdf' },
-        { name: 'PDF to Word', slug: 'pdf-to-word' },
-        { name: 'Rotate PDF', slug: 'rotate-pdf' },
-      ]}
+          { name: 'Split PDF', slug: 'split-pdf' },
+          { name: 'Compress PDF', slug: 'compress-pdf' },
+          { name: 'Rotate PDF', slug: 'rotate-pdf' },
+          { name: 'PDF to Word', slug: 'pdf-to-word' },
+          { name: 'PDF to JPG', slug: 'pdf-to-jpg' },
+        ]}
         primaryKeyword="merge PDF"
-        secondaryKeywords={['combine PDF', 'merge PDF online', 'join PDF files']}
+        secondaryKeywords={['combine PDF', 'merge PDF online', 'combine PDF files', 'PDF merger', 'join PDF files', 'merge PDF documents']}
       />
     </>
   );
