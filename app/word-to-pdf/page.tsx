@@ -3,11 +3,15 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import WordToPDFTool from '@/components/tools/word-to-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Word to PDF Converter - Free Online | PDFilio',
-  description: 'Convert Word documents to PDF instantly. Free, fast, and secure Word to PDF conversion. Preserve formatting. No sign-up required.',
-  keywords: 'Word to PDF, Convert Word to PDF, DOC to PDF, DOCX to PDF, free converter',
-  alternates: {
-    canonical: 'https://pdfilio.com/word-to-pdf',
+  title: 'Word to PDF Converter Online – Convert DOC & DOCX to PDF | PDFilio',
+  description: 'Convert supported Word DOC and DOCX documents to PDF online. Create shareable PDF files from resumes, reports, proposals, contracts, and business documents.',
+  keywords: ['Word to PDF', 'Word to PDF converter', 'convert Word to PDF', 'DOC to PDF', 'DOCX to PDF', 'Word document to PDF', 'Word to PDF online'],
+  alternates: { canonical: 'https://pdfilio.com/word-to-pdf' },
+  openGraph: {
+    title: 'Word to PDF Converter Online | PDFilio',
+    description: 'Convert supported DOC and DOCX documents into PDF files for sharing, printing, and document workflows.',
+    url: 'https://pdfilio.com/word-to-pdf',
+    type: 'website',
   },
 };
 
@@ -18,111 +22,66 @@ export default function WordToPDFPage() {
       <ToolLandingLayout
         toolName="Word to PDF Converter"
         toolSlug="word-to-pdf"
-        description="Convert Word documents (DOC, DOCX) to PDF format instantly. Maintain perfect formatting and styling. Secure and completely free."
+        description="Convert supported Word DOC and DOCX documents into PDF files for sharing, printing, archiving, and professional document workflows."
         heroImage="/tool-images/word-to-pdf-hero.png"
-        mainContent={`Word to PDF Converter transforms your Word documents into professional PDF files instantly. Perfect for sharing documents securely, creating print-ready files, and protecting your content from editing.
+        mainContent={`Word to PDF Converter helps turn supported Word documents into PDF files. PDF is commonly used when you want a stable document format for sharing, printing, submitting applications, distributing reports, or archiving a finished document.
 
-Our converter preserves all formatting including fonts, colors, images, layouts, tables, and special formatting. Your PDF looks exactly like your Word document, with perfect reproduction every time.
+The final appearance can depend on the source document, fonts, images, tables, page layout, and conversion engine. Review the generated PDF before sending or publishing important documents, especially when exact pagination or complex formatting matters.
 
-Convert files instantly with enterprise-grade security. Your documents are encrypted and automatically deleted within 24 hours. No registration needed, no watermarks, completely free. Convert unlimited files.`}
-        useCase={`Converting resumes for job applications
-Creating professional proposals and quotes
-Finalizing contracts before signing
-Distributing reports to stakeholders
-Preparing documents for archival
-Sharing content with external parties
-Creating read-only document versions`}
-        testimonials={[
-        {
-          name: 'Mark T.',
-          role: 'HR Manager',
-          text: 'Word to PDF is perfect for our job application process. Candidates always get perfect conversions. No formatting issues ever.',
-        },
-        {
-          name: 'Susan M.',
-          role: 'Project Manager',
-          text: 'Converting proposals to PDF daily. The quality and speed are exceptional. No better tool available.',
-        },
-        {
-          name: 'George R.',
-          role: 'Business Owner',
-          text: 'Using Word to PDF for all client documents. Reliable, fast, and completely free. Highly satisfied.',
-        },
-      ]}
+Typical workflow: upload a supported DOC or DOCX file, start the conversion, review the resulting PDF, and download it for your next document workflow. Availability of specific input formats and processing limits depends on the current tool configuration.`}
+        useCase={[
+          'Converting resumes for job applications',
+          'Preparing business proposals and reports',
+          'Sharing contracts and formal documents',
+          'Creating PDFs for printing',
+          'Preparing documents for email and uploads',
+          'Archiving finalized Word documents',
+          'Sharing documents with clients or teams',
+          'Creating PDF copies for submission workflows',
+        ].join('\n')}
         features={[
-        'Converts DOC and DOCX files',
-        'Preserves all formatting',
-        'Batch conversion support',
-        'Ultra-fast processing',
-        'AES-256 encryption',
-        'Works on all devices',
-      ]}
+          'DOC and DOCX to PDF conversion',
+          'PDF document output',
+          'Browser-based workflow',
+          'Useful for common Word documents',
+          'Desktop and supported mobile browser access',
+          'Downloadable PDF output',
+          'Simple upload and conversion process',
+          'Related PDF document tools',
+        ]}
         benefits={[
-        'Create professional PDF documents',
-        'Share documents safely',
-        'Maintain document integrity',
-        'No compatibility issues',
-        'Accessible anywhere, anytime',
-        'Instant results',
-      ]}
+          'Create a widely shareable PDF version of a Word document',
+          'Prepare documents for printing and submission',
+          'Reduce manual file-format conversion work',
+          'Keep finalized documents in a common distribution format',
+          'Move Word documents into PDF-based workflows',
+          'Make document sharing easier across devices',
+        ]}
+        testimonials={[]}
         faqs={[
-        {
-          q: 'What Word formats are supported?',
-          a: 'Support .DOC, .DOCX, .RTF and all common Word document formats.',
-        },
-        {
-          q: 'Will my document formatting be preserved?',
-          a: 'Yes! All formatting, fonts, colors, images, and layouts are preserved perfectly.',
-        },
-        {
-          q: 'Is it safe to upload my documents?',
-          a: 'Completely safe. We use encryption and auto-delete files after 24 hours.',
-        },
-        {
-          q: 'Can I convert multiple files at once?',
-          a: 'Yes! Use batch conversion to convert multiple Word files simultaneously.',
-        },
-        {
-          q: 'How fast is the conversion?',
-          a: 'Most documents convert in seconds. Processing time depends on file size.',
-        },
-        {
-          q: 'Is PDF the final format?',
-          a: 'Yes. PDFs are read-only by default, perfect for protecting your content.',
-        },
-        {
-          q: 'Can I edit the PDF after conversion?',
-          a: 'PDFs cannot be edited directly. Convert back to Word if you need to edit again.',
-        },
-        {
-          q: 'Does it work on mobile?',
-          a: 'Absolutely! Convert Word to PDF on phones, tablets, or computers.',
-        },
-        {
-          q: 'Is there a file size limit?',
-          a: 'No limits! Convert documents of any size without restrictions.',
-        },
-        {
-          q: 'Do I need to register?',
-          a: 'No registration needed. Start converting immediately, completely free.',
-        },
-        {
-          q: 'What about tables and special formatting?',
-          a: 'All tables, charts, headers, footers, and special formatting convert perfectly.',
-        },
-        {
-          q: 'Is Word to PDF free?',
-          a: '100% free! No hidden fees, no watermarks, no premium plans needed.',
-        },
-      ]}
+          { q: 'How do I convert Word to PDF online?', a: 'Upload a supported DOC or DOCX document, start the Word-to-PDF conversion, review the generated PDF, and download the result.' },
+          { q: 'Can I convert DOCX to PDF?', a: 'Yes. Supported DOCX documents can be converted into PDF files through the Word to PDF workflow.' },
+          { q: 'Can I convert DOC to PDF?', a: 'Yes, if the current uploader accepts DOC files. Follow the input formats shown by the tool interface.' },
+          { q: 'Will Word formatting be preserved exactly?', a: 'Exact preservation is not guaranteed for every document. Fonts, tables, images, page breaks, headers, footers, and complex layouts can affect the final PDF.' },
+          { q: 'Can I convert a resume to PDF?', a: 'Yes. Converting a resume to PDF is a common way to create a shareable version for applications and submissions.' },
+          { q: 'Can I convert a business report to PDF?', a: 'Yes. Supported Word reports can be converted to PDF for sharing, printing, review, or archiving.' },
+          { q: 'Can I convert contracts to PDF?', a: 'Supported Word contracts can be converted to PDF. Review the generated file carefully before signing or distributing it.' },
+          { q: 'Can I convert Word documents with tables?', a: 'Yes, supported documents containing tables can be processed, but complex tables may need visual review after conversion.' },
+          { q: 'Can I use Word to PDF on my phone?', a: 'Yes. The browser-based workflow can be accessed from supported phones, tablets, and desktop browsers.' },
+          { q: 'Do I need to install Microsoft Word?', a: 'No Microsoft Word installation is required to use the online conversion workflow, provided your file is in a supported format.' },
+          { q: 'How long does Word to PDF conversion take?', a: 'Processing time depends on document size, page count, complexity, and current system resources.' },
+          { q: 'Is Word to PDF free?', a: 'PDFilio provides the online converter; current usage limits, account requirements, and availability are determined by the product configuration shown in the tool interface.' },
+          { q: 'Can I edit the PDF after conversion?', a: 'A PDF is primarily a distribution format. If you need to make substantial edits, keeping the original Word document is usually the better option.' },
+        ]}
         relatedTools={[
-        { name: 'PDF to Word', slug: 'pdf-to-word' },
-        { name: 'Excel to PDF', slug: 'excel-to-pdf' },
-        { name: 'Merge PDF', slug: 'merge-pdf' },
-        { name: 'Compress PDF', slug: 'compress-pdf' },
-      ]}
+          { name: 'PDF to Word', slug: 'pdf-to-word' },
+          { name: 'Excel to PDF', slug: 'excel-to-pdf' },
+          { name: 'Compress PDF', slug: 'compress-pdf' },
+          { name: 'Merge PDF', slug: 'merge-pdf' },
+          { name: 'PDF to JPG', slug: 'pdf-to-jpg' },
+        ]}
         primaryKeyword="Word to PDF"
-        secondaryKeywords={['convert Word to PDF', 'DOC to PDF', 'DOCX to PDF']}
+        secondaryKeywords={['Word to PDF converter', 'convert Word to PDF', 'DOC to PDF', 'DOCX to PDF', 'Word document to PDF', 'Word to PDF online']}
       />
     </>
   );
