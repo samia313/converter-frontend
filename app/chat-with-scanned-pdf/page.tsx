@@ -2,12 +2,14 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Chat with Scanned PDF - OCR + AI Conversation | PDFilio',
-  description: 'Chat with scanned PDFs and images. Built-in OCR extracts text, then AI answers your questions. Works with handwritten and printed documents.',
-  keywords: 'chat scanned PDF, PDF OCR chat, chat image PDF, handwritten PDF chat, scanned document chat',
+  title: 'Chat with Scanned PDF Online – OCR + AI PDF Chat | PDFilio',
+  description: 'Chat with scanned PDFs, document images, and supported handwritten documents using OCR and AI. Extract text and ask questions in one browser-based workflow.',
+  keywords: ['chat with scanned PDF', 'scanned PDF OCR', 'PDF OCR chat', 'chat with image PDF', 'handwritten PDF chat', 'scanned document chat', 'AI OCR PDF'],
+  alternates: { canonical: 'https://pdfilio.com/chat-with-scanned-pdf' },
   openGraph: {
-    title: 'Chat with Scanned PDF - AI for Scanned Documents',
-    description: 'Upload scanned PDFs or images and chat with AI. OCR + AI = intelligent document conversations.',
+    title: 'Chat with Scanned PDF – OCR + AI | PDFilio',
+    description: 'Extract text from scanned PDFs and supported document images, then ask questions with AI.',
+    url: 'https://pdfilio.com/chat-with-scanned-pdf',
     type: 'website',
   },
 };
@@ -17,121 +19,71 @@ export default function ChatScannedPDFPage() {
     <ToolLandingLayout
       toolName="Chat with Scanned PDF"
       toolSlug="chat-with-scanned-pdf"
-      description="Upload scanned PDFs, images, or handwritten documents. Built-in OCR extracts text automatically, then AI analyzes and answers your questions instantly."
+      description="Extract text from scanned PDFs and supported document images with OCR, then explore the extracted content through AI-powered questions."
       heroImage="/tool-images/scanned-pdf-hero.png"
-      mainContent={`Chat with Scanned PDF combines OCR technology with AI intelligence. Scanned documents, images, handwritten notes - all work instantly.
+      mainContent={`Chat with Scanned PDF combines OCR and AI to make image-based documents easier to explore. When a PDF contains scanned pages rather than selectable text, OCR can extract the text so you can ask focused questions about the document.
 
-OCR + AI = Full document intelligence:
-- Automatic text extraction from images
-- Handwriting recognition
-- Printed text extraction
-- Document image analysis
-- Automatic text-to-chat conversion
+Useful document types include scanned papers, printed pages, document photos, image-based PDFs, archival material, and supported handwritten notes. OCR quality depends on scan resolution, handwriting, language, layout, and image quality, so important information should be checked against the original document.
 
-Upload any document image and immediately chat with it. The OCR handles text extraction automatically in the background, then AI answers your questions.
-
-Works with:
-- Scanned books and papers
-- Handwritten notes
-- Printed documents
-- Document photos
-- Image PDFs
-- Mixed text and images
-- Low-quality scans
-- Any document format
-
-Perfect for archival documents, handwritten notes, old papers, and image-based PDFs that traditional tools can&apos;t handle.`}
+Typical workflow:
+1. Upload a supported scanned PDF or document image.
+2. OCR extracts readable text from the document.
+3. Ask questions about the extracted content.
+4. Verify important answers against the original scan.`}
       useCase={[
-        'Extract info from scanned books',
-        'Chat with handwritten notes',
-        'Analyze document photos',
-        'Process archival documents',
-        'Understand old paper documents',
-        'Digitize and chat with papers',
-        'Process document images',
-        'Chat with printed documents',
-        'Analyze image-based PDFs',
-        'Convert scans to intelligence',
+        'Researching scanned books and papers',
+        'Exploring handwritten notes',
+        'Reviewing document photos',
+        'Working with archival material',
+        'Searching image-based PDFs',
+        'Understanding old paper documents',
+        'Reviewing printed scans',
+        'Extracting information from document images',
+        'Studying scanned course material',
+        'Preparing scanned documents for deeper review',
       ].join('\n')}
-      testimonials={[
-        {
-          name: 'Professor Robert Chen',
-          role: 'Historian',
-          text: 'Scanning old documents and chatting with them is amazing. OCR handles the text, AI analyzes. Finally, historical documents are searchable.',
-        },
-        {
-          name: 'Helen Rodriguez',
-          role: 'Document Manager',
-          text: 'Our paper archives are now intelligent. Scan document, chat with it, get answers. Transformed our document management.',
-        },
-        {
-          name: 'Mark Stevens',
-          role: 'Archivist',
-          text: 'Perfect for digitizing paper collections. OCR extracts text from scans, AI makes them searchable and intelligent.',
-        },
-      ]}
+      testimonials={[]}
       features={[
-        'Built-in OCR technology',
-        'Automatic text extraction',
-        'Handwriting recognition',
-        'Image to text conversion',
-        'Works with scanned documents',
-        'AI chat after OCR',
-        'Handles low-quality scans',
-        'Image PDF support',
+        'OCR-based text extraction',
+        'AI-powered document questions',
+        'Scanned PDF support',
+        'Document image processing',
+        'Printed-text recognition',
+        'Support for suitable handwriting',
+        'Browser-based workflow',
+        'OCR-to-chat document experience',
       ]}
       benefits={[
-        'Chat with any document format',
-        'No separate OCR tool needed',
-        'Handles handwritten documents',
-        'Works with old/archival documents',
-        'Automatic processing',
-        'Extract text and chat instantly',
-        'Works with document images',
-        'One tool for all document types',
+        'Explore image-based PDFs without manually reading every page',
+        'Combine OCR and document questions in one workflow',
+        'Find useful information inside scanned documents',
+        'Reduce repetitive manual transcription during initial review',
+        'Make archival and scanned material easier to investigate',
+        'Use one browser-based workflow for OCR and document chat',
       ]}
       faqs={[
-        {
-          q: 'Does this work with handwriting?',
-          a: 'Yes! OCR recognizes both printed and handwritten text accurately.',
-        },
-        {
-          q: 'How good is the OCR?',
-          a: 'Advanced OCR technology with high accuracy for both printed and handwritten documents.',
-        },
-        {
-          q: 'What image formats work?',
-          a: 'PDFs, JPG, PNG, GIF - any common image format works.',
-        },
-        {
-          q: 'How long does OCR take?',
-          a: 'Usually 5-10 seconds, then ready to chat.',
-        },
-        {
-          q: 'Can I upload multiple scans?',
-          a: 'Yes, upload multiple scanned PDFs or images.',
-        },
-        {
-          q: 'Does it work with poor quality scans?',
-          a: 'Yes, our advanced OCR handles even low-quality or faded scans.',
-        },
-        {
-          q: 'Can I edit the OCR text?',
-          a: 'The AI uses the extracted text to chat, and you can ask clarifying questions if needed.',
-        },
-        {
-          q: 'Is OCR accurate for all languages?',
-          a: 'Works best in English and major languages. Handles mixed-language documents.',
-        },
+        { q: 'What is Chat with Scanned PDF?', a: 'It is a document workflow that uses OCR to extract text from supported scanned PDFs and images and then lets you ask AI-powered questions about the extracted content.' },
+        { q: 'Can I chat with a scanned PDF?', a: 'Yes. The tool is designed specifically for PDFs where important content may be stored as scanned page images.' },
+        { q: 'Does it use OCR?', a: 'Yes. OCR is used to recognize text from supported scanned documents before the AI chat workflow analyzes that content.' },
+        { q: 'Can it read handwritten documents?', a: 'Supported handwriting may be recognized, but results depend heavily on handwriting clarity, scan quality, language, and layout.' },
+        { q: 'Can I use document photos?', a: 'Supported document images can be processed when they meet the tool and file requirements.' },
+        { q: 'Will OCR work on low-quality scans?', a: 'It may extract text from lower-quality scans, but accuracy can decrease with blur, fading, skew, noise, unusual fonts, or poor lighting.' },
+        { q: 'Can I ask questions after OCR?', a: 'Yes. After the text is available to the workflow, you can ask focused questions about the document content.' },
+        { q: 'Is OCR accurate for every language?', a: 'OCR accuracy varies by language and document quality. Check the original scan whenever accuracy is important.' },
+        { q: 'Can students use Chat with Scanned PDF?', a: 'Yes. It can help explore scanned study material and research documents, while important academic information should be verified against the source.' },
+        { q: 'Can businesses use scanned PDF chat?', a: 'Yes. It can help teams initially explore scanned reports, records, and other supported business documents.' },
+        { q: 'Should I rely on AI answers for important documents?', a: 'No. AI and OCR can make mistakes or omit context. For legal, financial, medical, archival, or other important information, verify answers against the original document.' },
+        { q: 'Do I need separate OCR software?', a: 'The page is designed to combine OCR and document chat in one browser-based workflow, reducing the need to switch between separate tools.' },
       ]}
       relatedTools={[
         { name: 'Chat with PDF', slug: 'chat-with-pdf' },
         { name: 'AI OCR', slug: 'ai-ocr' },
         { name: 'Image to PDF', slug: 'image-to-pdf' },
         { name: 'Chat Large PDF', slug: 'chat-large-pdf' },
+        { name: 'AI Document Chat', slug: 'ai-document-chat' },
       ]}
-      primaryKeyword="chat scanned PDF"
-      secondaryKeywords={['PDF OCR chat', 'chat image PDF', 'handwritten PDF chat', 'scanned document chat']}
+      primaryKeyword="chat with scanned PDF"
+      secondaryKeywords={['scanned PDF OCR', 'PDF OCR chat', 'chat with image PDF', 'handwritten PDF chat', 'scanned document chat', 'AI OCR PDF']}
     />
   );
 }
