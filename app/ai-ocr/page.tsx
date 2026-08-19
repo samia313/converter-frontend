@@ -2,10 +2,16 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI OCR - Optical Character Recognition | PDFilio',
-  description: 'Convert supported scanned documents and images to editable text with AI-powered OCR.',
-  keywords: 'OCR, optical character recognition, text extraction, scan to text',
+  title: 'AI OCR Online – Convert Scans & Images to Text | PDFilio',
+  description: 'Extract text from supported scanned PDFs, images, receipts, and documents with AI OCR. Turn image-based content into editable, searchable text online.',
+  keywords: ['AI OCR', 'OCR online', 'optical character recognition', 'image to text', 'scan to text', 'PDF OCR', 'OCR PDF', 'text extraction'],
   alternates: { canonical: 'https://pdfilio.com/ai-ocr' },
+  openGraph: {
+    title: 'AI OCR Online – Scan to Text | PDFilio',
+    description: 'Extract editable text from supported scanned documents and images with OCR.',
+    url: 'https://pdfilio.com/ai-ocr',
+    type: 'website',
+  },
 };
 
 export default function AIOCRPage() {
@@ -22,44 +28,64 @@ export default function AIOCRPage() {
     <ToolLandingLayout
       toolName="AI OCR"
       toolSlug="ai-ocr"
-      description="Convert supported scanned documents and images into editable text with OCR."
+      description="Convert supported scanned documents and images into editable, searchable text with AI-powered OCR."
       heroImage="/tool-images/ai-ocr-hero.png"
-      mainContent={`AI OCR can help extract text from supported scanned documents and images for editing, searching, and reuse. Results can vary with scan quality, layout, language, handwriting, and other document characteristics.
+      mainContent={`AI OCR helps turn supported image-based documents into text that you can search, edit, copy, and reuse. It is useful when a PDF or image contains scanned pages instead of selectable text.
 
-Use the tool to digitize supported documents, extract text from images, and make scanned content easier to work with.`}
+Common OCR use cases include scanned PDFs, paper documents, receipts, invoices, screenshots, photos of documents, and supported handwritten material. OCR accuracy depends on image quality, language, handwriting, layout, fonts, and other document characteristics, so important extracted information should always be checked against the original.
+
+A simple workflow: upload a supported file, let OCR analyze the document, then review and reuse the extracted text. For image-based PDFs that you want to explore conversationally, PDFilio also provides Chat with Scanned PDF.`}
       useCase={[
         'Digitizing paper documents',
-        'Extracting text from photos and screenshots',
+        'Extracting text from document photos',
         'Making scanned PDFs searchable',
         'Extracting text from receipts and invoices',
-        'Digitizing supported handwritten content',
-        'Converting images to editable text',
+        'Converting screenshots into editable text',
+        'Digitizing supported handwriting',
+        'Extracting text from image-based PDFs',
+        'Preparing scanned material for further editing',
       ].join('\n')}
       features={[
-        'OCR text extraction',
-        'Supported document and image inputs',
+        'AI-powered OCR text extraction',
+        'Supported scanned PDF processing',
+        'Image-to-text extraction',
+        'Searchable text from scanned content',
         'Editable text output',
-        'Text extraction for scanned content',
+        'Support for suitable document photos',
+        'Browser-based workflow',
+        'Useful for digitization workflows',
       ]}
       benefits={[
-        'Reduce manual text entry',
+        'Reduce repetitive manual typing',
         'Make scanned content easier to search',
-        'Reuse extracted text',
-        'Digitize supported documents',
+        'Reuse extracted document text',
+        'Digitize supported paper records',
+        'Prepare image-based documents for editing',
+        'Speed up initial document transcription',
       ]}
       faqs={[
-        { q: 'How accurate is AI OCR?', a: 'Accuracy depends on scan quality, language, layout, and other document characteristics. Review extracted text before relying on it.' },
-        { q: 'Can it recognize handwriting?', a: 'Handwriting support depends on the current OCR implementation and the quality of the source.' },
-        { q: 'What files can I use?', a: 'Use the formats accepted by the AI OCR uploader. The available input formats are shown in the tool interface.' },
-        { q: 'Does OCR work on low-quality scans?', a: 'It may work, but lower-quality or complex scans can produce less accurate results.' },
-        { q: 'Is OCR free?', a: 'The page is available without a paid claim here; any usage limits shown by the product should be followed.' },
+        { q: 'What is AI OCR?', a: 'AI OCR uses optical character recognition technology to identify text in supported scanned documents and images and turn it into usable digital text.' },
+        { q: 'Can I convert a scanned PDF to text?', a: 'Yes, supported scanned PDFs can be processed to extract text from their page images.' },
+        { q: 'Can I convert an image to text?', a: 'Yes. Supported document images can be analyzed and their readable text extracted.' },
+        { q: 'How accurate is AI OCR?', a: 'Accuracy depends on scan quality, language, layout, font, handwriting, and other factors. Review extracted text before relying on it.' },
+        { q: 'Can OCR recognize handwriting?', a: 'Supported handwriting may be recognized, but results vary significantly with handwriting clarity, language, and image quality.' },
+        { q: 'Does OCR work on low-quality scans?', a: 'It may work on lower-quality scans, but blur, fading, skew, noise, and compression can reduce recognition accuracy.' },
+        { q: 'Can OCR make a scanned PDF searchable?', a: 'OCR can extract text from image-based pages, which can help make scanned document content searchable when the resulting text is retained in the workflow.' },
+        { q: 'Can I extract text from receipts and invoices?', a: 'Yes, receipts and invoices are common OCR use cases, although unusual layouts and poor image quality can affect results.' },
+        { q: 'Can I use OCR on screenshots?', a: 'Yes, supported screenshots can be processed when the text is clear enough for recognition.' },
+        { q: 'Is AI OCR free?', a: 'PDFilio provides the AI OCR page as an online tool; any current usage limits or account requirements shown in the product interface apply.' },
+        { q: 'Do I need to install OCR software?', a: 'No separate OCR installation is required for the browser-based workflow.' },
+        { q: 'Should I verify extracted OCR text?', a: 'Yes. OCR can misread characters or formatting, so important legal, financial, academic, or business information should be checked against the original document.' },
       ]}
       relatedTools={[
+        { name: 'Chat with Scanned PDF', slug: 'chat-with-scanned-pdf' },
         { name: 'PDF Chat', slug: 'pdf-chat' },
         { name: 'PDF to Word', slug: 'pdf-to-word' },
+        { name: 'PDF to JPG', slug: 'pdf-to-jpg' },
+        { name: 'AI Document Summarizer', slug: 'ai-document-summarizer' },
       ]}
       primaryKeyword="AI OCR"
-      secondaryKeywords={['optical character recognition', 'text extraction', 'scan to text']}
+      secondaryKeywords={['OCR online', 'optical character recognition', 'image to text', 'scan to text', 'PDF OCR', 'OCR PDF', 'text extraction']}
       schema={schema}
     />
   );
