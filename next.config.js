@@ -28,6 +28,11 @@ const nextConfig = {
     { source: '/blog/convert-pdf-to-word-editable', destination: '/pdf-to-word', permanent: true },
     { source: '/use-cases/sign-pdf-for-students', destination: '/use-cases', permanent: true },
     { source: '/use-cases/rotate-pdf-for-college', destination: '/rotate-pdf', permanent: true },
+    // Legacy/alternate tool URLs -> current canonical routes
+    { source: '/ppt-to-pdf', destination: '/powerpoint-to-pdf', permanent: true },
+    { source: '/png-to-pdf', destination: '/image-to-pdf', permanent: true },
+    { source: '/ocr-pdf', destination: '/ocr', permanent: true },
+    { source: '/pdf-editor', destination: '/edit-pdf', permanent: true },
   ],
   rewrites: async () => ({ beforeFiles: [], afterFiles: [], fallback: [] }),
   turbopack: {},
