@@ -34,7 +34,7 @@ export default function AIOCRPage() {
 
 Common OCR use cases include scanned PDFs, paper documents, receipts, invoices, screenshots, photos of documents, and supported handwritten material. OCR accuracy depends on image quality, language, handwriting, layout, fonts, and other document characteristics, so important extracted information should always be checked against the original.
 
-A simple workflow: upload a supported file, let OCR analyze the document, then review and reuse the extracted text. For image-based PDFs that you want to explore conversationally, PDFilio also provides Chat with Scanned PDF.`}
+A simple workflow is to upload a supported file, let OCR analyze the document, review the extracted text, correct any recognition errors, and then reuse the verified result. For image-based PDFs that you want to explore conversationally, PDFilio also provides Chat with Scanned PDF.`}
       useCase={[
         'Digitizing paper documents',
         'Extracting text from document photos',
@@ -73,8 +73,9 @@ A simple workflow: upload a supported file, let OCR analyze the document, then r
         { q: 'Can OCR make a scanned PDF searchable?', a: 'OCR can extract text from image-based pages, which can help make scanned document content searchable when the resulting text is retained in the workflow.' },
         { q: 'Can I extract text from receipts and invoices?', a: 'Yes, receipts and invoices are common OCR use cases, although unusual layouts and poor image quality can affect results.' },
         { q: 'Can I use OCR on screenshots?', a: 'Yes, supported screenshots can be processed when the text is clear enough for recognition.' },
+        { q: 'Does OCR preserve the original layout?', a: 'Text extraction may not reproduce complex tables, columns, fonts, spacing, or page layouts exactly. Review the output when layout matters.' },
+        { q: 'What languages does OCR support?', a: 'Available languages depend on the current OCR engine and product configuration. Use the language options shown by the tool rather than assuming every language is supported.' },
         { q: 'Is AI OCR free?', a: 'PDFilio provides the AI OCR page as an online tool; any current usage limits or account requirements shown in the product interface apply.' },
-        { q: 'Do I need to install OCR software?', a: 'No separate OCR installation is required for the browser-based workflow.' },
         { q: 'Should I verify extracted OCR text?', a: 'Yes. OCR can misread characters or formatting, so important legal, financial, academic, or business information should be checked against the original document.' },
       ]}
       relatedTools={[
