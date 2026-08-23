@@ -25,11 +25,7 @@ export default function ChatScannedPDFPage() {
 
 Useful document types include scanned papers, printed pages, document photos, image-based PDFs, archival material, and supported handwritten notes. OCR quality depends on scan resolution, handwriting, language, layout, and image quality, so important information should be checked against the original document.
 
-Typical workflow:
-1. Upload a supported scanned PDF or document image.
-2. OCR extracts readable text from the document.
-3. Ask questions about the extracted content.
-4. Verify important answers against the original scan.`}
+Typical workflow: upload a supported scanned PDF or document image, let OCR process readable text, ask focused questions about the extracted content, review the response, and verify important answers against the original scan. Supported formats, file limits, and processing capabilities depend on the current tool configuration.`}
       useCase={[
         'Researching scanned books and papers',
         'Exploring handwritten notes',
@@ -73,7 +69,8 @@ Typical workflow:
         { q: 'Can students use Chat with Scanned PDF?', a: 'Yes. It can help explore scanned study material and research documents, while important academic information should be verified against the source.' },
         { q: 'Can businesses use scanned PDF chat?', a: 'Yes. It can help teams initially explore scanned reports, records, and other supported business documents.' },
         { q: 'Should I rely on AI answers for important documents?', a: 'No. AI and OCR can make mistakes or omit context. For legal, financial, medical, archival, or other important information, verify answers against the original document.' },
-        { q: 'Do I need separate OCR software?', a: 'The page is designed to combine OCR and document chat in one browser-based workflow, reducing the need to switch between separate tools.' },
+        { q: 'Does it preserve the original document layout?', a: 'OCR extracts recognized text, but complex columns, tables, fonts, spacing, and page layouts may not be reproduced exactly in extracted content.' },
+        { q: 'Is Chat with Scanned PDF free?', a: 'PDFilio provides the online scanned-PDF chat workflow; current usage limits, account requirements, and availability depend on the product configuration shown in the interface.' },
       ]}
       relatedTools={[
         { name: 'Chat with PDF', slug: 'chat-with-pdf' },
