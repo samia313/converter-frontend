@@ -19,6 +19,7 @@ const staticPages = [
   { path: '/faq', priority: 0.6, changeFrequency: 'monthly' as const },
 ]
 
+// Only include canonical tool routes that are backed by actual app routes.
 const toolPages = [
   'merge-pdf','split-pdf','rotate-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf',
   'word-to-pdf','excel-to-pdf','powerpoint-to-pdf','jpg-to-pdf','html-to-pdf','image-to-pdf',
