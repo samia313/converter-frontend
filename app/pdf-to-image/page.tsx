@@ -3,145 +3,84 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import PdfToImageTool from '@/components/tools/pdf-to-image-tool';
 
 export const metadata: Metadata = {
-  title: 'PDF to Image - Convert PDF Pages to Images | PDFilio',
-  description: 'Convert PDF pages to JPG, PNG, or other image formats instantly. Extract individual pages as images. Perfect for sharing, editing, and archiving. Free and secure.',
-  keywords: ['PDF to image', 'PDF to JPG', 'PDF to PNG', 'convert PDF pages to images'],
+  title: 'PDF to Image Online – Convert PDF to JPG & PNG | PDFilio',
+  description: 'Convert supported PDF pages to JPG, PNG or other available image formats online with PDFilio. Extract selected pages or convert a document for sharing, previews, web use and editing.',
+  keywords: ['PDF to image', 'PDF to JPG', 'PDF to PNG', 'convert PDF to image', 'PDF page to image', 'PDF image converter'],
+  alternates: { canonical: 'https://pdfilio.com/pdf-to-image' },
+  openGraph: {
+    title: 'PDF to Image Online – Convert PDF Pages to Images | PDFilio',
+    description: 'Convert supported PDF pages into image files for sharing, previews, web use, editing and presentations.',
+    url: 'https://pdfilio.com/pdf-to-image',
+    type: 'website',
+  },
 };
 
 export default function PDFToImagePage() {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'PDF to Image',
-    description: 'Convert PDF pages to image files',
-    applicationCategory: 'Utility',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.7',
-      ratingCount: '1720',
-    },
-  };
-
   return (
     <>
       <PdfToImageTool />
       <ToolLandingLayout
         toolName="PDF to Image"
         toolSlug="pdf-to-image"
-        description="Convert PDF pages to images instantly. Download as JPG, PNG, or other formats. Extract individual pages or convert entire documents. Perfect for sharing, editing, and web use."
+        description="Convert supported PDF pages into image files and prepare selected pages or complete documents for sharing, web use, presentations, or editing."
         heroImage="/tool-images/pdf-to-image-hero.png"
-        mainContent={`PDF to Image converts your PDF pages into high-quality image files instantly. Perfect for sharing PDF content on social media, editing pages in image editors, or creating visual previews.
+        mainContent={`PDF to Image turns supported PDF pages into image files. This can be useful when a page needs to be displayed as a visual preview, shared on a platform that expects an image, placed into a presentation, or opened in an image-editing workflow.
 
-Convert individual PDF pages or entire documents to JPG, PNG, or other image formats. Choose quality and resolution settings to match your needs. Perfect for web use, email sharing, or print preparation.
+Choose the image format and quality settings that fit your purpose. JPG can be useful for compact photographic content, while PNG can be preferable when sharp text, diagrams, or transparency-related requirements matter. Higher resolution can improve readability but may also increase file size.
 
-Our conversion process is fast and secure. Your files are processed instantly and deleted automatically. No registration required, no watermarks, completely free.`}
-        useCase={`Converting PDF pages for social media sharing
-Creating image previews of PDF documents
-Editing PDF pages in photo editors
-Preparing documents for web display
-Archiving documents as image files
-Creating thumbnails from PDF pages
-Extracting specific pages as images for presentations`}
+For important documents, review the generated images before publishing or printing. Check page order, text clarity, margins, graphics, signatures, and any content near the page edges. Keep the original PDF when you may need to regenerate images at a different resolution or format.`}
+        useCase={[
+          'Creating visual previews of PDF pages',
+          'Sharing PDF pages as images',
+          'Preparing pages for social platforms',
+          'Adding PDF pages to presentations',
+          'Editing page images in graphics software',
+          'Creating web thumbnails',
+          'Extracting selected pages as images',
+          'Preparing visual document archives',
+        ].join('\n')}
         features={[
-        'Convert to JPG, PNG, or WebP',
-        'Convert all pages or select individual pages',
-        'High-quality image output',
-        'Adjustable resolution and quality',
-        'Preserve text and graphics',
-        'Batch convert multiple PDFs',
-        'Download all at once',
-        'Works on all devices',
-      ]}
+          'Convert supported PDF pages to images',
+          'JPG and PNG output workflows',
+          'Select pages or convert a document',
+          'Adjust available quality and resolution settings',
+          'Useful output for web and presentations',
+          'Browser-based PDF processing',
+          'Mobile and desktop browser access',
+          'Related PDF and image tools',
+        ]}
         benefits={[
-        'Share PDF content easily',
-        'Edit pages in image editors',
-        'Perfect for social media',
-        'Universal image formats',
-        'Easy web integration',
-        'Better preview capabilities',
-        'Flexible editing options',
-        'Professional image quality',
-      ]}
-        testimonials={[
-        {
-          name: 'Michelle D.',
-          role: 'Content Creator',
-          text: 'PDF to Image is essential for my workflow. Converting PDF pages to images for social media is instant and the quality is excellent.',
-        },
-        {
-          name: 'Patrick L.',
-          role: 'Designer',
-          text: 'Perfect tool for converting PDF documents to images for editing in Photoshop. Quality is impressive and process is fast.',
-        },
-        {
-          name: 'Amanda S.',
-          role: 'Blogger',
-          text: 'Using PDF to Image daily to create visual content. Easy to use and produces perfect results every time.',
-        },
-      ]}
+          'Share individual PDF pages as visual files',
+          'Create previews and thumbnails',
+          'Prepare pages for image-editing workflows',
+          'Use PDF content in presentations',
+          'Choose output settings for quality or size',
+          'Review image output before distribution',
+        ]}
+        testimonials={[]}
         relatedTools={[
-        { name: 'Image to PDF', slug: 'image-to-pdf' },
-        { name: 'PDF to Word', slug: 'pdf-to-word' },
-        { name: 'Compress PDF', slug: 'compress-pdf' },
-        { name: 'Merge PDF', slug: 'merge-pdf' },
-      ]}
+          { name: 'Image to PDF', slug: 'image-to-pdf' },
+          { name: 'PDF to Word', slug: 'pdf-to-word' },
+          { name: 'Compress PDF', slug: 'compress-pdf' },
+          { name: 'Merge PDF', slug: 'merge-pdf' },
+        ]}
         faqs={[
-        {
-          q: 'How do I convert PDF pages to images?',
-          a: 'Upload your PDF, choose image format (JPG, PNG, etc.), select which pages to convert (all or specific), choose quality, and download. Done in seconds!',
-        },
-        {
-          q: 'Can I convert only specific PDF pages?',
-          a: 'Yes! Select individual pages, page ranges, or all pages. Convert exactly the pages you need.',
-        },
-        {
-          q: 'What image formats are available?',
-          a: 'Convert to JPG, PNG, WebP, and other formats. Choose the format that best fits your needs.',
-        },
-        {
-          q: 'Can I adjust image quality?',
-          a: 'Yes! Choose quality settings from high-quality to compressed. Balance between file size and image quality.',
-        },
-        {
-          q: 'What about resolution settings?',
-          a: 'Set custom DPI (resolution). Higher DPI means larger files but better quality. Choose based on your use case.',
-        },
-        {
-          q: 'Can I batch convert multiple PDFs?',
-          a: 'Yes! Upload multiple PDFs and convert all at once. Download all image files together.',
-        },
-        {
-          q: 'How fast is the conversion?',
-          a: 'Most conversions complete in seconds. Larger files or high-resolution conversions may take a bit longer.',
-        },
-        {
-          q: 'Will text and graphics be clear in the images?',
-          a: 'Yes! All text, graphics, and formatting are preserved. Images will look exactly like the PDF pages.',
-        },
-        {
-          q: 'Is my PDF secure during conversion?',
-          a: 'Completely secure. Your PDF is encrypted, processed, and automatically deleted within 24 hours. Never shared or stored.',
-        },
-        {
-          q: 'Can I use converted images for commercial purposes?',
-          a: 'Yes! Your converted images are yours to use freely. Use them for any purpose you like.',
-        },
-        {
-          q: 'Works on mobile devices?',
-          a: 'Absolutely! Convert PDFs to images on phones, tablets, or computers. Works perfectly on all devices.',
-        },
-        {
-          q: 'Is there a cost?',
-          a: '100% free! Unlimited conversions, no registration, no hidden fees. Convert as many PDFs as you need.',
-        },
-      ]}
+          { q: 'How do I convert PDF pages to images?', a: 'Open PDF to Image, upload a supported PDF, choose the available image format and page options, start the conversion, review the output, and download the resulting images.' },
+          { q: 'Can I convert only selected PDF pages?', a: 'If page selection is available in the current workflow, you can choose the pages you need instead of converting the entire document.' },
+          { q: 'Can I convert PDF to JPG?', a: 'Yes, JPG is a common output format for converting PDF pages into shareable image files when supported by the workflow.' },
+          { q: 'Can I convert PDF to PNG?', a: 'Yes, supported PDF pages can be rendered as PNG images through the available conversion workflow.' },
+          { q: 'Which is better, JPG or PNG?', a: 'JPG can be useful when smaller files are important, while PNG can be useful for sharp text, diagrams, or graphics. Choose based on the content and intended use.' },
+          { q: 'Can I adjust image quality or resolution?', a: 'Available quality and resolution settings depend on the current tool configuration. Higher resolution generally improves detail while increasing output size.' },
+          { q: 'Will the text remain readable?', a: 'Readability depends on the source PDF, page size, output resolution, and image format. Review text at the intended display or print size before distribution.' },
+          { q: 'Can I use PDF pages as images in a presentation?', a: 'Yes. Converting individual pages to images can make it easier to place document pages into slides or other visual layouts.' },
+          { q: 'Can I create web previews from a PDF?', a: 'Yes. PDF pages can be converted into images for thumbnails or visual previews when the output meets your website requirements.' },
+          { q: 'Can I convert a PDF on my phone?', a: 'The browser-based workflow can be accessed from supported phones, tablets, and desktop browsers.' },
+          { q: 'Does converting a PDF to an image preserve links and form fields?', a: 'An image represents the visual appearance of a page. Interactive PDF features such as form fields, embedded links, and selectable text generally do not remain interactive in a raster image.' },
+          { q: 'Should I keep the original PDF?', a: 'Yes. Keep the original PDF until you have checked the image output and confirmed that the resolution, page order, and visual content meet your needs.' },
+          { q: 'Is PDF to Image free?', a: 'PDFilio provides the online PDF-to-image workflow; current usage limits, account requirements, and available features depend on the product configuration shown in the interface.' },
+        ]}
         primaryKeyword="PDF to image"
-        secondaryKeywords={['convert PDF to image', 'PDF to JPG', 'PDF to PNG', 'extract PDF as image']}
+        secondaryKeywords={['convert PDF to image', 'PDF to JPG', 'PDF to PNG', 'PDF page to image', 'PDF image converter']}
       />
     </>
   );
