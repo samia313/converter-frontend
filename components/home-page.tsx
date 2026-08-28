@@ -9,108 +9,24 @@ import HeroAnimation from './hero-animation';
 import UnifiedToolsGrid from './unified-tools-grid';
 import { animationVariants } from '@/lib/animations';
 
-interface HomePageProps {
-  onSelectTool: (toolId: string) => void;
-}
+interface HomePageProps { onSelectTool: (toolId: string) => void; }
 
 export default function HomePage({ onSelectTool }: HomePageProps) {
-  const scrollToTools = () => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' });
-
-  return (
-    <div className="w-full">
-      <section className="relative py-12 px-4 sm:px-6 lg:px-8 text-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden flex items-center justify-center" style={{ minHeight: '450px' }}>
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-sky-500/20 rounded-full blur-3xl opacity-30 animate-pulse" />
-          <div className="absolute -bottom-8 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl opacity-30 animate-pulse" />
-        </div>
-        <HeroAnimation />
-        <div className="max-w-5xl mx-auto relative z-10">
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-4 py-2 bg-sky-500/20 border border-sky-500/50 text-sky-300 rounded-full font-bold text-xs mb-8 tracking-widest backdrop-blur-sm">
-            <span className="w-2 h-2 bg-sky-500 rounded-full animate-pulse" />
-            AI PDF TOOLKIT
-          </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight">
-            Chat with PDFs, Translate Documents,
-            <br />
-            <span className="bg-gradient-to-r from-sky-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">Summarize Reports & Convert Files using AI</span>
-          </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }} className="text-base sm:text-lg text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Professional PDF tools for converting, compressing, merging, splitting, editing, translating, and working with supported AI document features.
-          </motion.p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <motion.button onClick={scrollToTools} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="px-8 py-4 bg-gradient-to-r from-blue-500 to-sky-600 text-white rounded-lg shadow-lg font-bold flex items-center justify-center gap-2 text-base">
-              Start Free <ChevronRight className="w-5 h-5" />
-            </motion.button>
-            <motion.button onClick={scrollToTools} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="px-8 py-4 border-2 border-sky-500 text-sky-400 rounded-lg hover:bg-sky-500/10 font-bold text-base backdrop-blur-sm">
-              Browse Tools
-            </motion.button>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center text-sm text-gray-300">
-            <div className="flex items-center gap-2"><span className="text-xl">🔒</span><span>Secure Processing</span></div>
-            <div className="flex items-center gap-2"><span className="text-xl">⚡</span><span>Fast Workflows</span></div>
-            <div className="flex items-center gap-2"><span className="text-xl">🌍</span><span>Multilingual Tools</span></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="tools" className="relative py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-transparent -z-10" />
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-6 border border-blue-200">
-              <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-              <span className="text-blue-700 font-bold text-sm tracking-widest">AI TOOLS</span>
-            </div>
-            <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Advanced AI Tools</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">Process and analyze documents with the AI features currently available in PDFilio.</p>
-          </div>
-          <motion.div variants={animationVariants.staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {toolsByCategory.ai.map((tool) => {
-              const Icon = tool.icon;
-              return (
-                <motion.button key={tool.id} onClick={() => onSelectTool(tool.id)} variants={animationVariants.staggerItem} whileHover={{ y: -8 }} className="group relative bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-2xl transition-all duration-500 text-left overflow-hidden">
-                  <div className="relative z-10">
-                    <div className="flex items-start justify-between mb-6">
-                      <div className="w-16 h-16 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-br from-blue-500 to-purple-500"><Icon className="w-8 h-8 text-white" /></div>
-                      {tool.badge && <span className="px-3 py-1.5 bg-amber-100 text-amber-700 text-xs font-bold rounded-full border border-amber-200">{tool.badge}</span>}
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600">{tool.name}</h3>
-                    <p className="text-gray-600 text-sm mb-6 leading-relaxed">{tool.description}</p>
-                    <div className="flex items-center gap-2 text-blue-600 font-bold text-sm">Try Now <ChevronRight className="w-4 h-4" /></div>
-                  </div>
-                </motion.button>
-              );
-            })}
-          </motion.div>
-        </div>
-      </section>
-
-      <FeatureCardsGrid />
-      <TrustIndicators />
-      <UnifiedToolsGrid />
-
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-blue-50 to-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6">Why PDFilio</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">A focused toolkit for supported PDF and document workflows.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              ['⚡', 'Fast Workflows', 'Efficient processing for supported document tools.'],
-              ['🧩', 'Many PDF Tools', 'One place for common PDF organization and conversion tasks.'],
-              ['🤖', 'AI Features', 'AI-powered document capabilities where available.'],
-              ['🌍', 'Accessible', 'Simple browser-based access with multilingual options where supported.'],
-            ].map(([icon, title, description]) => (
-              <div key={title} className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-all">
-                <div className="text-4xl mb-4">{icon}</div>
-                <h3 className="font-bold text-gray-900 mb-2">{title}</h3>
-                <p className="text-gray-600 text-sm">{description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </div>
-  );
+ const scrollToTools=()=>document.getElementById('tools')?.scrollIntoView({behavior:'smooth'});
+ return <div className="w-full overflow-x-hidden">
+  <section className="relative flex min-h-[560px] items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-12 text-center sm:min-h-[600px] sm:px-6 sm:py-16 lg:px-8">
+   <div className="pointer-events-none absolute inset-0 overflow-hidden"><div className="absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-sky-500/20 blur-3xl sm:left-1/4 sm:h-96 sm:w-96 sm:translate-x-0"/><div className="absolute -bottom-12 right-0 h-64 w-64 rounded-full bg-blue-500/20 blur-3xl sm:right-1/4 sm:h-96 sm:w-96"/></div>
+   <HeroAnimation/>
+   <div className="relative z-10 mx-auto w-full max-w-5xl">
+    <motion.div initial={{opacity:0,y:-20}} animate={{opacity:1,y:0}} transition={{duration:.6}} className="mx-auto mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-sky-500/50 bg-sky-500/20 px-3 py-2 text-[10px] font-bold tracking-[.18em] text-sky-300 backdrop-blur-sm sm:mb-8 sm:px-4 sm:text-xs"><span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-sky-500"/>AI PDF TOOLKIT</motion.div>
+    <motion.h1 initial={{opacity:0,y:30}} animate={{opacity:1,y:0}} transition={{duration:.8,delay:.2}} className="text-3xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">Chat with PDFs, Translate Documents,<br className="hidden sm:block"/> <span className="bg-gradient-to-r from-sky-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">Summarize Reports &amp; Convert Files using AI</span></motion.h1>
+    <motion.p initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8,delay:.3}} className="mx-auto mb-7 mt-5 max-w-3xl text-sm leading-6 text-gray-300 sm:mb-8 sm:mt-6 sm:text-lg sm:leading-relaxed">Professional PDF tools for converting, compressing, merging, splitting, editing, translating, and working with supported AI document features.</motion.p>
+    <div className="mx-auto mb-7 grid w-full max-w-xl grid-cols-1 gap-3 sm:mb-8 sm:flex sm:max-w-none sm:justify-center sm:gap-4"><motion.button onClick={scrollToTools} whileHover={{scale:1.03}} whileTap={{scale:.98}} className="min-h-12 w-full rounded-lg bg-gradient-to-r from-blue-500 to-sky-600 px-6 py-3 text-base font-bold text-white shadow-lg sm:w-auto sm:px-8 sm:py-4">Start Free <ChevronRight className="inline h-5 w-5"/></motion.button><motion.button onClick={scrollToTools} whileHover={{scale:1.03}} whileTap={{scale:.98}} className="min-h-12 w-full rounded-lg border-2 border-sky-500 px-6 py-3 text-base font-bold text-sky-400 backdrop-blur-sm hover:bg-sky-500/10 sm:w-auto sm:px-8 sm:py-4">Browse Tools</motion.button></div>
+    <div className="grid grid-cols-1 justify-center gap-3 text-sm text-gray-300 sm:grid-cols-3 sm:gap-6"><div className="flex items-center justify-center gap-2">🔒 <span>Secure Processing</span></div><div className="flex items-center justify-center gap-2">⚡ <span>Fast Workflows</span></div><div className="flex items-center justify-center gap-2">🌍 <span>Multilingual Tools</span></div></div>
+   </div>
+  </section>
+  <section id="tools" className="relative overflow-hidden px-4 py-12 sm:px-6 sm:py-16 lg:px-8"><div className="absolute inset-0 -z-10 bg-gradient-to-br from-blue-50 via-purple-50 to-transparent"/><div className="relative z-10 mx-auto w-full max-w-7xl"><div className="mb-9 text-center sm:mb-12"><div className="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-gradient-to-r from-blue-100 to-purple-100 px-3 py-2 sm:px-4"><span className="h-2 w-2 animate-pulse rounded-full bg-blue-500"/><span className="text-xs font-bold tracking-widest text-blue-700 sm:text-sm">AI TOOLS</span></div><h2 className="text-3xl font-black leading-tight text-gray-900 sm:text-5xl lg:text-6xl">Advanced AI Tools</h2><p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-gray-600 sm:text-xl">Process and analyze documents with the AI features currently available in PDFilio.</p></div><motion.div variants={animationVariants.staggerContainer} initial="hidden" whileInView="visible" viewport={{once:true,margin:'-100px'}} className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">{toolsByCategory.ai.map(tool=>{const Icon=tool.icon;return <motion.button key={tool.id} onClick={()=>onSelectTool(tool.id)} variants={animationVariants.staggerItem} whileHover={{y:-6}} className="group relative min-h-[230px] min-w-0 rounded-2xl border border-gray-200 bg-white p-5 text-left shadow-sm transition-all duration-300 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 sm:p-7"><div className="flex h-full flex-col"><div className="mb-5 flex items-start justify-between gap-3"><div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 shadow-lg sm:h-16 sm:w-16"><Icon className="h-7 w-7 text-white sm:h-8 sm:w-8"/></div>{tool.badge&&<span className="shrink-0 rounded-full border border-amber-200 bg-amber-100 px-2.5 py-1.5 text-[10px] font-bold text-amber-700 sm:text-xs">{tool.badge}</span>}</div><h3 className="break-words text-lg font-bold text-gray-900 group-hover:text-blue-600 sm:text-xl">{tool.name}</h3><p className="mt-2 flex-1 break-words text-sm leading-6 text-gray-600">{tool.description}</p><span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-blue-600">Try Now <ChevronRight className="h-4 w-4"/></span></div></motion.button>})}</motion.div></div></section>
+  <FeatureCardsGrid/><TrustIndicators/><UnifiedToolsGrid/>
+  <section className="bg-gradient-to-br from-white via-blue-50 to-white px-4 py-14 sm:px-6 sm:py-20 lg:px-8"><div className="mx-auto w-full max-w-7xl"><div className="mb-9 text-center sm:mb-12"><h2 className="text-3xl font-black text-gray-900 sm:text-5xl">Why PDFilio</h2><p className="mx-auto mt-4 max-w-3xl text-base text-gray-600 sm:text-xl">A focused toolkit for supported PDF and document workflows.</p></div><div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">{[['⚡','Fast Workflows','Efficient processing for supported document tools.'],['🧩','Many PDF Tools','One place for common PDF organization and conversion tasks.'],['🤖','AI Features','AI-powered document capabilities where available.'],['🌍','Accessible','Simple browser-based access with multilingual options where supported.']].map(([icon,title,description])=><div key={title} className="min-w-0 rounded-xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:shadow-lg sm:p-7"><div className="mb-3 text-3xl sm:text-4xl">{icon}</div><h3 className="mb-2 font-bold text-gray-900">{title}</h3><p className="break-words text-sm leading-6 text-gray-600">{description}</p></div>)}</div></div></section>
+ </div>;
 }
