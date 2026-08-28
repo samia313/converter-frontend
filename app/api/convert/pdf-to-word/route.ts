@@ -14,13 +14,10 @@ function normalizeText(value: string): string {
 }
 
 async function extractPdfText(pdfBuffer: Buffer): Promise<string> {
-  // pdfjs-dist is used instead of creating a DOCX wrapper around the PDF.
-  // This extracts the actual text items from every PDF page.
   const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
   const loadingTask = pdfjs.getDocument({
     data: new Uint8Array(pdfBuffer),
     useWorkerFetch: false,
-    isEvalSupported: false,
     disableFontFace: true,
     verbosity: 0,
   });
@@ -68,20 +65,14 @@ async function extractPdfText(pdfBuffer: Buffer): Promise<string> {
 
 async function createWordDocument(text: string): Promise<Buffer> {
   const paragraphs = text.split(/\r?\n/).map(
-    (line) =>
-      new Paragraph({
-        children: [new TextRun({ text: line })],
-        spacing: { after: 100 },
-      }),
+    (line) => new Paragraph({
+      children: [new TextRun({ text: line })],
+      spacing: { after: 100 },
+    }),
   );
 
   const document = new Document({
-    sections: [
-      {
-        properties: {},
-        children: paragraphs.length ? paragraphs : [new Paragraph('')],
-      },
-    ],
+    sections: [{ properties: {}, children: paragraphs.length ? paragraphs : [new Paragraph('')] }],
   });
 
   return Packer.toBuffer(document);
@@ -105,7 +96,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'File is empty' }, { status: 400 });
     }
 
-    // Validate the source before attempting extraction.
     const pdfDoc = await PDFDocument.load(pdfBuffer, { ignoreEncryption: true });
     const pageCount = pdfDoc.getPageCount();
     if (pageCount < 1) {
@@ -123,13 +113,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Never return fake conversion metadata as document content.
     if (!extractedText.trim()) {
       return NextResponse.json(
-        {
-          error:
-            'No selectable text was found in this PDF. This PDF may be scanned/image-only and requires OCR.',
-        },
+        { error: 'No selectable text was found in this PDF. This PDF may be scanned/image-only and requires OCR.' },
         { status: 422 },
       );
     }
@@ -153,10 +139,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('[pdf-to-word] Conversion error:', error);
     return NextResponse.json(
-      {
-        error: 'Conversion failed',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
+      { error: 'Conversion failed', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 },
     );
   }
