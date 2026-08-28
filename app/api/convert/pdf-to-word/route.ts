@@ -1,142 +1,163 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument } from 'pdf-lib';
-import JSZip from 'jszip';
+import { Document, Packer, Paragraph, TextRun } from 'docx';
 
-export const maxDuration = 30;
+export const runtime = 'nodejs';
+export const maxDuration = 60;
 
-async function createWordDocument(text: string, fileName: string): Promise<Buffer> {
+function normalizeText(value: string): string {
+  return value
+    .replace(/\u0000/g, '')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/ *\n */g, '\n')
+    .trim();
+}
+
+async function extractPdfText(pdfBuffer: Buffer): Promise<string> {
+  // pdfjs-dist is used instead of creating a DOCX wrapper around the PDF.
+  // This extracts the actual text items from every PDF page.
+  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+  const loadingTask = pdfjs.getDocument({
+    data: new Uint8Array(pdfBuffer),
+    useWorkerFetch: false,
+    isEvalSupported: false,
+    disableFontFace: true,
+    verbosity: 0,
+  });
+
+  const pdf = await loadingTask.promise;
+  const pages: string[] = [];
+
   try {
-    const zip = new JSZip();
+    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+      const page = await pdf.getPage(pageNumber);
+      const content = await page.getTextContent();
+      const items = content.items as Array<{
+        str?: string;
+        hasEOL?: boolean;
+        transform?: number[];
+      }>;
 
-    // Add [Content_Types].xml
-    const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-  <Default Extension="xml" ContentType="application/xml"/>
-  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
-</Types>`;
-    zip.file('[Content_Types].xml', contentTypes);
+      let pageText = '';
+      let previousY: number | null = null;
 
-    // Add _rels/.rels
-    const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
-</Relationships>`;
-    zip.folder('_rels')?.file('.rels', rels);
+      for (const item of items) {
+        const value = item.str ?? '';
+        if (!value) continue;
 
-    // Add word/document.xml with actual content
-    const paragraphs = text.split('\n').map((para) => {
-      const escapedText = para
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&apos;');
-      
-      return `<w:p><w:r><w:t>${escapedText}</w:t></w:r></w:p>`;
-    }).join('');
+        const y = item.transform?.[5] ?? null;
+        if (previousY !== null && y !== null && Math.abs(previousY - y) > 3) {
+          pageText += '\n';
+        } else if (pageText && !pageText.endsWith('\n') && !pageText.endsWith(' ')) {
+          pageText += ' ';
+        }
 
-    const document = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-  <w:body>
-    ${paragraphs}
-  </w:body>
-</w:document>`;
-    zip.folder('word')?.file('document.xml', document);
+        pageText += value;
+        if (item.hasEOL) pageText += '\n';
+        previousY = y;
+      }
 
-    const buffer = await zip.generateAsync({ type: 'nodebuffer' });
-    console.log('[v0] DOCX created successfully, size:', buffer.length);
-    return buffer;
-  } catch (err) {
-    console.error('[v0] DOCX creation error:', err);
-    // Fallback to plain text
-    return Buffer.from(text, 'utf-8');
+      pages.push(normalizeText(pageText));
+    }
+  } finally {
+    await pdf.destroy();
   }
+
+  return pages.filter(Boolean).join('\n\n');
+}
+
+async function createWordDocument(text: string): Promise<Buffer> {
+  const paragraphs = text.split(/\r?\n/).map(
+    (line) =>
+      new Paragraph({
+        children: [new TextRun({ text: line })],
+        spacing: { after: 100 },
+      }),
+  );
+
+  const document = new Document({
+    sections: [
+      {
+        properties: {},
+        children: paragraphs.length ? paragraphs : [new Paragraph('')],
+      },
+    ],
+  });
+
+  return Packer.toBuffer(document);
 }
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const file = formData.get('file') as File;
+    const file = formData.get('file');
 
-    if (!file) {
-      return NextResponse.json(
-        { error: 'No file provided' },
-        { status: 400 }
-      );
+    if (!(file instanceof File)) {
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    if (!file.type.includes('pdf') && !file.name.endsWith('.pdf')) {
-      return NextResponse.json(
-        { error: 'File must be a PDF' },
-        { status: 400 }
-      );
+    if (!file.name.toLowerCase().endsWith('.pdf') && !file.type.includes('pdf')) {
+      return NextResponse.json({ error: 'File must be a PDF' }, { status: 400 });
     }
 
-    console.log('[v0] Converting PDF to Word for file:', file.name);
-
-    const arrayBuffer = await file.arrayBuffer();
-    const pdfBuffer = Buffer.from(arrayBuffer);
-
-    // Validate file size
+    const pdfBuffer = Buffer.from(await file.arrayBuffer());
     if (pdfBuffer.length === 0) {
-      return NextResponse.json(
-        { error: 'File is empty' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'File is empty' }, { status: 400 });
     }
 
-    // Verify PDF structure is valid
+    // Validate the source before attempting extraction.
+    const pdfDoc = await PDFDocument.load(pdfBuffer, { ignoreEncryption: true });
+    const pageCount = pdfDoc.getPageCount();
+    if (pageCount < 1) {
+      return NextResponse.json({ error: 'PDF contains no pages' }, { status: 400 });
+    }
+
+    let extractedText = '';
     try {
-      const pdfDoc = await PDFDocument.load(pdfBuffer, { ignoreEncryption: true });
-      const pageCount = pdfDoc.getPageCount();
-      console.log(`[v0] PDF validated - ${pageCount} pages`);
-    } catch (err) {
-      console.error('[v0] Invalid PDF file:', err);
+      extractedText = await extractPdfText(pdfBuffer);
+    } catch (extractError) {
+      console.error('[pdf-to-word] Text extraction failed:', extractError);
       return NextResponse.json(
-        { error: 'Invalid or corrupted PDF file' },
-        { status: 400 }
+        { error: 'Could not extract text from this PDF. It may be scanned/image-only or encrypted.' },
+        { status: 422 },
       );
     }
 
-    // Create a DOCX wrapper with PDF reference
-    const pdfContent = `PDF to Word Conversion\n${'='.repeat(50)}\n\nSource PDF: ${file.name}\nOriginal Format: PDF\nStatus: Successfully converted\n\n${'='.repeat(50)}\n\nNote: For detailed text extraction from complex PDFs, please use:
-- Adobe Acrobat (professional extraction)
-- Google Docs (upload PDF directly)
-- Online PDF to Word converters
-- OCR tools for scanned documents\n\nYour PDF file has been received and is ready for processing.\nFile size: ${(pdfBuffer.length / 1024).toFixed(2)} KB`;
-
-    // Create Word document
-    const wordBuffer = await createWordDocument(pdfContent, file.name);
-    
-    // Validate output
-    if (wordBuffer.length === 0) {
+    // Never return fake conversion metadata as document content.
+    if (!extractedText.trim()) {
       return NextResponse.json(
-        { error: 'Word document creation resulted in empty file' },
-        { status: 500 }
+        {
+          error:
+            'No selectable text was found in this PDF. This PDF may be scanned/image-only and requires OCR.',
+        },
+        { status: 422 },
       );
     }
 
-    const fileName = file.name.replace(/\.pdf$/i, '.docx');
+    const wordBuffer = await createWordDocument(extractedText);
+    if (!wordBuffer.length) {
+      return NextResponse.json({ error: 'Word document creation failed' }, { status: 500 });
+    }
 
-    console.log('[v0] Word document created successfully, size:', wordBuffer.length, 'bytes');
+    const fileName = file.name.replace(/\.pdf$/i, '') + '.docx';
 
-    return new NextResponse(wordBuffer, {
+    return new NextResponse(wordBuffer as BodyInit, {
       headers: {
         'Content-Disposition': `attachment; filename="${fileName}"`,
         'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Content-Length': String(wordBuffer.length),
+        'X-Converted-Pages': String(pageCount),
       },
     });
   } catch (error) {
-    console.error('[v0] PDF to Word conversion error:', error);
+    console.error('[pdf-to-word] Conversion error:', error);
     return NextResponse.json(
-      { 
+      {
         error: 'Conversion failed',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
