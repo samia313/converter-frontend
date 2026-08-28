@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { guides } from '@/lib/content/how-to-guides'
+import { editorialBlogPosts } from '@/lib/content/editorial-blog-posts'
 
 const BASE_URL = 'https://pdfilio.com'
 
@@ -19,7 +20,6 @@ const staticPages = [
   { path: '/faq', priority: 0.6, changeFrequency: 'monthly' as const },
 ]
 
-// Only include canonical tool routes that are backed by actual app routes.
 const toolPages = [
   'merge-pdf','split-pdf','rotate-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf',
   'word-to-pdf','excel-to-pdf','powerpoint-to-pdf','jpg-to-pdf','html-to-pdf','image-to-pdf',
@@ -33,13 +33,27 @@ const longTailGuides = guides.map((guide) => ({
   changeFrequency: 'monthly' as const,
 }))
 
+const editorialBlogPages = editorialBlogPosts.map((post) => ({
+  path: `/blog/${post.slug}`,
+  priority: post.featured ? 0.8 : 0.7,
+  changeFrequency: 'monthly' as const,
+  lastModified: new Date(post.updatedAt),
+}))
+
 function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
   const seen = new Set<string>()
-  return entries.filter((entry) => { if (seen.has(entry.url)) return false; seen.add(entry.url); return true })
+  return entries.filter((entry) => {
+    if (seen.has(entry.url)) return false
+    seen.add(entry.url)
+    return true
+  })
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return uniqueEntries([...staticPages, ...toolPages, ...longTailGuides].map((page) => ({
-    url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority,
-  })))
+  return uniqueEntries([
+    ...staticPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority })),
+    ...toolPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority })),
+    ...longTailGuides.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority })),
+    ...editorialBlogPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority, lastModified: page.lastModified })),
+  ])
 }
