@@ -2,10 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import {
-  Merge, Scissors, RotateCw, Trash2, Zap, FileDown, FileUp, Grid, Image, Code,
-  Edit, Stamp, Hash, Eye, Crop, Lock, Unlock, PenTool, ScanText, Sparkles, MessageCircle,
-} from 'lucide-react';
+import { Merge, Scissors, RotateCw, Trash2, Zap, FileDown, FileUp, Grid, Image, Code, Edit, Stamp, Hash, Eye, Crop, Lock, Unlock, PenTool, ScanText, Sparkles, MessageCircle } from 'lucide-react';
 import { animationVariants } from '@/lib/animations';
 
 const allTools = [
@@ -39,36 +36,5 @@ const allTools = [
 ];
 
 export default function UnifiedToolsGrid() {
-  return (
-    <section className="pt-2 pb-12 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-7xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
-          <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6">Your Complete PDF Toolkit</h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">27+ professional tools to handle any PDF task. Convert, merge, split, compress, protect, and more - all free and easy to use.</p>
-        </motion.div>
-
-        <motion.div variants={animationVariants.staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {allTools.map((tool) => {
-            const Icon = tool.icon;
-            return (
-              <motion.div key={tool.id} variants={animationVariants.staggerItem}>
-                <Link
-                  href={tool.href}
-                  aria-label={`Open ${tool.name}`}
-                  className="group relative block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-300 cursor-pointer overflow-hidden text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className={`${tool.color} w-14 h-14 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-md`}><Icon className="w-7 h-7 text-white" /></div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors">{tool.name}</h3>
-                  <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors">{tool.description}</p>
-                  <div className="mt-4 text-xs font-semibold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">Open tool →</div>
-                  <div className="absolute bottom-0 left-0 w-0 group-hover:w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300" />
-                </Link>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-      </div>
-    </section>
-  );
+  return <section className="pt-2 pb-12 px-4 sm:px-6 lg:px-8 bg-white"><div className="max-w-7xl mx-auto"><motion.div initial={{opacity:0,y:20}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:.6}} className="text-center mb-12"><h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6">PDF Tools</h2><p className="text-xl text-gray-600 max-w-3xl mx-auto">27 PDF tools are currently listed here. Features, supported formats, limits, and access can vary by tool.</p></motion.div><motion.div variants={animationVariants.staggerContainer} initial="hidden" whileInView="visible" viewport={{once:true}} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">{allTools.map(tool=>{const Icon=tool.icon;return <motion.div key={tool.id} variants={animationVariants.staggerItem}><Link href={tool.href} aria-label={`Open ${tool.name}`} className="group relative block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-300 cursor-pointer overflow-hidden text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"><div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"/><div className={`${tool.color} w-14 h-14 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-md`}><Icon className="w-7 h-7 text-white"/></div><h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors">{tool.name}</h3><p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors">{tool.description}</p><div className="mt-4 text-xs font-semibold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">Open tool →</div><div className="absolute bottom-0 left-0 w-0 group-hover:w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"/></Link></motion.div>})}</motion.div></div></section>;
 }
