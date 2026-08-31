@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Script from 'next/script'
+import { Analytics } from '@vercel/analytics/next'
 
 const CONSENT_KEY = 'pdfilio-consent-v1'
 
@@ -17,7 +18,7 @@ export default function PrivacyConsent() {
       const saved = window.localStorage.getItem(CONSENT_KEY)
       if (saved === 'accepted' || saved === 'necessary') setChoice(saved)
     } catch {
-      // If storage is unavailable, keep third-party scripts disabled.
+      // If storage is unavailable, keep optional technologies disabled.
     }
   }, [])
 
@@ -37,6 +38,18 @@ export default function PrivacyConsent() {
       {choice === 'accepted' && (
         <>
           <Script
+            id="pdfilio-ga4-src"
+            strategy="afterInteractive"
+            src="https://www.googletagmanager.com/gtag/js?id=G-BCT792X91Q"
+          />
+          <Script
+            id="pdfilio-ga4"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BCT792X91Q',{anonymize_ip:true});`,
+            }}
+          />
+          <Script
             id="pdfilio-gtm"
             strategy="afterInteractive"
             dangerouslySetInnerHTML={{
@@ -50,6 +63,7 @@ export default function PrivacyConsent() {
             crossOrigin="anonymous"
             strategy="afterInteractive"
           />
+          {process.env.NODE_ENV === 'production' && <Analytics />}
         </>
       )}
 
