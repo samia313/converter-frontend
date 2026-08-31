@@ -57,7 +57,9 @@ async function extractPdfText(pdfBuffer: Buffer): Promise<string> {
       pages.push(normalizeText(pageText));
     }
   } finally {
-    await pdf.destroy();
+    // PDFDocumentProxy in the installed pdfjs-dist typings does not expose
+    // destroy(); the loading task owns the worker lifecycle.
+    await loadingTask.destroy();
   }
 
   return pages.filter(Boolean).join('\n\n');
