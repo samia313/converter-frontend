@@ -29,16 +29,7 @@ export default function MergePDFPage() {
 A typical workflow is to upload the PDFs, arrange them in the required order when the interface provides reordering controls, create the merged document, review the result, and download the final PDF. The final output can depend on the source PDFs and the current processing workflow.
 
 For important documents, review page order, page size, orientation, bookmarks, forms, links, annotations, and other document features after merging. Keep the original files if you may need to create a different combined document later.`}
-        useCase={[
-          'Combining reports into one document',
-          'Merging chapters or sections into a single PDF',
-          'Organizing contract and application documents',
-          'Creating a unified project document',
-          'Combining meeting notes and supporting files',
-          'Assembling financial statements and reports',
-          'Preparing documents for submission',
-          'Creating a single PDF for sharing and archiving',
-        ] as any}
+        useCase={'Combining reports into one document\nMerging chapters or sections into a single PDF\nOrganizing contract and application documents\nCreating a unified project document\nCombining meeting notes and supporting files\nAssembling financial statements and reports\nPreparing documents for submission\nCreating a single PDF for sharing and archiving'}
         features={['Combine multiple supported PDFs', 'Arrange files before merging', 'Create a single PDF output', 'Review the result before download']}
         benefits={['Simplify document sharing', 'Organize related files', 'Prepare submissions more efficiently', 'Keep the original files available for backup']}
         faqs={[
