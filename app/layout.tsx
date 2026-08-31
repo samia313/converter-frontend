@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import LiveChatWidget from '@/components/live-chat-widget'
 import StructuredData from '@/components/structured-data'
 import PrivacyConsent from '@/components/privacy-consent'
+import AdSenseScript from '@/components/adsense-script'
 import Footer from '@/components/footer'
 import './globals.css'
 
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Footer />
         <LiveChatWidget />
         <PrivacyConsent />
+        <AdSenseScript />
       </body>
     </html>
   )
