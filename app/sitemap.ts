@@ -1,8 +1,10 @@
 import type { MetadataRoute } from 'next'
-import { guides } from '@/lib/content/how-to-guides'
+import { guides as coreGuides } from '@/lib/content/how-to-guides'
+import { additionalGuides } from '@/lib/content/additional-guides'
 import { editorialBlogPosts } from '@/lib/content/editorial-blog-posts'
 
 const BASE_URL = 'https://pdfilio.com'
+const guides = [...coreGuides, ...additionalGuides]
 
 const staticPages = [
   { path: '/', priority: 1.0, changeFrequency: 'weekly' as const },
@@ -17,6 +19,7 @@ const staticPages = [
   { path: '/contact', priority: 0.5, changeFrequency: 'monthly' as const },
   { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' as const },
   { path: '/terms', priority: 0.3, changeFrequency: 'yearly' as const },
+  { path: '/cookies', priority: 0.3, changeFrequency: 'yearly' as const },
   { path: '/faq', priority: 0.6, changeFrequency: 'monthly' as const },
 ]
 
@@ -27,26 +30,12 @@ const toolPages = [
   'pdf-chat','watermark-pdf','redact-pdf','protect-pdf','unlock-pdf','sign-pdf','edit-pdf',
 ].map((slug) => ({ path: `/${slug}`, priority: 0.9, changeFrequency: 'monthly' as const }))
 
-const longTailGuides = guides.map((guide) => ({
-  path: `/guides/${guide.slug}`,
-  priority: 0.75,
-  changeFrequency: 'monthly' as const,
-}))
-
-const editorialBlogPages = editorialBlogPosts.map((post) => ({
-  path: `/blog/${post.slug}`,
-  priority: post.featured ? 0.8 : 0.7,
-  changeFrequency: 'monthly' as const,
-  lastModified: new Date(post.updatedAt),
-}))
+const longTailGuides = guides.map((guide) => ({ path: `/guides/${guide.slug}`, priority: 0.75, changeFrequency: 'monthly' as const }))
+const editorialBlogPages = editorialBlogPosts.map((post) => ({ path: `/blog/${post.slug}`, priority: post.featured ? 0.8 : 0.7, changeFrequency: 'monthly' as const, lastModified: new Date(post.updatedAt) }))
 
 function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
   const seen = new Set<string>()
-  return entries.filter((entry) => {
-    if (seen.has(entry.url)) return false
-    seen.add(entry.url)
-    return true
-  })
+  return entries.filter((entry) => { if (seen.has(entry.url)) return false; seen.add(entry.url); return true })
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
