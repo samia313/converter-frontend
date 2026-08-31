@@ -9,32 +9,43 @@ interface AdSenseAdProps {
   className?: string
 }
 
-const CONSENT_KEY = 'pdfilio-consent-v1'
-
 export default function AdSenseAd({ slotId = '1234567890', format = 'auto', responsive = true, className = '' }: AdSenseAdProps) {
-  const [consented, setConsented] = useState(false)
+  const [tcStringReady, setTcStringReady] = useState(false)
 
   useEffect(() => {
-    const sync = () => {
-      try { setConsented(window.localStorage.getItem(CONSENT_KEY) === 'accepted') } catch { setConsented(false) }
+    let cancelled = false
+    let attempts = 0
+
+    const checkTcf = () => {
+      if (cancelled) return
+      const tcf = window.__tcfapi
+      if (typeof tcf === 'function') {
+        tcf('addEventListener', 2, (tcData: { eventStatus?: string; tcString?: string }, success: boolean) => {
+          if (!success || !tcData?.tcString) return
+          if (!cancelled) setTcStringReady(true)
+        })
+        return
+      }
+      attempts += 1
+      if (attempts < 40) window.setTimeout(checkTcf, 500)
     }
-    sync()
-    window.addEventListener('pdfilio-consent-changed', sync)
-    return () => window.removeEventListener('pdfilio-consent-changed', sync)
+
+    checkTcf()
+    return () => { cancelled = true }
   }, [])
 
   useEffect(() => {
-    if (!consented) return
+    if (!tcStringReady) return
     let attempts = 0
     const pushAd = () => {
       if (window.adsbygoogle) {
-        try { window.adsbygoogle.push({}); return } catch (err) { console.error('[PDFilio] AdSense error:', err) }
+        try { window.adsbygoogle.push({}) ; return } catch (err) { console.error('[PDFilio] AdSense error:', err) }
       }
       attempts += 1
       if (attempts < 20) window.setTimeout(pushAd, 500)
     }
     pushAd()
-  }, [consented])
+  }, [tcStringReady])
 
   const getAdStyle = () => {
     switch (format) {
@@ -45,7 +56,7 @@ export default function AdSenseAd({ slotId = '1234567890', format = 'auto', resp
     }
   }
 
-  if (!consented) return null
+  if (!tcStringReady) return null
 
   return (
     <div className={`adsense-container flex justify-center my-6 ${className}`} data-ad-format={format} aria-label="Advertisement">
@@ -54,4 +65,9 @@ export default function AdSenseAd({ slotId = '1234567890', format = 'auto', resp
   )
 }
 
-declare global { interface Window { adsbygoogle: any[] } }
+declare global {
+  interface Window {
+    adsbygoogle: any[]
+    __tcfapi?: (command: string, version: number, callback: (data: any, success: boolean) => void, parameter?: any) => void
+  }
+}
