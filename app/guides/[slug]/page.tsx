@@ -20,6 +20,12 @@ export async function generateMetadata({ params }: Props) {
     description: guide.description,
     keywords: guide.keywords.join(', '),
     alternates: { canonical: `https://pdfilio.com/guides/${guide.slug}` },
+    openGraph: {
+      type: 'article',
+      title: `${guide.title} | PDFilio Guides`,
+      description: guide.description,
+      url: `https://pdfilio.com/guides/${guide.slug}`,
+    },
   };
 }
 
@@ -34,18 +40,35 @@ export default async function GuidePage({ params }: Props) {
     intermediate: 'bg-yellow-500/10 text-yellow-600',
     advanced: 'bg-red-500/10 text-red-600',
   };
+  const publishedDate = new Date(guide.publishedAt).toISOString();
+  const formattedDate = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(guide.publishedAt));
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: guide.title,
+    description: guide.description,
+    datePublished: publishedDate,
+    dateModified: publishedDate,
+    author: { '@type': 'Organization', name: 'PDFilio Editorial Team', url: 'https://pdfilio.com/about' },
+    publisher: { '@type': 'Organization', name: 'PDFilio', url: 'https://pdfilio.com' },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://pdfilio.com/guides/${guide.slug}` },
+  };
 
   return (
     <main className="min-h-screen bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <article className="max-w-4xl mx-auto px-4 py-12">
         <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
           <Link href="/">Home</Link> <span aria-hidden="true">/</span> <Link href="/guides">Guides</Link> <span aria-hidden="true">/</span> <span>{guide.title}</span>
         </nav>
         <header className="mb-8">
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex flex-wrap items-center gap-2 mb-4">
             <span className={`px-3 py-1 rounded-full text-sm font-semibold capitalize ${difficultyColors[guide.difficulty]}`}>{guide.difficulty}</span>
             <span className="text-sm text-muted-foreground">{guide.readTime} min read</span>
+            <span className="text-sm text-muted-foreground">Updated {formattedDate}</span>
           </div>
+          <p className="text-sm text-muted-foreground mb-3">By PDFilio Editorial Team</p>
           <h1 className="text-4xl font-bold text-foreground mb-4">{guide.title}</h1>
           <p className="text-lg text-muted-foreground">{guide.description}</p>
         </header>
@@ -55,11 +78,7 @@ export default async function GuidePage({ params }: Props) {
         <div className="bg-muted p-6 rounded-lg mb-8">
           <h2 className="font-semibold text-foreground mb-4">Tools Used in This Guide</h2>
           <div className="flex flex-wrap gap-2">
-            {guide.tools.map((tool) => (
-              <Link key={tool} href={`/${tool}`} className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg transition-colors">
-                {tool.replaceAll('-', ' ')}
-              </Link>
-            ))}
+            {guide.tools.map((tool) => <Link key={tool} href={`/${tool}`} className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg transition-colors">{tool.replaceAll('-', ' ')}</Link>)}
           </div>
         </div>
         {relatedGuides.length > 0 && <section className="mb-12">
