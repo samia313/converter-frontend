@@ -1,9 +1,8 @@
-import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import LiveChatWidget from '@/components/live-chat-widget'
 import StructuredData from '@/components/structured-data'
-import GA4Analytics from '@/components/ga4-analytics'
+import PrivacyConsent from '@/components/privacy-consent'
 import Footer from '@/components/footer'
 import './globals.css'
 
@@ -16,10 +15,7 @@ const SITE_DESCRIPTION = 'Free online PDF tools for converting, merging, splitti
 const OG_IMAGE = '/og-image.png'
 
 export const metadata: Metadata = {
-  title: {
-    default: SITE_TITLE,
-    template: '%s | PDFilio',
-  },
+  title: { default: SITE_TITLE, template: '%s | PDFilio' },
   description: SITE_DESCRIPTION,
   applicationName: 'PDFilio',
   referrer: 'strict-origin-when-cross-origin',
@@ -29,33 +25,9 @@ export const metadata: Metadata = {
   publisher: 'PDFilio',
   metadataBase: new URL(SITE_URL),
   keywords: ['PDF tools', 'PDF converter', 'free PDF tools', 'merge PDF', 'split PDF', 'compress PDF', 'PDF to Word', 'Word to PDF', 'PDF editor', 'OCR PDF'],
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: SITE_URL,
-    siteName: 'PDFilio',
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
-    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'PDFilio - Free PDF Tools Online' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
-    images: [OG_IMAGE],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-      'max-snippet': -1,
-      'max-image-preview': 'large',
-      'max-video-preview': -1,
-    },
-  },
+  openGraph: { type: 'website', locale: 'en_US', url: SITE_URL, siteName: 'PDFilio', title: SITE_TITLE, description: SITE_DESCRIPTION, images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'PDFilio - Free PDF Tools Online' }] },
+  twitter: { card: 'summary_large_image', title: SITE_TITLE, description: SITE_DESCRIPTION, images: [OG_IMAGE] },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, noimageindex: false, 'max-snippet': -1, 'max-image-preview': 'large', 'max-video-preview': -1 } },
   alternates: { canonical: SITE_URL },
   category: 'Productivity',
   verification: { google: 'A4lEEeE2F892vUX8oGfyr9CE_iqjfSe-7hPl511bR6g' },
@@ -70,22 +42,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head suppressHydrationWarning>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T9N4TQVD');`,
-          }}
-        />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3342033551482593" crossOrigin="anonymous" />
         <link rel="sitemap" href="/sitemap.xml" />
         <StructuredData />
       </head>
       <body suppressHydrationWarning className="font-sans antialiased bg-white">
-        <GA4Analytics />
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9N4TQVD" height="0" width="0" style={{ display: 'none', visibility: 'hidden' }} /></noscript>
         {children}
         <Footer />
         <LiveChatWidget />
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        <PrivacyConsent />
       </body>
     </html>
   )
