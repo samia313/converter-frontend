@@ -26,8 +26,8 @@ export default function Footer() {
             <ul className="space-y-2 text-sm"><li><Link href="/about">About Us</Link></li><li><Link href="/contact">Contact</Link></li><li><Link href="/affiliate">Affiliate Program</Link></li><li><Link href="/referral">Referral Program</Link></li></ul>
           </div>
           <div>
-            <h4 className="text-white font-semibold mb-4">Support</h4>
-            <ul className="space-y-2 text-sm"><li><Link href="/security">Security & Privacy</Link></li><li><Link href="/terms">Terms of Service</Link></li><li><Link href="/privacy">Privacy Policy</Link></li><li><Link href="/developers">API Documentation</Link></li></ul>
+            <h4 className="text-white font-semibold mb-4">Legal & Privacy</h4>
+            <ul className="space-y-2 text-sm"><li><Link href="/security">Security & Privacy</Link></li><li><Link href="/terms">Terms of Service</Link></li><li><Link href="/privacy">Privacy Policy</Link></li><li><Link href="/cookies">Cookie Policy</Link></li><li><Link href="/developers">API Documentation</Link></li></ul>
           </div>
           <div>
             <h4 className="text-white font-semibold mb-4">Follow Us</h4>
@@ -39,7 +39,7 @@ export default function Footer() {
             <p className="text-xs mb-2">Languages</p><select className="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded" defaultValue="English"><option>English</option><option>Urdu</option><option>Hindi</option></select>
           </div>
         </div>
-        <div className="border-t border-gray-800 pt-8"><div className="flex flex-col md:flex-row justify-between items-center text-sm"><p className="text-gray-400 mb-4 md:mb-0">&copy; 2026 PDFilio. All rights reserved.</p><div className="flex gap-6"><Link href="/">Home</Link><Link href="/sitemap-page">Sitemap</Link><Link href="/security">Security</Link><Link href="/contact">Contact</Link></div></div></div>
+        <div className="border-t border-gray-800 pt-8"><div className="flex flex-col md:flex-row justify-between items-center text-sm"><p className="text-gray-400 mb-4 md:mb-0">&copy; 2026 PDFilio. All rights reserved.</p><div className="flex gap-6"><Link href="/">Home</Link><Link href="/sitemap-page">Sitemap</Link><Link href="/security">Security</Link><Link href="/privacy">Privacy</Link><Link href="/cookies">Cookies</Link><Link href="/contact">Contact</Link></div></div></div>
       </div>
     </footer>
   );
