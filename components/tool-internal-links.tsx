@@ -17,9 +17,7 @@ export default function ToolInternalLinks({
 }: ToolInternalLinksProps) {
   const relatedTools = getRelatedTools(currentToolSlug)
 
-  if (relatedTools.length === 0) {
-    return null
-  }
+  if (relatedTools.length === 0) return null
 
   return (
     <section className={`py-12 px-4 sm:px-6 lg:px-8 bg-gray-50 ${className}`}>
@@ -29,14 +27,12 @@ export default function ToolInternalLinks({
           {relatedTools.map((tool) => (
             <Link
               key={tool.slug}
-              href={`/tools/${tool.slug}`}
+              href={`/${tool.slug}`}
               className="group border border-gray-200 p-6 rounded-lg hover:shadow-lg hover:border-red-300 transition-all bg-white"
               title={tool.keyword}
             >
               <div className="flex items-start justify-between mb-3">
-                <h3 className="font-bold text-lg text-gray-900 group-hover:text-red-600 transition-colors">
-                  {tool.name}
-                </h3>
+                <h3 className="font-bold text-lg text-gray-900 group-hover:text-red-600 transition-colors">{tool.name}</h3>
                 <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-red-600 group-hover:translate-x-1 transition-all" />
               </div>
               <p className="text-gray-600 text-sm mb-4">{tool.description}</p>
@@ -44,8 +40,6 @@ export default function ToolInternalLinks({
             </Link>
           ))}
         </div>
-
-        {/* Internal Link Strategy Info */}
         <div className="mt-12 p-6 bg-blue-50 border border-blue-200 rounded-lg">
           <h3 className="font-bold text-gray-900 mb-2">Maximize Your PDF Workflow</h3>
           <p className="text-gray-700 text-sm">
