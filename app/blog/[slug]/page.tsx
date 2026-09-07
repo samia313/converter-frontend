@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return { title: 'Article Not Found | PDFilio' };
   const url = `https://pdfilio.com/blog/${post.slug}`;
   return {
-    title: `${post.title} | PDFilio Blog`, description: post.description, keywords: post.keywords,
+    title: post.title, description: post.description, keywords: post.keywords,
     alternates: { canonical: url },
     openGraph: { title: post.title, description: post.description, type: 'article', url, publishedTime: post.publishedAt, modifiedTime: post.updatedAt, authors: [post.author], images: [{ url: post.image, width: 1800, height: 900, alt: `${post.title} — PDFilio guide` }] },
     twitter: { card: 'summary_large_image', title: post.title, description: post.description, images: [post.image] },
