@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import PDFToWordTool from '@/components/tools/pdf-to-word-tool';
 
 export const metadata: Metadata = {
-  title: 'PDF to Word Without Losing Formatting – Online Converter | PDFilio',
+  title: 'PDF to Word Without Losing Formatting – Online Converter',
   description: 'Convert PDF to editable Word DOCX online and learn how to preserve formatting, tables, images, fonts, and page layout as much as possible.',
   keywords: [
     'convert PDF to Word without losing formatting',
