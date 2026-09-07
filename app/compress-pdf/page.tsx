@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import CompressPDFTool from '@/components/tools/compress-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Compress PDF to 2MB or Smaller – Reduce PDF Size Online | PDFilio',
+  title: 'Compress PDF to 2MB or Smaller – Reduce PDF Size Online',
   description: 'Compress PDF files online and reduce PDF size for email, WhatsApp, uploads, and storage. Work toward a 2MB target and check the resulting quality and file size.',
   keywords: [
     'compress PDF to 2MB',
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: 'https://pdfilio.com/compress-pdf' },
   openGraph: {
-    title: 'Compress PDF to 2MB or Smaller – Reduce PDF Size Online | PDFilio',
+    title: 'Compress PDF to 2MB or Smaller – Reduce PDF Size Online',
     description: 'Reduce PDF size for email, uploads, WhatsApp and online forms while checking the final quality.',
     url: 'https://pdfilio.com/compress-pdf',
     type: 'website',
