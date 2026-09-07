@@ -13,7 +13,7 @@ export async function generateStaticParams() { return guides.map((guide) => ({ s
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params; const guide = getGuideBySlug(slug);
   if (!guide) return { title: 'Guide Not Found | PDFilio' };
-  return { title: `${guide.title} | PDFilio Guides`, description: guide.description, keywords: guide.keywords.join(', '), alternates: { canonical: `https://pdfilio.com/guides/${guide.slug}` }, openGraph: { type: 'article', title: `${guide.title} | PDFilio Guides`, description: guide.description, url: `https://pdfilio.com/guides/${guide.slug}` } };
+  return { title: guide.title, description: guide.description, keywords: guide.keywords.join(', '), alternates: { canonical: `https://pdfilio.com/guides/${guide.slug}` }, openGraph: { type: 'article', title: guide.title, description: guide.description, url: `https://pdfilio.com/guides/${guide.slug}` } };
 }
 export default async function GuidePage({ params }: Props) {
   const { slug } = await params; const guide = getGuideBySlug(slug); if (!guide) notFound();
