@@ -3,13 +3,21 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import CompressPDFTool from '@/components/tools/compress-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Compress PDF Online – Reduce PDF File Size | PDFilio',
-  description: 'Compress supported PDF files online and reduce their size for email, uploads, sharing, and storage. Choose a quality level and download the result.',
-  keywords: ['compress PDF', 'compress PDF online', 'reduce PDF size', 'shrink PDF', 'PDF compressor', 'reduce PDF file size', 'compress PDF free'],
+  title: 'Compress PDF to 2MB or Smaller – Reduce PDF Size Online | PDFilio',
+  description: 'Compress PDF files online and reduce PDF size for email, WhatsApp, uploads, and storage. Work toward a 2MB target and check the resulting quality and file size.',
+  keywords: [
+    'compress PDF to 2MB',
+    'compress PDF under 2MB',
+    'compress PDF for email',
+    'how to make PDF smaller for email',
+    'reduce PDF size',
+    'compress PDF online',
+    'PDF compressor',
+  ],
   alternates: { canonical: 'https://pdfilio.com/compress-pdf' },
   openGraph: {
-    title: 'Compress PDF Online – Reduce PDF File Size | PDFilio',
-    description: 'Reduce the size of supported PDFs with selectable compression quality levels.',
+    title: 'Compress PDF to 2MB or Smaller – Reduce PDF Size Online | PDFilio',
+    description: 'Reduce PDF size for email, uploads, WhatsApp and online forms while checking the final quality.',
     url: 'https://pdfilio.com/compress-pdf',
     type: 'website',
   },
@@ -20,24 +28,42 @@ export default function CompressPDFPage() {
     <>
       <CompressPDFTool />
       <ToolLandingLayout
-        toolName="Compress PDF"
+        toolName="Compress PDF Online"
         toolSlug="compress-pdf"
-        description="Reduce the file size of supported PDFs with selectable compression quality levels for easier sharing, uploading, storage, and transfer."
+        description="Reduce PDF file size for email, WhatsApp, online forms, uploads, storage, and sharing. Choose a compression level and check the final file size and quality."
         heroImage="/tool-images/compress-pdf-hero.png"
-        mainContent={`Compress PDF helps reduce the size of supported PDF documents while letting you choose a quality level that fits your needs. Smaller PDFs can be easier to email, upload to websites, store, or transfer between devices.
+        mainContent={`Compress PDF online when a document is too large to email, upload, store, or share.
 
-The available compression levels balance file-size reduction and document quality differently. High quality prioritizes quality preservation, Medium provides a balance, and Low prioritizes a smaller output. The actual reduction depends on the PDF's images, fonts, embedded content, page structure, and other characteristics.
+## Compress PDF to 2MB
 
-After processing, PDFilio reports the original size, compressed size, and resulting reduction. Review the output before using it for important documents, especially when image quality or print quality matters.`}
+If an upload form requires a PDF around 2MB, start with a stronger available compression setting and check the resulting file size. There is no universal compression ratio: scanned and image-heavy PDFs may remain larger than text-heavy PDFs.
+
+## Compress PDF for Email
+
+Email attachment limits vary by provider. Reduce the PDF, download the result, and open it before sending. If the file is still too large, remove unnecessary pages, reduce oversized source images, or split the document when the destination permits multiple files.
+
+## How to Make a PDF Smaller for Email
+
+A practical workflow is to keep the original, compress a copy, compare the new file size, and inspect text, images, tables, signatures, and links. Use the smallest version that remains readable and fit for its purpose.
+
+## Reduce PDF Size Without Losing Too Much Quality
+
+Higher compression can reduce image quality. Use the lightest compression that meets your upload or sharing requirement, then verify important pages before replacing the original.
+
+## Why Is My PDF So Large?
+
+Large photographs, scanned pages, embedded fonts, graphics, attachments, and other document resources can increase PDF size. Removing unnecessary content at the source can sometimes produce a better result than repeated compression.
+
+## Is There a Guaranteed 2MB Result?
+
+No. PDF compression depends on the source document and the available compression settings. PDFilio reports the actual output size after processing so you can check whether it meets your target.`}
         useCase={[
           'Reducing PDF email attachment size',
-          'Meeting website upload limits',
+          'Meeting website and application upload limits',
+          'Preparing PDFs for WhatsApp and mobile sharing',
           'Saving document storage space',
-          'Preparing PDFs for online sharing',
-          'Making document transfers easier',
-          'Reducing PDF size before cloud uploads',
-          'Creating smaller copies for mobile sharing',
-          'Optimizing PDFs for practical everyday use',
+          'Reducing PDFs before cloud uploads',
+          'Creating smaller copies for everyday document sharing',
         ].join('\n')}
         features={[
           'High, medium, and low compression levels',
@@ -58,18 +84,13 @@ After processing, PDFilio reports the original size, compressed size, and result
           'Choose the quality-versus-size balance you need',
         ]}
         faqs={[
-          { q: 'How much can I compress a PDF?', a: 'The amount of reduction depends on the PDF content and selected quality level. The tool reports the actual result after processing.' },
-          { q: 'Will compressing a PDF reduce quality?', a: 'Compression can affect visual quality depending on the selected setting and the original PDF. Higher quality generally prioritizes preservation, while lower quality prioritizes a smaller file.' },
-          { q: 'Can I compress a PDF to exactly 100KB or 200KB?', a: 'The current tool uses selectable quality levels rather than guaranteeing a specific target file size.' },
-          { q: 'What is the maximum PDF file size?', a: 'Very large files may take longer to process or may exceed current processing limits. Follow the uploader requirements shown by the tool.' },
-          { q: 'Which compression level should I choose?', a: 'Choose High when quality preservation matters most, Medium for a balance, or Low when reducing file size is the priority.' },
-          { q: 'Can I compress a PDF on my phone?', a: 'Yes. The browser-based tool can be used from supported modern phones, tablets, and desktop browsers.' },
-          { q: 'Do I need to install software?', a: 'No separate desktop application is required for the browser-based PDF compression workflow.' },
-          { q: 'How do I know how much smaller my PDF became?', a: 'After processing, the tool reports the original size, compressed size, and resulting reduction.' },
-          { q: 'Can I compress another PDF after one conversion?', a: 'Yes. The page supports processing another PDF without needing to leave the compression workflow.' },
-          { q: 'Does compression work on image-heavy PDFs?', a: 'It can reduce image-heavy PDFs, but the amount of reduction and resulting visual quality depend on the embedded images and selected compression level.' },
-          { q: 'Can I compress a scanned PDF?', a: 'Yes, supported scanned PDFs can be processed. Because scans often contain images, the resulting size reduction can vary significantly.' },
-          { q: 'Will links and document features always remain unchanged?', a: 'Not every PDF feature is guaranteed to remain identical after processing. Review important documents and interactive features in the output before relying on them.' },
+          { q: 'How can I compress a PDF to 2MB?', a: 'Upload the PDF, choose a stronger available compression setting, process it, and check the resulting size. A 2MB result cannot be guaranteed for every source PDF.' },
+          { q: 'Can I compress a PDF for email?', a: 'Yes. Compress the PDF, check the final size against your email provider limit, and open the result to verify readability before sending.' },
+          { q: 'How do I make a PDF smaller for email?', a: 'Use PDF compression first. If the file remains too large, remove unnecessary pages or oversized source images, or split the document when appropriate.' },
+          { q: 'Will compressing a PDF reduce quality?', a: 'It can. Higher compression may reduce image quality, so review important pages after processing.' },
+          { q: 'Can I compress a PDF on my phone?', a: 'Yes. The browser-based workflow can be used from supported modern phones, tablets, and desktop browsers.' },
+          { q: 'What makes a PDF file so large?', a: 'High-resolution images, scans, embedded fonts, graphics, attachments, and other resources can increase file size.' },
+          { q: 'How do I know how much smaller my PDF became?', a: 'After processing, PDFilio reports the original size, compressed size, and resulting reduction.' },
           { q: 'Is Compress PDF free?', a: 'PDFilio provides the online compression tool; current usage limits, account requirements, and availability are determined by the product configuration shown in the tool interface.' },
         ]}
         relatedTools={[
@@ -80,7 +101,7 @@ After processing, PDFilio reports the original size, compressed size, and result
           { name: 'Rotate PDF', slug: 'rotate-pdf' },
         ]}
         primaryKeyword="compress PDF"
-        secondaryKeywords={['compress PDF online', 'reduce PDF size', 'shrink PDF', 'PDF compressor', 'reduce PDF file size', 'compress PDF free']}
+        secondaryKeywords={['compress PDF to 2MB', 'compress PDF under 2MB', 'compress PDF for email', 'how to make PDF smaller for email', 'reduce PDF size']}
       />
     </>
   );
