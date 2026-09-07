@@ -1,68 +1,23 @@
-# PDFilio Robots.txt - Optimized for 2500 Page Crawling
-# Allows Google and Bing to crawl and index all pages
+# PDFilio robots.txt
+# Keep public content crawlable; block only private application areas and known duplicate query variants.
 
-# Allow all bots by default
 User-agent: *
 Allow: /
 
-# Disallow private/admin areas
 Disallow: /admin/
 Disallow: /api/private/
 Disallow: /api/auth/
-Disallow: /_next/
-Disallow: /.well-known/except/.well-known/robots.txt
 
-# Block parameter-based duplicate pages
+# Query variants that can create duplicate URLs
 Disallow: /*?*sort=
 Disallow: /*?*filter=
 Disallow: /*?*page=
 Disallow: /*?*ref=
 
-# Crawl delay for general bots (1 second)
-Crawl-delay: 1
-Request-rate: 30/60
+# Do not block Next.js assets: Google may need them for rendering and page experience evaluation.
 
-# GOOGLE SPECIFIC - PRIORITY
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 0
-Request-rate: 100/60
-
-# BING SPECIFIC - PRIORITY
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 0
-Request-rate: 100/60
-
-# Block bad/harmful bots
-User-agent: MJ12bot
-Disallow: /
-
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: SemrushBot
-Disallow: /
-
-User-agent: DotBot
-Disallow: /
-
-User-agent: PetalBot
-Disallow: /
-
-# SITEMAP LOCATIONS - CRITICAL FOR 2700+ PAGE DISCOVERY
-# Master sitemap index - Use this in GSC, Bing, and Google Analytics
-Sitemap: https://pdfilio.com/api/sitemap-index
-
-# Main sitemaps
 Sitemap: https://pdfilio.com/sitemap.xml
-
-# Blog Post Sitemaps (1200+ individual blog post pages)
+Sitemap: https://pdfilio.com/api/sitemap-index
+Sitemap: https://pdfilio.com/blog-sitemap.xml
+Sitemap: https://pdfilio.com/tools-sitemap.xml
 Sitemap: https://pdfilio.com/api/sitemaps/blog-posts
-
-# Category-specific sitemaps for better crawling
-Sitemap: https://pdfilio.com/api/sitemaps/blog
-Sitemap: https://pdfilio.com/api/sitemaps/guides
-Sitemap: https://pdfilio.com/api/sitemaps/comparisons
-Sitemap: https://pdfilio.com/api/sitemaps/use-cases
-Sitemap: https://pdfilio.com/api/sitemaps/pages
