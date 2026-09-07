@@ -2,9 +2,12 @@ import type { MetadataRoute } from 'next'
 import { guides as coreGuides } from '@/lib/content/how-to-guides'
 import { additionalGuides } from '@/lib/content/additional-guides'
 import { editorialBlogPosts } from '@/lib/content/editorial-blog-posts'
+import { blogPosts } from '@/lib/content/blog-posts-1000'
+import { chatPdfBlogPosts } from '@/lib/content/blog-posts-200-chat-pdf'
 
 const BASE_URL = 'https://pdfilio.com'
 const guides = [...coreGuides, ...additionalGuides]
+const allBlogPosts = [...blogPosts, ...chatPdfBlogPosts]
 
 const staticPages = [
   { path: '/', priority: 1.0, changeFrequency: 'weekly' as const },
@@ -30,19 +33,42 @@ const toolPages = [
   'pdf-chat','watermark-pdf','redact-pdf','protect-pdf','unlock-pdf','sign-pdf','edit-pdf',
 ].map((slug) => ({ path: `/${slug}`, priority: 0.9, changeFrequency: 'monthly' as const }))
 
-const longTailGuides = guides.map((guide) => ({ path: `/guides/${guide.slug}`, priority: 0.75, changeFrequency: 'monthly' as const }))
-const editorialBlogPages = editorialBlogPosts.map((post) => ({ path: `/blog/${post.slug}`, priority: post.featured ? 0.8 : 0.7, changeFrequency: 'monthly' as const, lastModified: new Date(post.updatedAt) }))
+const longTailGuides = guides.map((guide) => ({
+  path: `/guides/${guide.slug}`,
+  priority: 0.75,
+  changeFrequency: 'monthly' as const,
+  lastModified: new Date(guide.publishedAt),
+}))
+
+const editorialBlogPages = editorialBlogPosts.map((post) => ({
+  path: `/blog/${post.slug}`,
+  priority: post.featured ? 0.8 : 0.7,
+  changeFrequency: 'monthly' as const,
+  lastModified: new Date(post.updatedAt),
+}))
+
+const generatedBlogPages = allBlogPosts.map((post) => ({
+  path: `/blog/${post.slug}`,
+  priority: post.featured ? 0.8 : 0.7,
+  changeFrequency: 'weekly' as const,
+  lastModified: new Date(post.updatedAt),
+}))
 
 function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
   const seen = new Set<string>()
-  return entries.filter((entry) => { if (seen.has(entry.url)) return false; seen.add(entry.url); return true })
+  return entries.filter((entry) => {
+    if (seen.has(entry.url)) return false
+    seen.add(entry.url)
+    return true
+  })
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return uniqueEntries([
     ...staticPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority })),
     ...toolPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority })),
-    ...longTailGuides.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority })),
+    ...longTailGuides.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority, lastModified: page.lastModified })),
     ...editorialBlogPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority, lastModified: page.lastModified })),
+    ...generatedBlogPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority, lastModified: page.lastModified })),
   ])
 }
