@@ -72,7 +72,7 @@ export default function OCRTool() {
 
           if (!context) throw new Error('Could not create a PDF rendering canvas.');
 
-          await page.render({ canvasContext: context, viewport }).promise;
+          await page.render({ canvas, canvasContext: context, viewport }).promise;
           const result = await worker.recognize(canvas);
           pageTexts.push(`--- Page ${pageNumber} ---\n${result.data.text.trim()}`);
 
@@ -138,63 +138,80 @@ export default function OCRTool() {
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Upload a PDF or Image</h2>
             <FileUploader
               accept=".pdf,.jpg,.png,.jpeg,.webp"
-              onFileSelected={(files) => setSelectedFile(files[0] || null)}
-              maxSize={50}
+              maxSize={50 * 1024 * 1024}
+              onFilesSelected={(files) => {
+                setSelectedFile(files[0] || null);
+                setError(null);
+                setExtractedText(null);
+                setProgress(0);
+                setStatus('');
+              }}
+              multiple={false}
             />
-            <p className="mt-3 text-xs text-gray-500">
-              Supports PDF, JPG, PNG, JPEG and WebP up to 50MB. Scanned PDFs are rendered page-by-page and OCRed in your browser.
-            </p>
+
+            {selectedFile && (
+              <button
+                type="button"
+                onClick={handleExtractText}
+                disabled={isProcessing}
+                className="mt-6 w-full rounded-lg bg-purple-600 px-4 py-3 font-semibold text-white transition hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isProcessing ? 'Extracting text…' : 'Extract Text'}
+              </button>
+            )}
 
             {isProcessing && (
-              <div className="mt-5" aria-live="polite">
-                <div className="flex justify-between text-xs text-gray-600 mb-2">
+              <div className="mt-6" aria-live="polite">
+                <div className="mb-2 flex justify-between text-sm text-gray-600">
                   <span>{status || 'Processing…'}</span>
                   <span>{progress}%</span>
                 </div>
-                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-purple-600 transition-all" style={{ width: `${progress}%` }} />
+                <div className="h-2 overflow-hidden rounded-full bg-gray-200">
+                  <div
+                    className="h-full rounded-full bg-purple-600 transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                  />
                 </div>
               </div>
             )}
 
             {error && (
-              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-700 text-sm">{error}</p>
-              </div>
+              <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700" role="alert">
+                {error}
+              </p>
             )}
-
-            <button
-              onClick={handleExtractText}
-              disabled={!selectedFile || isProcessing}
-              className="w-full mt-8 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition"
-            >
-              {isProcessing ? 'Extracting Text…' : 'Extract Text'}
-            </button>
           </div>
 
-          {extractedText && (
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Extracted Text</h2>
-              <div className="bg-gray-50 rounded-lg p-4 mb-4 max-h-64 overflow-y-auto">
-                <p className="text-gray-700 text-sm whitespace-pre-wrap">{extractedText}</p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={handleCopyText}
-                  className="flex-1 inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition text-sm"
-                >
-                  <Copy className="w-4 h-4" /> Copy Text
-                </button>
-                <button
-                  onClick={handleDownloadText}
-                  className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-2 px-4 rounded-lg transition text-sm"
-                >
-                  <Download className="w-4 h-4" /> Save as TXT
-                </button>
-              </div>
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="mb-4 flex items-center justify-between gap-4">
+              <h2 className="text-lg font-semibold text-gray-900">Extracted Text</h2>
+              {extractedText && (
+                <div className="flex gap-2">
+                  <button type="button" onClick={handleCopyText} className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-gray-50">
+                    <Copy className="h-4 w-4" /> Copy
+                  </button>
+                  <button type="button" onClick={handleDownloadText} className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-gray-50">
+                    <Download className="h-4 w-4" /> TXT
+                  </button>
+                </div>
+              )}
             </div>
-          )}
+
+            {extractedText ? (
+              <pre className="max-h-[520px] overflow-auto whitespace-pre-wrap rounded-lg bg-gray-50 p-4 text-sm leading-6 text-gray-800">
+                {extractedText}
+              </pre>
+            ) : (
+              <div className="flex min-h-[260px] items-center justify-center rounded-lg border-2 border-dashed border-gray-200 p-8 text-center text-gray-500">
+                Your extracted text will appear here after OCR finishes.
+              </div>
+            )}
+          </div>
         </div>
+
+        <p className="mt-8 text-center text-sm text-gray-500">
+          Browser-based OCR. Scanned PDFs are rendered page-by-page before text recognition. PDF OCR currently supports up to 10 pages per run.
+        </p>
       </div>
     </section>
   );
