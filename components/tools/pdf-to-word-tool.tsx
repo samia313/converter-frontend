@@ -31,10 +31,17 @@ export default function PDFToWordTool() {
     setDownloadUrl(null);
     setIsComplete(false);
 
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 55000);
+
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
-      const response = await fetch('/api/convert/pdf-to-word', { method: 'POST', body: formData });
+      const response = await fetch('/api/convert/pdf-to-word', {
+        method: 'POST',
+        body: formData,
+        signal: controller.signal,
+      });
 
       if (!response.ok) {
         let errorMessage = 'Conversion failed';
@@ -53,8 +60,13 @@ export default function PDFToWordTool() {
       setDownloadUrl(window.URL.createObjectURL(blob));
       setIsComplete(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        setError('Conversion took too long. Try a smaller or simpler PDF, or use OCR first if the PDF is scanned.');
+      } else {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      }
     } finally {
+      window.clearTimeout(timeoutId);
       setIsProcessing(false);
     }
   };
