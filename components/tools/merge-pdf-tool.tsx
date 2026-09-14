@@ -25,17 +25,17 @@ export default function MergePDFTool() {
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
   const addFiles = (newFiles: FileList | null) => {
     if (!newFiles) return;
 
     const newFileItems: FileItem[] = [];
-    
+
     for (let i = 0; i < newFiles.length; i++) {
       const file = newFiles[i];
-      
+
       if (file.type !== 'application/pdf') {
         setError(`"${file.name}" is not a PDF`);
         continue;
@@ -82,9 +82,6 @@ export default function MergePDFTool() {
   };
 
   const handleMerge = async () => {
-    console.log('[v0] Merge button clicked');
-    console.log('[v0] Files count:', files.length);
-
     if (files.length < 2) {
       setError('Select at least 2 PDF files');
       return;
@@ -102,32 +99,26 @@ export default function MergePDFTool() {
     setProgress(10);
 
     try {
-      console.log('[v0] Creating form data');
       const formData = new FormData();
       files.forEach((fileItem) => {
-        console.log('[v0] Adding:', fileItem.name);
         formData.append('files', fileItem.file);
       });
 
       setProgress(30);
-      console.log('[v0] Sending to API...');
 
       const response = await fetch('/api/convert/merge-pdf', {
         method: 'POST',
         body: formData,
       });
 
-      console.log('[v0] Response status:', response.status);
       setProgress(70);
 
       if (!response.ok) {
         const text = await response.text();
-        console.error('[v0] Error response:', text);
         throw new Error(`Status ${response.status}: ${text}`);
       }
 
       const blob = await response.blob();
-      console.log('[v0] Blob size:', blob.size);
 
       if (blob.size === 0) {
         throw new Error('Empty result');
@@ -145,7 +136,6 @@ export default function MergePDFTool() {
 
       setProgress(100);
       setSuccess(`Merged ${files.length} files!`);
-      console.log('[v0] Success!');
 
       setTimeout(() => {
         setFiles([]);
@@ -154,7 +144,6 @@ export default function MergePDFTool() {
       }, 2000);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
-      console.error('[v0] Error:', msg);
       setError(msg);
       setProgress(0);
     } finally {
@@ -168,15 +157,12 @@ export default function MergePDFTool() {
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Header */}
           <div className="bg-gradient-to-r from-red-600 to-red-700 px-8 py-12 text-white">
-            <h1 className="text-4xl font-bold mb-2">Merge PDF</h1>
+            <h2 className="text-4xl font-bold mb-2">Merge PDF</h2>
             <p className="text-red-100">Combine multiple PDFs into one</p>
           </div>
 
-          {/* Content */}
           <div className="p-8">
-            {/* Upload Area */}
             <div
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -198,7 +184,6 @@ export default function MergePDFTool() {
               />
             </div>
 
-            {/* Error */}
             {error && (
               <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4 flex gap-3">
                 <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
@@ -206,7 +191,6 @@ export default function MergePDFTool() {
               </div>
             )}
 
-            {/* Success */}
             {success && (
               <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4 flex gap-3">
                 <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
@@ -214,12 +198,9 @@ export default function MergePDFTool() {
               </div>
             )}
 
-            {/* Files List */}
             {files.length > 0 && (
               <div className="mt-8">
-                <h3 className="font-semibold text-gray-900 mb-4">
-                  Selected ({files.length})
-                </h3>
+                <h3 className="font-semibold text-gray-900 mb-4">Selected ({files.length})</h3>
                 <div className="space-y-2 bg-gray-50 rounded-lg p-4">
                   {files.map((fileItem, index) => (
                     <div key={fileItem.id} className="flex items-center justify-between bg-white rounded p-3 border border-gray-200">
@@ -233,8 +214,13 @@ export default function MergePDFTool() {
                         </div>
                       </div>
                       <button
-                        onClick={() => removeFile(fileItem.id)}
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          removeFile(fileItem.id);
+                        }}
                         className="ml-2 text-gray-400 hover:text-red-600"
+                        aria-label={`Remove ${fileItem.name}`}
                       >
                         <X className="w-5 h-5" />
                       </button>
@@ -247,7 +233,6 @@ export default function MergePDFTool() {
               </div>
             )}
 
-            {/* Progress */}
             {isProcessing && (
               <div className="mt-8">
                 <div className="flex justify-between mb-2">
@@ -260,10 +245,10 @@ export default function MergePDFTool() {
               </div>
             )}
 
-            {/* Buttons */}
             {files.length > 0 && (
               <div className="mt-8 flex gap-4">
                 <button
+                  type="button"
                   onClick={handleMerge}
                   disabled={isProcessing || files.length < 2}
                   className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-bold py-4 rounded-lg transition flex items-center justify-center gap-2"
@@ -284,6 +269,7 @@ export default function MergePDFTool() {
                   )}
                 </button>
                 <button
+                  type="button"
                   onClick={() => setFiles([])}
                   disabled={isProcessing}
                   className="px-8 bg-gray-300 hover:bg-gray-400 disabled:bg-gray-200 text-gray-900 font-semibold py-4 rounded-lg transition"
