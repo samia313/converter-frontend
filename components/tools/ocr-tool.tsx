@@ -36,20 +36,16 @@ export default function OcrTool() {
       setStatus('Starting OCR engine…');
       worker = await createWorker(OCR_LANG, 1, {
         logger: (message) => {
-          if (typeof message.progress === 'number') {
-            setProgress(Math.round(message.progress * 100));
-          }
+          if (typeof message.progress === 'number') setProgress(Math.round(message.progress * 100));
           if (message.status) setStatus(message.status);
         },
       });
 
+      let extractedText = '';
       if (selectedFile.type === 'application/pdf' || selectedFile.name.toLowerCase().endsWith('.pdf')) {
         setStatus('Loading PDF…');
         const pdfjs = await import('pdfjs-dist');
-        pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-          'pdfjs-dist/build/pdf.worker.mjs',
-          import.meta.url,
-        ).toString();
+        pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.mjs', import.meta.url).toString();
         const bytes = new Uint8Array(await selectedFile.arrayBuffer());
         const pdf = await pdfjs.getDocument({ data: bytes }).promise;
         if (pdf.numPages > MAX_PDF_PAGES) {
@@ -73,16 +69,16 @@ export default function OcrTool() {
           canvas.height = 1;
           page.cleanup();
         }
-        text = pageTexts.join('\n\n').trim();
+        extractedText = pageTexts.join('\n\n').trim();
         pdf.cleanup();
       } else {
         setStatus('Recognizing text…');
         const result = await worker.recognize(selectedFile);
-        text = result.data.text.trim();
+        extractedText = result.data.text.trim();
       }
 
-      if (!text) throw new Error('No text could be detected. Try a clearer, higher-resolution document.');
-      setText(text);
+      if (!extractedText) throw new Error('No text could be detected. Try a clearer, higher-resolution document.');
+      setText(extractedText);
       setProgress(100);
       setStatus('OCR complete');
     } catch (err) {
@@ -113,54 +109,20 @@ export default function OcrTool() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold">OCR PDF Online – Extract Text</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Extract machine-readable text from scanned PDFs and images with a real OCR engine.
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">Extract machine-readable text from scanned PDFs and images with a real OCR engine.</p>
       </div>
-
-      <FileUploader
-        accept=".pdf,.jpg,.png,.jpeg,.webp"
-        maxSize={50 * 1024 * 1024}
-        onFileSelected={handleFileSelected}
-      />
-
+      <FileUploader accept=".pdf,.jpg,.png,.jpeg,.webp" maxSize={50 * 1024 * 1024} onFileSelected={handleFileSelected} />
       {selectedFile && (
         <div className="space-y-3 rounded-lg border p-4">
           <div className="text-sm font-medium">{selectedFile.name}</div>
-          <button
-            type="button"
-            onClick={runOcr}
-            disabled={processing}
-            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
-          >
+          <button type="button" onClick={runOcr} disabled={processing} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">
             {processing ? 'Processing…' : 'Extract Text'}
           </button>
-          {processing && (
-            <div className="space-y-1">
-              <div className="h-2 overflow-hidden rounded bg-muted">
-                <div className="h-full bg-primary transition-all" style={{ width: `${progress}%` }} />
-              </div>
-              <p className="text-xs text-muted-foreground">{status}</p>
-            </div>
-          )}
+          {processing && <div className="space-y-1"><div className="h-2 overflow-hidden rounded bg-muted"><div className="h-full bg-primary transition-all" style={{ width: `${progress}%` }} /></div><p className="text-xs text-muted-foreground">{status}</p></div>}
         </div>
       )}
-
       {error && <p className="rounded-md border border-destructive/30 p-3 text-sm text-destructive">{error}</p>}
-
-      {text && (
-        <div className="space-y-3">
-          <div className="flex gap-2">
-            <button type="button" onClick={copyText} className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
-              <Copy className="h-4 w-4" /> Copy Text
-            </button>
-            <button type="button" onClick={downloadText} className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
-              <Download className="h-4 w-4" /> Save as TXT
-            </button>
-          </div>
-          <textarea readOnly value={text} className="min-h-72 w-full rounded-md border bg-background p-4 text-sm" aria-label="OCR extracted text" />
-        </div>
-      )}
+      {text && <div className="space-y-3"><div className="flex gap-2"><button type="button" onClick={copyText} className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><Copy className="h-4 w-4" /> Copy Text</button><button type="button" onClick={downloadText} className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><Download className="h-4 w-4" /> Save as TXT</button></div><textarea readOnly value={text} className="min-h-72 w-full rounded-md border bg-background p-4 text-sm" aria-label="OCR extracted text" /></div>}
     </div>
   );
 }
