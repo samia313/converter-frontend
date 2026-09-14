@@ -5,53 +5,42 @@ export const maxDuration = 30;
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const file = formData.get('file') as File;
+    const file = formData.get('file');
 
-    if (!file) {
+    if (!(file instanceof File)) {
+      return NextResponse.json({ error: 'No file provided.' }, { status: 400 });
+    }
+
+    const extension = file.name.split('.').pop()?.toLowerCase() || '';
+    const supported = ['pdf', 'jpg', 'jpeg', 'png', 'webp'];
+
+    if (!supported.includes(extension)) {
       return NextResponse.json(
-        { error: 'No file provided' },
+        { error: 'Supported files are PDF, JPG, JPEG, PNG, and WebP.' },
         { status: 400 }
       );
     }
 
-    // Validate file types
-    const isImage = file.type.startsWith('image/') || 
-                   /\.(png|jpg|jpeg|gif|bmp|tiff|webp)$/i.test(file.name);
-    const isPDF = file.type.includes('pdf') || file.name.endsWith('.pdf');
-
-    if (!isImage && !isPDF) {
-      return NextResponse.json(
-        { error: 'File must be an image or PDF' },
-        { status: 400 }
-      );
+    if (file.size <= 0) {
+      return NextResponse.json({ error: 'The uploaded file is empty.' }, { status: 400 });
     }
 
-    console.log('[v0] OCR processing:', file.name, 'Type:', file.type);
+    if (file.size > 50 * 1024 * 1024) {
+      return NextResponse.json({ error: 'The maximum file size is 50MB.' }, { status: 413 });
+    }
 
-    // For production OCR, integrate with Tesseract.js or cloud API
-    // This is a placeholder implementation with proper structure
-    const arrayBuffer = await file.arrayBuffer();
-    
-    // Create a text file with OCR placeholder
-    const ocrContent = `OPTICAL CHARACTER RECOGNITION (OCR) RESULTS\n${'='.repeat(60)}\n\nSource File: ${file.name}\nFile Type: ${file.type || 'Unknown'}\nFile Size: ${file.size} bytes\n\n${'='.repeat(60)}\n\nEXTRACTED TEXT:\n${'='.repeat(60)}\n\n[OCR Processing]\n\nNote: This is a framework implementation.\nFor production OCR, integrate with:\n- Tesseract.js (open-source)\n- Google Cloud Vision API\n- AWS Textract\n- Azure Computer Vision API\n\nThese services will extract actual text from images.\n\n${'='.repeat(60)}\n\nSTATUS: OCR framework ready\nFILE RECEIVED: ${file.size > 0 ? 'Yes' : 'No'}\nREADY FOR PROCESSING: Yes\n`;
-
-    const buffer = Buffer.from(ocrContent, 'utf-8');
-    const outputFileName = file.name.replace(/\.[^/.]+$/, '') + '-ocr.txt';
-
-    return new NextResponse(buffer, {
-      headers: {
-        'Content-Disposition': `attachment; filename="${outputFileName}"`,
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-      },
-    });
-  } catch (error) {
-    console.error('[v0] OCR error:', error);
+    // Do not return fabricated OCR output. A real OCR engine must be connected
+    // before image/scanned-PDF recognition is advertised as available.
     return NextResponse.json(
       {
-        error: 'OCR processing failed',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: 'The OCR recognition engine is not currently configured for this deployment. Please try a PDF with selectable text using PDF to Text, or connect an OCR engine before enabling scanned-document OCR.',
       },
+      { status: 503 }
+    );
+  } catch (error) {
+    console.error('[OCR] processing error:', error);
+    return NextResponse.json(
+      { error: 'OCR processing failed. Please try again with a supported file.' },
       { status: 500 }
     );
   }
