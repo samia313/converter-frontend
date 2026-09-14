@@ -6,6 +6,7 @@ import { Download } from 'lucide-react';
 
 export default function SplitPDFTool() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [splitPage, setSplitPage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
@@ -19,6 +20,7 @@ export default function SplitPDFTool() {
   const reset = () => {
     if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
     setSelectedFile(null);
+    setSplitPage('');
     setDownloadUrl(null);
     setError(null);
   };
@@ -29,13 +31,18 @@ export default function SplitPDFTool() {
     setIsProcessing(true);
     setError(null);
 
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 55_000);
+
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
+      if (splitPage.trim()) formData.append('splitPage', splitPage.trim());
 
       const response = await fetch('/api/convert/split-pdf', {
         method: 'POST',
         body: formData,
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -51,15 +58,22 @@ export default function SplitPDFTool() {
 
       const contentType = response.headers.get('content-type') || '';
       if (!contentType.includes('application/zip')) {
-        throw new Error('Split service returned an invalid file format');
+        throw new Error('Split service returned an invalid file format.');
       }
 
       const blob = await response.blob();
+      if (blob.size === 0) throw new Error('Split produced an empty output. Please try another PDF.');
+
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Split failed');
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        setError('Splitting took too long. Try a smaller or simpler PDF.');
+      } else {
+        setError(err instanceof Error ? err.message : 'Split failed');
+      }
     } finally {
+      window.clearTimeout(timeoutId);
       setIsProcessing(false);
     }
   };
@@ -83,7 +97,7 @@ export default function SplitPDFTool() {
             Split PDF
           </h1>
           <p className="text-lg text-gray-600">
-            Split your PDF into two downloadable parts
+            Split a PDF into two parts or choose where the split occurs
           </p>
         </div>
 
@@ -94,10 +108,33 @@ export default function SplitPDFTool() {
               if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
               setDownloadUrl(null);
               setError(null);
+              setSplitPage('');
               setSelectedFile(files[0] || null);
             }}
             maxSize={50}
           />
+
+          {selectedFile && (
+            <div className="mt-6 rounded-lg border border-gray-200 p-4">
+              <label htmlFor="split-page" className="block text-sm font-semibold text-gray-900 mb-2">
+                Split after page (optional)
+              </label>
+              <input
+                id="split-page"
+                type="number"
+                min="1"
+                step="1"
+                value={splitPage}
+                onChange={(event) => setSplitPage(event.target.value)}
+                placeholder="Leave blank to split in the middle"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
+                inputMode="numeric"
+              />
+              <p className="mt-2 text-xs text-gray-500">
+                For example, enter 5 to create pages 1–5 and 6–end as separate PDFs.
+              </p>
+            </div>
+          )}
 
           {error && (
             <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -116,7 +153,7 @@ export default function SplitPDFTool() {
           ) : (
             <div className="text-center mt-8">
               <p className="text-green-600 font-semibold mb-4">
-                Split completed! Download both parts as ZIP
+                Split completed! Download both parts as a ZIP file.
               </p>
               <div className="flex gap-4 justify-center">
                 <button
