@@ -3,13 +3,13 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import WordToPDFTool from '@/components/tools/word-to-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Word to PDF Converter Online – Convert DOC & DOCX to PDF | PDFilio',
-  description: 'Convert supported Word DOC and DOCX documents to PDF online. Create shareable PDF files from resumes, reports, proposals, contracts, and business documents.',
+  title: 'Word to PDF Converter – Convert DOC & DOCX to PDF | PDFilio',
+  description: 'Convert supported Word DOC and DOCX documents to PDF online. Create shareable PDFs from resumes, reports, proposals, contracts, and business documents.',
   keywords: ['Word to PDF', 'Word to PDF converter', 'convert Word to PDF', 'DOC to PDF', 'DOCX to PDF', 'Word document to PDF', 'Word to PDF online'],
   alternates: { canonical: 'https://pdfilio.com/word-to-pdf' },
   openGraph: {
-    title: 'Word to PDF Converter Online | PDFilio',
-    description: 'Convert supported DOC and DOCX documents into PDF files for sharing, printing, and document workflows.',
+    title: 'Word to PDF Converter – Convert DOC & DOCX to PDF | PDFilio',
+    description: 'Convert supported Word DOC and DOCX documents into PDF files for sharing, printing, and document workflows.',
     url: 'https://pdfilio.com/word-to-pdf',
     type: 'website',
   },
@@ -28,7 +28,7 @@ export default function WordToPDFPage() {
 
 The final appearance can depend on the source document, fonts, images, tables, page layout, and conversion engine. Review the generated PDF before sending or publishing important documents, especially when exact pagination or complex formatting matters.
 
-Typical workflow: upload a supported DOC or DOCX file, start the conversion, review the resulting PDF, and download it for your next document workflow. Availability of specific input formats and processing limits depends on the current tool configuration.`}
+Typical workflow: upload a supported Word document, start the conversion, review the generated PDF, and download it for your next document workflow. Supported input formats and processing limits depend on the current tool configuration.`}
         useCase={[
           'Converting resumes for job applications',
           'Preparing business proposals and reports',
@@ -61,9 +61,9 @@ Typical workflow: upload a supported DOC or DOCX file, start the conversion, rev
         faqs={[
           { q: 'How do I convert Word to PDF online?', a: 'Upload a supported DOC or DOCX document, start the Word-to-PDF conversion, review the generated PDF, and download the result.' },
           { q: 'Can I convert DOCX to PDF?', a: 'Yes. Supported DOCX documents can be converted into PDF files through the Word to PDF workflow.' },
-          { q: 'Can I convert DOC to PDF?', a: 'Yes, if the current uploader accepts DOC files. Follow the input formats shown by the tool interface.' },
+          { q: 'Can I convert DOC to PDF?', a: 'Yes. If DOC is shown as a supported input in the uploader, it can be converted through the Word to PDF workflow.' },
           { q: 'Will Word formatting be preserved exactly?', a: 'Exact preservation is not guaranteed for every document. Fonts, tables, images, page breaks, headers, footers, and complex layouts can affect the final PDF.' },
-          { q: 'Can I convert a resume to PDF?', a: 'Yes. Converting a resume to PDF is a common way to create a shareable version for applications and submissions.' },
+          { q: 'Can I convert a resume to PDF?', a: 'Yes. Converting a supported resume to PDF is a common way to create a shareable version for applications and submissions.' },
           { q: 'Can I convert a business report to PDF?', a: 'Yes. Supported Word reports can be converted to PDF for sharing, printing, review, or archiving.' },
           { q: 'Can I convert contracts to PDF?', a: 'Supported Word contracts can be converted to PDF. Review the generated file carefully before signing or distributing it.' },
           { q: 'Can I convert Word documents with tables?', a: 'Yes, supported documents containing tables can be processed, but complex tables may need visual review after conversion.' },
