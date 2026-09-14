@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import ProcessingPanel from '@/components/processing-panel';
 import { Download, FileText } from 'lucide-react';
@@ -12,11 +12,25 @@ export default function WordToPDFTool() {
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
+  useEffect(() => {
+    return () => {
+      if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
+    };
+  }, [downloadUrl]);
+
   const handleConvert = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile || isProcessing) return;
 
     setIsProcessing(true);
+    setIsComplete(false);
     setError(null);
+    if (downloadUrl) {
+      window.URL.revokeObjectURL(downloadUrl);
+      setDownloadUrl(null);
+    }
+
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 55_000);
 
     try {
       const formData = new FormData();
@@ -25,19 +39,34 @@ export default function WordToPDFTool() {
       const response = await fetch('/api/convert/word-to-pdf', {
         method: 'POST',
         body: formData,
+        signal: controller.signal,
       });
 
       if (!response.ok) {
-        throw new Error('Conversion failed');
+        let message = `Conversion failed (${response.status})`;
+        try {
+          const data = await response.json();
+          if (typeof data?.error === 'string' && data.error.trim()) message = data.error;
+        } catch {
+          // Keep the status-based error when the API does not return JSON.
+        }
+        throw new Error(message);
       }
 
       const blob = await response.blob();
+      if (blob.size === 0) throw new Error('The converter returned an empty PDF. Please try another supported document.');
+
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
       setIsComplete(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Conversion failed');
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        setError('Conversion took too long. Try a smaller or simpler Word document.');
+      } else {
+        setError(err instanceof Error ? err.message : 'Conversion failed. Please try again.');
+      }
     } finally {
+      window.clearTimeout(timeoutId);
       setIsProcessing(false);
     }
   };
@@ -54,6 +83,7 @@ export default function WordToPDFTool() {
   };
 
   const handleReset = () => {
+    if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
     setSelectedFile(null);
     setIsComplete(false);
     setError(null);
@@ -67,11 +97,11 @@ export default function WordToPDFTool() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-4">
             <FileText className="w-8 h-8 text-blue-600" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Word to PDF Converter
-          </h1>
+          </h2>
           <p className="text-lg text-gray-600 mb-8">
-            Convert your Word documents to PDF instantly
+            Convert supported Word documents to PDF online
           </p>
         </div>
 
@@ -81,7 +111,6 @@ export default function WordToPDFTool() {
               <FileUploader
                 accept=".doc,.docx,.odt"
                 onFileSelected={(files) => setSelectedFile(files[0] || null)}
-                
                 maxSize={50}
               />
 
@@ -97,7 +126,7 @@ export default function WordToPDFTool() {
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
                 <svg className="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">Conversion Complete!</h3>
