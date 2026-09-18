@@ -2,8 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Journal Research Assistant - Academic Journal Analysis | ConvertHub',
-  description: 'Specialized AI for analyzing academic journal articles. Track publications, identify trends, stay current.',
+  title: 'AI Journal Research Assistant – Analyze and Organize Research Articles | PDFilio',
+  description: 'AI-assisted support for reviewing academic journal articles, organizing findings, comparing research themes, and tracking information across supported documents.',
+  keywords: 'AI journal research assistant, academic article analysis, research paper assistant, literature review AI',
+  alternates: { canonical: 'https://pdfilio.com/ai-journal-research-assistant' },
+  openGraph: { title: 'AI Journal Research Assistant – Analyze and Organize Research Articles | PDFilio', description: 'AI-assisted support for reviewing academic journal articles, organizing findings, comparing research themes, and tracking information across supported documents.', url: 'https://pdfilio.com/ai-journal-research-assistant', type: 'website' },
 };
 
 export default function Page() {
@@ -11,7 +14,7 @@ export default function Page() {
     <ToolLandingLayout
       toolName="AI Journal Research Assistant"
       toolSlug="ai-journal-research-assistant"
-      description="Intelligent journal research platform. Track academic publications, analyze trends, identify emerging research directions."
+      description="AI-assisted support for reviewing academic journal articles, organizing findings, comparing themes, and exploring research documents."
       mainContent={`Stay current with journal research. Track publication trends automatically. Identify emerging research. Monitor your field continuously.
 
 Publication Intelligence:
@@ -27,23 +30,7 @@ Author network mapping
 Methodological evolution
 Field development tracking
 Research landscape monitoring`}
-      testimonials={[
-        {
-          name: 'Dr. Sophia Chen',
-          role: 'Journal Editor',
-          text: 'Publication trends instantly analyzed. Research landscape comprehensively understood. Editorial decisions informed significantly.',
-        },
-        {
-          name: 'Thomas Wright',
-          role: 'Field Specialist',
-          text: 'Stay current with field effortlessly. Emerging research identified automatically. Competitive advantage maintained.',
-        },
-        {
-          name: 'Dr. Louise Bergman',
-          role: 'Research Portfolio Manager',
-          text: 'Portfolio research tracked comprehensively. Publication impact assessed automatically. Strategic research decisions informed.',
-        },
-      ]}
+      testimonials={[]}
       features={[
         'Publication tracking',
         'Trend analysis',
