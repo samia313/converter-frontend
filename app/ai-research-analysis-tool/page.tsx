@@ -2,8 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Research Analysis Tool - Advanced Analysis Platform | ConvertHub',
-  description: 'Professional-grade research analysis tool. Deep insights, pattern recognition, comprehensive understanding.',
+  title: 'AI Research Analysis Tool – Analyze Research Documents | PDFilio',
+  description: 'AI-assisted research analysis for extracting information, organizing findings, identifying patterns, and reviewing research documents.',
+  keywords: ['AI research analysis tool', 'research analysis AI', 'AI document analysis', 'research document analyzer', 'research insights'],
+  alternates: { canonical: 'https://pdfilio.com/ai-research-analysis-tool' },
+  openGraph: { title: 'AI Research Analysis Tool | PDFilio', description: 'AI-assisted analysis for research documents and findings.', url: 'https://pdfilio.com/ai-research-analysis-tool', type: 'website' },
 };
 
 export default function Page() {
