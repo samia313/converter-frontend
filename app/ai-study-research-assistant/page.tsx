@@ -2,8 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Study Research Assistant - Student Study Support | ConvertHub',
-  description: 'AI-powered study companion for students. Comprehend complex material, prepare for exams, master difficult concepts.',
+  title: 'AI Study Research Assistant – Study and Understand Research Documents | PDFilio',
+  description: 'AI-assisted study support for simplifying complex material, organizing notes, reviewing documents, and preparing practice questions from supported content.',
+  keywords: 'AI study research assistant, AI study assistant, research study tool, document study assistant',
+  alternates: { canonical: 'https://pdfilio.com/ai-study-research-assistant' },
+  openGraph: { title: 'AI Study Research Assistant – Study and Understand Research Documents | PDFilio', description: 'AI-assisted study support for simplifying complex material, organizing notes, reviewing documents, and preparing practice questions from supported content.', url: 'https://pdfilio.com/ai-study-research-assistant', type: 'website' },
 };
 
 export default function Page() {
@@ -11,7 +14,7 @@ export default function Page() {
     <ToolLandingLayout
       toolName="AI Study Research Assistant"
       toolSlug="ai-study-research-assistant"
-      description="Student-focused AI research companion. Master complex material, prepare comprehensive study notes, accelerate learning."
+      description="AI-assisted study support for simplifying complex material, organizing notes, reviewing documents, and preparing study materials."
       mainContent={`Study smarter, not harder. Complex material simplified. Comprehensive notes generated automatically. Exam preparation streamlined.
 
 Learning Support Engine:
@@ -27,23 +30,7 @@ Practice question creation
 Knowledge gap identification
 Review material synthesis
 Study guide development`}
-      testimonials={[
-        {
-          name: 'Emily Rodriguez',
-          role: 'Engineering Student',
-          text: 'Complex material finally understandable. Study notes comprehensive and organized. Exam scores improved dramatically.',
-        },
-        {
-          name: 'David Kim',
-          role: 'Medical Student',
-          text: 'Massive textbooks simplified effectively. Study process efficient. Knowledge retention improved significantly.',
-        },
-        {
-          name: 'Prof. Rebecca Martinez',
-          role: 'Dean of Students',
-          text: 'Student academic performance improved. Learning support accessible 24/7. Student satisfaction exceptional.',
-        },
-      ]}
+      testimonials={[]}
       features={[
         'Concept simplification',
         'Study notes generation',
