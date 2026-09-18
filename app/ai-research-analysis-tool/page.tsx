@@ -14,8 +14,8 @@ export default function Page() {
     <ToolLandingLayout
       toolName="AI Research Analysis Tool"
       toolSlug="ai-research-analysis-tool"
-      description="Professional-grade research analysis platform. Extract deep insights, recognize patterns, understand research comprehensively."
-      mainContent={`Professional research analysis. Deep insights automatically extracted. Patterns recognized intelligently. Research understanding comprehensive.
+      description="AI-assisted research analysis for extracting information, organizing findings, identifying patterns, and reviewing research documents."
+      mainContent={`Use AI-assisted analysis to extract relevant information, organize findings, review patterns, and explore research documents. Verify important conclusions against the source material.
 
 Advanced Analysis Engine:
 AI applies sophisticated analysis techniques. Pattern recognition advanced. Insight extraction comprehensive. Understanding deep.
@@ -30,23 +30,7 @@ Research interpretation
 Data analysis
 Trend identification
 Strategic intelligence`}
-      testimonials={[
-        {
-          name: 'Prof. Samuel Mitchell',
-          role: 'Research Institute Director',
-          text: 'Analysis depth professional-grade. Pattern recognition sophisticated. Research intelligence extraordinary.',
-        },
-        {
-          name: 'Olivia Walsh',
-          role: 'Strategy Analyst',
-          text: 'Research insights actionable and profound. Analysis quality excellent. Strategic decisions significantly informed.',
-        },
-        {
-          name: 'Dr. Christopher Evans',
-          role: 'Research Scientist',
-          text: 'Pattern recognition identifies research relationships. Analysis comprehensive. Understanding transformed.',
-        },
-      ]}
+      testimonials={[]}
       features={[
         'Advanced analysis',
         'Pattern recognition',
@@ -65,8 +49,8 @@ Strategic intelligence`}
       ]}
       faqs={[
         {
-          q: 'Professional-grade analysis?',
-          a: 'Yes. Enterprise-level analysis tools and sophisticated pattern recognition algorithms.',
+          q: 'What can the analysis tool help with?',
+          a: 'It can assist with extracting information, organizing findings, identifying patterns, and reviewing research documents. Results should be checked against the underlying sources.',
         },
         {
           q: 'Discover research relationships?',
