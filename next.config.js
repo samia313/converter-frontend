@@ -33,6 +33,9 @@ const nextConfig = {
     { source: '/png-to-pdf', destination: '/image-to-pdf', permanent: true },
     { source: '/ocr-pdf', destination: '/ocr', permanent: true },
     { source: '/pdf-editor', destination: '/edit-pdf', permanent: true },
+
+    // Canonical tool URLs live at the root. Redirect legacy /tools/:slug URLs.
+    { source: '/tools/:slug', destination: '/:slug', permanent: true },
   ],
   rewrites: async () => ({ beforeFiles: [], afterFiles: [], fallback: [] }),
   turbopack: {},
