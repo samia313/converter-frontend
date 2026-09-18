@@ -2,8 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Dissertation Assistant - Doctoral Research Support | ConvertHub',
-  description: 'Advanced AI for dissertation research. Manage comprehensive research, analyze complex literature, support doctoral excellence.',
+  title: 'AI Dissertation Assistant – Organize and Analyze Dissertation Research | PDFilio',
+  description: 'AI-assisted support for dissertation research, literature organization, document analysis, and research workflows. Verify important findings against source material.',
+  keywords: 'AI dissertation assistant, dissertation research AI, PhD research assistant, literature review assistant',
+  alternates: { canonical: 'https://pdfilio.com/ai-dissertation-assistant' },
+  openGraph: { title: 'AI Dissertation Assistant – Organize and Analyze Dissertation Research | PDFilio', description: 'AI-assisted support for dissertation research, literature organization, document analysis, and research workflows. Verify important findings against source material.', url: 'https://pdfilio.com/ai-dissertation-assistant', type: 'website' },
 };
 
 export default function Page() {
@@ -11,7 +14,7 @@ export default function Page() {
     <ToolLandingLayout
       toolName="AI Dissertation Assistant"
       toolSlug="ai-dissertation-assistant"
-      description="Advanced AI-powered doctoral research platform. Manage complex research projects, analyze comprehensive literature, achieve dissertation excellence."
+      description="AI-assisted support for dissertation research, literature organization, document analysis, and structured research workflows."
       mainContent={`Doctoral research excellence. Complex research managed systematically. Comprehensive literature synthesized intelligently. Dissertation contributions articulated clearly.
 
 Research Management Engine:
@@ -27,23 +30,7 @@ Methodology development
 Complex research synthesis
 Defense preparation
 Academic publication`}
-      testimonials={[
-        {
-          name: 'Dr. Yuki Tanaka',
-          role: 'Recent PhD Graduate',
-          text: 'Doctoral research complexity managed effectively. Literature synthesis comprehensive and rigorous. Dissertation received excellent committee feedback.',
-        },
-        {
-          name: 'Prof. Edward Johnson',
-          role: 'Dissertation Advisor',
-          text: 'Student dissertations improved markedly. Research organization rigorous. Graduation timelines on track.',
-        },
-        {
-          name: 'Sofia Perez',
-          role: 'Doctoral Candidate',
-          text: 'Overwhelming doctoral research became manageable. Support systemic and intelligent. Doctoral success achievable.',
-        },
-      ]}
+      testimonials={[]}
       features={[
         'Extensive literature synthesis',
         'Research organization',
