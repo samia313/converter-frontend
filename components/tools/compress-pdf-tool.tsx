@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { Download, CheckCircle, AlertCircle, Upload } from 'lucide-react';
 
 interface CompressionResult { originalSize: number; compressedSize: number; reduction: number; }
-const MAX_FILE_SIZE_MB = 50;
+const MAX_FILE_SIZE_MB = 100;
 
 export default function CompressPDFTool() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
