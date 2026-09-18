@@ -125,7 +125,7 @@ export default function CompressPDFToolEnhanced() {
                 <FileUploader
                   accept=".pdf"
                   onFileSelected={handleFileSelect}
-                  maxSize={500}
+                  maxSize={100}
                 />
 
                 {selectedFile && (
