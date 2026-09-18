@@ -89,7 +89,7 @@ export default function PDFToWordTool() {
             <FileUploader
               onFileSelected={(files) => setSelectedFile(files[0] || null)}
               accept=".pdf"
-              maxSize={50}
+              maxSize={100}
             />
 
             {selectedFile && (
