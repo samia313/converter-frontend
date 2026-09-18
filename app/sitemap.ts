@@ -16,7 +16,6 @@ const staticPages = [
   { path: '/ai-tools', priority: 0.8, changeFrequency: 'weekly' as const },
   { path: '/comparisons', priority: 0.75, changeFrequency: 'monthly' as const },
   { path: '/guides', priority: 0.8, changeFrequency: 'weekly' as const },
-  { path: '/vs', priority: 0.7, changeFrequency: 'monthly' as const },
   { path: '/use-cases', priority: 0.8, changeFrequency: 'monthly' as const },
   { path: '/about', priority: 0.5, changeFrequency: 'monthly' as const },
   { path: '/contact', priority: 0.5, changeFrequency: 'monthly' as const },
