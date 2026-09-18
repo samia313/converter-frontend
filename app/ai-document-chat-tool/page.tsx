@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'AI Document Chat Tool – Chat with Supported Documents | PDFilio',
   description: 'Chat with supported documents using AI assistance. Ask questions, find information, and review document content while checking important answers against the source.',
-  keywords: 'AI document chat, document chat tool, chat with documents, AI document assistant',,
+  keywords: 'AI document chat, document chat tool, chat with documents, AI document assistant',
 };
 
 export default function Page() {
