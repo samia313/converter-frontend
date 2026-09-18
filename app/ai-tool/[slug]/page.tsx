@@ -18,6 +18,23 @@ const componentMap: Record<string, React.ComponentType> = {
   ResearchAssistantTool: ResearchAssistantTool,
 }
 
+export async function generateMetadata({ params }: AIToolPageProps) {
+  const tool = getToolConfig(params.slug)
+  if (!tool) return { title: 'AI Tool Not Found | PDFilio', robots: { index: false, follow: true } }
+  return {
+    title: `${tool.name} – AI PDF Tool | PDFilio`,
+    description: tool.description,
+    keywords: tool.keywords.join(', '),
+    alternates: { canonical: `https://pdfilio.com/ai-tool/${tool.slug}` },
+    openGraph: {
+      title: `${tool.name} – AI PDF Tool | PDFilio`,
+      description: tool.description,
+      url: `https://pdfilio.com/ai-tool/${tool.slug}`,
+      type: 'website',
+    },
+  }
+}
+
 export async function generateStaticParams() {
   return AI_TOOLS_MAPPING.map((tool) => ({
     slug: tool.slug,
@@ -110,7 +127,7 @@ export default function AIToolPage({ params }: AIToolPageProps) {
               <ul className="space-y-2 text-sm text-gray-400">
                 <li><a href="/pdf-to-word" className="hover:text-white">PDF to Word</a></li>
                 <li><a href="/word-to-pdf" className="hover:text-white">Word to PDF</a></li>
-                <li><a href="/ai-chat-pdf" className="hover:text-white">Chat PDF</a></li>
+                <li><a href="/pdf-chat" className="hover:text-white">Chat PDF</a></li>
               </ul>
             </div>
             <div>
