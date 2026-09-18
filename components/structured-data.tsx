@@ -11,7 +11,7 @@ export default function StructuredData() {
     '@type': 'Organization',
     name: 'PDFilio',
     url: 'https://pdfilio.com',
-    logo: 'https://pdfilio.com/logo.png',
+    logo: 'https://pdfilio.com/icon-512x512.png',
     description: 'Online PDF tools for converting, editing, compressing, merging, splitting, OCR, and managing PDF files.',
     contactPoint: {
       '@type': 'ContactPoint',
