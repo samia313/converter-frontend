@@ -2,8 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Research Assistant - Intelligent Document Analysis | ConvertHub',
-  description: 'Transform research workflows with intelligent AI-powered analysis, synthesis, and comprehensive research support.',
+  title: 'AI Research Assistant – Analyze and Organize Research | PDFilio',
+  description: 'AI-assisted research workflows for analyzing documents, organizing information, synthesizing findings, and exploring research questions.',
+  keywords: ['AI research assistant', 'research assistant AI', 'AI document research', 'research analysis tool', 'AI research workflow'],
+  alternates: { canonical: 'https://pdfilio.com/ai-research-assistant' },
+  openGraph: { title: 'AI Research Assistant | PDFilio', description: 'AI-assisted research and document analysis workflows.', url: 'https://pdfilio.com/ai-research-assistant', type: 'website' },
 };
 
 export default function Page() {
