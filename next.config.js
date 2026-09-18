@@ -140,6 +140,15 @@ const nextConfig = {
     { source: '/smart-ai-pdf-translator', destination: '/translate-pdf-online', permanent: true },
     { source: '/smart-pdf-translator', destination: '/translate-pdf-online', permanent: true },
 
+    // Consolidate remaining near-duplicate PDF chat intent routes.
+    { source: '/chat-large-pdf', destination: '/pdf-chat', permanent: true },
+    { source: '/chat-with-scanned-pdf', destination: '/pdf-chat', permanent: true },
+    { source: '/pdf-chat-no-signup', destination: '/pdf-chat', permanent: true },
+    { source: '/pdf-summarizer-chat', destination: '/ai-summary', permanent: true },
+    { source: '/free-ai-pdf-summarizer', destination: '/ai-summary', permanent: true },
+    { source: '/free-ai-pdf-translator', destination: '/translate-pdf-online', permanent: true },
+    { source: '/free-ai-translate-pdf', destination: '/translate-pdf-online', permanent: true },
+
     // Consolidate duplicate PDF summarization landing pages.
   ],
   rewrites: async () => ({ beforeFiles: [], afterFiles: [], fallback: [] }),
