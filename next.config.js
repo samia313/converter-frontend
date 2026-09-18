@@ -22,6 +22,10 @@ const nextConfig = {
     ],
   }],
   redirects: async () => [
+    { source: '/sitemap-index.xml', destination: '/sitemap.xml', permanent: true },
+    { source: '/tools-sitemap.xml', destination: '/sitemap.xml', permanent: true },
+    { source: '/blog-sitemap.xml', destination: '/sitemap.xml', permanent: true },
+
     { source: '/sitemap', destination: '/sitemap.xml', permanent: true },
     { source: '/robots', destination: '/robots.txt', permanent: true },
     { source: '/blog/rotate-pdf-pages-correct-orientation', destination: '/rotate-pdf', permanent: true },
