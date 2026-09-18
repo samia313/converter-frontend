@@ -173,7 +173,7 @@ export default function MergePDFTool() {
               }`}
             >
               <p className="text-gray-600 text-lg font-medium">Drag PDFs here or click</p>
-              <p className="text-gray-500 text-sm mt-2">Max 100MB per file</p>
+              <p className="text-gray-500 text-sm mt-2">Max 100MB per file · 500MB total</p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -226,8 +226,9 @@ export default function MergePDFTool() {
                       </button>
                     </div>
                   ))}
-                  <div className="text-sm text-gray-600 pt-2 border-t border-gray-200 mt-4">
-                    Total: <span className="font-semibold">{formatFileSize(totalSize)}</span>
+                  <div className="text-sm text-gray-600 pt-2 border-t border-gray-200 mt-4 flex items-center justify-between gap-4">
+                    <span>Total: <span className="font-semibold">{formatFileSize(totalSize)}</span></span>
+                    <span>Limit: 500MB</span>
                   </div>
                 </div>
               </div>
