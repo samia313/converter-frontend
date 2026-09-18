@@ -4,18 +4,11 @@ import { useState, useEffect } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
 
-export default function GenericTool() {
+export default function ExcelToPDFTool() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-  const [toolName, setToolName] = useState('excel-to-pdf');
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setToolName(window.location.pathname.split('/')[1] || 'excel-to-pdf');
-    }
-  }, []);
 
   const handleConvert = async () => {
     if (!selectedFile) return;
@@ -23,7 +16,7 @@ export default function GenericTool() {
     setError(null);
 
     try {
-      const apiEndpoint = `/api/convert/${toolName}`;
+      const apiEndpoint = '/api/convert/excel-to-pdf';
       const formData = new FormData();
       formData.append('file', selectedFile);
 
@@ -32,7 +25,7 @@ export default function GenericTool() {
         body: formData,
       });
 
-      if (!response.ok) throw new Error('Processing failed');
+      if (!response.ok) { let message = `Conversion failed (${response.status})`; try { const data = await response.json(); message = data.error || message; } catch {} throw new Error(message); }
       const blob = await response.blob();
       setDownloadUrl(window.URL.createObjectURL(blob));
     } catch (err) {
@@ -57,12 +50,12 @@ export default function GenericTool() {
     <section className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 md:py-20">
       <div className="container mx-auto max-w-2xl px-4">
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Processing Tool</h1>
-          <p className="text-lg text-gray-600">Convert your files instantly</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Excel to PDF Converter</h1>
+          <p className="text-lg text-gray-600">Convert supported Excel spreadsheets to PDF online</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-8">
-          <FileUploader accept="*" onFileSelected={(files) => setSelectedFile(files[0] || null)} maxSize={100} />
+          <FileUploader accept=".xlsx,.xls" onFileSelected={(files) => setSelectedFile(files[0] || null)} maxSize={100} />
 
           {error && <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg"><p className="text-red-700 text-sm">{error}</p></div>}
 
@@ -72,7 +65,7 @@ export default function GenericTool() {
             </button>
           ) : (
             <div className="text-center mt-6">
-              <p className="text-green-600 font-semibold mb-4">Processing completed!</p>
+              <p className="text-green-600 font-semibold mb-4">Conversion completed!</p>
               <div className="flex gap-4 justify-center">
                 <button onClick={handleDownload} className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg">
                   <Download className="w-5 h-5" />
