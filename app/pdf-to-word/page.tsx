@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import PDFToWordTool from '@/components/tools/pdf-to-word-tool';
 
 export const metadata: Metadata = {
-  title: 'PDF to Word Converter – Convert PDF to DOCX Online',
+  title: 'PDF to Word Converter – Convert PDF to DOCX Online | PDFilio',
   description: 'Convert supported PDF files to editable Word DOCX online. Learn how formatting, tables, images and scanned PDFs can affect conversion results.',
   keywords: [
     'PDF to Word',
