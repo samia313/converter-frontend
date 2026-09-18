@@ -111,7 +111,7 @@ export default function SplitPDFTool() {
               setSplitPage('');
               setSelectedFile(files[0] || null);
             }}
-            maxSize={50}
+            maxSize={100}
           />
 
           {selectedFile && (
