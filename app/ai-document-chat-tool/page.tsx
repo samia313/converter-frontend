@@ -2,9 +2,9 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Document Chat Tool - Universal Document Conversation | PDFilio',
-  description: 'Chat with any document type. PDFs, Word docs, images, scans - one universal tool.',
-  keywords: 'document chat tool, universal document chat, multi-format chat, ai document tool',
+  title: 'AI Document Chat Tool – Chat with Supported Documents | PDFilio',
+  description: 'Chat with supported documents using AI assistance. Ask questions, find information, and review document content while checking important answers against the source.',
+  keywords: 'AI document chat, document chat tool, chat with documents, AI document assistant',,
 };
 
 export default function Page() {
@@ -12,8 +12,8 @@ export default function Page() {
     <ToolLandingLayout
       toolName="AI Document Chat Tool"
       toolSlug="ai-document-chat-tool"
-      description="Universal document chat. PDFs, Word documents, images, scans - one integrated tool for all document types."
-      mainContent={`One tool for all documents. PDF, Word, image, scan - upload any document type and start chatting instantly.
+      description="AI-assisted document chat for supported PDFs, documents, images, and scans, depending on the current tool configuration."
+      mainContent={`Upload supported document content and ask questions about it using an AI-assisted chat workflow. Available file types and limits depend on the current tool configuration.
 
 Universal Support:
 - PDF documents
@@ -62,18 +62,7 @@ Whatever documents you work with, this tool handles them all seamlessly.`}
         'Multi-format projects',
         'Unified chat',
       ].join('\n')}
-      testimonials={[
-        {
-          name: 'Lisa Garcia',
-          role: 'Document Manager',
-          text: 'Works with all our document types. PDFs, Word docs, scans - everything works seamlessly.',
-        },
-        {
-          name: 'James Wilson',
-          role: 'Project Coordinator',
-          text: 'No format switching. One tool for all documents. Simplified our entire workflow.',
-        },
-      ]}
+      testimonials={[]}
       faqs={[
         {
           q: 'What formats work?',
