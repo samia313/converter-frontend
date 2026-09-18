@@ -16,12 +16,13 @@ export default function OcrTool() {
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
 
-  const handleFileSelected = (file: File) => {
+  const handleFileSelected = (files: File[]) => {
+    const file = files[0] ?? null;
     setSelectedFile(file);
     setText('');
     setError('');
     setProgress(0);
-    setStatus('Ready to OCR');
+    setStatus(file ? 'Ready to OCR' : '');
   };
 
   const runOcr = async () => {
