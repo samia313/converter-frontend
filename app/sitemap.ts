@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { guides as coreGuides } from '@/lib/content/how-to-guides'
 import { additionalGuides } from '@/lib/content/additional-guides'
 import { editorialBlogPosts } from '@/lib/content/editorial-blog-posts'
+import { comparisons } from '@/lib/content/comparisons'
 
 const BASE_URL = 'https://pdfilio.com'
 const guides = [...coreGuides, ...additionalGuides]
@@ -12,6 +13,8 @@ const staticPages = [
   { path: '/features', priority: 0.8, changeFrequency: 'monthly' as const },
   { path: '/pricing', priority: 0.8, changeFrequency: 'weekly' as const },
   { path: '/blog', priority: 0.85, changeFrequency: 'weekly' as const },
+  { path: '/ai-tools', priority: 0.8, changeFrequency: 'weekly' as const },
+  { path: '/comparisons', priority: 0.75, changeFrequency: 'monthly' as const },
   { path: '/guides', priority: 0.8, changeFrequency: 'weekly' as const },
   { path: '/vs', priority: 0.7, changeFrequency: 'monthly' as const },
   { path: '/use-cases', priority: 0.8, changeFrequency: 'monthly' as const },
@@ -37,6 +40,12 @@ const longTailGuides = guides.map((guide) => ({
   lastModified: new Date(guide.publishedAt),
 }))
 
+const comparisonPages = comparisons.map((comparison) => ({
+  path: `/vs/${comparison.slug}`,
+  priority: 0.65,
+  changeFrequency: 'monthly' as const,
+}))
+
 const editorialBlogPages = editorialBlogPosts.map((post) => ({
   path: `/blog/${post.slug}`,
   priority: post.featured ? 0.8 : 0.7,
@@ -59,5 +68,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...toolPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority })),
     ...longTailGuides.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority, lastModified: page.lastModified })),
     ...editorialBlogPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority, lastModified: page.lastModified })),
+    ...comparisonPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority })),
   ])
 }
