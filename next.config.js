@@ -92,7 +92,6 @@ const nextConfig = {
 
     // Collapse overlapping AI-PDF chat landing pages into the canonical tool.
     { source: '/ai-pdf-chat', destination: '/pdf-chat', permanent: true },
-    { source: '/ai-chat-pdf', destination: '/pdf-chat', permanent: true },
     { source: '/ai-document-chat', destination: '/pdf-chat', permanent: true },
 
     // Consolidate duplicate PDF chat/search-intent landing pages.
@@ -106,22 +105,8 @@ const nextConfig = {
     { source: '/smart-ai-pdf-chat', destination: '/pdf-chat', permanent: true },
 
     // Consolidate duplicate PDF translation landing pages.
-    { source: '/translate-pdf-with-ai', destination: '/translate-pdf-online', permanent: true },
-    { source: '/translate-pdf-without-formatting-loss', destination: '/translate-pdf-online', permanent: true },
-    { source: '/translate-scanned-pdf', destination: '/translate-pdf-online', permanent: true },
-    { source: '/online-ai-pdf-translator', destination: '/translate-pdf-online', permanent: true },
-    { source: '/free-ai-pdf-translator', destination: '/translate-pdf-online', permanent: true },
-    { source: '/free-ai-translate-pdf', destination: '/translate-pdf-online', permanent: true },
-    { source: '/smart-pdf-translator', destination: '/translate-pdf-online', permanent: true },
 
     // Consolidate duplicate PDF summarization landing pages.
-    { source: '/pdf-summarizer-ai', destination: '/ai-summary', permanent: true },
-    { source: '/pdf-summary-generator', destination: '/ai-summary', permanent: true },
-    { source: '/pdf-text-summarizer', destination: '/ai-summary', permanent: true },
-    { source: '/online-pdf-summarizer', destination: '/ai-summary', permanent: true },
-    { source: '/free-ai-pdf-summarizer', destination: '/ai-summary', permanent: true },
-    { source: '/instant-pdf-summary', destination: '/ai-summary', permanent: true },
-    { source: '/smart-pdf-summary', destination: '/ai-summary', permanent: true },
   ],
   rewrites: async () => ({ beforeFiles: [], afterFiles: [], fallback: [] }),
   turbopack: {},
