@@ -25,6 +25,10 @@ const staticPages = [
   { path: '/faq', priority: 0.6, changeFrequency: 'monthly' as const },
 ]
 
+const aiPages = [
+  'ai-document-rewriter','ai-research-writing-assistant','ai-document-chat-tool',
+].map((slug) => ({ path: `/${slug}`, priority: 0.75, changeFrequency: 'monthly' as const }))
+
 const toolPages = [
   'merge-pdf','split-pdf','rotate-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf',
   'word-to-pdf','excel-to-pdf','powerpoint-to-pdf','jpg-to-pdf','html-to-pdf','image-to-pdf',
@@ -65,6 +69,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return uniqueEntries([
     ...staticPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority })),
     ...toolPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority })),
+    ...aiPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority })),
     ...longTailGuides.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority, lastModified: page.lastModified })),
     ...editorialBlogPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority, lastModified: page.lastModified })),
     ...comparisonPages.map((page) => ({ url: `${BASE_URL}${page.path}`, changeFrequency: page.changeFrequency, priority: page.priority })),
