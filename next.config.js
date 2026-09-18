@@ -36,6 +36,11 @@ const nextConfig = {
 
     // Canonical tool URLs live at the root. Redirect legacy /tools/:slug URLs.
     { source: '/tools/:slug', destination: '/:slug', permanent: true },
+
+    // Collapse overlapping AI-PDF chat landing pages into the canonical tool.
+    { source: '/ai-pdf-chat', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-chat-pdf', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-document-chat', destination: '/pdf-chat', permanent: true },
   ],
   rewrites: async () => ({ beforeFiles: [], afterFiles: [], fallback: [] }),
   turbopack: {},
