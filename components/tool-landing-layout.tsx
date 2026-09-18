@@ -214,7 +214,37 @@ export default function ToolLandingLayout({
       </section>
 
       {schema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />}
-      {!schema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({'@context':'https://schema.org','@type':'SoftwareApplication',name:toolName,description,applicationCategory:'Utility',offers:{'@type':'Offer',price:'0',priceCurrency:'USD'}}) }} />}
+      {!schema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({'@context':'https://schema.org','@type':'SoftwareApplication',name:toolName,description,applicationCategory:'Utility'}) }} />}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://pdfilio.com/' },
+              { '@type': 'ListItem', position: 2, name: 'PDF Tools', item: 'https://pdfilio.com/tools' },
+              { '@type': 'ListItem', position: 3, name: toolName, item: `https://pdfilio.com/${toolSlug}` },
+            ],
+          }),
+        }}
+      />
+      {faqs.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: faqs.map((faq) => ({
+                '@type': 'Question',
+                name: faq.q,
+                acceptedAnswer: { '@type': 'Answer', text: faq.a },
+              })),
+            }),
+          }}
+        />
+      )}
     </div>
   );
 }
