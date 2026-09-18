@@ -166,11 +166,19 @@ export default function ToolLandingLayout({
       <section className="px-4 py-10 sm:px-6 sm:py-16 lg:px-8">
         <div className="mx-auto w-full max-w-4xl">
           <h2 className="mb-8 text-center text-2xl font-black text-gray-900 sm:mb-12 sm:text-4xl">How to Use {toolName}</h2>
-          <div className="space-y-5 sm:space-y-6">
-            <div><h3 className="mb-2 font-bold text-gray-900">1. Upload Your File</h3><p className="text-gray-600">Choose your PDF file.</p></div>
-            <div><h3 className="mb-2 font-bold text-gray-900">2. Configure Settings</h3><p className="text-gray-600">Choose the available options.</p></div>
-            <div><h3 className="mb-2 font-bold text-gray-900">3. Download Result</h3><p className="text-gray-600">Download the result when it is ready.</p></div>
-          </div>
+          {howitworks ? (
+            <div className="space-y-5 text-gray-600 sm:space-y-6">
+              {howitworks.split(/\n+/).filter(Boolean).map((step, i) => (
+                <p key={i} className="leading-7">{step.trim()}</p>
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-5 sm:space-y-6">
+              <div><h3 className="mb-2 font-bold text-gray-900">1. Open the Tool</h3><p className="text-gray-600">Open {toolName} and review the available workflow and supported inputs.</p></div>
+              <div><h3 className="mb-2 font-bold text-gray-900">2. Add or Select Your Content</h3><p className="text-gray-600">Provide the supported file or content required by the tool, then choose any available options.</p></div>
+              <div><h3 className="mb-2 font-bold text-gray-900">3. Review the Result</h3><p className="text-gray-600">Review the generated result before downloading or using it, especially when accuracy matters.</p></div>
+            </div>
+          )}
         </div>
       </section>
 
