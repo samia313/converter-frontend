@@ -2,8 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Academic Research Assistant - University Research Support | ConvertHub',
-  description: 'Specialized AI research assistant for academic institutions. Perfect for students, faculty, and researchers.',
+  title: 'AI Academic Research Assistant – Research Support for Students & Researchers | PDFilio',
+  description: 'AI-assisted support for literature review, research organization, document analysis, and academic workflows. Verify important findings against source material.',
+  keywords: ['AI academic research assistant', 'academic research AI', 'literature review assistant', 'AI research tool', 'student research assistant'],
+  alternates: { canonical: 'https://pdfilio.com/ai-academic-research-assistant' },
+  openGraph: { title: 'AI Academic Research Assistant | PDFilio', description: 'AI-assisted support for academic research workflows and document analysis.', url: 'https://pdfilio.com/ai-academic-research-assistant', type: 'website' },
 };
 
 export default function Page() {
