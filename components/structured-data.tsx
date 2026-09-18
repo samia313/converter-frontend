@@ -4,19 +4,6 @@ export default function StructuredData() {
     '@type': 'WebSite',
     name: 'PDFilio',
     url: 'https://pdfilio.com',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: 'https://pdfilio.com/search?q={search_term_string}',
-      },
-      'query-input': 'required name=search_term_string',
-    },
-    sameAs: [
-      'https://twitter.com/PDFilio',
-      'https://facebook.com/PDFilio',
-      'https://instagram.com/PDFilio',
-    ],
   };
 
   const organizationSchema = {
@@ -25,17 +12,13 @@ export default function StructuredData() {
     name: 'PDFilio',
     url: 'https://pdfilio.com',
     logo: 'https://pdfilio.com/logo.png',
-    description: 'Free online PDF converter, editor, and management tool with AI capabilities',
+    description: 'Online PDF tools for converting, editing, compressing, merging, splitting, OCR, and managing PDF files.',
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'Customer Support',
       email: 'support@pdfilio.com',
       availableLanguage: ['en'],
     },
-    sameAs: [
-      'https://twitter.com/PDFilio',
-      'https://facebook.com/PDFilio',
-    ],
   };
 
   return (
