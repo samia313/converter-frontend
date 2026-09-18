@@ -4,9 +4,10 @@ import { AI_TOOLS_MAPPING, getFeaturedAITools, getAIToolsByCategory } from '@/li
 import { ArrowRight, Zap, Globe, FileText, Search, Pencil } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Advanced AI Tools | PDFilio',
-  description: 'Discover 18+ powerful AI tools for document analysis, translation, summarization, research, and more.',
-  keywords: 'ai tools, document analysis, translation, summarization, research assistant',
+  title: 'AI PDF Tools – Chat, Summarize, Translate & Analyze PDFs | PDFilio',
+  description: 'Explore PDFilio AI tools for chatting with PDFs, summarizing documents, translating PDFs, OCR, and research assistance.',
+  keywords: 'AI PDF tools, chat with PDF, AI PDF summarizer, translate PDF, PDF OCR, document analysis',
+  alternates: { canonical: 'https://pdfilio.com/ai-tools' },
 };
 
 const categoryIcons = {
@@ -40,7 +41,7 @@ function MessageCircleIcon(props: any) {
 function ToolCard({ tool }: { tool: (typeof AI_TOOLS_MAPPING)[0] }) {
   return (
     <Link
-      href={`/tools/ai/${tool.slug}`}
+      href={`/ai-tool/${tool.slug}`}
       className="group bg-white rounded-xl shadow hover:shadow-lg transition border border-gray-200 hover:border-blue-300 p-6"
     >
       <div className="flex items-start justify-between mb-4">
@@ -78,11 +79,11 @@ export default function AIToolsPage() {
             Advanced AI Tools
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Unlock the power of AI with our 18+ advanced document analysis, translation, summarization, and research tools. Process any document instantly.
+            Use AI-powered tools to chat with PDFs, summarize documents, translate content, extract text, and support document research.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href="/tools/ai/ai-chat-pdf"
+              href="/ai-tool/ai-chat-pdf"
               className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition"
             >
               Try AI Chat PDF
@@ -100,8 +101,8 @@ export default function AIToolsPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
           {[
             { label: '18+ Tools', value: 'Advanced Features' },
-            { label: '100% Secure', value: 'No Data Storage' },
-            { label: '<2s Processing', value: 'Lightning Fast' },
+            { label: 'Secure Processing', value: 'Privacy-focused workflows' },
+            { label: 'Fast Processing', value: 'Results vary by document' },
             { label: 'Free to Use', value: 'No Sign-up' },
           ].map((stat, i) => (
             <div key={i} className="bg-white rounded-lg p-6 border border-gray-200">
@@ -178,8 +179,8 @@ export default function AIToolsPage() {
               description: 'Simple, intuitive interface. No technical knowledge required to get started.',
             },
             {
-              title: 'Always Free',
-              description: 'No subscription required. Use as many tools as you want completely free.',
+              title: 'Free options available',
+              description: 'No subscription required. Availability and limits can vary by tool.',
             },
           ].map((benefit, i) => (
             <div key={i} className="bg-white rounded-lg p-8 border border-gray-200">
@@ -198,7 +199,7 @@ export default function AIToolsPage() {
             Start using our AI tools today. No sign-up required. No credit card needed.
           </p>
           <Link
-            href="/tools/ai/ai-chat-pdf"
+            href="/ai-tool/ai-chat-pdf"
             className="inline-block px-8 py-3 bg-white hover:bg-blue-50 text-blue-600 font-semibold rounded-lg transition"
           >
             Get Started Now
