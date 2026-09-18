@@ -14,7 +14,7 @@ export default function FileUploader({
   onFileSelected,
   accept = '.pdf',
   multiple = false,
-  maxSize = 50,
+  maxSize = 100,
 }: FileUploaderProps) {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
