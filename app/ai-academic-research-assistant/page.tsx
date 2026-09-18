@@ -30,23 +30,7 @@ Institutional benchmarking
 Academic publishing
 Research methodology analysis
 Citation management`}
-      testimonials={[
-        {
-          name: 'Prof. Margaret O\'Brien',
-          role: 'History Department',
-          text: 'Students produce better research papers. Tool supports academic rigor. Learning outcomes improved noticeably.',
-        },
-        {
-          name: 'Dr. Nathan Kumar',
-          role: 'University Librarian',
-          text: 'Faculty adoption high. Students appreciate research support. Institutional research capacity expanded significantly.',
-        },
-        {
-          name: 'Amelia Foster',
-          role: 'Undergraduate Researcher',
-          text: 'Academic research became manageable. Complex papers understandable. Research confidence increased dramatically.',
-        },
-      ]}
+      testimonials={[]}
       features={[
         'Academic methodology',
         'Citation support',
