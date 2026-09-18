@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument, rgb } from 'pdf-lib';
 import * as mammoth from 'mammoth';
 
-export const maxDuration = 30;
+export const runtime = 'nodejs';
+export const maxDuration = 60;
+
+const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
 async function extractWordContent(arrayBuffer: ArrayBuffer): Promise<string> {
   try {
@@ -113,14 +116,11 @@ export async function POST(request: NextRequest) {
     }
 
     const fileName = file.name.toLowerCase();
-    const isWord = file.type.includes('word') || 
-                   file.type.includes('officedocument') ||
-                   fileName.endsWith('.doc') ||
-                   fileName.endsWith('.docx');
+    const isDocx = file.type.includes('officedocument') || fileName.endsWith('.docx');
 
-    if (!isWord) {
+    if (!isDocx) {
       return NextResponse.json(
-        { error: 'File must be a Word document (.doc or .docx)' },
+        { error: 'File must be a supported Word document (.docx)' },
         { status: 400 }
       );
     }
@@ -128,6 +128,13 @@ export async function POST(request: NextRequest) {
     console.log('[v0] Converting Word to PDF for file:', file.name);
 
     const arrayBuffer = await file.arrayBuffer();
+
+    if (arrayBuffer.byteLength > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: 'File size exceeds the 100MB limit.' },
+        { status: 413 }
+      );
+    }
 
     // Validate file size
     if (arrayBuffer.byteLength === 0) {
@@ -161,7 +168,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const outputFileName = file.name.replace(/\.(doc|docx)$/i, '.pdf');
+    const outputFileName = file.name.replace(/\.docx$/i, '.pdf');
 
     console.log('[v0] PDF created successfully, size:', pdfBuffer.length, 'bytes');
 
