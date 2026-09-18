@@ -97,6 +97,10 @@ export async function POST(request: NextRequest) {
     if (pdfBuffer.length === 0) {
       return NextResponse.json({ error: 'File is empty' }, { status: 400 });
     }
+    const maxSize = 100 * 1024 * 1024;
+    if (pdfBuffer.length > maxSize) {
+      return NextResponse.json({ error: 'File size exceeds the 100MB limit.' }, { status: 413 });
+    }
 
     const pdfDoc = await PDFDocument.load(pdfBuffer, { ignoreEncryption: true });
     const pageCount = pdfDoc.getPageCount();
