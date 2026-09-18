@@ -45,7 +45,7 @@ Strategic intelligence`}
         'Deep insights',
         'Professional quality',
         'Pattern discovery',
-        'Strategic advantage',
+        'Organized research workflows',
       ]}
       faqs={[
         {
