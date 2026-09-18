@@ -2,9 +2,16 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Document Translator - Multi-Format Translation | TranslateHub',
-  description: 'Translate any document type with AI. PDFs, Word docs, images, and more.',
-  keywords: 'ai document translator, document translation, multi-format translator',
+  title: 'AI Document Translator Online – Translate PDFs & Documents | PDFilio',
+  description: 'Translate supported PDF and document content with AI assistance. Explore document translation workflows while reviewing important translations against the source.',
+  keywords: ['AI document translator', 'document translation', 'PDF translator', 'AI translation'],
+  alternates: { canonical: 'https://pdfilio.com/ai-document-translator' },
+  openGraph: {
+    title: 'AI Document Translator Online | PDFilio',
+    description: 'Translate supported PDF and document content with AI assistance.',
+    url: 'https://pdfilio.com/ai-document-translator',
+    type: 'website',
+  },
 };
 
 export default function Page() {
@@ -12,84 +19,53 @@ export default function Page() {
     <ToolLandingLayout
       toolName="AI Document Translator"
       toolSlug="ai-document-translator"
-      description="Universal AI document translation. PDFs, Word documents, images, scans—translate any format."
-      mainContent={`One tool for all document types. PDF, Word, image, scan—upload any format and get professional translation instantly.
+      description="Translate supported document content with AI assistance and review the result against the original source."
+      mainContent={`AI Document Translator helps you translate supported document content through an AI-assisted workflow. It is designed for users who need to understand documents in another language without manually copying every section into a separate translator.
 
-Universal Format Support:
-- PDF documents
-- Word documents
-- PowerPoint presentations
-- Text files
-- Images with text
-- Scanned documents
-- Excel spreadsheets
-- Mixed format support
+Supported formats and language coverage depend on the current PDFilio processing workflow. Translation quality can vary with document structure, extracted text, formatting, terminology, and language pair.
 
-Simplified Workflow:
-No format conversion needed. No separate tools. Upload any document and translate immediately.
-
-Complete Compatibility:
-Whatever document format you work with, this AI translator handles it seamlessly with automatic format detection.`}
+For legal, financial, medical, academic, or other high-stakes material, treat AI translation as a review aid and verify important wording against the original document or a qualified human translator.`}
       features={[
-        'Multi-format support',
-        'PDF and Word',
-        'PowerPoint support',
-        'Image translation',
-        'Scanned documents',
-        'Format auto-detection',
-        'Universal translation',
-        'Complete compatibility',
+        'AI-assisted document translation',
+        'PDF translation workflow',
+        'Natural-language translation support',
+        'Document text extraction',
+        'Browser-based workflow',
+        'Source-versus-translation review',
+        'Support for longer documents where available',
+        'Translation review guidance',
       ]}
       benefits={[
-        'One tool all formats',
-        'Simplified workflow',
-        'No conversion needed',
-        'Complete coverage',
-        'Easy integration',
-        'Time efficient',
-        'Cost effective',
-        'Unified solution',
+        'Translate document content without repetitive copy and paste',
+        'Get a useful first-pass translation quickly',
+        'Review translated content in the context of the source',
+        'Speed up multilingual document understanding',
+        'Use one workflow for supported document translation tasks',
+        'Keep important terminology and claims subject to human review',
       ]}
       useCase={[
-        'Mixed document types',
-        'Diverse collections',
-        'Workflow simplification',
-        'Cross-format needs',
-        'Complete projects',
-        'Format flexibility',
-        'Integrated translation',
-        'Unified handling',
-        'Multi-format projects',
-        'Complete translation',
+        'Students reading documents in another language',
+        'Researchers reviewing multilingual source material',
+        'Professionals understanding international documents',
+        'Teams preparing first-pass translations',
+        'Readers reviewing supported PDF content',
+        'Users comparing translated wording with the source',
       ].join('\n')}
-      testimonials={[
-        {
-          name: 'Sophie Leclerc',
-          role: 'Document Manager',
-          text: 'Works with all our document types. Word docs, PDFs, PowerPoints—everything translates perfectly.',
-        },
-        {
-          name: 'Ming Chen',
-          role: 'Project Lead',
-          text: 'No format switching needed. One tool translates everything we need.',
-        },
-      ]}
+      testimonials={[]}
       faqs={[
-        {
-          q: 'What formats work?',
-          a: 'PDFs, Word docs, PowerPoints, images, scans—virtually any format.',
-        },
-        {
-          q: 'Automatic format detection?',
-          a: 'Yes, automatically detects and translates any document format.',
-        },
+        {q: 'What is AI Document Translator?', a: 'It is an AI-assisted workflow for translating supported document content into another language.'},
+        {q: 'Can I translate a PDF?', a: 'Supported PDFs can be translated through the available PDFilio document-processing workflow.'},
+        {q: 'Are AI translations always accurate?', a: 'No. Translation quality can vary. Verify important terminology, numbers, names, quotations, and conclusions against the original source.'},
+        {q: 'Can I use it for legal or medical documents?', a: 'It may assist with initial understanding, but important legal or medical translations should be reviewed against the original by an appropriate qualified professional.'},
+        {q: 'What file formats are supported?', a: 'Supported formats depend on the current PDFilio processing workflow and the file type you provide.'},
       ]}
       relatedTools={[
         { name: 'AI PDF Translator', slug: 'ai-pdf-translator' },
-        { name: 'Online PDF Language Converter', slug: 'online-pdf-language-converter' },
+        { name: 'AI Document Chat', slug: 'ai-document-chat' },
+        { name: 'PDF to Word', slug: 'pdf-to-word' },
       ]}
-      primaryKeyword="ai document translator"
-      secondaryKeywords={['document translation', 'multi-format translator']}
+      primaryKeyword="AI document translator"
+      secondaryKeywords={['document translation', 'PDF translator', 'AI translation']}
     />
   );
 }
