@@ -191,6 +191,28 @@ const nextConfig = {
     { source: '/free-ai-pdf-translator', destination: '/translate-pdf-online', permanent: true },
     { source: '/free-ai-translate-pdf', destination: '/translate-pdf-online', permanent: true },
 
+    // Final duplicate AI intent consolidation for legacy indexed/discovered URLs.
+    { source: '/ai-research-assistant-without-login', destination: '/ai-research-assistant', permanent: true },
+    { source: '/ai-research-assistant-without-signup', destination: '/ai-research-assistant', permanent: true },
+    { source: '/free-ai-research-assistant', destination: '/ai-research-assistant', permanent: true },
+    { source: '/research-pdf-chat', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-research-pdf-chat', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-research-summary-assistant', destination: '/ai-summary', permanent: true },
+    { source: '/automatic-pdf-summary', destination: '/ai-summary', permanent: true },
+    { source: '/fast-pdf-summarizer', destination: '/ai-summary', permanent: true },
+    { source: '/research-pdf-summarizer', destination: '/ai-summary', permanent: true },
+    { source: '/large-pdf-translator', destination: '/translate-pdf-online', permanent: true },
+    { source: '/research-paper-pdf-translator', destination: '/translate-pdf-online', permanent: true },
+    { source: '/translate-pdf-with-ai', destination: '/translate-pdf-online', permanent: true },
+    { source: '/translate-pdf-without-formatting-loss', destination: '/translate-pdf-online', permanent: true },
+    { source: '/translate-scanned-pdf', destination: '/translate-pdf-online', permanent: true },
+    { source: '/best-ai-chat-pdf-tool', destination: '/pdf-chat', permanent: true },
+    { source: '/gpt-ai-chat-pdf', destination: '/pdf-chat', permanent: true },
+    { source: '/free-chat-with-pdf', destination: '/pdf-chat', permanent: true },
+    { source: '/secure-ai-pdf-chat', destination: '/pdf-chat', permanent: true },
+    { source: '/pdf-ai-analyzer', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-ocr', destination: '/ocr', permanent: true },
+
     // Consolidate duplicate PDF summarization landing pages.
   ],
   rewrites: async () => ({ beforeFiles: [], afterFiles: [], fallback: [] }),
