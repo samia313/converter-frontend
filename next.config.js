@@ -88,6 +88,8 @@ const nextConfig = {
     { source: '/smart-ai-pdf-translator', destination: '/translate-pdf-online', permanent: true },
     { source: '/ai-document-translator', destination: '/translate-pdf-online', permanent: true },
     { source: '/ai-document-translation-tool', destination: '/translate-pdf-online', permanent: true },
+    { source: '/vs', destination: '/comparisons', permanent: true },
+    { source: '/tools/ai/:slug', destination: '/ai-tool/:slug', permanent: true },
     { source: '/tools/:slug', destination: '/:slug', permanent: true },
 
     // Collapse overlapping AI-PDF chat landing pages into the canonical tool.
