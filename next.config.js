@@ -108,6 +108,38 @@ const nextConfig = {
 
     // Consolidate duplicate PDF translation landing pages.
 
+    // Consolidate remaining duplicate AI-PDF chat routes.
+    { source: '/ai-chat-large-pdf', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-chat-pdf-without-login', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-chat-pdf-without-signup', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-chat-scanned-pdf', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-chat-with-pdf-documents', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-pdf-chat-assistant', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-pdf-question-answer', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-pdf-reader-chat', destination: '/pdf-chat', permanent: true },
+
+    // Consolidate remaining duplicate AI-PDF summary routes.
+    { source: '/ai-document-summarizer', destination: '/ai-summary', permanent: true },
+    { source: '/ai-file-summarizer', destination: '/ai-summary', permanent: true },
+    { source: '/ai-pdf-summary', destination: '/ai-summary', permanent: true },
+    { source: '/ai-pdf-summary-tool', destination: '/ai-summary', permanent: true },
+    { source: '/ai-report-summarizer', destination: '/ai-summary', permanent: true },
+    { source: '/smart-pdf-summary', destination: '/ai-summary', permanent: true },
+
+    // Consolidate remaining duplicate AI-PDF translation routes.
+    { source: '/ai-document-translation-tool', destination: '/translate-pdf-online', permanent: true },
+    { source: '/ai-document-translator', destination: '/translate-pdf-online', permanent: true },
+    { source: '/ai-ocr-pdf-translator', destination: '/translate-pdf-online', permanent: true },
+    { source: '/ai-pdf-translation-tool', destination: '/translate-pdf-online', permanent: true },
+    { source: '/ai-pdf-translation', destination: '/translate-pdf-online', permanent: true },
+    { source: '/ai-pdf-translator', destination: '/translate-pdf-online', permanent: true },
+    { source: '/ai-translate-pdf', destination: '/translate-pdf-online', permanent: true },
+    { source: '/ai-translate-pdf-documents', destination: '/translate-pdf-online', permanent: true },
+    { source: '/ai-translate-scanned-pdf', destination: '/translate-pdf-online', permanent: true },
+    { source: '/instant-ai-pdf-translation', destination: '/translate-pdf-online', permanent: true },
+    { source: '/smart-ai-pdf-translator', destination: '/translate-pdf-online', permanent: true },
+    { source: '/smart-pdf-translator', destination: '/translate-pdf-online', permanent: true },
+
     // Consolidate duplicate PDF summarization landing pages.
   ],
   rewrites: async () => ({ beforeFiles: [], afterFiles: [], fallback: [] }),
