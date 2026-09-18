@@ -2,8 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Thesis Research Assistant - Master Thesis Support | ConvertHub',
-  description: 'Specialized AI for thesis research. Conduct comprehensive literature review, organize research, prepare defense.',
+  title: 'AI Thesis Research Assistant – Organize Thesis Research and Literature | PDFilio',
+  description: 'AI-assisted thesis research support for literature organization, document analysis, finding synthesis, and research preparation. Check important conclusions against sources.',
+  keywords: 'AI thesis research assistant, thesis research AI, literature review assistant, academic research tool',
+  alternates: { canonical: 'https://pdfilio.com/ai-thesis-research-assistant' },
+  openGraph: { title: 'AI Thesis Research Assistant – Organize Thesis Research and Literature | PDFilio', description: 'AI-assisted thesis research support for literature organization, document analysis, finding synthesis, and research preparation. Check important conclusions against sources.', url: 'https://pdfilio.com/ai-thesis-research-assistant', type: 'website' },
 };
 
 export default function Page() {
@@ -11,7 +14,7 @@ export default function Page() {
     <ToolLandingLayout
       toolName="AI Thesis Research Assistant"
       toolSlug="ai-thesis-research-assistant"
-      description="Comprehensive thesis support platform. Conduct research efficiently, organize findings systematically, prepare defense confidently."
+      description="AI-assisted thesis research support for literature organization, document analysis, finding synthesis, and structured research workflows."
       mainContent={`Thesis research made manageable. Literature comprehensively analyzed. Findings organized systematically. Defense preparation streamlined.
 
 Research Synthesis Support:
@@ -27,23 +30,7 @@ Finding organization
 Methodology documentation
 Conclusion development
 Publication preparation`}
-      testimonials={[
-        {
-          name: 'Alex Foster',
-          role: 'Master Candidate',
-          text: 'Thesis research process manageable. Literature organized systematically. Defense preparation comprehensive and confident.',
-        },
-        {
-          name: 'Dr. Patricia Wong',
-          role: 'Thesis Advisor',
-          text: 'Student thesis quality improved significantly. Research organization systematic. Graduation timeline accelerated.',
-        },
-        {
-          name: 'James Sullivan',
-          role: 'Graduate Student',
-          text: 'Overwhelming research project became organized. Thesis development clear and systematic. Success achieved.',
-        },
-      ]}
+      testimonials={[]}
       features={[
         'Literature synthesis',
         'Research organization',
