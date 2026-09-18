@@ -24,7 +24,7 @@ export default function PDFToExcelTool() {
         body: formData,
       });
 
-      if (!response.ok) throw new Error('Conversion failed');
+      if (!response.ok) {\n        let message = 'Conversion failed';\n        try {\n          const data = await response.json();\n          message = data.error || data.details || message;\n        } catch {}\n        throw new Error(message);\n      }
       const blob = await response.blob();
       setDownloadUrl(window.URL.createObjectURL(blob));
     } catch (err) {
@@ -54,7 +54,7 @@ export default function PDFToExcelTool() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-8">
-          <FileUploader accept=".pdf" onFileSelected={(files) => setSelectedFile(files[0] || null)} maxSize={50} />
+          <FileUploader accept=".pdf" onFileSelected={(files) => setSelectedFile(files[0] || null)} maxSize={100} />
 
           {error && <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg"><p className="text-red-700 text-sm">{error}</p></div>}
 
