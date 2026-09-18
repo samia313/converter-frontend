@@ -2,9 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI PDF Reader - Intelligent Document Reading Tool | PDFilio',
-  description: 'Read PDFs intelligently with AI assistance. Get explanations, summaries, and interactive reading experience beyond traditional PDF viewing.',
-  keywords: 'AI PDF reader, intelligent document reader, PDF reading assistant, smart PDF viewer',
+  title: 'AI PDF Reader – Read and Understand PDF Documents with AI | PDFilio',
+  description: 'AI-assisted PDF reading for explanations, summaries, terminology help, and document understanding. Verify important answers against the source PDF.',
+  keywords: 'AI PDF reader, PDF reading assistant, intelligent PDF reader, AI document reader',
+  alternates: { canonical: 'https://pdfilio.com/ai-pdf-reader' },
+  openGraph: { title: 'AI PDF Reader – Read and Understand PDF Documents with AI | PDFilio', description: 'AI-assisted PDF reading for explanations, summaries, terminology help, and document understanding. Verify important answers against the source PDF.', url: 'https://pdfilio.com/ai-pdf-reader', type: 'website' },
 };
 
 export default function Page() {
@@ -12,12 +14,12 @@ export default function Page() {
     <ToolLandingLayout
       toolName="AI PDF Reader"
       toolSlug="ai-pdf-reader"
-      description="Beyond traditional PDF reading. Intelligent reading with AI explanations, context, and instant answers. More than a viewer, a learning tool."
+      description="AI-assisted PDF reading with explanations, context, terminology help, and document understanding."
       mainContent="AI PDF Reader transforms reading into interactive learning. Read with AI assistance, get instant explanations, understand complex concepts as you read."
       features={['Intelligent explanations', 'Concept clarification', 'Terminology definitions', 'Content simplification', 'Interactive reading', 'Margin notes support', 'Reading assistance', 'Learning optimization']}
       benefits={['Read with understanding', 'Get instant explanations', 'Learn better', 'Understand complexity', 'Interactive experience', 'Faster comprehension', 'Educational support', 'Enhanced learning']}
       useCase={['Study textbooks', 'Read technical docs', 'Learn complex topics', 'Student assistance', 'Professional learning', 'Technical documentation', 'Academic reading', 'Self-education'].join('\n')}
-      testimonials={[{name: 'Emma Taylor', role: 'Student', text: 'Reading with AI explanations helps me understand better.'}]}
+      testimonials={[]}
       faqs={[{q: 'Different from regular PDF readers?', a: 'Yes - interactive with AI help and explanations built-in.'}]}
       relatedTools={[{name: 'Chat with PDF', slug: 'chat-with-pdf'}, {name: 'Talk to PDF', slug: 'talk-to-pdf'}]}
       primaryKeyword="AI PDF reader"
