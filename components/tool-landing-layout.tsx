@@ -2,6 +2,7 @@
 
 import { ChevronRight, Star, Shield, Zap } from 'lucide-react';
 import Link from 'next/link';
+import { getRelatedTools } from '@/lib/seo-keywords';
 
 interface ToolLandingLayoutProps {
   toolName: string;
@@ -193,8 +194,15 @@ export default function ToolLandingLayout({
         <div className="mx-auto w-full max-w-6xl">
           <h2 className="mb-8 text-center text-2xl font-black text-gray-900 sm:mb-12 sm:text-4xl">Related Tools</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-            {relatedTools.map((t, i) => (
-              <Link key={i} href={`/${t.slug}`} className="min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-5 transition hover:border-gray-300 sm:p-6">
+            {Array.from(
+              new Map(
+                [
+                  ...relatedTools.map((t) => ({ name: t.name, slug: t.slug })),
+                  ...getRelatedTools(toolSlug).map((t) => ({ name: t.name, slug: t.slug })),
+                ].map((tool) => [tool.slug, tool])
+              ).values()
+            ).slice(0, 6).map((t) => (
+              <Link key={t.slug} href={`/${t.slug}`} className="min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-5 transition hover:border-gray-300 sm:p-6">
                 <h3 className="break-words font-bold text-gray-900">{t.name}</h3>
                 <p className="mt-1 text-sm text-gray-600">Learn more<ChevronRight className="inline h-4 w-4" /></p>
               </Link>
