@@ -2,8 +2,8 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Research Writing Assistant - Academic Writing Support | ConvertHub',
-  description: 'Intelligent writing support for research. Improve clarity, structure arguments, write professionaly.',
+  title: 'AI Research Writing Assistant – Academic Writing Support | PDFilio',
+  description: 'AI-assisted support for improving research writing clarity, structure, wording, and organization. Review important claims and citations against the source material.',
 };
 
 export default function Page() {
@@ -11,8 +11,8 @@ export default function Page() {
     <ToolLandingLayout
       toolName="AI Research Writing Assistant"
       toolSlug="ai-research-writing-assistant"
-      description="Comprehensive research writing platform. Improve clarity, structure arguments, support academic writing excellence."
-      mainContent={`Research writing perfected. Writing clarity improved. Arguments structured logically. Academic quality elevated.
+      description="AI-assisted research writing support for improving clarity, organizing arguments, and refining academic drafts."
+      mainContent={`Use AI-assisted writing support to revise research drafts, improve clarity, organize arguments, and prepare text for human review.
 
 Writing Enhancement Engine:
 AI improves writing quality. Strengthens arguments. Enhances clarity. Elevates academic tone.
@@ -27,23 +27,7 @@ Finding articulation
 Professional writing
 Publication preparation
 Academic communication`}
-      testimonials={[
-        {
-          name: 'Dr. Melissa Gray',
-          role: 'Academic Editor',
-          text: 'Writing quality improved significantly. Arguments better structured. Research communication enhanced.',
-        },
-        {
-          name: 'Gerald Thompson',
-          role: 'Publication Manager',
-          text: 'Manuscript quality elevated. Publication readiness accelerated. Writing excellence achieved.',
-        },
-        {
-          name: 'Catherine Noble',
-          role: 'Research Writer',
-          text: 'Writing process streamlined. Argument clarity enhanced. Research communication professional.',
-        },
-      ]}
+      testimonials={[]}
       features={[
         'Writing improvement',
         'Argument structuring',
