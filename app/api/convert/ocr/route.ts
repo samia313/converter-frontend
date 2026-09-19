@@ -25,8 +25,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'The uploaded file is empty.' }, { status: 400 });
     }
 
-    if (file.size > 50 * 1024 * 1024) {
-      return NextResponse.json({ error: 'The maximum file size is 50MB.' }, { status: 413 });
+    if (file.size > 100 * 1024 * 1024) {
+      return NextResponse.json({ error: 'The maximum file size is 100MB.' }, { status: 413 });
     }
 
     // Do not return fabricated OCR output. A real OCR engine must be connected
