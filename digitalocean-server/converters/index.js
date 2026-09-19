@@ -116,10 +116,13 @@ async function pdfToJpg(inputPath, outputPath) {
       if (!files.length) throw new Error('PDF to JPG produced no output files')
       if (files.length === 1) {
         fs.renameSync(path.join(outputDir, files[0]), outputPath)
-      } else {
-        await runCommand('zip', ['-j', outputPath, ...files], { cwd: outputDir })
+        ensureOutput(outputPath)
+        return { outputPath, format: 'jpg' }
       }
-      ensureOutput(outputPath)
+      const zipPath = outputPath.replace(/\.jpg$/i, '.zip')
+      await runCommand('zip', ['-j', zipPath, ...files], { cwd: outputDir })
+      ensureOutput(zipPath)
+      return { outputPath: zipPath, format: 'zip' }
     } finally { fs.rmSync(outputDir, { recursive: true, force: true }) }
   })
 }
