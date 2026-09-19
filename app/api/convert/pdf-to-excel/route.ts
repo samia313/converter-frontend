@@ -7,7 +7,7 @@ export const maxDuration = 60;
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
-type Cell = { x: number; text: string };
+type TextItem = { x: number; y: number; text: string; width: number };
 
 function xmlEscape(value: string): string {
   return value.replace(/[<>&'"]/g, (char) => ({
@@ -34,37 +34,56 @@ async function extractRows(pdfBuffer: Buffer): Promise<string[][]> {
     for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
       const page = await pdf.getPage(pageNumber);
       const content = await page.getTextContent();
-      const items = content.items as Array<{ str?: string; transform?: number[] }>;
-      const pageRows: Array<{ y: number; cells: Cell[] }> = [];
+      const items = content.items as Array<{
+        str?: string;
+        transform?: number[];
+        width?: number;
+      }>;
 
-      for (const item of items) {
-        const text = (item.str ?? '').trim();
-        if (!text) continue;
-        const x = item.transform?.[4] ?? 0;
-        const y = item.transform?.[5] ?? 0;
-        let row = pageRows.find((candidate) => Math.abs(candidate.y - y) <= 3);
+      const pageItems: TextItem[] = items
+        .map((item) => ({
+          x: item.transform?.[4] ?? 0,
+          y: item.transform?.[5] ?? 0,
+          text: (item.str ?? '').trim(),
+          width: Math.max(1, item.width ?? 0),
+        }))
+        .filter((item) => item.text.length > 0);
+
+      const pageRows: TextItem[][] = [];
+      for (const item of pageItems) {
+        let row = pageRows.find((candidate) => Math.abs(candidate[0].y - item.y) <= 3);
         if (!row) {
-          row = { y, cells: [] };
+          row = [];
           pageRows.push(row);
         }
-        row.cells.push({ x, text });
+        row.push(item);
       }
 
-      pageRows.sort((a, b) => b.y - a.y);
+      pageRows.sort((a, b) => b[0].y - a[0].y);
+
       for (const row of pageRows) {
-        row.cells.sort((a, b) => a.x - b.x);
+        row.sort((a, b) => a.x - b.x);
         const cells: string[] = [];
-        for (const cell of row.cells) {
-          const previous = cells[cells.length - 1];
-          if (previous && cell.x - row.cells[row.cells.indexOf(cell) - 1].x < 8) {
-            cells[cells.length - 1] = previous + ' ' + cell.text;
+        let current = '';
+        let previousRight = 0;
+
+        for (const item of row) {
+          const gap = item.x - previousRight;
+          const columnBreak = current.length > 0 && gap > Math.max(10, item.width * 0.35);
+          if (columnBreak) {
+            cells.push(current.trim());
+            current = item.text;
           } else {
-            cells.push(cell.text);
+            current = current ? `${current} ${item.text}` : item.text;
           }
+          previousRight = item.x + item.width;
         }
+
+        if (current.trim()) cells.push(current.trim());
         if (cells.length) rows.push(cells);
       }
-      rows.push([]);
+
+      if (pageNumber < pdf.numPages) rows.push([]);
     }
   } finally {
     await loadingTask.destroy();
@@ -86,8 +105,8 @@ function columnName(index: number): string {
 }
 
 async function createXlsx(rows: string[][]): Promise<Buffer> {
-  const maxColumns = Math.max(1, ...rows.map((row) => row.length));
-  const normalized = rows.map((row) => Array.from({ length: maxColumns }, (_, i) => row[i] ?? ''));
+  const maxColumns = Math.min(50, Math.max(1, ...rows.map((row) => row.length)));
+  const normalized = rows.map((row) => Array.from({ length: maxColumns }, (_, i) => row[i] ?? '').slice(0, maxColumns));
   const sheetRows = normalized.map((row, rowIndex) => {
     const cells = row.map((value, columnIndex) => {
       const ref = `${columnName(columnIndex)}${rowIndex + 1}`;
