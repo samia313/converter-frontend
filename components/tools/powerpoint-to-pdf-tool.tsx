@@ -1,91 +1,11 @@
 'use client';
-
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
-import { Download } from 'lucide-react';
-
-export default function PowerpointtopdfTool() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-  const [toolName, setToolName] = useState('powerpoint-to-pdf');
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const path = window.location.pathname.split('/')[1];
-      setToolName(path || 'powerpoint-to-pdf');
-    }
-  }, []);
-
-  const handleConvert = async () => {
-    if (!selectedFile) return;
-    setIsProcessing(true);
-    setError(null);
-
-    try {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-
-      const response = await fetch(`/api/convert/${toolName}`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error('Processing failed');
-      const blob = await response.blob();
-      setDownloadUrl(window.URL.createObjectURL(blob));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Processing failed');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const handleDownload = () => {
-    if (downloadUrl && selectedFile) {
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-      a.download = `${selectedFile.name.split('.')[0]}_converted.${selectedFile.name.split('.').pop()}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-  };
-
-  return (
-    <section className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 md:py-20">
-      <div className="container mx-auto max-w-2xl px-4">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">powerpoint-to-pdf</h1>
-          <p className="text-lg text-gray-600">Process your files instantly</p>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <FileUploader accept="*" onFileSelected={(files) => setSelectedFile(files[0] || null)} maxSize={100} />
-
-          {error && <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg"><p className="text-red-700 text-sm">{error}</p></div>}
-
-          {!downloadUrl ? (
-            <button onClick={handleConvert} disabled={!selectedFile || isProcessing} className="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition">
-              {isProcessing ? 'Processing...' : 'Process File'}
-            </button>
-          ) : (
-            <div className="text-center mt-6">
-              <p className="text-green-600 font-semibold mb-4">Processing completed!</p>
-              <div className="flex gap-4 justify-center">
-                <button onClick={handleDownload} className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg">
-                  <Download className="w-5 h-5" />
-                  Download
-                </button>
-                <button onClick={() => { setSelectedFile(null); setDownloadUrl(null); }} className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg">
-                  Process Another
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
-  );
+import { Download, Presentation } from 'lucide-react';
+export default function PowerPointToPDFTool() {
+  const [selectedFile,setSelectedFile]=useState<File|null>(null); const [isProcessing,setIsProcessing]=useState(false); const [downloadUrl,setDownloadUrl]=useState<string|null>(null); const [error,setError]=useState<string|null>(null);
+  useEffect(()=>()=>{if(downloadUrl)URL.revokeObjectURL(downloadUrl)},[downloadUrl]);
+  const convert=async()=>{if(!selectedFile||isProcessing)return;setIsProcessing(true);setError(null);if(downloadUrl)URL.revokeObjectURL(downloadUrl);setDownloadUrl(null);try{const f=new FormData();f.append('file',selectedFile);const r=await fetch('/api/convert/ppt-to-pdf',{method:'POST',body:f});if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(typeof d?.error==='string'?d.error:'Conversion failed ('+r.status+')')}const b=await r.blob();if(!b.size)throw new Error('The converter returned an empty PDF.');setDownloadUrl(URL.createObjectURL(b))}catch(e){setError(e instanceof Error?e.message:'Conversion failed. Please try again.')}finally{setIsProcessing(false)}};
+  const reset=()=>{if(downloadUrl)URL.revokeObjectURL(downloadUrl);setSelectedFile(null);setDownloadUrl(null);setError(null)};
+  return <section className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 md:py-20"><div className="container mx-auto max-w-2xl px-4"><div className="text-center mb-12"><div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-4"><Presentation className="w-8 h-8 text-blue-600"/></div><h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">PowerPoint to PDF Converter</h1><p className="text-lg text-gray-600">Convert supported PPT and PPTX presentations to PDF online</p></div><div className="bg-white rounded-2xl shadow-lg p-8 md:p-12"><FileUploader accept=".ppt,.pptx" onFileSelected={files=>setSelectedFile(files[0]||null)} maxSize={100}/>{error&&<div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg"><p className="text-red-700 text-sm">{error}</p></div>}{!downloadUrl?<button onClick={convert} disabled={!selectedFile||isProcessing} className="w-full mt-8 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg">{isProcessing?'Converting...':'Convert to PDF'}</button>:<div className="text-center mt-8"><p className="text-green-600 font-semibold mb-4">Conversion complete — your PDF is ready.</p><div className="flex gap-4 justify-center"><button onClick={()=>{if(!selectedFile||!downloadUrl)return;const a=document.createElement('a');a.href=downloadUrl;a.download=selectedFile.name.replace(/\.(pptx?|ppt)$/i,'.pdf');document.body.appendChild(a);a.click();a.remove()}} className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg"><Download className="w-5 h-5"/>Download PDF</button><button onClick={reset} className="bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg">Convert Another</button></div></div>}<p className="text-xs text-gray-500 mt-8">Maximum file size: 100 MB. Review complex slides, fonts, animations, transitions, embedded media, and speaker notes after conversion.</p></div></div></section>;
 }
