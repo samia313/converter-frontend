@@ -143,14 +143,12 @@ router.post('/pdf-to-jpg', upload.single('file'), async (req, res, next) => {
   let outputPath
   try {
     const file = requireFile(req)
-    outputPath = path.join(settings.uploadTempDir, `${uuidv4()}.${path.basename(file.originalname, '.pdf') ? 'jpg' : 'jpg'}`)
     const tempOutput = path.join(settings.uploadTempDir, `${uuidv4()}.jpg`)
-    const resultPath = tempOutput
-    await converters.pdfToJpg(file.path, resultPath)
-    const isZip = path.extname(resultPath).toLowerCase() === '.zip'
-    const finalPath = resultPath
-    const downloadUrl = await spacesService.uploadFile(finalPath, `${path.basename(file.originalname, '.pdf')}-jpg.${isZip ? 'zip' : 'jpg'}`, isZip ? 'application/zip' : 'image/jpeg')
-    res.json({ success: true, format: isZip ? 'zip' : 'jpg', downloadUrl })
+    const result = await converters.pdfToJpg(file.path, tempOutput)
+    outputPath = result.outputPath
+    const baseName = path.basename(file.originalname, '.pdf')
+    const downloadUrl = await spacesService.uploadFile(outputPath, `${baseName}-jpg.${result.format}`, result.format === 'zip' ? 'application/zip' : 'image/jpeg')
+    res.json({ success: true, format: result.format, downloadUrl })
   } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
 })
 
