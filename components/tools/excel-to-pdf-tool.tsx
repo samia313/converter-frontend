@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
 
@@ -39,7 +39,7 @@ export default function ExcelToPDFTool() {
     if (downloadUrl && selectedFile) {
       const a = document.createElement('a');
       a.href = downloadUrl;
-      a.download = `${selectedFile.name.split('.')[0]}_converted.${selectedFile.name.split('.').pop()}`;
+      a.download = selectedFile.name.replace(/\.(xlsx|xls)$/i, '.pdf');
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -61,7 +61,7 @@ export default function ExcelToPDFTool() {
 
           {!downloadUrl ? (
             <button onClick={handleConvert} disabled={!selectedFile || isProcessing} className="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition">
-              {isProcessing ? 'Processing...' : 'Process File'}
+              {isProcessing ? 'Converting...' : 'Convert to PDF'}
             </button>
           ) : (
             <div className="text-center mt-6">
@@ -69,7 +69,7 @@ export default function ExcelToPDFTool() {
               <div className="flex gap-4 justify-center">
                 <button onClick={handleDownload} className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg">
                   <Download className="w-5 h-5" />
-                  Download
+                  Download PDF
                 </button>
                 <button onClick={() => { setSelectedFile(null); setDownloadUrl(null); }} className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg">
                   Process Another
