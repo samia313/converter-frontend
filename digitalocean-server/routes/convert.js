@@ -135,6 +135,23 @@ router.post('/pdf-ocr', upload.single('file'), async (req, res, next) => {
   } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
 })
 
+router.post('/unlock-pdf', upload.single('file'), async (req, res, next) => {
+  let outputPath
+  try {
+    const file = requireFile(req)
+    const password = typeof req.body?.password === 'string' ? req.body.password : ''
+    outputPath = path.join(settings.uploadTempDir, `${uuidv4()}.pdf`)
+    const downloadUrl = await convertAndUpload({
+      inputPath: file.path,
+      outputPath,
+      filename: `${path.basename(file.originalname, path.extname(file.originalname))}-unlocked.pdf`,
+      mimeType: 'application/pdf',
+      converter: (input, output) => converters.unlockPdf(input, output, password),
+    })
+    res.json({ success: true, format: 'pdf', downloadUrl })
+  } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
+})
+
 router.post('/html-to-pdf', upload.single('file'), async (req, res, next) => {
   let outputPath
   try {
