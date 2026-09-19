@@ -54,6 +54,19 @@ const convertAndUpload = async ({ inputPath, outputPath, filename, mimeType, con
   return spacesService.uploadFile(outputPath, filename, mimeType)
 }
 
+router.post('/word-to-pdf', upload.single('file'), async (req, res, next) => {
+  let outputPath
+  try {
+    const file = req.file
+    if (!file) { const error = new Error('No Word file provided'); error.status = 400; error.code = 'NO_FILE'; throw error }
+    const ext = path.extname(file.originalname).toLowerCase()
+    if (!['.doc', '.docx'].includes(ext)) { const error = new Error('Only DOC and DOCX files are supported'); error.status = 415; error.code = 'UNSUPPORTED_WORD_FORMAT'; throw error }
+    outputPath = path.join(settings.uploadTempDir, `${uuidv4()}.pdf`)
+    const downloadUrl = await convertAndUpload({ inputPath: file.path, outputPath, filename: `${path.basename(file.originalname, ext)}.pdf`, mimeType: 'application/pdf', converter: converters.wordToPdf })
+    res.json({ success: true, format: 'pdf', downloadUrl })
+  } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
+})
+
 router.post('/pdf-to-word', upload.single('file'), async (req, res, next) => {
   let outputPath
   try {
