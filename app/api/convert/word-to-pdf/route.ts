@@ -1,208 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument, rgb } from 'pdf-lib';
-import * as mammoth from 'mammoth';
+import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
-export const maxDuration = 60;
-
+export const dynamic = 'force-dynamic';
+export const maxDuration = 90;
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
-async function extractWordContent(arrayBuffer: ArrayBuffer): Promise<string> {
-  const result = await mammoth.convertToHtml({ arrayBuffer }, {
-    includeDefaultStyleMap: true,
-  });
-  if (result.messages?.length) {
-    console.warn('[word-to-pdf] Mammoth messages:', result.messages);
-  }
-  return result.value || '';
-}
-
-function htmlToBlocks(html: string): Array<{ type: 'paragraph' | 'heading' | 'table'; text: string; rows?: string[][] }> {
-  const blocks: Array<{ type: 'paragraph' | 'heading' | 'table'; text: string; rows?: string[][] }> = [];
-  const source = html.replace(/<img\b[^>]*>/gi, '').replace(/\s+/g, ' ');
-  const tokenRe = /<(h[1-6]|p|li|table)\b[^>]*>([\s\S]*?)<\/\1>/gi;
-  let match: RegExpExecArray | null;
-  while ((match = tokenRe.exec(source))) {
-    const tag = match[1].toLowerCase();
-    const inner = match[2];
-    if (tag === 'table') {
-      const rows = Array.from(inner.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)).map((row) =>
-        Array.from(row[1].matchAll(/<(td|th)\b[^>]*>([\s\S]*?)<\/\1>/gi))
-          .map((cell) => cell[2].replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').trim())
-          .filter(Boolean),
-      ).filter((row) => row.length);
-      if (rows.length) blocks.push({ type: 'table', text: '', rows });
-      continue;
-    }
-    const text = inner
-      .replace(/<br\s*\/?>/gi, '\n')
-      .replace(/<[^>]+>/g, '')
-      .replace(/&nbsp;/gi, ' ')
-      .replace(/&amp;/gi, '&')
-      .replace(/&lt;/gi, '<')
-      .replace(/&gt;/gi, '>')
-      .replace(/&quot;/gi, '"')
-      .trim();
-    if (!text) continue;
-    blocks.push({ type: tag.startsWith('h') ? 'heading' : 'paragraph', text });
-  }
-  return blocks;
-}
-
-function wrapText(text: string, maxChars: number): string[] {
-  const lines: string[] = [];
-  for (const paragraph of text.split(/\n+/)) {
-    const words = paragraph.trim().split(/\s+/).filter(Boolean);
-    if (!words.length) { lines.push(''); continue; }
-    let line = '';
-    for (const word of words) {
-      const next = line ? `${line} ${word}` : word;
-      if (next.length > maxChars && line) {
-        lines.push(line);
-        line = word;
-      } else line = next;
-    }
-    if (line) lines.push(line);
-  }
-  return lines;
-}
-
-async function createPDFFromContent(content: string, fileName: string): Promise<Buffer> {
-  const pdfDoc = await PDFDocument.create();
-  const pageSize: [number, number] = [595, 842];
-  const margin = 50;
-  const fontSize = 11;
-  const lineHeight = 15;
-  let page = pdfDoc.addPage(pageSize);
-  let y = pageSize[1] - margin;
-
-  const addPage = () => {
-    page = pdfDoc.addPage(pageSize);
-    y = pageSize[1] - margin;
-  };
-
-  const ensureSpace = (needed = lineHeight) => {
-    if (y < margin + needed) addPage();
-  };
-
-  const drawLines = (text: string, size = fontSize, gap = lineHeight) => {
-    const maxChars = size >= 14 ? 72 : 92;
-    for (const line of wrapText(text, maxChars)) {
-      if (!line) { y -= gap; continue; }
-      ensureSpace(gap);
-      page.drawText(line, { x: margin, y, size, color: rgb(0, 0, 0) });
-      y -= gap;
-    }
-  };
-
-  const blocks = htmlToBlocks(content);
-  if (!blocks.length) throw new Error('No readable content found in Word document');
-
-  for (const block of blocks) {
-    if (block.type === 'heading') {
-      ensureSpace(28);
-      drawLines(block.text, 16, 20);
-      y -= 5;
-    } else if (block.type === 'table' && block.rows) {
-      for (const row of block.rows) {
-        ensureSpace(18);
-        drawLines(row.join(' | '), 9, 13);
-      }
-      y -= 8;
-    } else {
-      drawLines(block.text);
-      y -= 6;
-    }
-  }
-
-  return Buffer.from(await pdfDoc.save());
-}
-
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
+  const baseUrl = process.env.DIGITALOCEAN_CONVERTER_URL?.replace(/\/$/, '');
+  const apiKey = process.env.DIGITALOCEAN_CONVERTER_API_KEY;
+  if (!baseUrl || !apiKey) return NextResponse.json({ error: 'Word to PDF conversion service is not configured yet.', code: 'CONVERTER_NOT_CONFIGURED' }, { status: 503 });
   try {
-    const formData = await request.formData();
-    const file = formData.get('file') as File;
-
-    if (!file) {
-      return NextResponse.json(
-        { error: 'No file provided' },
-        { status: 400 }
-      );
-    }
-
-    const fileName = file.name.toLowerCase();
-    const isDocx = file.type.includes('officedocument') || fileName.endsWith('.docx');
-
-    if (!isDocx) {
-      return NextResponse.json(
-        { error: 'File must be a supported Word document (.docx)' },
-        { status: 400 }
-      );
-    }
-
-    console.log('[v0] Converting Word to PDF for file:', file.name);
-
-    const arrayBuffer = await file.arrayBuffer();
-
-    if (arrayBuffer.byteLength > MAX_FILE_SIZE) {
-      return NextResponse.json(
-        { error: 'File size exceeds the 100MB limit.' },
-        { status: 413 }
-      );
-    }
-
-    // Validate file size
-    if (arrayBuffer.byteLength === 0) {
-      return NextResponse.json(
-        { error: 'File is empty' },
-        { status: 400 }
-      );
-    }
-
-    // Extract content from Word file
-    const content = await extractWordContent(arrayBuffer);
-
-    // Validate extracted content
-    if (!content || content.trim().length === 0) {
-      return NextResponse.json(
-        { error: 'No content found in Word document' },
-        { status: 400 }
-      );
-    }
-
-    console.log('[v0] Extracted content length:', content.length);
-
-    // Create PDF with extracted content
-    const pdfBuffer = await createPDFFromContent(content, file.name);
-
-    // Validate PDF size
-    if (pdfBuffer.length === 0) {
-      return NextResponse.json(
-        { error: 'PDF creation resulted in empty file' },
-        { status: 500 }
-      );
-    }
-
-    const outputFileName = file.name.replace(/\.docx$/i, '.pdf');
-
-    console.log('[v0] PDF created successfully, size:', pdfBuffer.length, 'bytes');
-
-    return new NextResponse(pdfBuffer, {
-      headers: {
-        'Content-Disposition': `attachment; filename="${outputFileName}"`,
-        'Content-Type': 'application/pdf',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Content-Length': String(pdfBuffer.length),
-      },
-    });
+    const incoming = await request.formData();
+    const file = incoming.get('file');
+    if (!(file instanceof File)) return NextResponse.json({ error: 'No Word file provided.', code: 'NO_FILE' }, { status: 400 });
+    if (!file.size) return NextResponse.json({ error: 'The Word file is empty.', code: 'EMPTY_FILE' }, { status: 400 });
+    if (file.size > MAX_FILE_SIZE) return NextResponse.json({ error: 'Word file exceeds the 100MB limit.', code: 'FILE_TOO_LARGE' }, { status: 413 });
+    const lower = file.name.toLowerCase();
+    if (!lower.endsWith('.doc') && !lower.endsWith('.docx')) return NextResponse.json({ error: 'Only DOC and DOCX files are supported.', code: 'UNSUPPORTED_FORMAT' }, { status: 415 });
+    const body = new FormData();
+    body.append('file', file, file.name);
+    const response = await fetch(baseUrl + '/convert/word-to-pdf', { method: 'POST', headers: { Authorization: 'Bearer ' + apiKey }, body, cache: 'no-store', signal: AbortSignal.timeout(60000) });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) return NextResponse.json({ error: typeof data?.error === 'string' ? data.error : 'Word to PDF conversion failed.', code: data?.code || 'CONVERSION_FAILED' }, { status: response.status });
+    if (!data?.downloadUrl) return NextResponse.json({ error: 'Conversion completed without a download URL.', code: 'MISSING_OUTPUT' }, { status: 502 });
+    const output = await fetch(data.downloadUrl, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
+    if (!output.ok) return NextResponse.json({ error: 'Converted PDF could not be retrieved.', code: 'OUTPUT_FETCH_FAILED' }, { status: 502 });
+    return new NextResponse(await output.arrayBuffer(), { headers: { 'Content-Type': 'application/pdf', 'Content-Disposition': 'attachment; filename="' + file.name.replace(/\.(docx?|DOCX?)$/, '') + '.pdf"', 'Cache-Control': 'no-store' } });
   } catch (error) {
-    console.error('[v0] Word to PDF error:', error);
-    return NextResponse.json(
-      {
-        error: 'Conversion failed',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Word to PDF conversion failed.', code: 'CONVERTER_UNAVAILABLE' }, { status: 502 });
   }
 }
