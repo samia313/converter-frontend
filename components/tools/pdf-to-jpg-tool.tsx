@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
 
@@ -11,10 +11,14 @@ export default function PDFToJpgTool() {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [downloadType, setDownloadType] = useState<'jpg' | 'zip'>('jpg');
 
+  useEffect(() => () => { if (downloadUrl) URL.revokeObjectURL(downloadUrl); }, [downloadUrl]);
+
   const handleConvert = async () => {
     if (!selectedFile) return;
     setIsProcessing(true);
     setError(null);
+    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    setDownloadUrl(null);
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
