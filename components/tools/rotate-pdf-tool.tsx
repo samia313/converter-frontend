@@ -93,7 +93,7 @@ export default function RotatePDFTool() {
               setError(null);
               setSelectedFile(files[0] || null);
             }}
-            maxSize={50}
+            maxSize={100}
           />
 
           <div className="mt-8 mb-8">
