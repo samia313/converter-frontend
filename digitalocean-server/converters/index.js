@@ -106,6 +106,27 @@ async function unlockPdf(inputPath, outputPath, password = '') {
   })
 }
 
+async function pdfToPng(inputPath, outputPath) {
+  return withConversionSlot(async () => {
+    const outputDir = `${outputPath}.pages`
+    fs.mkdirSync(outputDir, { recursive: true })
+    try {
+      await runCommand('pdftoppm', ['-png', '-r', '150', inputPath, path.join(outputDir, 'page')])
+      const files = fs.readdirSync(outputDir).filter((f) => f.toLowerCase().endsWith('.png')).sort()
+      if (!files.length) throw new Error('PDF to PNG produced no output files')
+      if (files.length === 1) {
+        fs.renameSync(path.join(outputDir, files[0]), outputPath)
+        ensureOutput(outputPath)
+        return { outputPath, format: 'png' }
+      }
+      const zipPath = outputPath.replace(/\.png$/i, '.zip')
+      await runCommand('zip', ['-j', zipPath, ...files], { cwd: outputDir })
+      ensureOutput(zipPath)
+      return { outputPath: zipPath, format: 'zip' }
+    } finally { fs.rmSync(outputDir, { recursive: true, force: true }) }
+  })
+}
+
 async function pdfToJpg(inputPath, outputPath) {
   return withConversionSlot(async () => {
     const outputDir = `${outputPath}.pages`
@@ -157,4 +178,4 @@ async function pdfOCR(inputPath, outputPath, language = 'eng') {
   })
 }
 
-module.exports = { pdfToWord, wordToPdf, pdfToExcel, pdfToPowerPoint, powerpointToPdf, htmlToPdf, excelToPdf, unlockPdf, pdfToJpg, pdfToImages, pdfOCR }
+module.exports = { pdfToWord, wordToPdf, pdfToExcel, pdfToPowerPoint, powerpointToPdf, htmlToPdf, excelToPdf, unlockPdf, pdfToJpg, pdfToPng, pdfToImages, pdfOCR }
