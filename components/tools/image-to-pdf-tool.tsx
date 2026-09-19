@@ -4,14 +4,19 @@ import { useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
 
+const MAX_TOTAL_SIZE = 500 * 1024 * 1024;
+
 export default function ImageToPDFTool() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
+  const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+  const totalSizeMb = (totalSize / (1024 * 1024)).toFixed(1);
+
   const handleConvert = async () => {
-    if (!selectedFiles.length) return;
+    if (!selectedFiles.length || totalSize > MAX_TOTAL_SIZE) return;
     setIsProcessing(true);
     setError(null);
 
@@ -30,6 +35,7 @@ export default function ImageToPDFTool() {
       }
 
       const blob = await response.blob();
+      if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
       setDownloadUrl(window.URL.createObjectURL(blob));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Image to PDF conversion failed.');
@@ -75,7 +81,7 @@ export default function ImageToPDFTool() {
 
           {selectedFiles.length > 0 && (
             <p className="mt-4 text-sm text-gray-600">
-              {selectedFiles.length} image{selectedFiles.length === 1 ? '' : 's'} selected · Maximum 30 images
+              {selectedFiles.length} image{selectedFiles.length === 1 ? '' : 's'} selected · {totalSizeMb}MB total · 100MB/file · 500MB total · Maximum 30 images
             </p>
           )}
 
@@ -88,7 +94,7 @@ export default function ImageToPDFTool() {
           {!downloadUrl ? (
             <button
               onClick={handleConvert}
-              disabled={!selectedFiles.length || isProcessing}
+              disabled={!selectedFiles.length || isProcessing || totalSize > MAX_TOTAL_SIZE}
               className="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition"
             >
               {isProcessing ? 'Converting...' : 'Convert to PDF'}
