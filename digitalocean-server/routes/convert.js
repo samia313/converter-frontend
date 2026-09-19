@@ -139,6 +139,19 @@ router.post('/excel-to-pdf', upload.single('file'), async (req, res, next) => {
   } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
 })
 
+router.post('/pdf-to-png', upload.single('file'), async (req, res, next) => {
+  let outputPath
+  try {
+    const file = requireFile(req)
+    const tempOutput = path.join(settings.uploadTempDir, `${uuidv4()}.png`)
+    const result = await converters.pdfToPng(file.path, tempOutput)
+    outputPath = result.outputPath
+    const baseName = path.basename(file.originalname, '.pdf')
+    const downloadUrl = await spacesService.uploadFile(outputPath, `${baseName}-png.${result.format}`, result.format === 'zip' ? 'application/zip' : 'image/png')
+    res.json({ success: true, format: result.format, downloadUrl })
+  } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
+})
+
 router.post('/pdf-to-jpg', upload.single('file'), async (req, res, next) => {
   let outputPath
   try {
