@@ -3,9 +3,9 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import ExcelToPDFTool from '@/components/tools/excel-to-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Excel to PDF Converter Online – Convert XLS & XLSX to PDF | PDFilio',
-  description: 'Convert supported Excel XLS and XLSX spreadsheets to PDF online. Prepare reports, tables, budgets, invoices, and workbooks for sharing, printing, and archiving.',
-  keywords: ['Excel to PDF', 'Excel to PDF converter', 'convert Excel to PDF', 'XLS to PDF', 'XLSX to PDF', 'spreadsheet to PDF', 'Excel to PDF online'],
+  title: 'Excel to PDF Converter Online – Convert XLSX to PDF | PDFilio',
+  description: 'Convert supported XLSX spreadsheets to PDF online. Prepare reports, tables, budgets, invoices, and workbooks for sharing, printing, and archiving.',
+  keywords: ['Excel to PDF', 'Excel to PDF converter', 'convert Excel to PDF', 'XLSX to PDF', 'spreadsheet to PDF', 'Excel to PDF online'],
   alternates: { canonical: 'https://pdfilio.com/excel-to-pdf' },
   openGraph: {
     title: 'Excel to PDF Converter Online | PDFilio',
@@ -37,7 +37,7 @@ export default function ExcelToPDFPage() {
 
 The final PDF can depend on the workbook structure, print settings, page breaks, formulas, fonts, charts, images, hidden content, and the conversion engine. For important reports, review page orientation, pagination, tables, totals, charts, and other critical content before distributing the PDF.
 
-Typical workflow: upload a supported XLS or XLSX file, start the conversion, review the generated PDF, and download it for your next document workflow. Current input formats and processing limits depend on the tool configuration shown in the interface.`}
+Typical workflow: upload a supported XLSX file, start the conversion, review the generated PDF, and download it for your next document workflow. Current input formats and processing limits depend on the tool configuration shown in the interface.`}
         useCase={[
           'Converting financial reports to PDF',
           'Preparing budgets for printing',
@@ -49,7 +49,7 @@ Typical workflow: upload a supported XLS or XLSX file, start the conversion, rev
           'Creating fixed-format copies of spreadsheets',
         ].join('\n')}
         features={[
-          'XLS and XLSX to PDF conversion',
+          'XLSX to PDF conversion',
           'PDF document output',
           'Browser-based workflow',
           'Useful for tables and reports',
@@ -77,7 +77,6 @@ Typical workflow: upload a supported XLS or XLSX file, start the conversion, rev
         faqs={[
           { q: 'How do I convert Excel to PDF online?', a: 'Upload a supported Excel spreadsheet, start the conversion, review the generated PDF, and download the result.' },
           { q: 'Can I convert XLSX to PDF?', a: 'Yes. Supported XLSX workbooks can be converted into PDF files through the Excel-to-PDF workflow.' },
-          { q: 'Can I convert XLS to PDF?', a: 'If the current uploader accepts XLS files, they can be processed through the same conversion workflow. Follow the formats displayed by the tool.' },
           { q: 'Will Excel formatting be preserved exactly?', a: 'Exact preservation is not guaranteed for every workbook. Page breaks, print areas, fonts, formulas, charts, images, and complex layouts can affect the final PDF.' },
           { q: 'Can I convert a workbook with multiple sheets?', a: 'Supported workbooks can contain multiple sheets, but the final PDF structure depends on the current conversion workflow and workbook settings. Review the output before sharing.' },
           { q: 'What happens to Excel formulas?', a: 'The PDF represents the spreadsheet as a document rather than an editable workbook. Formula results may be rendered as displayed values, depending on the conversion process.' },
