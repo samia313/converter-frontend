@@ -45,7 +45,7 @@ Always review important names, numbers, dates, totals, addresses, and other crit
           'Browser-based OCR workflow',
           'Copy extracted text for reuse',
           'Save extracted text as TXT',
-          'Support for supported document languages',
+          'English printed-text recognition',
           'No separate desktop OCR application required',
         ]}
         benefits={[
@@ -72,7 +72,7 @@ Always review important names, numbers, dates, totals, addresses, and other crit
           { q: 'Can OCR extract text from an image?', a: 'Yes. Supported image files can be processed to recognize visible printed text.' },
           { q: 'Is OCR 100% accurate?', a: 'No. OCR accuracy varies with scan quality, language, font, layout, image noise, skew, and other document characteristics.' },
           { q: 'Can OCR recognize handwriting?', a: 'Handwriting is generally harder to recognize than clear printed text. Results depend on the handwriting, image quality, language support, and available OCR capabilities.' },
-          { q: 'Which languages does OCR support?', a: 'Language availability depends on the OCR models and configuration used by the current PDFilio workflow. Use the language options shown by the tool when available.' },
+          { q: 'Which language does this OCR tool support?', a: 'The current browser OCR workflow uses the English (eng) Tesseract model. Non-English documents may produce poor or incorrect results.' },
           { q: 'Can OCR extract text from receipts and invoices?', a: 'Yes, supported receipts and invoices are common OCR use cases. Verify totals, dates, invoice numbers, and amounts against the original.' },
           { q: 'Can OCR make a scanned PDF searchable?', a: 'OCR can turn recognized image text into machine-readable text. Whether the final output is a searchable PDF depends on the specific workflow and output format.' },
           { q: 'Does OCR preserve the original formatting?', a: 'Not necessarily. OCR focuses on text recognition, while complex tables, columns, fonts, spacing, and page layouts may require cleanup.' },
