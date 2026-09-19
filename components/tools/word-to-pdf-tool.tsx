@@ -109,7 +109,7 @@ export default function WordToPDFTool() {
           {!isComplete ? (
             <div>
               <FileUploader
-                accept=".docx"
+                accept=".doc,.docx"
                 onFileSelected={(files) => setSelectedFile(files[0] || null)}
                 maxSize={100}
               />
