@@ -82,6 +82,7 @@ const pdfToExcel = (inputPath, outputPath) => libreOfficeConvert(inputPath, outp
 const pdfToPowerPoint = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'pptx')
 const powerpointToPdf = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'pdf:impress_pdf_Export')
 const htmlToPdf = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'pdf:writer_pdf_Export')
+const excelToPdf = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'pdf:calc_pdf_Export')
 
 async function unlockPdf(inputPath, outputPath, password = '') {
   const safePassword = String(password ?? '')
@@ -134,4 +135,4 @@ async function pdfOCR(inputPath, outputPath, language = 'eng') {
   })
 }
 
-module.exports = { pdfToWord, pdfToExcel, pdfToPowerPoint, powerpointToPdf, htmlToPdf, unlockPdf, pdfToImages, pdfOCR }
+module.exports = { pdfToWord, pdfToExcel, pdfToPowerPoint, powerpointToPdf, htmlToPdf, excelToPdf, unlockPdf, pdfToImages, pdfOCR }
