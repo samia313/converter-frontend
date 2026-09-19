@@ -24,7 +24,7 @@ export async function POST(request:NextRequest){
    else if(position.endsWith('right'))x=width-tw-margin
    if(position==='center')y=(height-fontSize)/2
    else if(position.startsWith('bottom'))y=margin
-   page.drawText(text,{x:Math.max(0,x),y:Math.max(0,y),size:fontSize,font,color:rgb(.45,.45,.45),opacity,rotate:{type:'degrees',angle}})
+   page.drawText(text,{x:Math.max(0,x),y:Math.max(0,y),size:fontSize,font,color:rgb(.45,.45,.45),opacity,rotate:{type:'degrees',angle} as any})
   }
   const output=await pdf.save(),name=file.name.replace(/\.pdf$/i,'')+'_watermarked.pdf'
   return new NextResponse(output as BodyInit,{headers:{'Content-Type':'application/pdf','Content-Disposition':`attachment; filename="${name}"`,'Content-Length':String(output.length),'Cache-Control':'no-store'}})
