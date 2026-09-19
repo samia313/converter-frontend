@@ -183,7 +183,7 @@ router.post('/pdf-ocr', upload.single('file'), async (req, res, next) => {
     const language = req.body?.language || 'eng'
     const extractedText = await converters.pdfOCR(file.path, outputPath, language)
     const downloadUrl = await spacesService.uploadFile(outputPath, `${path.basename(file.originalname, '.pdf')}-ocr.pdf`, 'application/pdf')
-    res.json({ success: true, format: 'pdf', textExtracted: extractedText.slice(0, 500), downloadUrl })
+    res.json({ success: true, format: 'pdf', textExtracted: extractedText, downloadUrl })
   } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
 })
 
