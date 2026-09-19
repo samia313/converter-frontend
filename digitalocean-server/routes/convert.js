@@ -113,6 +113,19 @@ router.post('/ppt-to-pdf', upload.single('file'), async (req, res, next) => {
   } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
 })
 
+router.post('/excel-to-pdf', upload.single('file'), async (req, res, next) => {
+  let outputPath
+  try {
+    const file = req.file
+    if (!file) { const error = new Error('No Excel file provided'); error.status = 400; error.code = 'NO_FILE'; throw error }
+    const ext = path.extname(file.originalname).toLowerCase()
+    if (ext !== '.xlsx') { const error = new Error('Only XLSX files are supported'); error.status = 415; error.code = 'UNSUPPORTED_EXCEL_FORMAT'; throw error }
+    outputPath = path.join(settings.uploadTempDir, `${uuidv4()}.pdf`)
+    const downloadUrl = await convertAndUpload({ inputPath: file.path, outputPath, filename: `${path.basename(file.originalname, ext)}.pdf`, mimeType: 'application/pdf', converter: converters.excelToPdf })
+    res.json({ success: true, format: 'pdf', downloadUrl })
+  } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
+})
+
 router.post('/pdf-to-images', upload.single('file'), async (req, res, next) => {
   let outputDir
   try {
