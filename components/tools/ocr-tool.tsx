@@ -4,6 +4,7 @@ import { useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Copy, Download } from 'lucide-react';
 
+const MAX_FILE_SIZE = 100 * 1024 * 1024;
 const MAX_PDF_PAGES = 10;
 const OCR_LANG = 'eng';
 const TESSERACT_CDN = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
@@ -152,9 +153,9 @@ export default function OcrTool() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold">OCR PDF Online – Extract Text</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Extract machine-readable text from scanned PDFs and images with a real OCR engine.</p>
+        <p className="mt-2 text-sm text-muted-foreground">Extract English text from scanned PDFs and images with a browser-based OCR engine.</p>
       </div>
-      <FileUploader accept=".pdf,.jpg,.png,.jpeg,.webp" maxSize={50 * 1024 * 1024} onFileSelected={handleFileSelected} />
+      <FileUploader accept=".pdf,.jpg,.png,.jpeg,.webp" maxSize={MAX_FILE_SIZE} onFileSelected={handleFileSelected} />
       {selectedFile && (
         <div className="space-y-3 rounded-lg border p-4">
           <div className="text-sm font-medium">{selectedFile.name}</div>
