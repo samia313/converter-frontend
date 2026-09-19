@@ -67,6 +67,52 @@ export default function OcrTool() {
     setStatus(file ? 'Ready to OCR' : '');
   };
 
+  const runServerPdfOcr = async (file: File) => {
+    setStatus('Uploading PDF to the OCR server…');
+    setProgress(10);
+
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    const response = await fetch('/api/convert/ocr', {
+      method: 'POST',
+      body: formData,
+      signal: AbortSignal.timeout(90000),
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(typeof data?.error === 'string' ? data.error : 'Server OCR failed. Please try again.');
+    }
+
+    if (typeof data?.text !== 'string') {
+      throw new Error('OCR completed without extracted text.');
+    }
+
+    setProgress(100);
+    return data.text.trim();
+  };
+
+  const runBrowserImageOcr = async (file: File) => {
+    setStatus('Loading OCR engine…');
+    const tesseract = await loadTesseract();
+
+    const worker = await tesseract.createWorker(OCR_LANG, 1, {
+      logger: (message) => {
+        if (typeof message.progress === 'number') setProgress(Math.round(message.progress * 100));
+        if (message.status) setStatus(message.status);
+      },
+    });
+
+    try {
+      setStatus('Recognizing image text…');
+      const result = await worker.recognize(file);
+      return result.data.text.trim();
+    } finally {
+      await worker.terminate();
+    }
+  };
+
   const runOcr = async () => {
     if (!selectedFile) return;
     setProcessing(true);
@@ -74,51 +120,14 @@ export default function OcrTool() {
     setText('');
     setProgress(0);
 
-    let worker: OcrWorker | null = null;
     try {
-      setStatus('Loading OCR engine…');
-      const tesseract = await loadTesseract();
-      worker = await tesseract.createWorker(OCR_LANG, 1, {
-        logger: (message) => {
-          if (typeof message.progress === 'number') setProgress(Math.round(message.progress * 100));
-          if (message.status) setStatus(message.status);
-        },
-      });
-
+      const isPdf = selectedFile.type === 'application/pdf' || selectedFile.name.toLowerCase().endsWith('.pdf');
       let extractedText = '';
-      if (selectedFile.type === 'application/pdf' || selectedFile.name.toLowerCase().endsWith('.pdf')) {
-        setStatus('Loading PDF…');
-        const pdfjs = await import('pdfjs-dist');
-        pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.mjs', import.meta.url).toString();
-        const bytes = new Uint8Array(await selectedFile.arrayBuffer());
-        const pdf = await pdfjs.getDocument({ data: bytes }).promise;
-        if (pdf.numPages > MAX_PDF_PAGES) {
-          throw new Error(`This OCR tool currently supports up to ${MAX_PDF_PAGES} PDF pages per run. Split the PDF first and OCR each part.`);
-        }
 
-        const pageTexts: string[] = [];
-        for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
-          setStatus(`OCR page ${pageNumber} of ${pdf.numPages}…`);
-          const page = await pdf.getPage(pageNumber);
-          const viewport = page.getViewport({ scale: 2 });
-          const canvas = document.createElement('canvas');
-          canvas.width = Math.ceil(viewport.width);
-          canvas.height = Math.ceil(viewport.height);
-          const context = canvas.getContext('2d', { alpha: false });
-          if (!context) throw new Error('Could not create a PDF rendering canvas.');
-          await page.render({ canvas, canvasContext: context, viewport }).promise;
-          const result = await worker.recognize(canvas);
-          pageTexts.push(`--- Page ${pageNumber} ---\n${result.data.text.trim()}`);
-          canvas.width = 1;
-          canvas.height = 1;
-          page.cleanup();
-        }
-        extractedText = pageTexts.join('\n\n').trim();
-        pdf.cleanup();
+      if (isPdf) {
+        extractedText = await runServerPdfOcr(selectedFile);
       } else {
-        setStatus('Recognizing text…');
-        const result = await worker.recognize(selectedFile);
-        extractedText = result.data.text.trim();
+        extractedText = await runBrowserImageOcr(selectedFile);
       }
 
       if (!extractedText) throw new Error('No text could be detected. Try a clearer, higher-resolution document.');
@@ -129,7 +138,6 @@ export default function OcrTool() {
       setError(err instanceof Error ? err.message : 'OCR failed. Please try again.');
       setStatus('OCR failed');
     } finally {
-      if (worker) await worker.terminate();
       setProcessing(false);
     }
   };
@@ -144,7 +152,7 @@ export default function OcrTool() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${selectedFile?.name.replace(/\.[^.]+$/, '') || 'ocr-result'}.txt`;
+    link.download = `${selectedFile?.name.replace(/\\.[^.]+$/, '') || 'ocr-result'}.txt`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -153,7 +161,9 @@ export default function OcrTool() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold">OCR PDF Online – Extract Text</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Extract English text from scanned PDFs and images with a browser-based OCR engine.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Extract English text from scanned PDFs on the server, or from JPG/PNG/WebP images directly in your browser.
+        </p>
       </div>
       <FileUploader accept=".pdf,.jpg,.png,.jpeg,.webp" maxSize={MAX_FILE_SIZE} onFileSelected={handleFileSelected} />
       {selectedFile && (
