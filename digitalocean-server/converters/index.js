@@ -106,6 +106,24 @@ async function unlockPdf(inputPath, outputPath, password = '') {
   })
 }
 
+async function pdfToJpg(inputPath, outputPath) {
+  return withConversionSlot(async () => {
+    const outputDir = `${outputPath}.pages`
+    fs.mkdirSync(outputDir, { recursive: true })
+    try {
+      await runCommand('pdftoppm', ['-jpeg', '-r', '150', inputPath, path.join(outputDir, 'page')])
+      const files = fs.readdirSync(outputDir).filter((f) => f.toLowerCase().endsWith('.jpg')).sort()
+      if (!files.length) throw new Error('PDF to JPG produced no output files')
+      if (files.length === 1) {
+        fs.renameSync(path.join(outputDir, files[0]), outputPath)
+      } else {
+        await runCommand('zip', ['-j', outputPath, ...files], { cwd: outputDir })
+      }
+      ensureOutput(outputPath)
+    } finally { fs.rmSync(outputDir, { recursive: true, force: true }) }
+  })
+}
+
 async function pdfToImages(inputPath, outputDir) {
   return withConversionSlot(async () => {
     fs.mkdirSync(outputDir, { recursive: true })
@@ -136,4 +154,4 @@ async function pdfOCR(inputPath, outputPath, language = 'eng') {
   })
 }
 
-module.exports = { pdfToWord, pdfToExcel, pdfToPowerPoint, powerpointToPdf, htmlToPdf, excelToPdf, unlockPdf, pdfToImages, pdfOCR }
+module.exports = { pdfToWord, wordToPdf, pdfToExcel, pdfToPowerPoint, powerpointToPdf, htmlToPdf, excelToPdf, unlockPdf, pdfToJpg, pdfToImages, pdfOCR }
