@@ -1,47 +1,33 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export const maxDuration = 30;
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+export const maxDuration = 90;
 
-export async function POST(request: NextRequest) {
+const MAX_FILE_SIZE = 100 * 1024 * 1024;
+
+export async function POST(request: Request) {
+  const baseUrl = process.env.DIGITALOCEAN_CONVERTER_URL?.replace(/\/$/, '');
+  const apiKey = process.env.DIGITALOCEAN_CONVERTER_API_KEY;
   try {
     const formData = await request.formData();
     const file = formData.get('file');
-
-    if (!(file instanceof File)) {
-      return NextResponse.json({ error: 'No file provided.' }, { status: 400 });
-    }
-
+    if (!(file instanceof File)) return NextResponse.json({ error: 'No file provided.' }, { status: 400 });
+    if (!file.size) return NextResponse.json({ error: 'The uploaded file is empty.' }, { status: 400 });
+    if (file.size > MAX_FILE_SIZE) return NextResponse.json({ error: 'The maximum file size is 100MB.' }, { status: 413 });
     const extension = file.name.split('.').pop()?.toLowerCase() || '';
-    const supported = ['pdf', 'jpg', 'jpeg', 'png', 'webp'];
+    if (extension !== 'pdf') return NextResponse.json({ error: 'Server OCR currently accepts PDF files. JPG/PNG/WebP OCR remains available in the browser tool.' }, { status: 415 });
+    if (!baseUrl || !apiKey) return NextResponse.json({ error: 'OCR conversion service is not configured for this deployment.' }, { status: 503 });
 
-    if (!supported.includes(extension)) {
-      return NextResponse.json(
-        { error: 'Supported files are PDF, JPG, JPEG, PNG, and WebP.' },
-        { status: 400 }
-      );
-    }
-
-    if (file.size <= 0) {
-      return NextResponse.json({ error: 'The uploaded file is empty.' }, { status: 400 });
-    }
-
-    if (file.size > 100 * 1024 * 1024) {
-      return NextResponse.json({ error: 'The maximum file size is 100MB.' }, { status: 413 });
-    }
-
-    // Do not return fabricated OCR output. A real OCR engine must be connected
-    // before image/scanned-PDF recognition is advertised as available.
-    return NextResponse.json(
-      {
-        error: 'The OCR recognition engine is not currently configured for this deployment. Please try a PDF with selectable text using PDF to Text, or connect an OCR engine before enabling scanned-document OCR.',
-      },
-      { status: 503 }
-    );
+    const body = new FormData();
+    body.append('file', file, file.name);
+    body.append('language', 'eng');
+    const response = await fetch(baseUrl + '/convert/pdf-ocr', { method: 'POST', headers: { Authorization: 'Bearer ' + apiKey }, body, cache: 'no-store', signal: AbortSignal.timeout(75000) });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) return NextResponse.json({ error: typeof data?.error === 'string' ? data.error : 'OCR conversion failed.', code: data?.code || 'OCR_FAILED' }, { status: response.status });
+    if (typeof data?.textExtracted !== 'string') return NextResponse.json({ error: 'OCR completed without extracted text.', code: 'MISSING_TEXT' }, { status: 502 });
+    return NextResponse.json({ success: true, text: data.textExtracted, downloadUrl: data.downloadUrl || null });
   } catch (error) {
-    console.error('[OCR] processing error:', error);
-    return NextResponse.json(
-      { error: 'OCR processing failed. Please try again with a supported file.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'OCR processing failed.', code: 'OCR_UNAVAILABLE' }, { status: 502 });
   }
 }
