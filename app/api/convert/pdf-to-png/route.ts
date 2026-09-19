@@ -1,78 +1,29 @@
-import { NextRequest, NextResponse } from 'next/server';
-import sharp from 'sharp';
-import JSZip from 'jszip';
+import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
-export const maxDuration = 60;
-
+export const dynamic = 'force-dynamic';
+export const maxDuration = 90;
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
-const MAX_PAGES = 50;
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
+  const baseUrl = process.env.DIGITALOCEAN_CONVERTER_URL?.replace(/\/$/, '');
+  const apiKey = process.env.DIGITALOCEAN_CONVERTER_API_KEY;
+  if (!baseUrl || !apiKey) return NextResponse.json({ error: 'PDF to PNG conversion service is not configured yet.', code: 'CONVERTER_NOT_CONFIGURED' }, { status: 503 });
   try {
-    const formData = await request.formData();
-    const file = formData.get('file');
-
-    if (!(file instanceof File)) {
-      return NextResponse.json({ error: 'No PDF file provided.' }, { status: 400 });
-    }
-    if (file.size === 0) {
-      return NextResponse.json({ error: 'The PDF file is empty.' }, { status: 400 });
-    }
-    if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json({ error: 'PDF file exceeds the 100MB limit.' }, { status: 413 });
-    }
-    if (!file.name.toLowerCase().endsWith('.pdf') || (file.type && file.type !== 'application/pdf')) {
-      return NextResponse.json({ error: 'Please upload a valid PDF file.' }, { status: 415 });
-    }
-
-    const input = Buffer.from(await file.arrayBuffer());
-    const metadata = await sharp(input, { density: 150 }).metadata();
-    const pages = metadata.pages ?? 1;
-
-    if (pages > MAX_PAGES) {
-      return NextResponse.json(
-        { error: `This converter supports up to ${MAX_PAGES} PDF pages per request.` },
-        { status: 400 },
-      );
-    }
-
-    const baseName = file.name.replace(/\.[^.]+$/, '');
-    const renderPage = (page: number) =>
-      sharp(input, { density: 150, page })
-        .png({ compressionLevel: 6 })
-        .toBuffer();
-
-    if (pages === 1) {
-      const png = await renderPage(0);
-      return new NextResponse(png, {
-        headers: {
-          'Content-Disposition': `attachment; filename="${baseName}.png"`,
-          'Content-Type': 'image/png',
-          'Cache-Control': 'no-cache',
-        },
-      });
-    }
-
-    const zip = new JSZip();
-    for (let page = 0; page < pages; page++) {
-      const png = await renderPage(page);
-      zip.file(`${baseName}-page-${String(page + 1).padStart(3, '0')}.png`, png);
-    }
-
-    const archive = await zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });
-    return new NextResponse(archive, {
-      headers: {
-        'Content-Disposition': `attachment; filename="${baseName}-png.zip"`,
-        'Content-Type': 'application/zip',
-        'Cache-Control': 'no-cache',
-      },
-    });
-  } catch (error) {
-    console.error('PDF to PNG conversion failed:', error);
-    return NextResponse.json(
-      { error: 'PDF rendering failed on the current conversion runtime. Please try another PDF.' },
-      { status: 422 },
-    );
-  }
+    const incoming = await request.formData();
+    const file = incoming.get('file');
+    if (!(file instanceof File)) return NextResponse.json({ error: 'No PDF file provided.', code: 'NO_FILE' }, { status: 400 });
+    if (!file.size) return NextResponse.json({ error: 'The PDF file is empty.', code: 'EMPTY_FILE' }, { status: 400 });
+    if (file.size > MAX_FILE_SIZE) return NextResponse.json({ error: 'PDF file exceeds the 100MB limit.', code: 'FILE_TOO_LARGE' }, { status: 413 });
+    if (!file.name.toLowerCase().endsWith('.pdf')) return NextResponse.json({ error: 'Please upload a PDF file.', code: 'UNSUPPORTED_FORMAT' }, { status: 415 });
+    const body = new FormData(); body.append('file', file, file.name);
+    const response = await fetch(baseUrl + '/convert/pdf-to-png', { method: 'POST', headers: { Authorization: 'Bearer ' + apiKey }, body, cache: 'no-store', signal: AbortSignal.timeout(75000) });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) return NextResponse.json({ error: typeof data?.error === 'string' ? data.error : 'PDF to PNG conversion failed.', code: data?.code || 'CONVERSION_FAILED' }, { status: response.status });
+    if (!data?.downloadUrl) return NextResponse.json({ error: 'Conversion completed without a download URL.', code: 'MISSING_OUTPUT' }, { status: 502 });
+    const output = await fetch(data.downloadUrl, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
+    if (!output.ok) return NextResponse.json({ error: 'Converted image could not be retrieved.', code: 'OUTPUT_FETCH_FAILED' }, { status: 502 });
+    const isZip = data.format === 'zip';
+    return new NextResponse(await output.arrayBuffer(), { headers: { 'Content-Type': isZip ? 'application/zip' : 'image/png', 'Content-Disposition': 'attachment; filename="' + file.name.replace(/\.pdf$/i, '-png.' + (isZip ? 'zip' : 'png')) + '"', 'Cache-Control': 'no-store' } });
+  } catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : 'PDF to PNG conversion failed.', code: 'CONVERTER_UNAVAILABLE' }, { status: 502 }); }
 }
