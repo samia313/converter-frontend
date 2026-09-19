@@ -3,10 +3,51 @@
 import { useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Copy, Download } from 'lucide-react';
-import { createWorker } from 'tesseract.js';
 
 const MAX_PDF_PAGES = 10;
 const OCR_LANG = 'eng';
+const TESSERACT_CDN = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+
+type OcrWorker = {
+  recognize: (image: unknown) => Promise<{ data: { text: string } }>;
+  terminate: () => Promise<unknown>;
+};
+
+type TesseractApi = {
+  createWorker: (
+    lang: string,
+    oem?: number,
+    options?: { logger?: (message: { progress?: number; status?: string }) => void }
+  ) => Promise<OcrWorker>;
+};
+
+declare global {
+  interface Window {
+    Tesseract?: TesseractApi;
+  }
+}
+
+function loadTesseract(): Promise<TesseractApi> {
+  if (typeof window === 'undefined') throw new Error('OCR is only available in a browser.');
+  if (window.Tesseract) return Promise.resolve(window.Tesseract);
+
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector<HTMLScriptElement>('script[data-pdfilio-tesseract]');
+    if (existing) {
+      existing.addEventListener('load', () => window.Tesseract ? resolve(window.Tesseract) : reject(new Error('OCR engine loaded without its API.')));
+      existing.addEventListener('error', () => reject(new Error('Could not load the OCR engine.')));
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = TESSERACT_CDN;
+    script.async = true;
+    script.dataset.pdfilioTesseract = 'true';
+    script.onload = () => window.Tesseract ? resolve(window.Tesseract) : reject(new Error('OCR engine loaded without its API.'));
+    script.onerror = () => reject(new Error('Could not load the OCR engine. Please check your internet connection and try again.'));
+    document.head.appendChild(script);
+  });
+}
 
 export default function OcrTool() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -32,10 +73,11 @@ export default function OcrTool() {
     setText('');
     setProgress(0);
 
-    let worker: Awaited<ReturnType<typeof createWorker>> | null = null;
+    let worker: OcrWorker | null = null;
     try {
-      setStatus('Starting OCR engine…');
-      worker = await createWorker(OCR_LANG, 1, {
+      setStatus('Loading OCR engine…');
+      const tesseract = await loadTesseract();
+      worker = await tesseract.createWorker(OCR_LANG, 1, {
         logger: (message) => {
           if (typeof message.progress === 'number') setProgress(Math.round(message.progress * 100));
           if (message.status) setStatus(message.status);
