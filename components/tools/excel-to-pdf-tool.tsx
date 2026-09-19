@@ -55,7 +55,7 @@ export default function ExcelToPDFTool() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-8">
-          <FileUploader accept=".xlsx,.xls" onFileSelected={(files) => setSelectedFile(files[0] || null)} maxSize={100} />
+          <FileUploader accept=".xlsx" onFileSelected={(files) => setSelectedFile(files[0] || null)} maxSize={100} />
 
           {error && <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg"><p className="text-red-700 text-sm">{error}</p></div>}
 
