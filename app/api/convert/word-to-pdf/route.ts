@@ -8,99 +8,114 @@ export const maxDuration = 60;
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
 async function extractWordContent(arrayBuffer: ArrayBuffer): Promise<string> {
-  try {
-    // Use mammoth to extract text from DOCX
-    const result = await mammoth.extractRawText({ arrayBuffer });
-    console.log('[v0] Extracted text from Word file');
-    return result.value || 'Content extracted but appears empty';
-  } catch (error) {
-    console.error('[v0] Text extraction error:', error);
-    throw new Error('Failed to extract content from Word file');
+  const result = await mammoth.convertToHtml({ arrayBuffer }, {
+    includeDefaultStyleMap: true,
+  });
+  if (result.messages?.length) {
+    console.warn('[word-to-pdf] Mammoth messages:', result.messages);
   }
+  return result.value || '';
 }
 
-function wrapText(text: string, maxWidth: number): string[] {
-  const lines: string[] = [];
-  const words = text.split(' ');
-  let currentLine = '';
-
-  for (const word of words) {
-    const testLine = currentLine ? `${currentLine} ${word}` : word;
-    if (testLine.length > maxWidth) {
-      if (currentLine) lines.push(currentLine);
-      currentLine = word;
-    } else {
-      currentLine = testLine;
+function htmlToBlocks(html: string): Array<{ type: 'paragraph' | 'heading' | 'table'; text: string; rows?: string[][] }> {
+  const blocks: Array<{ type: 'paragraph' | 'heading' | 'table'; text: string; rows?: string[][] }> = [];
+  const source = html.replace(/<img\b[^>]*>/gi, '').replace(/\s+/g, ' ');
+  const tokenRe = /<(h[1-6]|p|li|table)\b[^>]*>([\s\S]*?)<\/\1>/gi;
+  let match: RegExpExecArray | null;
+  while ((match = tokenRe.exec(source))) {
+    const tag = match[1].toLowerCase();
+    const inner = match[2];
+    if (tag === 'table') {
+      const rows = Array.from(inner.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)).map((row) =>
+        Array.from(row[1].matchAll(/<(td|th)\b[^>]*>([\s\S]*?)<\/\1>/gi))
+          .map((cell) => cell[2].replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').trim())
+          .filter(Boolean),
+      ).filter((row) => row.length);
+      if (rows.length) blocks.push({ type: 'table', text: '', rows });
+      continue;
     }
+    const text = inner
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<[^>]+>/g, '')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&amp;/gi, '&')
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>')
+      .replace(/&quot;/gi, '"')
+      .trim();
+    if (!text) continue;
+    blocks.push({ type: tag.startsWith('h') ? 'heading' : 'paragraph', text });
   }
-  if (currentLine) lines.push(currentLine);
+  return blocks;
+}
+
+function wrapText(text: string, maxChars: number): string[] {
+  const lines: string[] = [];
+  for (const paragraph of text.split(/\n+/)) {
+    const words = paragraph.trim().split(/\s+/).filter(Boolean);
+    if (!words.length) { lines.push(''); continue; }
+    let line = '';
+    for (const word of words) {
+      const next = line ? `${line} ${word}` : word;
+      if (next.length > maxChars && line) {
+        lines.push(line);
+        line = word;
+      } else line = next;
+    }
+    if (line) lines.push(line);
+  }
   return lines;
 }
 
 async function createPDFFromContent(content: string, fileName: string): Promise<Buffer> {
-  try {
-    const pdfDoc = await PDFDocument.create();
-    let page = pdfDoc.addPage([595, 842]); // A4 size (210mm x 297mm)
-    
-    const { height } = page.getSize();
-    const margins = 50;
-    const pageWidth = 595 - 2 * margins;
-    const lineHeight = 14;
-    const fontSize = 11;
-    
-    let currentY = height - margins;
+  const pdfDoc = await PDFDocument.create();
+  const pageSize: [number, number] = [595, 842];
+  const margin = 50;
+  const fontSize = 11;
+  const lineHeight = 15;
+  let page = pdfDoc.addPage(pageSize);
+  let y = pageSize[1] - margin;
 
-    // Add title
-    page.drawText('Word Document Content', {
-      x: margins,
-      y: currentY,
-      size: 16,
-      color: rgb(0, 0, 0),
-    });
-    currentY -= 30;
+  const addPage = () => {
+    page = pdfDoc.addPage(pageSize);
+    y = pageSize[1] - margin;
+  };
 
-    // Add file info
-    page.drawText(`Source: ${fileName}`, {
-      x: margins,
-      y: currentY,
-      size: 9,
-      color: rgb(0.5, 0.5, 0.5),
-    });
-    currentY -= 20;
+  const ensureSpace = (needed = lineHeight) => {
+    if (y < margin + needed) addPage();
+  };
 
-    // Add divider
-    page.drawLine({
-      start: { x: margins, y: currentY },
-      end: { x: 595 - margins, y: currentY },
-      color: rgb(0.8, 0.8, 0.8),
-    });
-    currentY -= 15;
-
-    // Wrap and add content
-    const lines = wrapText(content, 85);
-
-    for (const line of lines) {
-      if (currentY < margins + 20) {
-        // Add new page if near bottom
-        page = pdfDoc.addPage([595, 842]);
-        currentY = height - margins;
-      }
-
-      page.drawText(line, {
-        x: margins,
-        y: currentY,
-        size: fontSize,
-        color: rgb(0, 0, 0),
-      });
-      currentY -= lineHeight;
+  const drawLines = (text: string, size = fontSize, gap = lineHeight) => {
+    const maxChars = size >= 14 ? 72 : 92;
+    for (const line of wrapText(text, maxChars)) {
+      if (!line) { y -= gap; continue; }
+      ensureSpace(gap);
+      page.drawText(line, { x: margin, y, size, color: rgb(0, 0, 0) });
+      y -= gap;
     }
+  };
 
-    const pdfBytes = await pdfDoc.save();
-    return Buffer.from(pdfBytes);
-  } catch (error) {
-    console.error('[v0] PDF creation error:', error);
-    throw new Error('Failed to create PDF');
+  const blocks = htmlToBlocks(content);
+  if (!blocks.length) throw new Error('No readable content found in Word document');
+
+  for (const block of blocks) {
+    if (block.type === 'heading') {
+      ensureSpace(28);
+      drawLines(block.text, 16, 20);
+      y -= 5;
+    } else if (block.type === 'table' && block.rows) {
+      for (const row of block.rows) {
+        ensureSpace(18);
+        drawLines(row.join(' | '), 9, 13);
+      }
+      y -= 8;
+    } else {
+      drawLines(block.text);
+      y -= 6;
+    }
   }
+
+  return Buffer.from(await pdfDoc.save());
 }
 
 export async function POST(request: NextRequest) {
