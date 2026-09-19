@@ -34,6 +34,6 @@ export async function POST(request:NextRequest){
   page.drawText(signature,{x,y,size:fontSize,font,color:rgb(0,0,0)});
   const output=await doc.save();
   const base=file.name.replace(/\.pdf$/i,'')||'document';
-  return new NextResponse(output as BodyInit,{headers:{'Content-Type':'application/pdf','Content-Disposition:`attachment; filename="${base}_signed.pdf"`,'Cache-Control':'no-store'}});
+  return new NextResponse(output as BodyInit,{headers:{'Content-Type':'application/pdf','Content-Disposition: `attachment; filename="${base}_signed.pdf"`,'Cache-Control':'no-store'}});
  }catch(e){return NextResponse.json({error:e instanceof Error?e.message:'Unable to sign PDF.'},{status:500});}
 }
