@@ -10,10 +10,14 @@ export default function ExcelToPDFTool() {
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
+  useEffect(() => () => { if (downloadUrl) URL.revokeObjectURL(downloadUrl); }, [downloadUrl]);
+
   const handleConvert = async () => {
     if (!selectedFile) return;
     setIsProcessing(true);
     setError(null);
+    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    setDownloadUrl(null);
 
     try {
       const apiEndpoint = '/api/convert/excel-to-pdf';
@@ -27,6 +31,7 @@ export default function ExcelToPDFTool() {
 
       if (!response.ok) { let message = `Conversion failed (${response.status})`; try { const data = await response.json(); message = data.error || message; } catch {} throw new Error(message); }
       const blob = await response.blob();
+      if (!blob.size) throw new Error('The converter returned an empty PDF.');
       setDownloadUrl(window.URL.createObjectURL(blob));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Processing failed');
@@ -71,7 +76,7 @@ export default function ExcelToPDFTool() {
                   <Download className="w-5 h-5" />
                   Download PDF
                 </button>
-                <button onClick={() => { setSelectedFile(null); setDownloadUrl(null); }} className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg">
+                <button onClick={() => { if (downloadUrl) URL.revokeObjectURL(downloadUrl); setSelectedFile(null); setDownloadUrl(null); setError(null); }} className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg">
                   Process Another
                 </button>
               </div>
