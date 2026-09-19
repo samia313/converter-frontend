@@ -84,6 +84,35 @@ router.post('/pdf-to-ppt', upload.single('file'), async (req, res, next) => {
   } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
 })
 
+router.post('/ppt-to-pdf', upload.single('file'), async (req, res, next) => {
+  let outputPath
+  try {
+    const file = req.file
+    if (!file) {
+      const error = new Error('No file provided')
+      error.status = 400
+      error.code = 'NO_FILE'
+      throw error
+    }
+    const ext = path.extname(file.originalname).toLowerCase()
+    if (!['.ppt', '.pptx'].includes(ext)) {
+      const error = new Error('Only PPT and PPTX files are supported')
+      error.status = 415
+      error.code = 'UNSUPPORTED_PRESENTATION_FORMAT'
+      throw error
+    }
+    outputPath = path.join(settings.uploadTempDir, `${uuidv4()}.pdf`)
+    const downloadUrl = await convertAndUpload({
+      inputPath: file.path,
+      outputPath,
+      filename: `${path.basename(file.originalname, ext)}.pdf`,
+      mimeType: 'application/pdf',
+      converter: converters.powerpointToPdf,
+    })
+    res.json({ success: true, format: 'pdf', downloadUrl })
+  } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
+})
+
 router.post('/pdf-to-images', upload.single('file'), async (req, res, next) => {
   let outputDir
   try {
