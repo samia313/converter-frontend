@@ -1,91 +1,47 @@
-'use client';
+'use client'
+import { useRef, useState } from 'react'
+import FileUploader from '@/components/file-uploader'
 
-import { useState, useEffect } from 'react';
-import FileUploader from '@/components/file-uploader';
-import { Download } from 'lucide-react';
+export default function CropPdfTool() {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [file, setFile] = useState<File | null>(null)
+  const [margins, setMargins] = useState({ left: '0', right: '0', top: '0', bottom: '0' })
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const [url, setUrl] = useState<string | null>(null)
 
-export default function CroppdfTool() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-  const [toolName, setToolName] = useState('crop-pdf');
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const path = window.location.pathname.split('/')[1];
-      setToolName(path || 'crop-pdf');
-    }
-  }, []);
-
-  const handleConvert = async () => {
-    if (!selectedFile) return;
-    setIsProcessing(true);
-    setError(null);
-
+  function resetUrl() { if (url) URL.revokeObjectURL(url); setUrl(null) }
+  async function process() {
+    if (!file) return
+    setBusy(true); setError(''); resetUrl()
     try {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
+      const fd = new FormData()
+      fd.append('file', file)
+      fd.append('left', margins.left); fd.append('right', margins.right)
+      fd.append('top', margins.top); fd.append('bottom', margins.bottom)
+      const response = await fetch('/api/convert/crop-pdf', { method: 'POST', body: fd })
+      if (!response.ok) { const data = await response.json().catch(() => null); throw new Error(data?.error || 'Cropping failed.') }
+      setUrl(URL.createObjectURL(await response.blob()))
+    } catch (e) { setError(e instanceof Error ? e.message : 'Cropping failed.') }
+    finally { setBusy(false) }
+  }
+  function reset() { resetUrl(); setFile(null); setError(''); setMargins({ left: '0', right: '0', top: '0', bottom: '0' }); if (inputRef.current) inputRef.current.value = '' }
 
-      const response = await fetch(`/api/convert/${toolName}`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error('Processing failed');
-      const blob = await response.blob();
-      setDownloadUrl(window.URL.createObjectURL(blob));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Processing failed');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const handleDownload = () => {
-    if (downloadUrl && selectedFile) {
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-      a.download = `${selectedFile.name.split('.')[0]}_converted.${selectedFile.name.split('.').pop()}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-  };
-
-  return (
-    <section className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 md:py-20">
-      <div className="container mx-auto max-w-2xl px-4">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">crop-pdf</h1>
-          <p className="text-lg text-gray-600">Process your files instantly</p>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <FileUploader accept="*" onFileSelected={(files) => setSelectedFile(files[0] || null)} maxSize={100} />
-
-          {error && <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg"><p className="text-red-700 text-sm">{error}</p></div>}
-
-          {!downloadUrl ? (
-            <button onClick={handleConvert} disabled={!selectedFile || isProcessing} className="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition">
-              {isProcessing ? 'Processing...' : 'Process File'}
-            </button>
-          ) : (
-            <div className="text-center mt-6">
-              <p className="text-green-600 font-semibold mb-4">Processing completed!</p>
-              <div className="flex gap-4 justify-center">
-                <button onClick={handleDownload} className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg">
-                  <Download className="w-5 h-5" />
-                  Download
-                </button>
-                <button onClick={() => { setSelectedFile(null); setDownloadUrl(null); }} className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg">
-                  Process Another
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+  return <section className="mx-auto w-full max-w-3xl px-4 py-8">
+    <div className="rounded-2xl border bg-background p-5 shadow-sm sm:p-7">
+      <h1 className="text-2xl font-bold sm:text-3xl">Crop PDF</h1>
+      <p className="mt-2 text-muted-foreground">Trim visible page margins using point measurements. The same crop margins are applied to every page.</p>
+      <input ref={inputRef} type="file" accept=".pdf,application/pdf" onChange={e => { resetUrl(); setFile(e.target.files?.[0] ?? null); setError('') }} className="mt-6 block w-full rounded-lg border p-3 text-sm" />
+      <div className="mt-5 grid grid-cols-2 gap-4">
+        {(['left','right','top','bottom'] as const).map(side => <label key={side} className="text-sm font-medium capitalize">{side} margin (pt)<input type="number" min="0" max="1000" step="1" value={margins[side]} onChange={e => setMargins(v => ({ ...v, [side]: e.target.value }))} disabled={!file || busy} className="mt-2 w-full rounded-lg border px-3 py-3" /></label>)}
       </div>
-    </section>
-  );
+      <p className="mt-3 text-xs text-muted-foreground">PDF points are used for crop margins. 72 points = 1 inch. Keep the combined margins smaller than each page's dimensions.</p>
+      <div className="mt-5 flex flex-wrap gap-3">
+        <button type="button" onClick={process} disabled={!file || busy} className="rounded-lg bg-primary px-5 py-3 font-medium text-primary-foreground disabled:opacity-50">{busy ? 'Cropping…' : 'Crop PDF'}</button>
+        {(file || url) && <button type="button" onClick={reset} className="rounded-lg border px-5 py-3 font-medium">Reset</button>}
+      </div>
+      {error && <p className="mt-4 text-sm text-red-600" role="alert">{error}</p>}
+      {url && <div className="mt-5 rounded-lg border p-4"><p className="font-medium text-green-700">Cropped PDF is ready.</p><a href={url} download={file?.name.replace(/\.pdf$/i,'') + '_cropped.pdf'} className="mt-3 inline-flex rounded-lg border px-5 py-3 font-medium">Download PDF</a></div>}
+    </div>
+  </section>
 }
