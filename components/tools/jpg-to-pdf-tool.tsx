@@ -4,11 +4,16 @@ import { useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
 
+const MAX_TOTAL_SIZE = 500 * 1024 * 1024;
+
 export default function JpgToPdfTool() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+  const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+  const totalSizeMb = (totalSize / (1024 * 1024)).toFixed(1);
 
   const handleConvert = async () => {
     if (!selectedFiles.length) return;
@@ -22,6 +27,7 @@ export default function JpgToPdfTool() {
         const data = await response.json().catch(() => null);
         throw new Error(data?.error || 'JPG to PDF conversion failed.');
       }
+      if (downloadUrl) URL.revokeObjectURL(downloadUrl);
       setDownloadUrl(URL.createObjectURL(await response.blob()));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'JPG to PDF conversion failed.');
@@ -38,6 +44,13 @@ export default function JpgToPdfTool() {
     a.click();
   };
 
+  const reset = () => {
+    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    setSelectedFiles([]);
+    setDownloadUrl(null);
+    setError(null);
+  };
+
   return (
     <section className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 md:py-20">
       <div className="container mx-auto max-w-2xl px-4">
@@ -47,10 +60,14 @@ export default function JpgToPdfTool() {
         </div>
         <div className="bg-white rounded-2xl shadow-lg p-8">
           <FileUploader accept=".jpg,.jpeg" multiple onFileSelected={setSelectedFiles} maxSize={100} />
-          {selectedFiles.length > 0 && <p className="mt-4 text-sm text-gray-600">{selectedFiles.length} image{selectedFiles.length === 1 ? '' : 's'} selected · Maximum 30 images</p>}
+          {selectedFiles.length > 0 && (
+            <p className="mt-4 text-sm text-gray-600">
+              {selectedFiles.length} image{selectedFiles.length === 1 ? '' : 's'} selected · {totalSizeMb}MB total · 100MB/file · 500MB total · Maximum 30 images
+            </p>
+          )}
           {error && <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg"><p className="text-red-700 text-sm">{error}</p></div>}
           {!downloadUrl ? (
-            <button onClick={handleConvert} disabled={!selectedFiles.length || isProcessing} className="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition">
+            <button onClick={handleConvert} disabled={!selectedFiles.length || isProcessing || totalSize > MAX_TOTAL_SIZE} className="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition">
               {isProcessing ? 'Converting...' : 'Convert to PDF'}
             </button>
           ) : (
@@ -58,7 +75,7 @@ export default function JpgToPdfTool() {
               <p className="text-green-600 font-semibold mb-4">PDF created successfully.</p>
               <div className="flex gap-4 justify-center">
                 <button onClick={download} className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg"><Download className="w-5 h-5" />Download PDF</button>
-                <button onClick={() => { URL.revokeObjectURL(downloadUrl); setSelectedFiles([]); setDownloadUrl(null); }} className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg">Convert More</button>
+                <button onClick={reset} className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-8 rounded-lg">Convert More</button>
               </div>
             </div>
           )}
