@@ -80,6 +80,7 @@ async function libreOfficeConvert(inputPath, outputPath, format) {
 const pdfToWord = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'docx')
 const pdfToExcel = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'xlsx')
 const pdfToPowerPoint = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'pptx')
+const powerpointToPdf = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'pdf:impress_pdf_Export')
 
 async function pdfToImages(inputPath, outputDir) {
   return withConversionSlot(async () => {
@@ -111,4 +112,4 @@ async function pdfOCR(inputPath, outputPath, language = 'eng') {
   })
 }
 
-module.exports = { pdfToWord, pdfToExcel, pdfToPowerPoint, pdfToImages, pdfOCR }
+module.exports = { pdfToWord, pdfToExcel, pdfToPowerPoint, powerpointToPdf, pdfToImages, pdfOCR }
