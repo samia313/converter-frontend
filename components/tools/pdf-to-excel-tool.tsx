@@ -24,7 +24,14 @@ export default function PDFToExcelTool() {
         body: formData,
       });
 
-      if (!response.ok) {\n        let message = 'Conversion failed';\n        try {\n          const data = await response.json();\n          message = data.error || data.details || message;\n        } catch {}\n        throw new Error(message);\n      }
+      if (!response.ok) {
+        let message = 'Conversion failed';
+        try {
+          const data = await response.json();
+          message = data.error || data.details || message;
+        } catch {}
+        throw new Error(message);
+      }
       const blob = await response.blob();
       setDownloadUrl(window.URL.createObjectURL(blob));
     } catch (err) {
