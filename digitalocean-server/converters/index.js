@@ -83,6 +83,27 @@ const pdfToPowerPoint = (inputPath, outputPath) => libreOfficeConvert(inputPath,
 const powerpointToPdf = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'pdf:impress_pdf_Export')
 const htmlToPdf = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'pdf:writer_pdf_Export')
 
+async function unlockPdf(inputPath, outputPath, password = '') {
+  const safePassword = String(password ?? '')
+  return withConversionSlot(async () => {
+    try {
+      await runCommand('qpdf', [`--password=${safePassword}`, '--decrypt', inputPath, outputPath])
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        const unavailable = new Error('PDF unlocking requires qpdf on the conversion server.')
+        unavailable.code = 'UNLOCK_ENGINE_UNAVAILABLE'
+        unavailable.status = 503
+        throw unavailable
+      }
+      const denied = new Error('The PDF could not be unlocked. Check the password and make sure you are authorized to remove its protection.')
+      denied.code = 'UNLOCK_FAILED'
+      denied.status = 422
+      throw denied
+    }
+    ensureOutput(outputPath)
+  })
+}
+
 async function pdfToImages(inputPath, outputDir) {
   return withConversionSlot(async () => {
     fs.mkdirSync(outputDir, { recursive: true })
