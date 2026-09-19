@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument } from 'pdf-lib';
+import sharp from 'sharp';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
 const MAX_FILES = 30;
+const MAX_TOTAL_SIZE = 500 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(['image/jpeg']);
 const ALLOWED_EXTENSIONS = new Set(['.jpg', '.jpeg']);
 
@@ -24,6 +26,11 @@ export async function POST(request: NextRequest) {
     if (!files.length) return NextResponse.json({ error: 'No JPG files provided.' }, { status: 400 });
     if (files.length > MAX_FILES) return NextResponse.json({ error: `You can convert up to ${MAX_FILES} images at once.` }, { status: 400 });
 
+    const totalSize = files.reduce((sum, entry) => sum + (entry instanceof File ? entry.size : 0), 0);
+    if (totalSize > MAX_TOTAL_SIZE) {
+      return NextResponse.json({ error: 'Total image size exceeds the 500MB limit.' }, { status: 413 });
+    }
+
     const pdfDoc = await PDFDocument.create();
 
     for (const entry of files) {
@@ -36,18 +43,28 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: `Unsupported file "${entry.name}". Use JPG or JPEG files.` }, { status: 415 });
       }
 
-      const image = await pdfDoc.embedJpg(new Uint8Array(await entry.arrayBuffer()));
-      const page = pdfDoc.addPage();
-      const margin = 24;
-      const maxWidth = page.getWidth() - margin * 2;
-      const maxHeight = page.getHeight() - margin * 2;
+      const bytes = new Uint8Array(await entry.arrayBuffer());
+      const image = await pdfDoc.embedJpg(bytes);
+      const metadata = await sharp(bytes).metadata();
+      const pixelWidth = metadata.width ?? image.width;
+      const pixelHeight = metadata.height ?? image.height;
+      const maxPageWidth = 842;
+      const maxPageHeight = 842;
+      const minPageSize = 300;
+      const pointsPerPixel = Math.min(1, 600 / Math.max(pixelWidth, pixelHeight));
+      const pageWidth = Math.max(minPageSize, Math.min(maxPageWidth, pixelWidth * pointsPerPixel));
+      const pageHeight = Math.max(minPageSize, Math.min(maxPageHeight, pixelHeight * pointsPerPixel));
+      const page = pdfDoc.addPage([pageWidth, pageHeight]);
+      const margin = 18;
+      const maxWidth = pageWidth - margin * 2;
+      const maxHeight = pageHeight - margin * 2;
       const scale = Math.min(maxWidth / image.width, maxHeight / image.height);
       const width = image.width * scale;
       const height = image.height * scale;
 
       page.drawImage(image, {
-        x: (page.getWidth() - width) / 2,
-        y: (page.getHeight() - height) / 2,
+        x: (pageWidth - width) / 2,
+        y: (pageHeight - height) / 2,
         width,
         height,
       });
