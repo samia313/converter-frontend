@@ -134,4 +134,4 @@ async function pdfOCR(inputPath, outputPath, language = 'eng') {
   })
 }
 
-module.exports = { pdfToWord, pdfToExcel, pdfToPowerPoint, powerpointToPdf, htmlToPdf, pdfToImages, pdfOCR }
+module.exports = { pdfToWord, pdfToExcel, pdfToPowerPoint, powerpointToPdf, htmlToPdf, unlockPdf, pdfToImages, pdfOCR }
