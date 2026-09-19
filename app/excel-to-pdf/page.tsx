@@ -89,7 +89,7 @@ Typical workflow: upload a supported XLSX file, start the conversion, review the
           { q: 'Should I check the PDF after conversion?', a: 'Yes. For important spreadsheets, check page breaks, orientation, totals, charts, tables, headers, footers, and other critical content before distributing the PDF.' },
         ]}
         primaryKeyword="Excel to PDF"
-        secondaryKeywords={['convert Excel to PDF', 'spreadsheet to PDF', 'XLS to PDF', 'XLSX to PDF', 'Excel conversion', 'Excel to PDF online']}
+        secondaryKeywords={['convert Excel to PDF', 'spreadsheet to PDF', 'XLSX to PDF', 'Excel conversion', 'Excel to PDF online']}
         schema={schema}
       />
     </>
