@@ -1,56 +1,12 @@
-import { Metadata } from 'next';
-import ToolLandingLayout from '@/components/tool-landing-layout';
-import PageNumbersTool from '@/components/tools/page-numbers-tool';
+import { Metadata } from 'next'
+import ToolLandingLayout from '@/components/tool-landing-layout'
+import PageNumbersTool from '@/components/tools/page-numbers-tool'
 
 export const metadata: Metadata = {
-  title: 'Page Numbers | PDFilio',
-  description: 'Page Numbers online for free. Fast, secure, and easy to use.',
-  keywords: ['page-numbers', 'Page Numbers'],
-};
-
-export default function PageNumbersToolPage() {
-  return (
-    <>
-      <PageNumbersTool />
-      <ToolLandingLayout
-        toolName="Page Numbers"
-        toolSlug="page-numbers"
-        description="Powerful online Page Numbers tool. Fast, secure, and completely free."
-        heroImage="/tool-images/page-numbers-hero.png"
-        mainContent="Page Numbers helps you process PDF files online instantly. Professional quality with zero compromise."
-        useCase="Page Numbers is perfect for professionals who need reliable document processing."
-        features={['Fast processing', 'High quality output', 'No registration needed', 'Secure encryption', 'Works on all devices']}
-        benefits={['Save time', 'Professional results', 'Completely free', 'Works everywhere', 'Easy to use']}
-        testimonials={[
-          {
-            name: 'John D.',
-            role: 'Professional',
-            text: 'This tool makes document processing incredibly easy. Highly recommended!',
-          },
-        ]}
-        faqs={[
-          {
-            q: 'Is this tool free?',
-            a: 'Yes, completely free with no hidden charges or registration required.',
-          },
-          {
-            q: 'How long does processing take?',
-            a: 'Most documents process within seconds depending on file size.',
-          },
-          {
-            q: 'Is my data secure?',
-            a: 'Yes, all files are encrypted and automatically deleted after processing.',
-          },
-        ]}
-        relatedTools={[
-          { name: 'Merge PDF', slug: 'merge-pdf' },
-          { name: 'Compress PDF', slug: 'compress-pdf' },
-          { name: 'Split PDF', slug: 'split-pdf' },
-          { name: 'PDF to Word', slug: 'pdf-to-word' },
-        ]}
-        primaryKeyword="page-numbers"
-        secondaryKeywords={['Page Numbers', 'page-numbers online', 'free Page Numbers']}
-      />
-    </>
-  );
+  title: 'Add Page Numbers to PDF Online | PDFilio',
+  description: 'Add sequential page numbers to PDF files online. Choose the starting number, font size, and page number position.',
+  keywords: ['add page numbers to PDF','page numbers PDF','number PDF pages','PDF page numbering'],
+  alternates:{canonical:'https://pdfilio.com/page-numbers'},
+  openGraph:{title:'Add Page Numbers to PDF Online | PDFilio',description:'Add sequential page numbers to every PDF page with position and font-size controls.',url:'https://pdfilio.com/page-numbers',type:'website'},
 }
+export default function PageNumbersToolPage(){return <><PageNumbersTool/><ToolLandingLayout toolName="Add Page Numbers to PDF" toolSlug="page-numbers" description="Add sequential page numbers to every PDF page and choose where they appear." mainContent="PDFilio adds a new sequential page number to each page of your PDF. Choose the starting number, font size, and one of six page positions. Existing document content stays in place." features={['Sequential page numbering','Six position options','Custom starting number','Adjustable font size','100 MB PDF limit','Separate numbered PDF output']} benefits={['Prepare reports and documents for printing','Make long PDFs easier to navigate','Control numbering position and size','Keep the original PDF unchanged']} relatedTools={[{name:'Edit PDF',slug:'edit-pdf'},{name:'Organize PDF',slug:'organize-pdf'},{name:'Merge PDF',slug:'merge-pdf'},{name:'Compress PDF',slug:'compress-pdf'}]} faqs={[{q:'How do I add page numbers to a PDF?',a:'Upload your PDF, choose the starting number, font size, and position, then select Add Page Numbers.'},{q:'Can I choose where page numbers appear?',a:'Yes. The current tool supports top-left, top-center, top-right, bottom-left, bottom-center, and bottom-right.'},{q:'Can I start numbering from a different number?',a:'Yes. Enter any positive starting number.'},{q:'Will existing PDF content be removed?',a:'No. Page numbers are added as new text over the existing page.'},{q:'What is the PDF upload limit?',a:'The current limit is 100 MB per PDF.'}]} primaryKeyword="add page numbers to PDF" secondaryKeywords={['page numbers PDF','number PDF pages','PDF page numbering']}/></>}
