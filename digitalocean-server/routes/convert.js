@@ -135,4 +135,23 @@ router.post('/pdf-ocr', upload.single('file'), async (req, res, next) => {
   } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
 })
 
+router.post('/html-to-pdf', upload.single('file'), async (req, res, next) => {
+  let outputPath
+  try {
+    const file = req.file
+    if (!file) { const error = new Error('No HTML file provided'); error.status = 400; error.code = 'NO_FILE'; throw error }
+    const ext = path.extname(file.originalname).toLowerCase()
+    if (!['.html', '.htm'].includes(ext)) { const error = new Error('Only HTML and HTM files are supported'); error.status = 415; error.code = 'UNSUPPORTED_HTML_FORMAT'; throw error }
+    outputPath = path.join(settings.uploadTempDir, `${uuidv4()}.pdf`)
+    const downloadUrl = await convertAndUpload({
+      inputPath: file.path,
+      outputPath,
+      filename: `${path.basename(file.originalname, ext)}.pdf`,
+      mimeType: 'application/pdf',
+      converter: converters.htmlToPdf,
+    })
+    res.json({ success: true, format: 'pdf', downloadUrl })
+  } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
+})
+
 module.exports = router
