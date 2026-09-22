@@ -175,6 +175,29 @@ router.post('/pdf-to-images', upload.single('file'), async (req, res, next) => {
   } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputDir) }
 })
 
+router.post('/compress-pdf', upload.single('file'), async (req, res, next) => {
+  let outputPath
+  try {
+    const file = requireFile(req)
+    const level = typeof req.body?.level === 'string' ? req.body.level.toLowerCase() : 'medium'
+    if (!['low', 'medium', 'high'].includes(level)) {
+      const error = new Error('Compression level must be low, medium, or high')
+      error.status = 400
+      error.code = 'INVALID_COMPRESSION_LEVEL'
+      throw error
+    }
+    outputPath = path.join(settings.uploadTempDir, `${uuidv4()}.pdf`)
+    const downloadUrl = await convertAndUpload({
+      inputPath: file.path,
+      outputPath,
+      filename: `${path.basename(file.originalname, '.pdf')}-compressed.pdf`,
+      mimeType: 'application/pdf',
+      converter: (input, output) => converters.compressPdf(input, output, level),
+    })
+    res.json({ success: true, format: 'pdf', level, downloadUrl })
+  } catch (error) { next(error) } finally { cleanupFile(req.file?.path); cleanupFile(outputPath) }
+})
+
 router.post('/pdf-ocr', upload.single('file'), async (req, res, next) => {
   let outputPath
   try {
