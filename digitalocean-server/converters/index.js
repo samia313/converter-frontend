@@ -120,7 +120,7 @@ async function pdfToPng(inputPath, outputPath) {
         return { outputPath, format: 'png' }
       }
       const zipPath = outputPath.replace(/\.png$/i, '.zip')
-      await runCommand('zip', ['-j', zipPath, ...files], { cwd: outputDir })
+      await runCommand('zip', ['-j', zipPath, ...files.map((file) => path.join(outputDir, file))])
       ensureOutput(zipPath)
       return { outputPath: zipPath, format: 'zip' }
     } finally { fs.rmSync(outputDir, { recursive: true, force: true }) }
@@ -141,7 +141,7 @@ async function pdfToJpg(inputPath, outputPath) {
         return { outputPath, format: 'jpg' }
       }
       const zipPath = outputPath.replace(/\.jpg$/i, '.zip')
-      await runCommand('zip', ['-j', zipPath, ...files], { cwd: outputDir })
+      await runCommand('zip', ['-j', zipPath, ...files.map((file) => path.join(outputDir, file))])
       ensureOutput(zipPath)
       return { outputPath: zipPath, format: 'zip' }
     } finally { fs.rmSync(outputDir, { recursive: true, force: true }) }
