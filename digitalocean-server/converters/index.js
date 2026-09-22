@@ -168,6 +168,28 @@ async function pdfToImages(inputPath, outputDir) {
   })
 }
 
+async function compressPdf(inputPath, outputPath, level = 'medium') {
+  return withConversionSlot(async () => {
+    const presets = {
+      low: '/prepress',
+      medium: '/ebook',
+      high: '/screen',
+    }
+    const preset = presets[String(level || 'medium').toLowerCase()] || presets.medium
+    await runCommand('gs', [
+      '-sDEVICE=pdfwrite',
+      '-dCompatibilityLevel=1.4',
+      `-dPDFSETTINGS=${preset}`,
+      '-dNOPAUSE',
+      '-dQUIET',
+      '-dBATCH',
+      `-sOutputFile=${outputPath}`,
+      inputPath,
+    ])
+    ensureOutput(outputPath)
+  })
+}
+
 async function pdfOCR(inputPath, outputPath, language = 'eng') {
   return withConversionSlot(async () => {
     const safeLanguage = String(language || 'eng').trim().replace(/[^a-zA-Z0-9_+.-]/g, '') || 'eng'
@@ -178,4 +200,4 @@ async function pdfOCR(inputPath, outputPath, language = 'eng') {
   })
 }
 
-module.exports = { pdfToWord, wordToPdf, pdfToExcel, pdfToPowerPoint, powerpointToPdf, htmlToPdf, excelToPdf, unlockPdf, pdfToJpg, pdfToPng, pdfToImages, pdfOCR }
+module.exports = { pdfToWord, wordToPdf, pdfToExcel, pdfToPowerPoint, powerpointToPdf, htmlToPdf, excelToPdf, unlockPdf, pdfToJpg, pdfToPng, pdfToImages, compressPdf, pdfOCR }
