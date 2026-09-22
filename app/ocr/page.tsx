@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import OCRTool from '@/components/tools/ocr-tool';
 
 export const metadata: Metadata = {
-  title: 'OCR PDF Online – Extract Text from Scanned PDFs & Images | PDFilio',
+  title: 'OCR PDF Online – Extract Text from Scanned PDFs & Images',
   description: 'Extract text from supported scanned PDFs and images with PDFilio OCR. Convert image-based document content into machine-readable text for editing, searching, and reuse.',
   keywords: ['OCR PDF', 'OCR online', 'OCR PDF online', 'scanned PDF OCR', 'PDF to text OCR', 'image to text', 'extract text from image', 'OCR text extraction'],
   alternates: { canonical: 'https://pdfilio.com/ocr' },
