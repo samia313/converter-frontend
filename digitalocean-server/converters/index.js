@@ -176,7 +176,8 @@ async function compressPdf(inputPath, outputPath, level = 'medium') {
       high: '/screen',
     }
     const preset = presets[String(level || 'medium').toLowerCase()] || presets.medium
-    await runCommand('gs', [
+    try {
+      await runCommand('gs', [
       '-sDEVICE=pdfwrite',
       '-dCompatibilityLevel=1.4',
       `-dPDFSETTINGS=${preset}`,
@@ -185,7 +186,16 @@ async function compressPdf(inputPath, outputPath, level = 'medium') {
       '-dBATCH',
       `-sOutputFile=${outputPath}`,
       inputPath,
-    ])
+      ])
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        const unavailable = new Error('PDF compression requires Ghostscript on the conversion server.')
+        unavailable.code = 'COMPRESSION_ENGINE_UNAVAILABLE'
+        unavailable.status = 503
+        throw unavailable
+      }
+      throw error
+    }
     ensureOutput(outputPath)
   })
 }
@@ -193,7 +203,17 @@ async function compressPdf(inputPath, outputPath, level = 'medium') {
 async function pdfOCR(inputPath, outputPath, language = 'eng') {
   return withConversionSlot(async () => {
     const safeLanguage = String(language || 'eng').trim().replace(/[^a-zA-Z0-9_+.-]/g, '') || 'eng'
-    await runCommand('ocrmypdf', ['--skip-text', '--language', safeLanguage, inputPath, outputPath])
+    try {
+      await runCommand('ocrmypdf', ['--skip-text', '--language', safeLanguage, inputPath, outputPath])
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        const unavailable = new Error('OCR requires OCRmyPDF on the conversion server.')
+        unavailable.code = 'OCR_ENGINE_UNAVAILABLE'
+        unavailable.status = 503
+        throw unavailable
+      }
+      throw error
+    }
     ensureOutput(outputPath)
     const parsed = await pdfParse(fs.readFileSync(outputPath))
     return parsed.text || ''
