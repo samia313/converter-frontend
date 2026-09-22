@@ -57,12 +57,14 @@ export default function OcrTool() {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
+  const [ocrPdfUrl, setOcrPdfUrl] = useState<string | null>(null);
 
   const handleFileSelected = (files: File[]) => {
     const file = files[0] ?? null;
     setSelectedFile(file);
     setText('');
     setError('');
+    setOcrPdfUrl(null);
     setProgress(0);
     setStatus(file ? 'Ready to OCR' : '');
   };
@@ -90,6 +92,7 @@ export default function OcrTool() {
     }
 
     setProgress(100);
+    setOcrPdfUrl(typeof data?.downloadUrl === 'string' ? data.downloadUrl : null);
     return data.text.trim();
   };
 
@@ -176,7 +179,7 @@ export default function OcrTool() {
         </div>
       )}
       {error && <p className="rounded-md border border-destructive/30 p-3 text-sm text-destructive">{error}</p>}
-      {text && <div className="space-y-3"><div className="flex gap-2"><button type="button" onClick={copyText} className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><Copy className="h-4 w-4" /> Copy Text</button><button type="button" onClick={downloadText} className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><Download className="h-4 w-4" /> Save as TXT</button></div><textarea readOnly value={text} className="min-h-72 w-full rounded-md border bg-background p-4 text-sm" aria-label="OCR extracted text" /></div>}
+      {text && <div className="space-y-3"><div className="flex flex-wrap gap-2"><button type="button" onClick={copyText} className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><Copy className="h-4 w-4" /> Copy Text</button><button type="button" onClick={downloadText} className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><Download className="h-4 w-4" /> Save as TXT</button>{ocrPdfUrl && <a href={ocrPdfUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><Download className="h-4 w-4" /> Download OCR PDF</a>}</div><textarea readOnly value={text} className="min-h-72 w-full rounded-md border bg-background p-4 text-sm" aria-label="OCR extracted text" /></div>}
     </div>
   );
 }
