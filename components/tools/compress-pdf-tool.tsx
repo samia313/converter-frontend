@@ -14,6 +14,7 @@ export default function CompressPDFTool() {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [result, setResult] = useState<CompressionResult | null>(null);
   const [progress, setProgress] = useState(0);
+  const [compressionLevel, setCompressionLevel] = useState<'low' | 'medium' | 'high'>('medium');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,6 +49,7 @@ export default function CompressPDFTool() {
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
+      formData.append('level', compressionLevel);
       setProgress(30);
 
       const response = await fetch('/api/convert/compress-pdf', {
@@ -144,6 +146,18 @@ export default function CompressPDFTool() {
 
           {selectedFile && !downloadUrl && (
             <div className="p-8">
+              <label htmlFor="compression-level" className="block text-sm font-semibold text-gray-900 mb-2">Compression level</label>
+              <select
+                id="compression-level"
+                value={compressionLevel}
+                onChange={(e) => setCompressionLevel(e.target.value as 'low' | 'medium' | 'high')}
+                disabled={isProcessing}
+                className="w-full mb-5 rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900"
+              >
+                <option value="low">Low — preserve more quality</option>
+                <option value="medium">Medium — balanced size and quality</option>
+                <option value="high">High — smaller file, more quality loss</option>
+              </select>
               <button type="button" onClick={handleCompress} disabled={isProcessing} className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-4 px-6 rounded-lg transition flex items-center justify-center gap-3">
                 {isProcessing && <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" /></svg>}
                 {isProcessing ? 'Compressing...' : 'Compress PDF'}
