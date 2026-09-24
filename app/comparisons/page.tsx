@@ -1,9 +1,17 @@
 import { comparisons } from '@/lib/content/comparisons';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'PDFilio vs Competitors - Detailed Comparisons',
-  description: 'Compare PDFilio with Smallpdf, ILovePDF, Adobe, PDF24, Foxit, Nitro, and more. See features, pricing, and why PDFilio is better.',
+  description: 'Compare PDFilio with other PDF tools across features, workflows, and pricing information.',
+  alternates: { canonical: 'https://pdfilio.com/comparisons' },
+  openGraph: {
+    title: 'PDF Tool Comparisons | PDFilio',
+    description: 'Compare PDFilio with other PDF tools across features, workflows, and pricing information.',
+    url: 'https://pdfilio.com/comparisons',
+    type: 'website',
+  },
 };
 
 export default function ComparisonsPage() {
