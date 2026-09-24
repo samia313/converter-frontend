@@ -4,7 +4,7 @@ import SplitPDFTool from '@/components/tools/split-pdf-tool';
 
 export const metadata: Metadata = {
   title: 'Split PDF Online – Split a PDF into Two Files | PDFilio',
-  description: 'description: 'Split a PDF online into separate PDF files by choosing where to divide the document. Download the generated PDF parts and review them before sharing or submission.'',
+  description: 'Split a PDF online into separate PDF files by choosing where to divide the document. Download the generated PDF parts and review them before sharing or submission.',
   keywords: ['split PDF', 'split PDF online', 'split PDF into two parts', 'divide PDF', 'PDF splitter', 'separate PDF pages'],
   alternates: { canonical: 'https://pdfilio.com/split-pdf' },
   openGraph: {
