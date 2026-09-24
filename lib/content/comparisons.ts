@@ -15,16 +15,16 @@ export const competitors = [
 
 export const comparisons: Comparison[] = competitors.map((competitor, index) => ({
   id: `comp-${String(index + 1).padStart(3, '0')}`,
-  slug: `${competitor}-vs-pdffilio`,
+  slug: `${competitor}-vs-pdfilio`,
   title: `${competitor.charAt(0).toUpperCase() + competitor.slice(1)} vs PDFilio: Detailed Comparison 2024`,
-  url: `/vs/${competitor}-vs-pdffilio`,
+  url: `/vs/${competitor}-vs-pdfilio`,
   competitor,
   keywords: [
-    `${competitor} vs pdffilio`,
+    `${competitor} vs pdfilio`,
     `${competitor} alternative`,
-    `pdffilio comparison`,
+    `pdfilio comparison`,
     `best pdf tool`,
-    `${competitor} vs pdffilio 2024`
+    `${competitor} vs pdfilio 2024`
   ]
 }))
 
