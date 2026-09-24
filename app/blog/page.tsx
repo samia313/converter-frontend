@@ -38,7 +38,7 @@ export default function BlogPage() {
             <p className="mb-8 text-lg leading-8 text-muted-foreground">Straightforward tutorials, useful checks, and real document workflows — without filler.</p>
             <div className="flex flex-wrap gap-3">
               <Link href="/tools" className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">Explore PDF Tools</Link>
-              <Link href="/faq" className="rounded-lg border border-border px-6 py-3 font-semibold text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">Read FAQs</Link>
+              <Link href="/guides" className="rounded-lg border border-border px-6 py-3 font-semibold text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">Browse PDF Guides</Link>
             </div>
           </div>
         </div>
