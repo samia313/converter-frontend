@@ -22,6 +22,7 @@ export async function generateMetadata({ params }: AIToolPageProps) {
   const tool = getToolConfig(params.slug)
   if (!tool) return { title: 'AI Tool Not Found | PDFilio', robots: { index: false, follow: true } }
   return {
+    robots: { index: false, follow: true },
     title: `${tool.name} – AI PDF Tool | PDFilio`,
     description: tool.description,
     keywords: tool.keywords.join(', '),
@@ -134,8 +135,8 @@ export default function AIToolPage({ params }: AIToolPageProps) {
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li><a href="/contact" className="hover:text-white">Contact</a></li>
-                <li><a href="/faq" className="hover:text-white">FAQ</a></li>
-                <li><a href="/docs" className="hover:text-white">Documentation</a></li>
+                <li><a href="/guides" className="hover:text-white">Guides</a></li>
+                <li><a href="/contact" className="hover:text-white">Contact</a></li>
               </ul>
             </div>
           </div>
