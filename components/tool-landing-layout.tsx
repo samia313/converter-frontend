@@ -212,7 +212,7 @@ export default function ToolLandingLayout({
             ).slice(0, 6).map((t) => (
               <Link key={t.slug} href={`/${t.slug}`} className="min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-5 transition hover:border-gray-300 sm:p-6">
                 <h3 className="break-words font-bold text-gray-900">{t.name}</h3>
-                <p className="mt-1 text-sm text-gray-600">Learn more<ChevronRight className="inline h-4 w-4" /></p>
+                <p className="mt-1 text-sm text-gray-600">Explore {t.name}<ChevronRight className="inline h-4 w-4" /></p>
               </Link>
             ))}
           </div>
