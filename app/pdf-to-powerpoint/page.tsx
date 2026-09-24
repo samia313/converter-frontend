@@ -78,7 +78,7 @@ For important presentations, keep the original PDF and compare the converted sli
           { name: 'PDF to Excel', slug: 'pdf-to-excel' },
           { name: 'Merge PDF', slug: 'merge-pdf' },
           { name: 'Compress PDF', slug: 'compress-pdf' },
-          { name: 'PDF to Image', slug: 'pdf-to-image' },
+          { name: 'PDF to Images', slug: 'pdf-to-images' },
         ]}
         primaryKeyword="PDF to PowerPoint"
         secondaryKeywords={['PDF to PPT', 'convert PDF to PowerPoint', 'PDF to PPT online', 'PDF presentation converter']}
