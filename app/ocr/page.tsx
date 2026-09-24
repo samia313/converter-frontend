@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   keywords: ['OCR PDF', 'OCR online', 'OCR PDF online', 'scanned PDF OCR', 'PDF to text OCR', 'image to text', 'extract text from image', 'OCR text extraction'],
   alternates: { canonical: 'https://pdfilio.com/ocr' },
   openGraph: {
-    title: 'OCR PDF Online – Extract Text from Scanned PDFs & Images | PDFilio',
+    title: 'OCR PDF Online – Extract Text from Scanned PDFs & Images',
     description: 'Extract text from supported scanned PDFs and images with PDFilio OCR.',
     url: 'https://pdfilio.com/ocr',
     type: 'website',
