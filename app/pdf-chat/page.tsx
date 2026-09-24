@@ -70,8 +70,8 @@ AI-generated responses can contain errors or omit context. For legal, financial,
           { q: 'What type of PDFs are supported?', a: 'Use PDFs supported by PDFilio’s current processing workflow. Results can vary with file quality, text extraction, scans, and document complexity.' },
         ]}
         relatedTools={[
-          { name: 'AI Chat PDF', slug: 'ai-chat-pdf' },
-          { name: 'AI Document Summarizer', slug: 'ai-document-summarizer' },
+          { name: 'AI Document Chat', slug: 'ai-document-chat-tool' },
+          { name: 'AI Document Rewriter', slug: 'ai-document-rewriter' },
           { name: 'PDF to Word', slug: 'pdf-to-word' },
           { name: 'Split PDF', slug: 'split-pdf' },
           { name: 'Merge PDF', slug: 'merge-pdf' },
