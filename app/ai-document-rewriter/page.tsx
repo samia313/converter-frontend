@@ -70,11 +70,11 @@ A practical workflow is to provide supported document content, select or describ
         { q: 'Should I review AI-rewritten content before publishing?', a: 'Yes. Human review is recommended, especially for legal, academic, financial, medical, technical, or other high-stakes documents.' },
       ]}
       relatedTools={[
-        { name: 'AI Rewrite PDF', slug: 'ai-rewrite-pdf' },
-        { name: 'Rewrite PDF with AI', slug: 'rewrite-pdf-with-ai' },
-        { name: 'AI Document Summarizer', slug: 'ai-document-summarizer' },
-        { name: 'AI Document Chat', slug: 'ai-document-chat' },
-        { name: 'AI Document Research Assistant', slug: 'ai-document-research-assistant' },
+        { name: 'AI Document Chat', slug: 'ai-document-chat-tool' },
+        { name: 'AI Research Assistant', slug: 'ai-research-assistant' },
+        { name: 'AI Research Writing Assistant', slug: 'ai-research-writing-assistant' },
+        { name: 'PDF Chat', slug: 'pdf-chat' },
+        { name: 'AI Document Rewriter', slug: 'ai-document-rewriter' },
       ]}
       primaryKeyword="AI document rewriter"
       secondaryKeywords={['AI rewrite document', 'document rewriting AI', 'rewrite text with AI', 'AI document editor', 'AI writing assistant']}
