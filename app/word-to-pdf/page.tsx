@@ -3,12 +3,12 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import WordToPDFTool from '@/components/tools/word-to-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Word to PDF Converter Online – Convert DOCX to PDF | PDFilio',
+  title: 'Word to PDF Converter Online – Convert DOCX to PDF',
   description: 'Convert Word DOC and DOCX files to PDF online. Create shareable PDF documents from resumes, reports, proposals, contracts, and other supported Word files.',
   keywords: ['Word to PDF', 'Word to PDF converter', 'convert Word to PDF', 'DOC to PDF', 'DOCX to PDF', 'Word document to PDF', 'Word to PDF online'],
   alternates: { canonical: 'https://pdfilio.com/word-to-pdf' },
   openGraph: {
-    title: 'Word to PDF Converter – Convert DOC & DOCX to PDF | PDFilio',
+    title: 'Word to PDF Converter – Convert DOC & DOCX to PDF',
     description: 'Convert supported Word DOC and DOCX documents into PDF files for sharing, printing, and document workflows.',
     url: 'https://pdfilio.com/word-to-pdf',
     type: 'website',
