@@ -3,7 +3,7 @@ export const seoKeywords = {
   secondary: ['Best PDF Converter','Free PDF Converter','Fast PDF Converter','Secure PDF Converter','Convert PDF Online','Edit PDF Online','Compress PDF Free','Merge PDF Online','Split PDF Online','PDF Merge Tool','Online PDF Editor','PDF Management Tool','Document Converter Online','Batch PDF Converter'],
   longTail: ['How to compress PDF without losing quality','How to merge PDFs online free','Convert PDF to Word without formatting loss','Best PDF editor online','Compress PDF to 200KB','Compress PDF to 100KB','Reduce PDF size online','Merge multiple PDFs','OCR scanned PDF online','Edit PDF text online','How to protect PDF with password','Unlock password protected PDF','Convert DOCX to PDF online','Split large PDF files','Batch convert PDF to Word'],
   toolLinks: {
-    'pdf-to-word': { title: 'PDF to Word Converter', description: 'Convert PDF documents to editable Word files online.', relatedTools: ['word-to-pdf','edit-pdf','ocr-pdf'], keywords: ['PDF to Word','convert PDF to Word','PDF to DOC'] },
+    'pdf-to-word': { title: 'PDF to Word Converter', description: 'Convert PDF documents to editable Word files online.', relatedTools: ['word-to-pdf','edit-pdf','ocr'], keywords: ['PDF to Word','convert PDF to Word','PDF to DOC'] },
     'word-to-pdf': { title: 'Word to PDF Converter', description: 'Convert Word documents into PDF files online.', relatedTools: ['pdf-to-word','compress-pdf','protect-pdf'], keywords: ['Word to PDF','DOC to PDF','DOCX to PDF'] },
     'merge-pdf': { title: 'Merge PDF', description: 'Combine multiple PDF files into one document online.', relatedTools: ['split-pdf','compress-pdf','edit-pdf'], keywords: ['Merge PDF','combine PDF','join PDF files'] },
     'split-pdf': { title: 'Split PDF', description: 'Split PDF files into separate pages or custom sections.', relatedTools: ['merge-pdf','compress-pdf','rotate-pdf'], keywords: ['Split PDF','separate PDF pages','extract PDF pages'] },
@@ -33,7 +33,7 @@ export const seoKeywords = {
     ['pdf-to-word','word-to-pdf','compress-pdf','merge-pdf','split-pdf'],
     ['merge-pdf','split-pdf','compress-pdf','edit-pdf','ocr-pdf'],
     ['protect-pdf','unlock-pdf','edit-pdf','compress-pdf','merge-pdf'],
-    ['ocr-pdf','pdf-to-word','edit-pdf','compress-pdf','merge-pdf'],
+    ['ocr','pdf-to-word','edit-pdf','compress-pdf','merge-pdf'],
   ],
 };
 
