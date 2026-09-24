@@ -59,7 +59,7 @@ For important documents, keep the original image files until you have reviewed t
         ]}
         testimonials={[]}
         relatedTools={[
-          { name: 'PDF to Images', slug: 'pdf-to-images' },
+          { name: 'PDF to Image', slug: 'pdf-to-image' },
           { name: 'Merge PDF', slug: 'merge-pdf' },
           { name: 'Compress PDF', slug: 'compress-pdf' },
           { name: 'PDF to Word', slug: 'pdf-to-word' },
