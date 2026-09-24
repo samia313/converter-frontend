@@ -45,7 +45,7 @@ const upload = multer({
 })
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString(), activeTempDir: settings.uploadTempDir })
+  res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
 app.get('/version', (req, res) => {
@@ -58,7 +58,11 @@ app.use('/convert', convertRoutes)
 
 app.use((err, req, res, next) => {
   console.error('[ERROR]', err)
-  const status = Number.isInteger(err.status) ? err.status : (err.code === 'LIMIT_FILE_SIZE' ? 413 : 500)
+  const status = Number.isInteger(err.status)
+    ? err.status
+    : (err.code === 'LIMIT_FILE_SIZE' ? 413
+      : (err.code === 'LIMIT_UNEXPECTED_FILE' ? 400
+        : (err.message === 'Origin not allowed by CORS' ? 403 : 500)))
   const message = status >= 500 ? 'Conversion server error' : (err.message || 'Request failed')
   res.status(status).json({ error: message, code: err.code || 'INTERNAL_ERROR' })
 })
