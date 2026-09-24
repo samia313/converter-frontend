@@ -22,6 +22,38 @@ interface ToolLandingLayoutProps {
   schema?: Record<string, any>;
 }
 
+function getRelatedToolAnchor(name: string, slug: string): string {
+  const anchors: Record<string, string> = {
+    'pdf-to-word': 'Convert PDF to Word',
+    'word-to-pdf': 'Convert Word to PDF',
+    'pdf-to-excel': 'Convert PDF to Excel',
+    'excel-to-pdf': 'Convert Excel to PDF',
+    'pdf-to-powerpoint': 'Convert PDF to PowerPoint',
+    'powerpoint-to-pdf': 'Convert PowerPoint to PDF',
+    'pdf-to-jpg': 'Convert PDF to JPG',
+    'pdf-to-png': 'Convert PDF to PNG',
+    'pdf-to-image': 'Convert PDF to images',
+    'jpg-to-pdf': 'Convert JPG to PDF',
+    'image-to-pdf': 'Convert images to PDF',
+    'compress-pdf': 'Compress PDF files',
+    'merge-pdf': 'Merge PDF files',
+    'split-pdf': 'Split PDF files',
+    'rotate-pdf': 'Rotate PDF pages',
+    'organize-pdf': 'Organize PDF pages',
+    'remove-pages': 'Remove PDF pages',
+    'crop-pdf': 'Crop PDF pages',
+    'ocr': 'Extract text with OCR',
+    'edit-pdf': 'Edit PDF online',
+    'protect-pdf': 'Protect PDF with a password',
+    'unlock-pdf': 'Unlock a PDF',
+    'sign-pdf': 'Sign a PDF',
+    'watermark-pdf': 'Add a PDF watermark',
+    'redact-pdf': 'Redact PDF content',
+    'page-numbers': 'Add PDF page numbers',
+  };
+  return anchors[slug] ?? name;
+}
+
 function ContentBlocks({ content }: { content: string }) {
   return (
     <div className="space-y-5">
@@ -212,7 +244,7 @@ export default function ToolLandingLayout({
             ).slice(0, 6).map((t) => (
               <Link key={t.slug} href={`/${t.slug}`} className="min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-5 transition hover:border-gray-300 sm:p-6">
                 <h3 className="break-words font-bold text-gray-900">{t.name}</h3>
-                <p className="mt-1 text-sm text-gray-600">Explore {t.name}<ChevronRight className="inline h-4 w-4" /></p>
+                <p className="mt-1 text-sm text-gray-600">{getRelatedToolAnchor(t.name, t.slug)}<ChevronRight className="inline h-4 w-4" /></p>
               </Link>
             ))}
           </div>
