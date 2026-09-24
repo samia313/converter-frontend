@@ -5,6 +5,17 @@ import Link from 'next/link';
 export const dynamicParams = true;
 export const revalidate = 3600;
 
+const TOOL_ROUTES: Record<string, string> = {
+  'compress-pdf': '/compress-pdf',
+  'merge-pdf': '/merge-pdf',
+  'split-pdf': '/split-pdf',
+  'convert-pdf': '/pdf-to-word',
+  'remove-password': '/unlock-pdf',
+  'sign-pdf': '/sign-pdf',
+  'rotate-pdf': '/rotate-pdf',
+  'extract-images': '/pdf-to-images',
+};
+
 interface Props {
   params: {
     slug: string;
@@ -28,6 +39,7 @@ export async function generateMetadata({ params }: Props) {
     title: useCase.title,
     description: `How to use ${useCase.tool} - PDFilio Use Case`,
     keywords: useCase.keywords.join(', '),
+    robots: { index: false, follow: true },
   };
 }
 
@@ -51,7 +63,7 @@ export default function UseCasePage({ params }: Props) {
           <p className="text-lg text-muted-foreground">Explore how to use {useCase.tool.replace('-', ' ')} with PDFilio</p>
           <div className="mt-4 flex gap-2">
             <Link
-              href={`/tools/${useCase.tool}`}
+              href={TOOL_ROUTES[useCase.tool] ?? '/tools'}
               className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm hover:bg-blue-500/30 transition-colors"
             >
               {useCase.tool.replace('-', ' ')}
@@ -76,7 +88,7 @@ export default function UseCasePage({ params }: Props) {
         <div className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 border border-blue-500/20 rounded-lg p-8 mb-12">
           <h2 className="text-2xl font-bold text-foreground mb-4">Start Using {useCase.tool.replace('-', ' ')} Today</h2>
           <Link
-            href={`/tools/${useCase.tool}`}
+            href={TOOL_ROUTES[useCase.tool] ?? '/tools'}
             className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
           >
             Open {useCase.tool.replace('-', ' ')} Tool
