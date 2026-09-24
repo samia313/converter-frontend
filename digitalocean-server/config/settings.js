@@ -26,7 +26,7 @@ module.exports = {
   // File Settings
   maxFileSize: intEnv('MAX_FILE_SIZE', 100 * 1024 * 1024),
   uploadTempDir: process.env.UPLOAD_TEMP_DIR || '/tmp/pdfilio',
-  cleanupInterval: intEnv('CLEANUP_INTERVAL', 24 * 60 * 60 * 1000),
+  cleanupInterval: intEnv('CLEANUP_INTERVAL', 60 * 60 * 1000),
 
   // Conversion
   conversionTimeout: intEnv('CONVERSION_TIMEOUT', 60 * 1000),
