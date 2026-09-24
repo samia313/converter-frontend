@@ -83,7 +83,7 @@ Always review important names, numbers, dates, totals, addresses, and other crit
         ]}
         relatedTools={[
           { name: 'AI OCR', slug: 'ai-ocr' },
-          { name: 'PDF to Text', slug: 'pdf-to-text' },
+          { name: 'PDF to Word', slug: 'pdf-to-word' },
           { name: 'PDF to Word', slug: 'pdf-to-word' },
           { name: 'AI Chat with PDF', slug: 'ai-chat-pdf' },
           { name: 'PDF to PNG', slug: 'pdf-to-png' },
