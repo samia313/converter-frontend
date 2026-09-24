@@ -3,12 +3,12 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import RotatePDFTool from '@/components/tools/rotate-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Rotate PDF Online – Rotate PDF Pages & Fix Orientation | PDFilio',
+  title: 'Rotate PDF Online – Rotate PDF Pages & Fix Orientation',
   description: 'Rotate supported PDF pages by 90, 180, or 270 degrees online. Fix sideways scans, mixed page orientation, and documents that need a different viewing direction.',
   keywords: ['rotate PDF', 'rotate PDF online', 'rotate PDF pages', 'fix PDF orientation', 'PDF page rotation', 'fix sideways PDF', 'PDF rotation tool'],
   alternates: { canonical: 'https://pdfilio.com/rotate-pdf' },
   openGraph: {
-    title: 'Rotate PDF Online – Rotate PDF Pages & Fix Orientation | PDFilio',
+    title: 'Rotate PDF Online – Rotate PDF Pages & Fix Orientation',
     description: 'Rotate supported PDF pages by 90, 180, or 270 degrees to correct page orientation.',
     url: 'https://pdfilio.com/rotate-pdf',
     type: 'website',
