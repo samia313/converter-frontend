@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import PDFToWordTool from '@/components/tools/pdf-to-word-tool';
 
 export const metadata: Metadata = {
-  title: 'PDF to Word Converter Online – Convert PDF to DOCX | PDFilio',
+  title: 'PDF to Word Converter Online – Convert PDF to DOCX',
   description: 'Convert PDF to Word DOCX online. Convert supported PDFs to editable Word documents and check formatting, tables, images, and scanned pages.',
   keywords: [
     'PDF to Word',
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: 'https://pdfilio.com/pdf-to-word' },
   openGraph: {
-    title: 'PDF to Word Converter Online – Convert PDF to DOCX | PDFilio',
+    title: 'PDF to Word Converter Online – Convert PDF to DOCX',
     description: 'Convert supported PDFs to editable Word documents and check formatting, tables, images and page breaks after conversion.',
     url: 'https://pdfilio.com/pdf-to-word',
     type: 'website',
