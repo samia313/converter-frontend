@@ -3,12 +3,12 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import PDFToPowerpointTool from '@/components/tools/pdf-to-powerpoint-tool';
 
 export const metadata: Metadata = {
-  title: 'PDF to PowerPoint Online – Convert PDF to PPT | PDFilio',
+  title: 'PDF to PowerPoint Online – Convert PDF to PPT',
   description: 'Convert supported PDF documents into PowerPoint presentations online with PDFilio. Prepare PDF content for editable slide-based workflows, presentations, meetings and teaching materials.',
   keywords: ['PDF to PowerPoint', 'PDF to PPT', 'convert PDF to PowerPoint', 'PDF to PPT online', 'PDF presentation converter'],
   alternates: { canonical: 'https://pdfilio.com/pdf-to-powerpoint' },
   openGraph: {
-    title: 'PDF to PowerPoint Online – Convert PDF to PPT | PDFilio',
+    title: 'PDF to PowerPoint Online – Convert PDF to PPT',
     description: 'Convert supported PDF documents into PowerPoint presentations for slides, meetings, teaching and editing workflows.',
     url: 'https://pdfilio.com/pdf-to-powerpoint',
     type: 'website',
