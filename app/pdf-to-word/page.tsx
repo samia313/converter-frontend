@@ -105,7 +105,7 @@ Use the converted DOCX as an editable starting point. Adjust page breaks, table 
         relatedTools={[
           { name: 'Word to PDF', slug: 'word-to-pdf' },
           { name: 'PDF to Excel', slug: 'pdf-to-excel' },
-          { name: 'AI OCR', slug: 'ai-ocr' },
+          { name: 'OCR PDF', slug: 'ocr' },
           { name: 'Compress PDF', slug: 'compress-pdf' },
           { name: 'Merge PDF', slug: 'merge-pdf' },
         ]}
