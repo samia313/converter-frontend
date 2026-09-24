@@ -38,10 +38,19 @@ function MessageCircleIcon(props: any) {
   );
 }
 
+const CANONICAL_AI_ROUTES: Record<string, string> = {
+  chat: '/ai-document-chat-tool',
+  translation: '/translate-pdf-online',
+  summarization: '/ai-summary',
+  research: '/ai-research-assistant',
+  rewriting: '/ai-document-rewriter',
+  extraction: '/ocr',
+};
+
 function ToolCard({ tool }: { tool: (typeof AI_TOOLS_MAPPING)[0] }) {
   return (
     <Link
-      href={`/ai-tool/${tool.slug}`}
+      href={CANONICAL_AI_ROUTES[tool.category] ?? '/ai-tools'}
       className="group bg-white rounded-xl shadow hover:shadow-lg transition border border-gray-200 hover:border-blue-300 p-6"
     >
       <div className="flex items-start justify-between mb-4">
