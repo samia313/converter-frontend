@@ -69,7 +69,17 @@ function ensureOutput(outputPath) {
 async function libreOfficeConvert(inputPath, outputPath, format) {
   return withConversionSlot(async () => {
     const outputDir = path.dirname(outputPath)
-    await runCommand('libreoffice', ['--headless', '--convert-to', format, '--outdir', outputDir, inputPath])
+    try {
+      await runCommand('libreoffice', ['--headless', '--convert-to', format, '--outdir', outputDir, inputPath])
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        const unavailable = new Error('This conversion requires LibreOffice on the conversion server.')
+        unavailable.code = 'LIBREOFFICE_ENGINE_UNAVAILABLE'
+        unavailable.status = 503
+        throw unavailable
+      }
+      throw error
+    }
     const generated = path.join(outputDir, `${path.basename(inputPath, path.extname(inputPath))}.${format.split(':')[0]}`)
     ensureOutput(generated)
     if (generated !== outputPath) fs.renameSync(generated, outputPath)
@@ -111,7 +121,17 @@ async function pdfToPng(inputPath, outputPath) {
     const outputDir = `${outputPath}.pages`
     fs.mkdirSync(outputDir, { recursive: true })
     try {
-      await runCommand('pdftoppm', ['-png', '-r', '150', inputPath, path.join(outputDir, 'page')])
+      try {
+        await runCommand('pdftoppm', ['-png', '-r', '150', inputPath, path.join(outputDir, 'page')])
+      } catch (error) {
+        if (error.code === 'ENOENT') {
+          const unavailable = new Error('PDF to PNG conversion requires Poppler (pdftoppm) on the conversion server.')
+          unavailable.code = 'PDF_RENDER_ENGINE_UNAVAILABLE'
+          unavailable.status = 503
+          throw unavailable
+        }
+        throw error
+      }
       const files = fs.readdirSync(outputDir).filter((f) => f.toLowerCase().endsWith('.png')).sort()
       if (!files.length) throw new Error('PDF to PNG produced no output files')
       if (files.length === 1) {
@@ -120,7 +140,17 @@ async function pdfToPng(inputPath, outputPath) {
         return { outputPath, format: 'png' }
       }
       const zipPath = outputPath.replace(/\.png$/i, '.zip')
-      await runCommand('zip', ['-j', zipPath, ...files.map((file) => path.join(outputDir, file))])
+      try {
+        await runCommand('zip', ['-j', zipPath, ...files.map((file) => path.join(outputDir, file))])
+      } catch (error) {
+        if (error.code === 'ENOENT') {
+          const unavailable = new Error('Creating multi-page image downloads requires the zip utility on the conversion server.')
+          unavailable.code = 'ZIP_ENGINE_UNAVAILABLE'
+          unavailable.status = 503
+          throw unavailable
+        }
+        throw error
+      }
       ensureOutput(zipPath)
       return { outputPath: zipPath, format: 'zip' }
     } finally { fs.rmSync(outputDir, { recursive: true, force: true }) }
@@ -132,7 +162,17 @@ async function pdfToJpg(inputPath, outputPath) {
     const outputDir = `${outputPath}.pages`
     fs.mkdirSync(outputDir, { recursive: true })
     try {
-      await runCommand('pdftoppm', ['-jpeg', '-r', '150', inputPath, path.join(outputDir, 'page')])
+      try {
+        await runCommand('pdftoppm', ['-jpeg', '-r', '150', inputPath, path.join(outputDir, 'page')])
+      } catch (error) {
+        if (error.code === 'ENOENT') {
+          const unavailable = new Error('PDF to JPG conversion requires Poppler (pdftoppm) on the conversion server.')
+          unavailable.code = 'PDF_RENDER_ENGINE_UNAVAILABLE'
+          unavailable.status = 503
+          throw unavailable
+        }
+        throw error
+      }
       const files = fs.readdirSync(outputDir).filter((f) => f.toLowerCase().endsWith('.jpg')).sort()
       if (!files.length) throw new Error('PDF to JPG produced no output files')
       if (files.length === 1) {
@@ -152,7 +192,17 @@ async function pdfToImages(inputPath, outputDir) {
   return withConversionSlot(async () => {
     fs.mkdirSync(outputDir, { recursive: true })
     try {
-      await runCommand('pdftoppm', [inputPath, path.join(outputDir, 'page'), '-png'])
+      try {
+        await runCommand('pdftoppm', [inputPath, path.join(outputDir, 'page'), '-png'])
+      } catch (error) {
+        if (error.code === 'ENOENT') {
+          const unavailable = new Error('PDF to image conversion requires Poppler (pdftoppm) on the conversion server.')
+          unavailable.code = 'PDF_RENDER_ENGINE_UNAVAILABLE'
+          unavailable.status = 503
+          throw unavailable
+        }
+        throw error
+      }
       const files = fs.readdirSync(outputDir).filter((f) => f.endsWith('.png')).sort()
       if (!files.length) throw new Error('PDF to images produced no output files')
       const spacesService = require('../utils/spaces')
