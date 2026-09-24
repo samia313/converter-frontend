@@ -30,6 +30,7 @@ export async function generateMetadata({ params }: Props) {
     title: comparison.title,
     description: `Compare ${comparison.competitor} with PDFilio - See the differences`,
     keywords: comparison.keywords.join(', '),
+    robots: { index: false, follow: true },
   };
 }
 
