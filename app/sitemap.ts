@@ -16,6 +16,7 @@ const staticPages = [
   { path: '/comparisons', priority: 0.75, changeFrequency: 'monthly' as const },
   { path: '/guides', priority: 0.8, changeFrequency: 'weekly' as const },
   { path: '/use-cases', priority: 0.8, changeFrequency: 'monthly' as const },
+  { path: '/security', priority: 0.7, changeFrequency: 'monthly' as const },
   { path: '/about', priority: 0.5, changeFrequency: 'monthly' as const },
   { path: '/contact', priority: 0.5, changeFrequency: 'monthly' as const },
   { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' as const },
@@ -25,8 +26,16 @@ const staticPages = [
 ]
 
 const aiPages = [
-  'ai-document-rewriter','ai-research-writing-assistant','ai-document-chat-tool',
-].map((slug) => ({ path: `/${slug}`, priority: 0.75, changeFrequency: 'monthly' as const }))
+  'ai-document-rewriter',
+  'ai-research-writing-assistant',
+  'ai-document-chat-tool',
+  'ai-pdf-summary',
+  'ai-ocr',
+  'ai-chat-pdf',
+  'ai-document-summarizer',
+  'ai-document-translator',
+  'ai-research-assistant',
+].map((slug) => ({ path: `/${slug}`, priority: 0.8, changeFrequency: 'monthly' as const }))
 
 const toolPages = [
   'merge-pdf','split-pdf','rotate-pdf','organize-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf',
@@ -60,11 +69,12 @@ function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
 
 function isCanonicalSitemapUrl(url: string): boolean {
   const path = new URL(url).pathname
-  // Legacy/redirected routes must never enter the XML sitemap.
+  // Legacy/redirected/private utility routes must never enter the XML sitemap.
   return !(
     path === '/vs' ||
     path.startsWith('/vs/') ||
     path === '/sitemap' ||
+    path === '/sitemap-page' ||
     path === '/robots' ||
     path.startsWith('/tools/')
   )
