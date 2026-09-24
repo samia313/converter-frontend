@@ -4,7 +4,7 @@ import OCRTool from '@/components/tools/ocr-tool';
 
 export const metadata: Metadata = {
   title: 'OCR PDF Online – Extract Text from Scanned PDFs & Images',
-  description: 'description: 'Extract text from supported scanned PDFs and images with OCR. Turn image-based documents into searchable, copyable text for editing and reuse.'',
+  description: 'Extract text from supported scanned PDFs and images with OCR. Turn image-based documents into searchable, copyable text for editing and reuse.',
   keywords: ['OCR PDF', 'OCR online', 'OCR PDF online', 'scanned PDF OCR', 'PDF to text OCR', 'image to text', 'extract text from image', 'OCR text extraction'],
   alternates: { canonical: 'https://pdfilio.com/ocr' },
   openGraph: {
