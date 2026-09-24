@@ -3,12 +3,12 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import JpgToPdfTool from '@/components/tools/jpg-to-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'JPG to PDF Converter Online – Convert Images to PDF | PDFilio',
+  title: 'JPG to PDF Converter Online – Convert Images to PDF',
   description: 'Convert JPG and JPEG images into PDF documents online. Combine multiple images, organize pages, and create a shareable PDF from photos, scans, receipts, or screenshots.',
   keywords: ['JPG to PDF', 'JPG to PDF converter', 'JPEG to PDF', 'convert JPG to PDF', 'JPG to PDF online', 'image to PDF', 'photos to PDF'],
   alternates: { canonical: 'https://pdfilio.com/jpg-to-pdf' },
   openGraph: {
-    title: 'JPG to PDF Converter Online | PDFilio',
+    title: 'JPG to PDF Converter Online',
     description: 'Convert JPG and JPEG images into PDF documents and combine multiple images into one file.',
     url: 'https://pdfilio.com/jpg-to-pdf',
     type: 'website',
