@@ -3,12 +3,12 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import PDFToPngTool from '@/components/tools/pdf-to-png-tool';
 
 export const metadata: Metadata = {
-  title: 'PDF to PNG Converter Online – Convert PDF to PNG | PDFilio',
+  title: 'PDF to PNG Converter Online – Convert PDF to PNG',
   description: 'Convert PDF pages to PNG images online. Create PNG files from supported PDF pages for presentations, websites, previews, design work, and sharing.',
   keywords: ['PDF to PNG', 'PDF to PNG converter', 'convert PDF to PNG', 'PDF pages to PNG', 'PDF to image', 'PDF PNG converter', 'PDF to PNG online'],
   alternates: { canonical: 'https://pdfilio.com/pdf-to-png' },
   openGraph: {
-    title: 'PDF to PNG Converter Online | PDFilio',
+    title: 'PDF to PNG Converter Online',
     description: 'Convert supported PDF pages into PNG images for previews, presentations, design and sharing.',
     url: 'https://pdfilio.com/pdf-to-png',
     type: 'website',
