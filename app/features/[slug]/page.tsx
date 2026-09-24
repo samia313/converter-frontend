@@ -28,6 +28,7 @@ export async function generateMetadata({ params }: Props) {
     title: feature.title,
     description: feature.description,
     keywords: feature.keywords.join(', '),
+    robots: { index: false, follow: true },
   };
 }
 
