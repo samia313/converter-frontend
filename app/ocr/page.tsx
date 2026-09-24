@@ -82,13 +82,13 @@ Always review important names, numbers, dates, totals, addresses, and other crit
           { q: 'Is OCR free?', a: 'Current usage limits and availability are determined by the product configuration shown in the PDFilio OCR interface.' },
         ]}
         relatedTools={[
-          { name: 'AI OCR', slug: 'ai-ocr' },
           { name: 'PDF to Word', slug: 'pdf-to-word' },
-          { name: 'PDF to Word', slug: 'pdf-to-word' },
-          { name: 'AI Chat with PDF', slug: 'ai-chat-pdf' },
+          { name: 'PDF to Excel', slug: 'pdf-to-excel' },
+          { name: 'Compress PDF', slug: 'compress-pdf' },
+          { name: 'Split PDF', slug: 'split-pdf' },
           { name: 'PDF to PNG', slug: 'pdf-to-png' },
         ]}
-        schema={schema}
+                schema={schema}
       />
     </>
   );
