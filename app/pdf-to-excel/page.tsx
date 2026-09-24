@@ -70,7 +70,7 @@ Typical workflow: upload a supported PDF, let the converter process the document
         relatedTools={[
           { name: 'Excel to PDF', slug: 'excel-to-pdf' },
           { name: 'PDF to Word', slug: 'pdf-to-word' },
-          { name: 'AI OCR', slug: 'ai-ocr' },
+          { name: 'OCR PDF', slug: 'ocr' },
           { name: 'Merge PDF', slug: 'merge-pdf' },
           { name: 'Compress PDF', slug: 'compress-pdf' },
         ]}
