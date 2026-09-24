@@ -8,7 +8,8 @@ const authMiddleware = require('./middleware/auth')
 
 const app = express()
 
-fs.mkdirSync(settings.uploadTempDir, { recursive: true })
+fs.mkdirSync(settings.uploadTempDir, { recursive: true, mode: 0o700 })
+try { fs.chmodSync(settings.uploadTempDir, 0o700) } catch (error) { console.warn('[SECURITY] Could not restrict temp directory permissions:', error.message) }
 
 const allowedOrigins = new Set(settings.allowedOrigins.length
   ? settings.allowedOrigins
