@@ -3,12 +3,12 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import PDFToExcelTool from '@/components/tools/pdf-to-excel-tool';
 
 export const metadata: Metadata = {
-  title: 'PDF to Excel Converter Online – Convert PDF to XLSX | PDFilio',
+  title: 'PDF to Excel Converter Online – Convert PDF to XLSX',
   description: 'Convert PDF tables and supported data into editable Excel XLSX spreadsheets online for reports, invoices, statements, and data workflows.',
   keywords: ['PDF to Excel', 'PDF to XLSX', 'convert PDF to Excel', 'PDF table to Excel', 'extract PDF data', 'PDF to spreadsheet', 'PDF Excel converter'],
   alternates: { canonical: 'https://pdfilio.com/pdf-to-excel' },
   openGraph: {
-    title: 'PDF to Excel Converter Online | PDFilio',
+    title: 'PDF to Excel Converter Online',
     description: 'Extract supported PDF tables and data into editable Excel spreadsheets.',
     url: 'https://pdfilio.com/pdf-to-excel',
     type: 'website',
