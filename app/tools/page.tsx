@@ -37,6 +37,25 @@ export default function ToolsPage() {
         </div>
       </section>
       <UnifiedToolsGrid />
+      <section className="px-4 pb-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
+          <h2 className="text-2xl font-black text-gray-900 sm:text-3xl">Popular PDF workflows</h2>
+          <p className="mt-3 max-w-3xl leading-7 text-gray-600">
+            Choose a focused PDF workflow for common document tasks, from conversion and OCR to file-size reduction and page management.
+          </p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <a href="/pdf-to-word" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Convert PDF to Word</a>
+            <a href="/pdf-to-excel" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Convert PDF to Excel</a>
+            <a href="/word-to-pdf" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Convert Word to PDF</a>
+            <a href="/ocr" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Extract text with OCR</a>
+            <a href="/compress-pdf" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Compress PDF files</a>
+            <a href="/merge-pdf" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Merge PDF files</a>
+            <a href="/split-pdf" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Split PDF files</a>
+            <a href="/jpg-to-pdf" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Convert JPG to PDF</a>
+            <a href="/pdf-to-jpg" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Convert PDF to JPG</a>
+          </div>
+        </div>
+      </section>
     </main>
   )
 }
