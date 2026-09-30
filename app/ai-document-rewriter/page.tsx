@@ -74,7 +74,6 @@ A practical workflow is to provide supported document content, select or describ
         { name: 'AI Research Assistant', slug: 'ai-research-assistant' },
         { name: 'AI Research Writing Assistant', slug: 'ai-research-writing-assistant' },
         { name: 'PDF Chat', slug: 'pdf-chat' },
-        { name: 'AI Document Rewriter', slug: 'ai-document-rewriter' },
       ]}
       primaryKeyword="AI document rewriter"
       secondaryKeywords={['AI rewrite document', 'document rewriting AI', 'rewrite text with AI', 'AI document editor', 'AI writing assistant']}
