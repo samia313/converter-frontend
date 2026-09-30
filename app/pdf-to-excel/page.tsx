@@ -4,7 +4,7 @@ import PDFToExcelTool from '@/components/tools/pdf-to-excel-tool';
 
 export const metadata: Metadata = {
   title: 'PDF to Excel Online – Convert PDF to XLSX',
-  description: 'Convert PDF tables and supported data into editable Excel XLSX spreadsheets online for reports, invoices, statements, and data workflows.',
+  description: 'Convert PDF tables and supported data to Excel XLSX online. Extract tables from reports, invoices, statements, and other PDFs for editing, analysis, and spreadsheet workflows.',
   keywords: ['PDF to Excel', 'PDF to XLSX', 'convert PDF to Excel', 'PDF table to Excel', 'extract PDF data', 'PDF to spreadsheet', 'PDF Excel converter'],
   alternates: { canonical: 'https://pdfilio.com/pdf-to-excel' },
   openGraph: {
