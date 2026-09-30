@@ -3,8 +3,8 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import CompressPDFTool from '@/components/tools/compress-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Compress PDF Online – Reduce PDF Size to 2MB',
-  description: 'Compress PDF files online and reduce PDF size for email, WhatsApp, uploads, and storage. Work toward a 2MB target and check the resulting quality and file size.',
+  title: 'Compress PDF Online – Reduce PDF File Size',
+  description: 'Compress PDF files online and reduce PDF file size for email, WhatsApp, uploads, and storage. Choose a practical compression level and review the resulting file size and quality.',
   keywords: [
     'compress PDF to 2MB',
     'compress PDF under 2MB',
