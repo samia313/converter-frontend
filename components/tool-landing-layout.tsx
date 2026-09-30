@@ -54,6 +54,56 @@ function getRelatedToolAnchor(name: string, slug: string): string {
   return anchors[slug] ?? name;
 }
 
+type WorkflowLink = { href: string; label: string; context: string };
+
+const workflowLinksBySlug: Record<string, WorkflowLink[]> = {
+  'pdf-to-word': [
+    { href: '/ocr', label: 'Extract text with OCR', context: 'For scanned or image-only PDFs, OCR can help turn visible text into machine-readable content first.' },
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce a large source PDF before sharing or uploading it when file size is a concern.' },
+    { href: '/merge-pdf', label: 'Merge PDF files', context: 'Combine supporting PDFs into one document before starting your Word workflow.' },
+  ],
+  'pdf-to-excel': [
+    { href: '/ocr', label: 'Extract text with OCR', context: 'Scanned tables may need OCR before text and data can be recognized.' },
+    { href: '/pdf-to-word', label: 'Convert PDF to Word', context: 'Use Word when the content needs document-style editing rather than spreadsheet analysis.' },
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Create a smaller source file when upload or sharing limits matter.' },
+  ],
+  'word-to-pdf': [
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce the generated PDF size when you need a smaller file for email or uploads.' },
+    { href: '/merge-pdf', label: 'Merge PDF files', context: 'Combine the converted document with other PDFs into one submission or packet.' },
+    { href: '/sign-pdf', label: 'Sign a PDF', context: 'Continue to a PDF signing workflow when the finished document needs a signature.' },
+  ],
+  'compress-pdf': [
+    { href: '/pdf-to-word', label: 'Convert PDF to Word', context: 'Move supported PDF content into an editable DOCX workflow after reviewing the compressed file.' },
+    { href: '/merge-pdf', label: 'Merge PDF files', context: 'Combine related documents before or after compression when you need one PDF package.' },
+    { href: '/split-pdf', label: 'Split PDF files', context: 'Separate large documents into smaller PDF parts when only certain pages need to be shared.' },
+  ],
+  'merge-pdf': [
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce the size of a combined PDF before sharing or uploading it.' },
+    { href: '/split-pdf', label: 'Split PDF files', context: 'Separate selected pages later when different recipients need different sections.' },
+    { href: '/pdf-to-word', label: 'Convert PDF to Word', context: 'Turn supported combined PDF content into an editable Word document when needed.' },
+  ],
+  'split-pdf': [
+    { href: '/merge-pdf', label: 'Merge PDF files', context: 'Recombine selected PDF parts into a new document when your workflow requires it.' },
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce the size of the resulting PDF parts for easier sharing and uploads.' },
+    { href: '/pdf-to-word', label: 'Convert PDF to Word', context: 'Convert a selected text-based PDF part into an editable DOCX workflow.' },
+  ],
+  'ocr': [
+    { href: '/pdf-to-word', label: 'Convert PDF to Word', context: 'Use the Word workflow when recognized text needs document-style editing.' },
+    { href: '/pdf-to-excel', label: 'Convert PDF to Excel', context: 'Use Excel when recognized table data needs spreadsheet analysis.' },
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce a PDF size before processing or sharing when the source file is large.' },
+  ],
+  'jpg-to-pdf': [
+    { href: '/merge-pdf', label: 'Merge PDF files', context: 'Combine image-created PDFs or other supporting documents into one file.' },
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce the resulting PDF size when photos or scans create a large document.' },
+    { href: '/pdf-to-jpg', label: 'Convert PDF to JPG', context: 'Convert PDF pages back to JPG images when individual image files are needed.' },
+  ],
+  'pdf-to-jpg': [
+    { href: '/pdf-to-png', label: 'Convert PDF to PNG', context: 'Use PNG output when your workflow calls for PNG image files instead of JPG.' },
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce the source PDF size before conversion when upload limits are a concern.' },
+    { href: '/jpg-to-pdf', label: 'Convert JPG to PDF', context: 'Turn JPG images into a PDF when you need a document rather than separate images.' },
+  ],
+};
+
 function ContentBlocks({ content }: { content: string }) {
   return (
     <div className="space-y-5">
