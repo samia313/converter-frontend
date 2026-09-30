@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import PdfToImageTool from '@/components/tools/pdf-to-image-tool';
 
 export const metadata: Metadata = {
-  title: 'PDF to Image Online – Convert PDF to JPG & PNG | PDFilio',
+  title: 'PDF to Image Online – Convert PDF to JPG & PNG',
   description: 'Convert supported PDF pages to JPG, PNG or other available image formats online with PDFilio. Extract selected pages or convert a document for sharing, previews, web use and editing.',
   keywords: ['PDF to image', 'PDF to JPG', 'PDF to PNG', 'convert PDF to image', 'PDF page to image', 'PDF image converter'],
   alternates: { canonical: 'https://pdfilio.com/pdf-to-image' },
