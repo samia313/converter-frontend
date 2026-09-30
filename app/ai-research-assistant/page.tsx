@@ -2,8 +2,8 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Research Assistant – Analyze and Organize Research | PDFilio',
-  description: 'AI-assisted research workflows for analyzing documents, organizing information, synthesizing findings, and exploring research questions.',
+  title: 'AI Research Assistant – Research and Document Analysis | PDFilio',
+  description: 'AI-assisted research support for analyzing documents, organizing information, synthesizing findings, and exploring research questions.',
   keywords: ['AI research assistant', 'research assistant AI', 'AI document research', 'research analysis tool', 'AI research workflow'],
   alternates: { canonical: 'https://pdfilio.com/ai-research-assistant' },
   openGraph: { title: 'AI Research Assistant | PDFilio', description: 'AI-assisted research and document analysis workflows.', url: 'https://pdfilio.com/ai-research-assistant', type: 'website' },
@@ -15,62 +15,34 @@ export default function Page() {
       toolName="AI Research Assistant"
       toolSlug="ai-research-assistant"
       description="AI-assisted research support for document analysis, information synthesis, and organized research workflows."
-      mainContent={`Support research workflows with AI-assisted document analysis, information synthesis, and structured exploration. Review important findings against the original sources.
+      mainContent={`Use AI-assisted workflows to analyze supported document content, organize information, compare findings, and explore research questions. Review important findings against the original sources.
 
-Intelligent Analysis Engine:
-Context-aware AI understands domain-specific research patterns. Extract meaning from complex documents. Synthesize information across multiple sources. Generate actionable intelligence instantly.
+## How an AI Research Assistant Can Help
 
-Strategic Research Support:
-Move beyond basic analysis. AI identifies emerging trends, correlations, and research opportunities. Make data-driven decisions with confidence based on comprehensive AI-powered insights.`}
-      useCase={`Complex research projects
-Multi-source synthesis
-Competitive intelligence
+Use supported document content as a starting point for organizing notes, identifying themes, comparing information, and developing follow-up questions. Results depend on the source material, extraction quality, and current tool capabilities.
+
+## Verify Research Findings
+
+AI-generated analysis can miss context or introduce errors. Check important claims, quotations, statistics, citations, and conclusions against the original sources before relying on them.`}
+      useCase={`Research projects
+Literature review support
+Multi-source document review
+Academic note organization
 Market research analysis
-Academic collaboration
-Strategic planning
-Insight generation
-Trend forecasting`}
+Report preparation
+Research question exploration`}
       testimonials={[]}
-      features={[
-        'Enterprise AI analysis',
-        'Multi-source synthesis',
-        'Domain recognition',
-        'Correlation discovery',
-        'Opportunity identification',
-        'Trend forecasting',
-        'Strategic synthesis',
-        'Advanced reporting',
-      ]}
-      benefits={[
-        'Structured research support',
-        'Faster analysis cycles',
-        'Deeper insights',
-        'Organized research workflows',
-        'Competitive intelligence',
-        'Time efficiency',
-        'Quality acceleration',
-        'Decision clarity',
-      ]}
+      features={['AI-assisted document analysis','Information synthesis','Research organization','Theme and topic exploration','Follow-up question support','Source verification workflow']}
+      benefits={['Organize research faster','Explore document themes','Prepare structured notes','Compare information more efficiently','Keep source verification in the workflow']}
       faqs={[
-        {
-          q: 'What kind of research support does this tool provide?',
-          a: 'It can assist with document analysis, information synthesis, organization, and exploration. Important findings should be checked against the original source material.',
-        },
-        {
-          q: 'Multiple data sources?',
-          a: 'Absolutely. Synthesizes from diverse sources for comprehensive research perspectives.',
-        },
-        {
-          q: 'Strategic recommendations?',
-          a: 'Yes. Generates actionable recommendations and opportunity identification automatically.',
-        },
+        {q:'What does an AI research assistant do?',a:'It can assist with analyzing supported documents, organizing information, synthesizing findings, and exploring research questions.'},
+        {q:'Can it replace original research sources?',a:'No. Use AI output as research assistance and verify important claims against the original sources.'},
+        {q:'Can it analyze multiple documents?',a:'Capabilities depend on the current workflow and supported inputs. Check the uploader and tool limits before processing multiple documents.'},
+        {q:'Can students use an AI research assistant?',a:'It can help organize study and research material, but students should follow their institution’s rules and verify claims and citations against original sources.'},
       ]}
-      relatedTools={[
-        { name: 'AI Research Paper Assistant', slug: 'ai-research-paper-assistant' },
-        { name: 'AI Scientific Research Assistant', slug: 'ai-scientific-research-assistant' },
-      ]}
-      primaryKeyword="ai research assistant"
-      secondaryKeywords={['research analysis', 'research intelligence', 'research automation']}
+      relatedTools={[{name:'AI Research Writing Assistant',slug:'ai-research-writing-assistant'},{name:'AI Document Chat',slug:'ai-document-chat-tool'},{name:'AI PDF Summarizer',slug:'ai-summary'},{name:'OCR PDF',slug:'ocr'}]}
+      primaryKeyword="AI research assistant"
+      secondaryKeywords={['AI document research','research analysis tool','AI research workflow']}
     />
   );
 }
