@@ -42,7 +42,7 @@ AI-generated summaries can omit context or contain mistakes. For legal, medical,
           'Studying course and reference material',
           'Extracting key themes from business documents',
           'Preparing notes for further document review',
-        ].join('\\n')}
+        ].join('\n')}
         features={[
           'AI-assisted PDF summarization',
           'Document-focused summaries',
