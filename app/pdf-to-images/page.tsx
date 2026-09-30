@@ -6,9 +6,9 @@ export const metadata: Metadata = {
   title: 'PDF to Images Converter Online – Convert PDF Pages to PNG | PDFilio',
   description: 'Convert PDF pages into PNG images online. Download individual page images as a ZIP for previews, design work, sharing, and image-based workflows.',
   keywords: ['PDF to images', 'PDF to PNG', 'convert PDF to images', 'PDF pages to PNG', 'PDF image converter'],
-  alternates: { canonical: 'https://pdfilio.com/pdf-to-images' },
+  alternates: { canonical: 'https://pdfilio.com/pdf-to-image' },
   robots: { index: false, follow: true },
-  openGraph: { title: 'PDF to Images Converter Online | PDFilio', description: 'Convert supported PDF pages into PNG images and download them as a ZIP.', url: 'https://pdfilio.com/pdf-to-images', type: 'website' },
+  openGraph: { title: 'PDF to Images Converter Online | PDFilio', description: 'Convert supported PDF pages into PNG images and download them as a ZIP.', url: 'https://pdfilio.com/pdf-to-image', type: 'website' },
 };
 
 export default function PDFToImagesPage() {
