@@ -43,7 +43,7 @@ For legal, medical, financial, contractual, academic, or official documents, ver
         'Translating study material and reports',
         'Reviewing travel and reference documents',
         'Creating a translated working copy of a PDF',
-      ].join('\\n')}
+      ].join('\n')}
       features={[
         'Browser-based PDF translation workflow',
         'Support for available language options',
