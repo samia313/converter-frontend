@@ -13,7 +13,7 @@ const TOOL_ROUTES: Record<string, string> = {
   'remove-password': '/unlock-pdf',
   'sign-pdf': '/sign-pdf',
   'rotate-pdf': '/rotate-pdf',
-  'extract-images': '/pdf-to-image',
+  'extract-images': '/pdf-to-jpg',
 };
 
 interface Props {
