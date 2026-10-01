@@ -37,15 +37,6 @@ export default async function BlogArticle({ params }: Props) {
   return (
     <main className="min-h-screen bg-background">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://pdfilio.com/' },
-          { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://pdfilio.com/blog' },
-          { '@type': 'ListItem', position: 3, name: post.title, item: url },
-        ],
-      }) }} />
       <nav className="mx-auto max-w-4xl px-4 py-5 text-sm text-muted-foreground" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-foreground focus:outline-none focus:ring-2 focus:ring-blue-600">Home</Link><span className="mx-2">/</span><Link href="/blog" className="hover:text-foreground focus:outline-none focus:ring-2 focus:ring-blue-600">Blog</Link><span className="mx-2">/</span><span className="text-foreground" aria-current="page">{post.title}</span>
       </nav>
