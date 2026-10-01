@@ -54,7 +54,9 @@ function getRelatedToolAnchor(name: string, slug: string): string {
   return anchors[slug] ?? name;
 }
 
-type WorkflowLink = { href: string; label: string; context: string };\n\ntype GuideLink = { href: string; label: string; context: string };
+type WorkflowLink = { href: string; label: string; context: string };
+
+type GuideLink = { href: string; label: string; context: string };
 
 const guideLinksBySlug: Record<string, GuideLink[]> = {
   'compress-pdf': [
