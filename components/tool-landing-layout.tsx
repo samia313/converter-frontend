@@ -177,6 +177,23 @@ export default function ToolLandingLayout({
         </div>
       </section>
 
+      {workflowLinksBySlug[toolSlug] && workflowLinksBySlug[toolSlug].length > 0 && (
+        <section className="bg-slate-50 px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+          <div className="mx-auto w-full max-w-4xl">
+            <h2 className="text-2xl font-black text-gray-900 sm:text-3xl">Related PDF workflows</h2>
+            <p className="mt-3 leading-7 text-gray-600">Continue with a related PDF task when your document workflow needs another step.</p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-3">
+              {workflowLinksBySlug[toolSlug].map((link) => (
+                <Link key={link.href} href={link.href} className="rounded-xl border border-gray-200 bg-white p-5 transition hover:border-gray-400">
+                  <h3 className="font-bold text-gray-900">{link.label}</h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-600">{link.context}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {mainContent && (
         <section className="px-4 py-10 sm:px-6 sm:py-16 lg:px-8">
           <div className="mx-auto w-full max-w-4xl text-base text-gray-700 sm:text-lg">
