@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: 'https://pdfilio.com/pdf-to-word' },
   openGraph: {
-    title: 'PDF to Word Converter Online – Convert PDF to DOCX',
+    title: 'PDF to Word Online – Convert PDF to DOCX',
     description: 'Convert supported PDFs to editable Word documents and check formatting, tables, images and page breaks after conversion.',
     url: 'https://pdfilio.com/pdf-to-word',
     type: 'website',
