@@ -54,7 +54,41 @@ function getRelatedToolAnchor(name: string, slug: string): string {
   return anchors[slug] ?? name;
 }
 
-type WorkflowLink = { href: string; label: string; context: string };
+type WorkflowLink = { href: string; label: string; context: string };\n\ntype GuideLink = { href: string; label: string; context: string };
+
+const guideLinksBySlug: Record<string, GuideLink[]> = {
+  'compress-pdf': [
+    { href: '/guides/how-to-compress-pdf', label: 'How to Compress PDF Files', context: 'Step-by-step guidance for reducing PDF size and checking the output quality.' },
+    { href: '/guides/how-to-compress-pdf-under-2mb', label: 'How to Compress PDF to 2MB', context: 'Practical steps for working toward a 2MB upload target without promising a fixed compression ratio.' },
+    { href: '/guides/how-to-reduce-pdf-size-for-upload', label: 'How to Reduce PDF Size for Uploads', context: 'Prepare a smaller PDF for forms, portals, applications, and other upload limits.' },
+  ],
+  'merge-pdf': [
+    { href: '/guides/how-to-merge-pdf', label: 'How to Merge PDF Files', context: 'Learn how to combine PDFs in the required order and verify the final document.' },
+    { href: '/guides/how-to-merge-pdf-for-submission', label: 'How to Merge PDFs for Submission', context: 'Plan document order and check the final PDF before an online submission.' },
+    { href: '/guides/how-to-combine-scanned-pdfs', label: 'How to Combine Scanned PDFs', context: 'Combine scanned documents and check page order, readability, and file size.' },
+  ],
+  'split-pdf': [
+    { href: '/guides/how-to-split-pdf', label: 'How to Split a PDF', context: 'Learn how to divide a PDF into separate files for sharing and organization.' },
+    { href: '/guides/how-to-split-pdf-by-page-range', label: 'How to Split a PDF by Page Range', context: 'Extract a specific page range while avoiding common page-number mistakes.' },
+    { href: '/guides/how-to-extract-pages-from-pdf', label: 'How to Extract Pages from a PDF', context: 'Create a smaller PDF containing only the pages you need.' },
+  ],
+  'pdf-to-word': [
+    { href: '/guides/how-to-convert-pdf-to-word', label: 'How to Convert PDF to Word', context: 'Convert a supported PDF to an editable DOCX and review the result.' },
+    { href: '/guides/how-to-convert-pdf-to-word-without-losing-formatting', label: 'How to Convert PDF to Word Without Losing Formatting', context: 'Review tables, images, fonts, page breaks, and other layout details after conversion.' },
+    { href: '/guides/convert-scanned-pdf-to-word', label: 'How to Convert a Scanned PDF to Word', context: 'Understand when OCR is needed before creating an editable Word document.' },
+  ],
+  'ocr': [
+    { href: '/guides/pdf-ocr-guide', label: 'How to OCR a PDF and Extract Text', context: 'Learn how OCR works on scans and how to verify recognized text.' },
+    { href: '/guides/convert-scanned-pdf-to-word', label: 'How to Convert a Scanned PDF to Word', context: 'Use OCR as part of a scan-to-editable-document workflow.' },
+  ],
+  'jpg-to-pdf': [
+    { href: '/guides/how-to-check-pdf-before-upload', label: 'How to Check a PDF Before Uploading', context: 'Review file size, page order, readability, and completeness before submission.' },
+  ],
+  'remove-pages': [
+    { href: '/guides/remove-pdf-pages-before-submission', label: 'How to Remove Unwanted PDF Pages', context: 'Prepare a cleaner submission by removing pages that are not required.' },
+    { href: '/guides/how-to-extract-pages-from-pdf', label: 'How to Extract Pages from a PDF', context: 'Create a smaller PDF when only selected pages need to be shared.' },
+  ],
+};
 
 const workflowLinksBySlug: Record<string, WorkflowLink[]> = {
   'pdf-to-word': [
@@ -187,6 +221,21 @@ export default function ToolLandingLayout({
                 <Link key={link.href} href={link.href} className="rounded-xl border border-gray-200 bg-white p-5 transition hover:border-gray-400">
                   <h3 className="font-bold text-gray-900">{link.label}</h3>
                   <p className="mt-2 text-sm leading-6 text-gray-600">{link.context}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}\n\n      {guideLinksBySlug[toolSlug] && guideLinksBySlug[toolSlug].length > 0 && (
+        <section className="px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+          <div className="mx-auto w-full max-w-4xl">
+            <h2 className="text-2xl font-black text-gray-900 sm:text-3xl">Helpful PDF guides</h2>
+            <p className="mt-3 leading-7 text-gray-600">Read a practical guide before or after using this PDFilio tool.</p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {guideLinksBySlug[toolSlug].map((guide) => (
+                <Link key={guide.href} href={guide.href} className="rounded-xl border border-gray-200 bg-white p-5 transition hover:border-gray-400">
+                  <h3 className="font-bold text-gray-900">{guide.label}</h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-600">{guide.context}</p>
                 </Link>
               ))}
             </div>
