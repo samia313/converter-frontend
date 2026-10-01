@@ -35,7 +35,7 @@ export const additionalGuides: Guide[] = [
     description: 'Learn when OCR is useful, how to process a scanned PDF, and how to verify recognized text.',
     difficulty: 'intermediate', readTime: 6,
     keywords: ['pdf ocr', 'ocr pdf online', 'extract text scanned pdf'],
-    tools: ['ocr'], relatedGuides: ['how-to-extract-text-from-pdf'], publishedAt: '2026-08-31T00:00:00Z',
+    tools: ['ocr'], relatedGuides: ['convert-scanned-pdf-to-word', 'extract-tables-from-pdf'], publishedAt: '2026-08-31T00:00:00Z',
     content: `# How to OCR a PDF and Extract Text from Scans\n\nOCR, or optical character recognition, converts visible characters in document images into machine-readable text.\n\n## Steps\n1. Open the PDF OCR workflow.\n2. Upload the scan you are authorized to process.\n3. Start recognition.\n4. Review the recognized text or searchable output.\n5. Correct important names, numbers, dates, and table values against the original.\n\n## When OCR struggles\nLow-resolution scans, skewed pages, handwriting, complex tables, stamps, and noisy backgrounds can reduce accuracy. OCR is a convenience, not a substitute for checking important source documents.`
   },
   {
@@ -44,7 +44,7 @@ export const additionalGuides: Guide[] = [
     description: 'Prepare tables in a PDF for reuse in spreadsheets and understand why complex layouts may need manual cleanup.',
     difficulty: 'intermediate', readTime: 6,
     keywords: ['extract tables from pdf', 'pdf table extraction', 'pdf to excel tables'],
-    tools: ['pdf-to-excel'], relatedGuides: ['how-to-convert-pdf-to-excel'], publishedAt: '2026-08-31T00:00:00Z',
+    tools: ['pdf-to-excel'], relatedGuides: ['how-to-check-pdf-before-upload', 'pdf-ocr-guide'], publishedAt: '2026-08-31T00:00:00Z',
     content: `# How to Extract Tables from a PDF\n\nTables can be difficult to extract because PDFs describe positioned page content rather than spreadsheet cells.\n\n## Workflow\n1. Identify whether the table contains selectable text or is an image.\n2. Open a PDF-to-Excel or table-extraction workflow that supports your document.\n3. Upload the source PDF.\n4. Process the table and download the spreadsheet output when available.\n5. Check column alignment, merged cells, numbers, dates, and totals against the source.\n\n## Scanned tables\nIf the table is an image, OCR may be required before structured extraction. Complex multi-line cells and merged columns can still need manual correction.`
   },
   {
@@ -80,7 +80,7 @@ export const additionalGuides: Guide[] = [
     description: 'Create a cleaner submission by removing pages that are not required and checking the final document before upload.',
     difficulty: 'beginner', readTime: 5,
     keywords: ['remove pdf pages', 'delete pdf pages', 'pdf submission'],
-    tools: ['remove-pages'], relatedGuides: ['how-to-delete-pages-from-pdf'], publishedAt: '2026-08-31T00:00:00Z',
+    tools: ['remove-pages'], relatedGuides: ['how-to-extract-pages-from-pdf', 'how-to-split-pdf'], publishedAt: '2026-08-31T00:00:00Z',
     content: `# How to Remove Unwanted Pages from a PDF Before Submission\n\nApplication portals often request specific pages or documents. Removing unnecessary pages can make the final submission easier to review.\n\n## Workflow\n1. Read the submission instructions carefully.\n2. Keep an original copy of the full PDF.\n3. Open the PDF page-removal workflow.\n4. Select only the pages that should be removed.\n5. Create the new PDF and review every page.\n\n## Final checklist\nConfirm that required signatures, attachments, page numbers, and supporting evidence remain present and in the correct order.`
   },
   {
