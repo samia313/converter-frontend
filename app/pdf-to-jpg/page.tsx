@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   keywords: ['PDF to JPG', 'PDF to JPG converter', 'convert PDF to JPG', 'PDF pages to images', 'PDF to image', 'PDF JPG converter'],
   alternates: { canonical: 'https://pdfilio.com/pdf-to-jpg' },
   openGraph: {
-    title: 'PDF to JPG Converter Online',
+    title: 'PDF to JPG Converter Online – Convert PDF to JPG',
     description: 'Convert supported PDF pages into JPG images for sharing, previews, presentations, and design workflows.',
     url: 'https://pdfilio.com/pdf-to-jpg',
     type: 'website',

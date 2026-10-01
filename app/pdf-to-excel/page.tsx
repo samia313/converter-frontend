@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   keywords: ['PDF to Excel', 'PDF to XLSX', 'convert PDF to Excel', 'PDF table to Excel', 'extract PDF data', 'PDF to spreadsheet', 'PDF Excel converter'],
   alternates: { canonical: 'https://pdfilio.com/pdf-to-excel' },
   openGraph: {
-    title: 'PDF to Excel Converter Online',
+    title: 'PDF to Excel Online – Convert PDF to XLSX',
     description: 'Extract supported PDF tables and data into editable Excel spreadsheets.',
     url: 'https://pdfilio.com/pdf-to-excel',
     type: 'website',

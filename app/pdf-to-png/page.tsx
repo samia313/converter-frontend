@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   keywords: ['PDF to PNG', 'PDF to PNG converter', 'convert PDF to PNG', 'PDF pages to PNG', 'PDF to image', 'PDF PNG converter', 'PDF to PNG online'],
   alternates: { canonical: 'https://pdfilio.com/pdf-to-png' },
   openGraph: {
-    title: 'PDF to PNG Converter Online',
+    title: 'PDF to PNG Converter Online – Convert PDF to PNG',
     description: 'Convert supported PDF pages into PNG images for previews, presentations, design and sharing.',
     url: 'https://pdfilio.com/pdf-to-png',
     type: 'website',

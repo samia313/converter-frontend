@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   keywords: ['split PDF', 'split PDF online', 'split PDF into two parts', 'divide PDF', 'PDF splitter', 'separate PDF pages'],
   alternates: { canonical: 'https://pdfilio.com/split-pdf' },
   openGraph: {
-    title: 'Split PDF Online – Split PDF into Two Parts',
+    title: 'Split PDF Online – Split PDF into Separate Files',
     description: 'Split supported PDFs into two parts by choosing where the split occurs, then download both PDF files together.',
     url: 'https://pdfilio.com/split-pdf',
     type: 'website',

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   keywords: ['merge PDF', 'merge PDF online', 'combine PDF', 'combine PDF files', 'PDF merger', 'join PDF files', 'merge PDF documents'],
   alternates: { canonical: 'https://pdfilio.com/merge-pdf' },
   openGraph: {
-    title: 'Merge PDF Online – Combine PDF Files',
+    title: 'Merge PDF Online – Combine PDF Files into One',
     description: 'Combine supported PDF files into one document and arrange them in the order you want before merging.',
     url: 'https://pdfilio.com/merge-pdf',
     type: 'website',
