@@ -64,8 +64,7 @@ export default function ComparisonPage({ params }: Props) {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">Why Choose PDFilio?</h2>
             <p className="text-muted-foreground mb-4">
-              PDFilio offers a modern, user-friendly interface with powerful PDF tools that rival {comparison.competitor} and more. 
-              All tools are free, no registration required, and your files are secure with enterprise-grade encryption.
+              PDFilio provides online PDF tools for common document workflows. This page summarizes the available PDFilio features and the comparison points relevant to this service. Tool availability, account requirements, processing methods, and limits can vary by feature.
             </p>
           </section>
         </div>
@@ -74,13 +73,13 @@ export default function ComparisonPage({ params }: Props) {
         <div className="bg-blue-600/10 border border-blue-500/20 rounded-lg p-8 mb-12">
           <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Switch?</h2>
           <p className="text-muted-foreground mb-6">
-            Join millions of users who have already made the switch to PDFilio. Start for free today.
+            Review the relevant PDFilio tools and compare their available features with your current workflow.
           </p>
           <Link
             href="/tools"
             className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
           >
-            Get Started for Free
+            Explore PDF Tools
           </Link>
         </div>
 
