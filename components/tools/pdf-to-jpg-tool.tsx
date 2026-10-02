@@ -60,7 +60,7 @@ export default function PDFToJpgTool() {
     <section className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 md:py-20">
       <div className="container mx-auto max-w-2xl px-4">
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">PDF to JPG Converter</h1>
+          <p role="heading" aria-level={2} className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">PDF to JPG Converter</p>
           <p className="text-lg text-gray-600">Render PDF pages as JPG images</p>
         </div>
         <div className="bg-white rounded-2xl shadow-lg p-8">
