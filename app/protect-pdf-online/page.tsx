@@ -44,7 +44,7 @@ export default function ProtectPdfOnlineLandingPage() {
 The current implementation uses RC4-128 PDF encryption. Because PDF security behavior can vary between readers and permission restrictions can be advisory, highly sensitive documents should also use appropriate secure storage, controlled sharing, and other security measures.
 
 A typical workflow is to upload the PDF, set the password and available permissions, create the protected copy, then open and test the result before sharing it. Keep the original document separately when you may need it later.`}
-        useCase={['Password-protect private PDF documents','Protect business reports before sharing','Add access control to personal records','Configure printing permissions','Configure copying permissions','Configure editing permissions','Prepare PDFs for controlled sharing','Protect archived PDF copies']}
+        useCase={['Password-protect private PDF documents','Protect business reports before sharing','Add access control to personal records','Configure printing permissions','Configure copying permissions','Configure editing permissions','Prepare PDFs for controlled sharing','Protect archived PDF copies'].join('\n')}
         features={['Password-based PDF protection','RC4-128 PDF encryption','Open password support','Owner password support','Printing permission control','Copying permission control','Editing permission control','Separate protected PDF output']}
         benefits={['Add a password required to open supported PDFs','Configure common document permissions','Keep the original PDF separately','Create a protected copy for sharing','Review and test the protected file before distribution','Use a browser-based PDF protection workflow']}
         testimonials={[]}
