@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import type { MetadataRoute } from 'next'
 import { guides as coreGuides } from '@/lib/content/how-to-guides'
 import { additionalGuides } from '@/lib/content/additional-guides'
 import { editorialBlogPosts } from '@/lib/content/editorial-blog-posts'
