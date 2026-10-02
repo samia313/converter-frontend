@@ -47,7 +47,7 @@ const ocrExtractionTools = [
 ]
 
 const aiTools = [
-  'ai-document-rewriter'  'ai-document-rewriter','ai-research-writing-assistant','ai-document-chat-tool','ai-research-assistant',
+  'ai-document-rewriter','ai-research-writing-assistant','ai-document-chat-tool','ai-research-assistant',
   'ai-summary',
   'pdf-chat',
   'translate-pdf-online',
