@@ -48,7 +48,7 @@ export default function EditPdfTool() {
   return (
     <section className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 md:py-20">
       <div className="container mx-auto max-w-3xl px-4">
-        <div className="text-center mb-10"><h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Edit PDF Online</h1><p className="text-lg text-gray-600">Add text to a PDF page and download the edited copy.</p></div>
+        <div className="text-center mb-10"><p role="heading" aria-level={2} className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Edit PDF Online</p><p className="text-lg text-gray-600">Add text to a PDF page and download the edited copy.</p></div>
         <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
           <FileUploader accept=".pdf,application/pdf" onFileSelected={handleFileSelected} maxSize={MAX_FILE_SIZE_MB} />
           {selectedFile && !downloadUrl && <div className="mt-6 space-y-5">
