@@ -49,7 +49,7 @@ export default function ProtectpdfTool(){
     <div className="container mx-auto max-w-2xl px-4">
       <div className="text-center mb-10">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-blue-700"><LockKeyhole className="h-7 w-7"/></div>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Protect PDF Online</h1>
+        <p role="heading" aria-level={2} className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Protect PDF Online</p>
         <p className="text-lg text-gray-600">Password-protect a PDF and control basic printing, copying, and editing permissions.</p>
       </div>
       <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
