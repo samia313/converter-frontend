@@ -7,6 +7,16 @@ import { editorialBlogPosts, getEditorialPost } from '@/lib/content/editorial-bl
 export const dynamicParams = false;
 export const revalidate = 3600;
 
+const toolLinks: Record<string, { href: string; label: string }> = {
+  'compress-pdf': { href: '/compress-pdf', label: 'Compress PDF Online' },
+  'merge-pdf': { href: '/merge-pdf', label: 'Merge PDF Files' },
+  'convert-pdf-to-word': { href: '/pdf-to-word', label: 'PDF to Word Converter' },
+  'pdf-protector': { href: '/protect-pdf', label: 'Protect PDF' },
+  'pdf-ocr': { href: '/ocr', label: 'OCR PDF Online' },
+  'split-pdf': { href: '/split-pdf', label: 'Split PDF Online' },
+  'pdf-to-excel': { href: '/pdf-to-excel', label: 'PDF to Excel Converter' },
+};
+
 interface Props { params: Promise<{ slug: string }> }
 
 export function generateStaticParams() {
@@ -32,6 +42,7 @@ export default async function BlogArticle({ params }: Props) {
   if (!post) notFound();
 
   const related = editorialBlogPosts.filter((item) => item.slug !== post.slug && (item.tool === post.tool || item.category === post.category)).slice(0, 3);
+  const toolLink = toolLinks[post.tool];
   const jsonLd = { '@context': 'https://schema.org', '@type': 'BlogPosting', headline: post.title, description: post.description, image: [post.image], datePublished: post.publishedAt, dateModified: post.updatedAt, articleSection: post.category, keywords: post.keywords.join(', '), author: { '@type': 'Organization', name: post.author }, publisher: { '@type': 'Organization', name: 'PDFilio', url: 'https://pdfilio.com', logo: { '@type': 'ImageObject', url: 'https://pdfilio.com/logo.png' } }, mainEntityOfPage: { '@type': 'WebPage', '@id': `https://pdfilio.com/blog/${post.slug}` } };
 
   return (
@@ -49,7 +60,8 @@ export default async function BlogArticle({ params }: Props) {
         </header>
         <figure className="mb-10 overflow-hidden rounded-2xl border border-border bg-muted shadow-sm"><Image src={post.image} alt={`${post.title} — PDFilio guide`} width={1800} height={900} priority className="aspect-[16/9] w-full object-cover" /><figcaption className="px-4 py-3 text-xs text-muted-foreground">Editorial illustration for this PDF guide.</figcaption></figure>
         <div className="prose prose-lg max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: post.content }} />
-        <div className="mt-12 border-t border-border pt-8"><p className="mb-3 text-sm font-semibold text-foreground">Related topics</p><div className="flex flex-wrap gap-2">{post.keywords.map((keyword) => <span key={keyword} className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">{keyword}</span>)}</div></div>
+        {toolLink && <section className="mt-10 rounded-2xl border border-border bg-muted/40 p-6"><h2 className="mb-2 text-xl font-bold text-foreground">Use the PDFilio tool</h2><p className="mb-4 text-muted-foreground">Ready to work with your PDF? Open the related PDFilio tool directly.</p><Link href={toolLink.href} className="inline-flex rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">{toolLink.label} →</Link></section>}
+        <div className="mt-10 border-t border-border pt-8"><p className="mb-3 text-sm font-semibold text-foreground">Related topics</p><div className="flex flex-wrap gap-2">{post.keywords.map((keyword) => <span key={keyword} className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">{keyword}</span>)}</div></div>
       </article>
       {related.length > 0 && <section className="border-t border-border bg-muted/40 py-14"><div className="mx-auto max-w-6xl px-4"><h2 className="mb-7 text-2xl font-bold text-foreground">You may also find these useful</h2><div className="grid gap-5 md:grid-cols-3">{related.map((item) => <Link key={item.slug} href={`/blog/${item.slug}`} className="rounded-xl border border-border bg-background p-5 transition hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"><h3 className="mb-2 font-bold text-foreground">{item.title}</h3><p className="text-sm leading-6 text-muted-foreground">{item.description}</p></Link>)}</div></div></section>}
       <section className="mx-auto max-w-6xl px-4 py-12"><div className="rounded-2xl bg-gradient-to-r from-blue-600/10 to-purple-600/10 p-8 text-center"><h2 className="mb-3 text-2xl font-bold text-foreground">Need to work on a PDF?</h2><p className="mb-6 text-muted-foreground">Use PDFilio's online tools to handle common PDF tasks in a few clicks.</p><Link href="/tools" className="inline-flex rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">Explore PDF Tools</Link></div></section>
