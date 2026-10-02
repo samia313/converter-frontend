@@ -31,7 +31,7 @@ const aiPages = [
 ].map((slug) => ({ path: `/${slug}`, priority: 0.8, changeFrequency: 'monthly' as const }))
 
 const toolPages = [
-  'merge-pdf','merge-pdf-files','split-pdf','split-pdf-files','rotate-pdf','rotate-pages','view-and-annotate','organize-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf',
+  'merge-pdf','merge-pdf-files','split-pdf','split-pdf-files','rotate-pdf','rotate-pdf-files','rotate-pages','view-and-annotate','organize-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf',
   'word-to-pdf','excel-to-pdf','powerpoint-to-pdf','jpg-to-pdf','html-to-pdf','image-to-pdf',
   'pdf-to-word','pdf-to-excel','pdf-to-powerpoint','pdf-to-jpg','pdf-to-png','ocr','ai-ocr','ai-summary','translate-pdf-online',
   'pdf-chat','chat-with-pdf','ai-chat-pdf','ai-translation','ai-translate-pdf','ai-rewrite-pdf','ai-resume-builder','ai-contract-analyzer','ai-invoice','ai-cover-letter-generator','ai-business-proposal','ai-notes-generator','ai-quiz-generator','ai-table-extraction','pdf-metadata-editor','batch-conversion','qr-code-generator','ocr-online','pdf-to-word-online','word-to-pdf-online','merge-pdf-online','split-pdf-online','compress-pdf-online','password-protect-pdf','watermark-pdf-online','ai-pdf-summary','flatten-pdf','extract-pages','watermark-pdf','redact-pdf','protect-pdf','unlock-pdf','sign-pdf','edit-pdf','pdf-metadata',
