@@ -24,7 +24,7 @@ export function sitemapXml(category: keyof typeof sitemapGroups) {
   const urls = entries.map((entry) => {
     const path = typeof entry === 'string' ? entry : entry.url
     const lastModified = typeof entry === 'string' ? undefined : entry.lastModified
-    return `  <url>\n    <loc>${escapeXml(`${BASE_URL}${path}`)}</loc>\n${lastModified ? `    <lastmod>${lastModified.toISOString()}</lastmod>\n` : ''}  </url>`
+    return `  <url>\n    <loc>${escapeXml(`${BASE_URL}${path.startsWith('/') ? path : `/${path}`}`)}</loc>\n${lastModified ? `    <lastmod>${lastModified.toISOString()}</lastmod>\n` : ''}  </url>`
   }).join('\n')
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
 }
