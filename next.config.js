@@ -22,7 +22,6 @@ const nextConfig = {
     ],
   }],
   redirects: async () => [
-    { source: '/sitemap-index.xml', destination: '/sitemap.xml', permanent: true },
     { source: '/tools-sitemap.xml', destination: '/sitemap.xml', permanent: true },
     { source: '/blog-sitemap.xml', destination: '/sitemap.xml', permanent: true },
 
