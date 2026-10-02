@@ -33,7 +33,7 @@ const aiPages = [
 const toolPages = [
   'merge-pdf','merge-pdf-files','split-pdf','split-pdf-files','rotate-pdf','rotate-pdf-files','rotate-pages','view-and-annotate','organize-pdf','remove-pages','remove-pages-online','crop-pdf','page-numbers','compress-pdf','compress-pdf-files',
   'word-to-pdf','word-document-to-pdf','excel-to-pdf','excel-spreadsheet-to-pdf','powerpoint-to-pdf','powerpoint-presentation-to-pdf','jpg-to-pdf','jpg-images-to-pdf','html-to-pdf','html-file-to-pdf','image-to-pdf','images-to-pdf',
-  'pdf-to-word','pdf-file-to-word','pdf-to-excel','pdf-to-powerpoint','pdf-to-jpg','pdf-to-png','ocr','ai-ocr','ai-summary','translate-pdf-online',
+  'pdf-to-word','pdf-file-to-word','pdf-to-excel','pdf-file-to-excel','pdf-to-powerpoint','pdf-to-jpg','pdf-to-png','ocr','ai-ocr','ai-summary','translate-pdf-online',
   'pdf-chat','chat-with-pdf','ai-chat-pdf','ai-translation','ai-translate-pdf','ai-rewrite-pdf','ai-resume-builder','ai-contract-analyzer','ai-invoice','ai-cover-letter-generator','ai-business-proposal','ai-notes-generator','ai-quiz-generator','ai-table-extraction','pdf-metadata-editor','batch-conversion','qr-code-generator','ocr-online','pdf-to-word-online','word-to-pdf-online','merge-pdf-online','split-pdf-online','compress-pdf-online','password-protect-pdf','watermark-pdf-online','ai-pdf-summary','flatten-pdf','extract-pages','watermark-pdf','redact-pdf','protect-pdf','unlock-pdf','sign-pdf','edit-pdf','pdf-metadata',
 ].map((slug) => ({ path: `/${slug}`, priority: 0.9, changeFrequency: 'monthly' as const }))
 
