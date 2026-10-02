@@ -35,7 +35,7 @@ const toolPages = [
   'merge-pdf','split-pdf','rotate-pdf','organize-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf',
   'word-to-pdf','excel-to-pdf','powerpoint-to-pdf','jpg-to-pdf','html-to-pdf','image-to-pdf',
   'pdf-to-word','pdf-to-excel','pdf-to-powerpoint','pdf-to-jpg','pdf-to-png','ocr','ai-summary','translate-pdf-online',
-  'pdf-chat','chat-with-pdf','ai-chat-pdf','ai-pdf-summary','flatten-pdf','extract-pages','watermark-pdf','redact-pdf','protect-pdf','unlock-pdf','sign-pdf','edit-pdf','pdf-metadata',
+  'pdf-chat','chat-with-pdf','ai-chat-pdf','ai-translation','ai-pdf-summary','flatten-pdf','extract-pages','watermark-pdf','redact-pdf','protect-pdf','unlock-pdf','sign-pdf','edit-pdf','pdf-metadata',
 ].map((slug) => ({ path: `/${slug}`, priority: 0.9, changeFrequency: 'monthly' as const }))
 
 const longTailGuides = guides.map((guide) => ({
