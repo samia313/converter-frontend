@@ -43,7 +43,7 @@ const securityEditingTools = [
 ]
 
 const ocrExtractionTools = [
-  'ocr','ocr-online','ocr-pdf-online','ai-ocr','ai-table-extraction',
+  'ocr','ocr-online','ocr-pdf-online','ai-table-extraction',
 ]
 
 const aiTools = [
