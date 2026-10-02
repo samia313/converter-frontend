@@ -56,7 +56,7 @@ export default function PDFToExcelTool() {
     <section className="min-h-screen bg-gradient-to-b from-green-50 to-white py-12 md:py-20">
       <div className="container mx-auto max-w-2xl px-4">
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">PDF to Excel</h1>
+          <p className="text-3xl md:text-4xl font-bold text-gray-900 mb-4" role="heading" aria-level={2}>PDF to Excel</p>
           <p className="text-lg text-gray-600">Convert PDF tables to Excel spreadsheets</p>
         </div>
 
