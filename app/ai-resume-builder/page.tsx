@@ -2,9 +2,9 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Resume Builder - Professional Resume Generator | PDFilio',
-  description: 'Generate professional resumes with AI assistance. Create ATS-friendly resumes that get noticed by employers.',
-  keywords: 'resume builder, AI resume, professional resume, ATS resume generator',
+  title: 'AI Resume Builder Online | Create a Professional Resume | PDFilio',
+  description: 'Create and refine professional resumes with AI assistance. Improve wording, organize experience, and tailor your resume to supported job requirements.',
+  keywords: ['AI resume builder', 'resume builder', 'AI resume generator', 'professional resume builder', 'ATS resume'],
 };
 
 export default function AIResumeBuilderPage() {
@@ -14,15 +14,14 @@ export default function AIResumeBuilderPage() {
     name: 'AI Resume Builder',
     description: 'AI-powered professional resume creation tool',
     applicationCategory: 'Utility',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', ratingCount: '4100' },
+
   };
 
   return (
     <ToolLandingLayout
       toolName="AI Resume Builder"
       toolSlug="ai-resume-builder"
-      description="Create professional, ATS-optimized resumes with AI assistance. Stand out to employers with perfectly formatted resumes."
+      description="Create and refine professional resumes with AI assistance. Improve wording, organize experience, and tailor your resume to supported job requirements."
       heroImage="/tool-images/ai-resume-builder-hero.png"
       mainContent={`AI Resume Builder helps you create compelling, professional resumes that get noticed by employers and pass ATS (Applicant Tracking System) screening. Our AI provides intelligent suggestions for content and formatting.
 
@@ -39,27 +38,11 @@ Create unlimited resumes for different positions. Download as PDF, Word, or shar
         'Industry-specific applications',
         'Responding to job postings strategically',
       ].join('\n')}
-      testimonials={[
-        {
-          name: 'Jennifer White',
-          role: 'Marketing Professional',
-          text: 'AI Resume Builder created the perfect resume for my new job. Got 3 interviews in one week! Worth every second.',
-        },
-        {
-          name: 'Thomas Jackson',
-          role: 'Career Changer',
-          text: 'Helped me transition careers successfully. AI suggestions made my resume compelling and ATS-friendly.',
-        },
-        {
-          name: 'Nina Patel',
-          role: 'Recent Graduate',
-          text: 'Amazing tool for entry-level job hunting! Professional resume that helped me land my first job.',
-        },
-      ]}
+      testimonials={[]}
       features={[
         'AI-powered content suggestions',
         'Professional resume templates',
-        'ATS optimization',
+        'ATS-aware resume formatting',
         'Keyword optimization',
         'Multiple export formats',
         'Customizable designs',
@@ -68,26 +51,26 @@ Create unlimited resumes for different positions. Download as PDF, Word, or shar
       ]}
       benefits={[
         'Stand out to employers',
-        'Pass ATS screening',
+        'Improve resume structure and readability',
         'Professional appearance',
         'Save time creating resumes',
         'Optimize for job descriptions',
         'Multiple versions for different jobs',
-        'Career advancement opportunities',
+        'Prepare tailored versions for different applications',
         'Confidence in job applications',
       ]}
       faqs={[
         {
           q: 'How does AI help with resume building?',
-          a: 'AI suggests professional language, highlights achievements, and optimizes keywords for job postings.',
+          a: 'AI can suggest clearer professional language, help highlight relevant achievements, and tailor wording to a job description when those features are available.'
         },
         {
           q: 'Are templates ATS-friendly?',
-          a: 'Absolutely! All templates are optimized for applicant tracking systems and pass formatting checks.',
+          a: 'Templates can be designed with ATS-friendly structure in mind, but no resume format can guarantee acceptance or passage through every employer ATS.'
         },
         {
           q: 'Can I create multiple resumes?',
-          a: 'Yes! Create unlimited resumes for different positions and industries.',
+          a: 'The available number of resumes depends on the current product configuration and limits shown in the tool.'
         },
         {
           q: 'How do I customize templates?',
@@ -95,7 +78,7 @@ Create unlimited resumes for different positions. Download as PDF, Word, or shar
         },
         {
           q: 'What export formats available?',
-          a: 'PDF, Word (.docx), and plain text formats. Download or share directly.',
+          a: 'Available export formats depend on the current tool configuration. Use the export options shown in the editor.'
         },
         {
           q: 'Do you provide keywords for my field?',
@@ -103,7 +86,7 @@ Create unlimited resumes for different positions. Download as PDF, Word, or shar
         },
         {
           q: 'Can I track ATS compatibility?',
-          a: 'All templates score 100% on ATS compatibility checks and formatting validation.',
+          a: 'ATS compatibility depends on the template, formatting, job system, and employer requirements. Review the generated resume before submitting it.'
         },
         {
           q: 'Help with job-specific resumes?',
@@ -111,7 +94,7 @@ Create unlimited resumes for different positions. Download as PDF, Word, or shar
         },
         {
           q: 'Is AI Resume Builder free?',
-          a: 'Completely free! Unlimited resume creation, templates, and downloads.',
+          a: 'Current pricing, usage limits, and export availability depend on the product configuration shown in PDFilio.'
         },
         {
           q: 'Best for career change?',
