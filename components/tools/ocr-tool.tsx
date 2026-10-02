@@ -163,7 +163,7 @@ export default function OcrTool() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold">OCR PDF Online – Extract Text</h1>
+        <p role="heading" aria-level={2} className="text-2xl font-semibold">OCR PDF Online – Extract Text</p>
         <p className="mt-2 text-sm text-muted-foreground">
           Extract English text from scanned PDFs on the server, or from JPG/PNG/WebP images directly in your browser.
         </p>
