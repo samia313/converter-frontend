@@ -101,11 +101,10 @@ ${urls}
 `
 }
 
-export async function GET(
-  _request: Request,
-  context: { params: Promise<{ category: string }> },
-) {
-  const { category } = await context.params
+export async function GET(request: Request) {
+  const pathname = new URL(request.url).pathname
+  const match = pathname.match(/^\/sitemaps\/([^/]+)\.xml\/?$/)
+  const category = match?.[1] ?? ''
   const entries = groups[category]
 
   if (!entries) {
