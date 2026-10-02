@@ -24,7 +24,6 @@ const staticPages = [
 ]
 
 const aiPages = [
-  // Only canonical, indexable AI landing pages belong in the sitemap.
   'ai-document-rewriter',
   'ai-research-writing-assistant',
   'ai-document-chat-tool',
@@ -35,7 +34,7 @@ const toolPages = [
   'merge-pdf','split-pdf','rotate-pdf','organize-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf',
   'word-to-pdf','excel-to-pdf','powerpoint-to-pdf','jpg-to-pdf','html-to-pdf','image-to-pdf',
   'pdf-to-word','pdf-to-excel','pdf-to-powerpoint','pdf-to-jpg','pdf-to-png','ocr','ai-ocr','ai-summary','translate-pdf-online',
-  'pdf-chat','chat-with-pdf','ai-chat-pdf','ai-translation','ai-translate-pdf','ai-rewrite-pdf','ai-resume-builder','ai-contract-analyzer','ai-invoice','ai-cover-letter-generator','ai-business-proposal','ai-notes-generator','ai-quiz-generator','ai-table-extraction','pdf-metadata-editor','batch-conversion','qr-code-generator','ocr-online','pdf-to-word-online','word-to-pdf-online','merge-pdf-online','split-pdf-online','compress-pdf-online','ai-pdf-summary','flatten-pdf','extract-pages','watermark-pdf','redact-pdf','protect-pdf','unlock-pdf','sign-pdf','edit-pdf','pdf-metadata',
+  'pdf-chat','chat-with-pdf','ai-chat-pdf','ai-translation','ai-translate-pdf','ai-rewrite-pdf','ai-resume-builder','ai-contract-analyzer','ai-invoice','ai-cover-letter-generator','ai-business-proposal','ai-notes-generator','ai-quiz-generator','ai-table-extraction','pdf-metadata-editor','batch-conversion','qr-code-generator','ocr-online','pdf-to-word-online','word-to-pdf-online','merge-pdf-online','split-pdf-online','compress-pdf-online','password-protect-pdf','ai-pdf-summary','flatten-pdf','extract-pages','watermark-pdf','redact-pdf','protect-pdf','unlock-pdf','sign-pdf','edit-pdf','pdf-metadata',
 ].map((slug) => ({ path: `/${slug}`, priority: 0.9, changeFrequency: 'monthly' as const }))
 
 const longTailGuides = guides.map((guide) => ({
@@ -63,7 +62,6 @@ function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
 
 function isCanonicalSitemapUrl(url: string): boolean {
   const path = new URL(url).pathname
-  // Legacy/redirected/private utility routes must never enter the XML sitemap.
   return !(
     path === '/vs' ||
     path.startsWith('/vs/') ||
