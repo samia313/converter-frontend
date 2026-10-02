@@ -43,7 +43,7 @@ export default function RedactPdfOnlineLandingPage() {
 This distinction is important: the current workflow places an opaque rectangle over the page rather than securely removing the underlying PDF text or objects. For sensitive, confidential, or legally important documents, do not assume that a covered area has been permanently sanitized. Independently verify the final file before distribution.
 
 A typical workflow is to upload the PDF, define the area to cover, create the output, inspect the result, and only then decide whether it is suitable for your intended use.`}
-        useCase={['Visually cover sensitive information in document copies','Mark areas for review before document distribution','Cover repeated regions across PDF pages','Prepare a visually redacted working copy','Hide visible content in draft documents','Review document areas before sharing']}
+        useCase={['Visually cover sensitive information in document copies','Mark areas for review before document distribution','Cover repeated regions across PDF pages','Prepare a visually redacted working copy','Hide visible content in draft documents','Review document areas before sharing'].join('\n')}
         features={['Opaque rectangle covering','Custom X and Y coordinates','Custom width and height','Same-area application across pages','Separate output PDF','Browser-based workflow','Support for visual document marking','Output review before sharing']}
         benefits={['Quickly cover visible PDF areas','Apply the same cover area across pages','Create a separate marked-up copy','Control the covered region precisely','Keep the original PDF separately','Encourage final-file review before distribution']}
         testimonials={[]}
