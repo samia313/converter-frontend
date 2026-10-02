@@ -30,7 +30,7 @@ export default function HtmltopdfTool() {
   return <section className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 md:py-20">
     <div className="container mx-auto max-w-2xl px-4">
       <div className="mb-10 text-center">
-        <h1 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">HTML to PDF Converter</h1>
+        <p role="heading" aria-level={2} className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">HTML to PDF Converter</p>
         <p className="text-lg text-gray-600">Convert HTML and HTM files to PDF with the PDFilio conversion server.</p>
       </div>
       <div className="rounded-2xl bg-white p-6 shadow-lg md:p-8">
