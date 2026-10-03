@@ -43,7 +43,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head suppressHydrationWarning>
-        <link rel="sitemap" href="/sitemap.xml" />
+        <link rel="sitemap" href="/sitemap-index.xml" />
         <StructuredData />
       </head>
       <body suppressHydrationWarning className="font-sans antialiased bg-white">
