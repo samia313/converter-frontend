@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument } from 'pdf-lib';
-import sharp from 'sharp';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -45,9 +44,8 @@ export async function POST(request: NextRequest) {
 
       const bytes = new Uint8Array(await entry.arrayBuffer());
       const image = await pdfDoc.embedJpg(bytes);
-      const metadata = await sharp(bytes).metadata();
-      const pixelWidth = metadata.width ?? image.width;
-      const pixelHeight = metadata.height ?? image.height;
+      const pixelWidth = image.width;
+      const pixelHeight = image.height;
       const maxPageWidth = 842;
       const maxPageHeight = 842;
       const minPageSize = 300;
