@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import EditPdfTool from '@/components/tools/edit-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Edit PDF Online – Add Text to PDF | PDFilio',
+  title: 'Edit PDF Online – Add Text to PDF',
   description: 'Edit a PDF online by adding text to a selected page. Set the page, position, and font size, then download the edited PDF.',
   keywords: ['edit PDF', 'edit PDF online', 'add text to PDF', 'PDF editor online', 'PDF text editor'],
   alternates: { canonical: 'https://pdfilio.com/edit-pdf' },
