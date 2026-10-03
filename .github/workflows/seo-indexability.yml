@@ -13,5 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Run sitemap source audit
+        run: node scripts/seo-sitemap-source-audit.mjs
       - name: Run production indexability audit
         run: node scripts/seo-production-indexability-audit.mjs
