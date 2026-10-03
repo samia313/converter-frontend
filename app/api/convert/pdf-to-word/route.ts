@@ -14,55 +14,19 @@ function normalizeText(value: string): string {
 }
 
 async function extractPdfText(pdfBuffer: Buffer): Promise<string> {
-  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
-  const loadingTask = pdfjs.getDocument({
-    data: new Uint8Array(pdfBuffer),
-    useWorkerFetch: false,
-    disableFontFace: true,
-    verbosity: 0,
-  });
-
-  const pdf = await loadingTask.promise;
-  const pages: string[] = [];
+  const { PDFParse } = await import('pdf-parse');
+  const parser = new PDFParse({ data: pdfBuffer });
 
   try {
-    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-      const page = await pdf.getPage(pageNumber);
-      const content = await page.getTextContent();
-      const items = content.items as Array<{
-        str?: string;
-        hasEOL?: boolean;
-        transform?: number[];
-      }>;
-
-      let pageText = '';
-      let previousY: number | null = null;
-
-      for (const item of items) {
-        const value = item.str ?? '';
-        if (!value) continue;
-
-        const y = item.transform?.[5] ?? null;
-        if (previousY !== null && y !== null && Math.abs(previousY - y) > 3) {
-          pageText += '\n';
-        } else if (pageText && !pageText.endsWith('\n') && !pageText.endsWith(' ')) {
-          pageText += ' ';
-        }
-
-        pageText += value;
-        if (item.hasEOL) pageText += '\n';
-        previousY = y;
-      }
-
-      pages.push(normalizeText(pageText));
-    }
+    const result = await parser.getText();
+    return result.text
+      .split(/\f/)
+      .map((page: string) => normalizeText(page))
+      .filter(Boolean)
+      .join('\n\n');
   } finally {
-    // PDFDocumentProxy in the installed pdfjs-dist typings does not expose
-    // destroy(); the loading task owns the worker lifecycle.
-    await loadingTask.destroy();
+    await parser.destroy();
   }
-
-  return pages.filter(Boolean).join('\n\n');
 }
 
 async function createWordDocument(text: string): Promise<Buffer> {
