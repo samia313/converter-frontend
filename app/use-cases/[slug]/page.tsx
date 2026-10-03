@@ -17,9 +17,7 @@ const TOOL_ROUTES: Record<string, string> = {
 };
 
 interface Props {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -29,7 +27,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const useCase = getUseCaseBySlug(params.slug);
+  const { slug } = await params;
+  const useCase = getUseCaseBySlug(slug);
 
   if (!useCase) {
     return { title: 'Use Case Not Found' };
@@ -43,8 +42,9 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default function UseCasePage({ params }: Props) {
-  const useCase = getUseCaseBySlug(params.slug);
+export default async function UseCasePage({ params }: Props) {
+  const { slug } = await params;
+  const useCase = getUseCaseBySlug(slug);
 
   if (!useCase) {
     notFound();
@@ -57,7 +57,6 @@ export default function UseCasePage({ params }: Props) {
   return (
     <main className="min-h-screen bg-background">
       <article className="max-w-4xl mx-auto px-4 py-12">
-        {/* Header */}
         <header className="mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">{useCase.title}</h1>
           <p className="text-lg text-muted-foreground">Explore how to use {useCase.tool.replace('-', ' ')} with PDFilio</p>
@@ -74,7 +73,6 @@ export default function UseCasePage({ params }: Props) {
           </div>
         </header>
 
-        {/* Content */}
         <div className="prose prose-invert max-w-none mb-12">
           <section>
             <h2 className="text-2xl font-semibold mb-4">Overview</h2>
@@ -84,7 +82,6 @@ export default function UseCasePage({ params }: Props) {
           </section>
         </div>
 
-        {/* CTA */}
         <div className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 border border-blue-500/20 rounded-lg p-8 mb-12">
           <h2 className="text-2xl font-bold text-foreground mb-4">Start Using {useCase.tool.replace('-', ' ')} Today</h2>
           <Link
@@ -95,7 +92,6 @@ export default function UseCasePage({ params }: Props) {
           </Link>
         </div>
 
-        {/* Related Use Cases */}
         {relatedUseCases.length > 0 && (
           <div className="mb-12">
             <h3 className="text-lg font-semibold text-foreground mb-4">Related Use Cases</h3>
@@ -114,14 +110,9 @@ export default function UseCasePage({ params }: Props) {
           </div>
         )}
 
-        {/* Navigation */}
         <div className="flex justify-between items-center mt-12 pt-8 border-t border-border">
-          <Link href="/tools" className="text-blue-600 hover:text-blue-700">
-            ← Back to Tools
-          </Link>
-          <Link href="/" className="text-blue-600 hover:text-blue-700">
-            Home →
-          </Link>
+          <Link href="/tools" className="text-blue-600 hover:text-blue-700">← Back to Tools</Link>
+          <Link href="/" className="text-blue-600 hover:text-blue-700">Home →</Link>
         </div>
       </article>
     </main>
