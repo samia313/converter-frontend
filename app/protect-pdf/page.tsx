@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import ProtectPdfTool from '@/components/tools/protect-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Protect PDF Online – Password Protect PDF Files | PDFilio',
+  title: 'Protect PDF Online – Password Protect PDF Files',
   description: 'Password-protect PDF files online with RC4-128 encryption and optional printing, copying, and editing permissions.',
   keywords: ['protect PDF','protect PDF online','password protect PDF','PDF password','encrypt PDF','secure PDF','PDF security'],
   alternates:{canonical:'https://pdfilio.com/protect-pdf'},
