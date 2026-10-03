@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import UnlockPdfTool from '@/components/tools/unlock-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Unlock PDF Online – Remove PDF Password Restrictions | PDFilio',
+  title: 'Unlock PDF Online – Remove PDF Password Restrictions',
   description: 'Unlock supported PDF files online when you have the required password or authorization. Review permissions and keep the original document before making changes.',
   keywords: ['unlock PDF', 'unlock PDF online', 'remove PDF password', 'unlock password protected PDF', 'remove PDF restrictions', 'PDF unlocker'],
   alternates: { canonical: 'https://pdfilio.com/unlock-pdf' },
