@@ -87,6 +87,10 @@ const canonicalAiPages = [
   'ai-document-research-assistant',
   'ai-journal-research-assistant',
   'ai-thesis-research-assistant',
+  'ai-research-analysis-tool',
+  'ai-study-research-assistant',
+  'ai-pdf-reader',
+  'pdf-abstract-generator',
 ].map((slug) => ({ path: `/${slug}`, priority: 0.8, changeFrequency: 'monthly' as const }))
 
 const longTailGuides = guides.map((guide) => ({
