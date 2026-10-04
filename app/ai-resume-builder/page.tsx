@@ -4,7 +4,9 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'AI Resume Builder Online | Create a Professional Resume | PDFilio',
   description: 'Create and refine professional resumes with AI assistance. Improve wording, organize experience, and tailor your resume to supported job requirements.',
-  keywords: ['AI resume builder', 'resume builder', 'AI resume generator', 'professional resume builder', 'ATS resume'],
+  keywords: ['AI resume builder', 'AI resume generator', 'resume builder online', 'professional resume builder', 'ATS resume'],
+  alternates: { canonical: 'https://pdfilio.com/ai-resume-builder' },
+  openGraph: { title: 'AI Resume Builder Online | Create a Professional Resume | PDFilio', description: 'Create and refine a professional resume with AI assistance, templates, and job-focused wording.', url: 'https://pdfilio.com/ai-resume-builder', type: 'website' },
 };
 
 export default function AIResumeBuilderPage() {
@@ -23,11 +25,11 @@ export default function AIResumeBuilderPage() {
       toolSlug="ai-resume-builder"
       description="Create and refine professional resumes with AI assistance. Improve wording, organize experience, and tailor your resume to supported job requirements."
       heroImage="/tool-images/ai-resume-builder-hero.png"
-      mainContent={`AI Resume Builder helps you create compelling, professional resumes that get noticed by employers and pass ATS (Applicant Tracking System) screening. Our AI provides intelligent suggestions for content and formatting.
+      mainContent={`AI Resume Builder helps you create and refine professional resumes with AI-assisted wording, structure, and job-focused content. ATS compatibility depends on the template, formatting, employer system, and job requirements.
 
 Choose from professionally designed templates, customize with your information, and let AI enhance your content. Optimize keywords for job titles, highlight achievements effectively, and present your best professional self.
 
-Create unlimited resumes for different positions. Download as PDF, Word, or share directly. Perfect for career changers, students, and anyone seeking better opportunities. Free forever with no registration required.`}
+Create tailored resume drafts for different positions and review the result before applying. Available templates, export formats, usage limits, pricing, and account requirements depend on the current product configuration.`}
       useCase={[
         'Job searching and career advancement',
         'Career transition and changing fields',
@@ -74,7 +76,7 @@ Create unlimited resumes for different positions. Download as PDF, Word, or shar
         },
         {
           q: 'How do I customize templates?',
-          a: 'Drag-and-drop editor makes customization easy. Add, remove, or rearrange sections instantly.',
+          a: 'Available editing controls depend on the current builder interface. Use the editor controls shown in the tool to add, remove, or rearrange supported sections.'
         },
         {
           q: 'What export formats available?',
@@ -82,7 +84,7 @@ Create unlimited resumes for different positions. Download as PDF, Word, or shar
         },
         {
           q: 'Do you provide keywords for my field?',
-          a: 'Yes! AI suggests industry-specific keywords to optimize for job postings.',
+          a: 'AI can suggest relevant wording and keywords based on the job information you provide, when that feature is available.'
         },
         {
           q: 'Can I track ATS compatibility?',
