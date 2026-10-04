@@ -4,7 +4,7 @@ const path = require('path')
 const { v4: uuidv4 } = require('uuid')
 const settings = require('../config/settings')
 const { createWorkerConnection } = require('./connection')
-const { conversionQueue } = require('./index')
+const { conversionQueue, closeQueue } = require('./index')
 const spaces = require('../utils/spaces')
 const converters = require('../converters')
 
@@ -199,6 +199,7 @@ const shutdown = async (signal) => {
   console.log(`[WORKER] ${signal} received, shutting down`)
   await worker.close()
   await connection.quit()
+  await closeQueue()
   process.exit(0)
 }
 process.on('SIGTERM', () => shutdown('SIGTERM'))
