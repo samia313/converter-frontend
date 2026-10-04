@@ -67,17 +67,27 @@ router.post('/', upload.single('file'), async (req, res, next) => {
     const inputName = `jobs/${uuidv4()}/input${ext}`
     const inputKey = await spaces.uploadFile(req.file.path, inputName, req.file.mimetype || 'application/octet-stream')
 
-    const job = await conversionQueue.add('convert', {
+    let options = {}
+    if (req.body?.options) {
+      try { options = JSON.parse(req.body.options) } catch { throw fail('Invalid conversion options JSON', 'INVALID_OPTIONS') }
+    }
+    if (req.body?.level) options.level = req.body.level
+    if (req.body?.password) options.password = req.body.password
+    if (req.body?.language) options.language = req.body.language
+
+    let job
+    try {
+      job = await conversionQueue.add('convert', {
       tool,
       inputKey,
       originalName: path.basename(req.file.originalname),
-      options: req.body?.options ? JSON.parse(req.body.options) : {
-        level: req.body?.level,
-        password: req.body?.password,
-        language: req.body?.language,
-      },
+      options,
       submittedAt: new Date().toISOString(),
     })
+    } catch (error) {
+      await spaces.deleteFile(inputKey)
+      throw error
+    }
 
     res.status(202).json({
       success: true,
