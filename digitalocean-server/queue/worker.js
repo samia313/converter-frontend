@@ -4,6 +4,7 @@ const path = require('path')
 const { v4: uuidv4 } = require('uuid')
 const settings = require('../config/settings')
 const { createWorkerConnection } = require('./connection')
+const { conversionQueue } = require('./index')
 const spaces = require('../utils/spaces')
 const converters = require('../converters')
 
@@ -153,6 +154,12 @@ const processConversion = async (job) => {
     const outputKey = await spaces.uploadFile(finalPath, outputName, result.format === 'zip' ? 'application/zip' : definition.mime)
 
     await spaces.deleteFile(data.inputKey)
+    await conversionQueue.add('cleanup-output', { key: outputKey }, {
+      delay: settings.outputTtlMs,
+      attempts: 3,
+      removeOnComplete: true,
+      removeOnFail: { age: 7 * 24 * 60 * 60 },
+    })
 
     await job.updateProgress(100)
     return {
