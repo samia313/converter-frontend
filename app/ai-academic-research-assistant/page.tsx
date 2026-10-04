@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'AI Academic Research Assistant – Research Support for Students & Researchers | PDFilio',
-  description: 'AI-assisted support for literature review, research organization, document analysis, and academic workflows. Verify important findings against source material.',
+  description: 'AI-assisted support for literature review, research organization, document analysis, and academic workflows. Review important findings against the original sources.',
   keywords: ['AI academic research assistant', 'academic research AI', 'literature review assistant', 'AI research tool', 'student research assistant'],
   alternates: { canonical: 'https://pdfilio.com/ai-academic-research-assistant' },
   openGraph: { title: 'AI Academic Research Assistant | PDFilio', description: 'AI-assisted support for academic research workflows and document analysis.', url: 'https://pdfilio.com/ai-academic-research-assistant', type: 'website' },
@@ -14,14 +14,14 @@ export default function Page() {
     <ToolLandingLayout
       toolName="AI Academic Research Assistant"
       toolSlug="ai-academic-research-assistant"
-      description="Purpose-built AI research assistant for academic environments. Support students, faculty, and research teams with intelligent analysis."
-      mainContent={`Academic-focused research platform designed for university success. Supports students through literature review. Assists faculty with research analysis.
+      description="AI-assisted research support for literature review, document organization, and analysis workflows. Review important findings against the original sources."
+      mainContent={`Use AI-assisted workflows to organize literature, review supported research documents, compare information, and prepare research notes. Results depend on the source material and available tool capabilities.
 
-Scholarly Analysis:
-Understands academic conventions, citation styles, and research methodologies. Extracts methodology properly. Analyzes research design rigorously.
+Research Review Support:
+Use document content as a starting point for literature review, research organization, and analysis. Verify important claims, quotations, citations, and conclusions against the original sources.
 
-Academic Support:
-Help students master complex research. Support faculty with literature synthesis. Facilitate institutional research excellence.`}
+Academic Workflow Support:
+Organize research material, identify themes, prepare notes, and develop follow-up questions while keeping human review in the workflow.`}
       useCase={`Literature review support
 Thesis research assistance
 Faculty research collaboration
@@ -49,12 +49,12 @@ Citation management`}
       ]}
       faqs={[
         {
-          q: 'University approved?',
-          a: 'Yes. Designed specifically for academic institutional use with research integrity support.',
+          q: 'Is this an officially university-approved research tool?',
+          a: 'PDFilio does not make a universal university-approval claim. Check your institution’s policies before using AI for academic work.'
         },
         {
-          q: 'Citation management?',
-          a: 'Supports MLA, APA, Chicago, and other academic citation formats.',
+          q: 'Can it help with citations?',
+          a: 'It can help organize citation-related information when supported by the current workflow, but citations should be checked against the original sources and required style guide.'
         },
       ]}
       relatedTools={[
