@@ -50,10 +50,12 @@ app.get('/health', (req, res) => {
 })
 
 app.get('/version', (req, res) => {
-  res.json({ version: '1.1.0', name: 'PDFilio Conversion Server' })
+  res.json({ version: '1.2.0', name: 'PDFilio Conversion Server', queue: settings.redisUrl ? settings.queueName : null })
 })
 
 app.use('/convert', authMiddleware)
+const jobRoutes = require('./routes/jobs')
+app.use('/convert/jobs', jobRoutes)
 const convertRoutes = require('./routes/convert')
 app.use('/convert', convertRoutes)
 
