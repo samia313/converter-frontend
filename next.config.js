@@ -244,6 +244,21 @@ const nextConfig = {
     { source: '/ocr-pdf-online', destination: '/ocr', permanent: true },
     { source: '/ocr-online', destination: '/ocr', permanent: true },
 
+    // Consolidate remaining core and format-variant URLs.
+    { source: '/edit-pdf-online', destination: '/edit-pdf', permanent: true },
+    { source: '/protect-pdf-online', destination: '/protect-pdf', permanent: true },
+    { source: '/unlock-pdf-online', destination: '/unlock-pdf', permanent: true },
+    { source: '/sign-pdf-online', destination: '/sign-pdf', permanent: true },
+    { source: '/redact-pdf-online', destination: '/redact-pdf', permanent: true },
+    { source: '/watermark-pdf-online', destination: '/watermark-pdf', permanent: true },
+    { source: '/pdf-to-image', destination: '/pdf-to-jpg', permanent: true },
+    { source: '/pdf-to-images', destination: '/pdf-to-jpg', permanent: true },
+    { source: '/pdf-metadata', destination: '/pdf-metadata-editor', permanent: true },
+    { source: '/ai-pdf-summary', destination: '/ai-summary', permanent: true },
+    { source: '/ai-pdf-summary-online', destination: '/ai-summary', permanent: true },
+    { source: '/pdf-summarizer-ai', destination: '/ai-summary', permanent: true },
+    { source: '/ask-pdf-questions', destination: '/pdf-chat', permanent: true },
+
     // Consolidate duplicate PDF summarization landing pages.
   ],
   rewrites: async () => ({ beforeFiles: [], afterFiles: [], fallback: [] }),
