@@ -38,6 +38,15 @@ module.exports = {
     .map((origin) => origin.trim())
     .filter(Boolean),
 
+  // Queue / worker
+  redisUrl: process.env.REDIS_URL,
+  queueName: process.env.CONVERSION_QUEUE_NAME || 'pdfilio-conversion',
+  queuePrefix: process.env.CONVERSION_QUEUE_PREFIX || 'pdfilio',
+  workerConcurrency: intEnv('WORKER_CONCURRENCY', 1),
+  jobAttempts: intEnv('JOB_ATTEMPTS', 3),
+  jobBackoffMs: intEnv('JOB_BACKOFF_MS', 5000),
+  outputTtlMs: intEnv('OUTPUT_TTL_MS', 24 * 60 * 60 * 1000),
+
   // Logging
   logLevel: process.env.LOG_LEVEL || 'info',
 }

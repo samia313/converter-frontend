@@ -418,3 +418,92 @@ Consider adding monitoring service:
 ---
 
 Deployment complete! Your conversion server is now live and integrated with your Next.js application.
+
+
+---
+
+## Queue-based conversion engine (PDFilio v1.2)
+
+The conversion API now supports an asynchronous, server-side pipeline:
+
+```
+Vercel/Next.js
+   |
+   | authenticated multipart upload
+   v
+DigitalOcean API -> private Spaces input object -> BullMQ/Redis
+                                      |
+                                      v
+                           DigitalOcean conversion worker
+                                      |
+                                      v
+                         private Spaces output object
+                                      |
+                                      v
+                          short-lived signed download URL
+```
+
+### Required Redis
+
+Set a persistent Redis/Valkey URL in the conversion server environment:
+
+```env
+REDIS_URL=rediss://default:<password>@<host>:6379
+CONVERSION_QUEUE_NAME=pdfilio-conversion
+CONVERSION_QUEUE_PREFIX=pdfilio
+WORKER_CONCURRENCY=1
+JOB_ATTEMPTS=3
+JOB_BACKOFF_MS=5000
+OUTPUT_TTL_MS=86400000
+```
+
+For production BullMQ, Redis persistence should be enabled and Redis should use `maxmemory-policy=noeviction`; BullMQ workers should use a connection with `maxRetriesPerRequest=null`. See the BullMQ production guidance.
+
+### Install and run
+
+```bash
+cd ~/pdf-conversion-api
+npm install
+npm run check
+pm2 start ecosystem.config.js
+pm2 save
+```
+
+This starts two separate processes:
+
+- `pdfilio-converter-api` — authenticated upload/status API.
+- `pdfilio-conversion-worker` — actual conversion process.
+
+### Queue API
+
+All queue endpoints require the existing API key:
+
+```bash
+# Submit
+curl -H "Authorization: Bearer $API_KEY" \
+  -F "tool=pdf-to-word" \
+  -F "file=@sample.pdf" \
+  https://api.pdfilio.com/convert/jobs
+
+# Poll
+curl -H "Authorization: Bearer $API_KEY" \
+  https://api.pdfilio.com/convert/jobs/<JOB_ID>
+```
+
+A successful submission returns HTTP 202 and a `jobId`. The status endpoint returns `queued`, `active`, `completed`, or `failed`. On completion it returns a short-lived signed download URL.
+
+### Security properties
+
+- Input and output objects are private in DigitalOcean Spaces.
+- Browser clients never receive Spaces credentials.
+- The API authenticates queue requests with the existing bearer API key.
+- PDF uploads are checked for the `%PDF-` file signature before queueing.
+- Worker jobs download to a per-job directory with restrictive permissions.
+- Input objects are deleted after successful processing.
+- Output objects are automatically scheduled for deletion after `OUTPUT_TTL_MS`.
+- Conversion jobs retry with exponential backoff.
+- The Vercel app should call this API through a server-side proxy; do not expose `API_KEY` to browser JavaScript.
+
+### Important
+
+This migration establishes the production queue/file pipeline. It does **not** claim every PDFilio tool is now using a new conversion engine. The next phase is tool-by-tool engine implementation and golden-file testing (PDF→Word, Office→PDF, PDF→Excel, PDF→PowerPoint, OCR, render/export, etc.).
