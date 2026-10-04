@@ -48,4 +48,40 @@ const uploadFile = async (fileOrBuffer, filename, mimeType) => {
   }
 }
 
-module.exports = { uploadFile }
+const downloadFile = async (key, destinationPath) => {
+  const output = fs.createWriteStream(destinationPath, { mode: 0o600 })
+  try {
+    const request = s3Client.getObject({
+      Bucket: settings.spaces.bucket,
+      Key: key,
+    }).createReadStream()
+    await new Promise((resolve, reject) => {
+      request.on('error', reject)
+      output.on('error', reject)
+      output.on('finish', resolve)
+      request.pipe(output)
+    })
+    return destinationPath
+  } catch (error) {
+    try { output.destroy() } catch {}
+    try { fs.rmSync(destinationPath, { force: true }) } catch {}
+    throw error
+  }
+}
+
+const deleteFile = async (key) => {
+  if (!key) return
+  try {
+    await s3Client.deleteObject({ Bucket: settings.spaces.bucket, Key: key }).promise()
+  } catch (error) {
+    console.warn('[SPACES] Delete error:', key, error.message)
+  }
+}
+
+const signedDownloadUrl = (key) => s3Client.getSignedUrl('getObject', {
+  Bucket: settings.spaces.bucket,
+  Key: key,
+  Expires: settings.spaces.signedUrlTtl,
+})
+
+module.exports = { uploadFile, downloadFile, deleteFile, signedDownloadUrl }
