@@ -2,9 +2,16 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI PDF Abstract Generator - Academic Summary Tool | PDFilio',
-  description: 'Generate academic abstracts automatically. Perfect for research papers and academic documents.',
-  keywords: 'PDF abstract generator, academic abstract, research paper summary, abstract AI',
+  title: 'AI PDF Abstract Generator – Create Research Abstracts | PDFilio',
+  description: 'Create a concise draft abstract from a research paper or supported PDF. Review the generated abstract against the source before submission.',
+  keywords: ['PDF abstract generator', 'AI abstract generator', 'research paper abstract', 'academic abstract tool'],
+  alternates: { canonical: 'https://pdfilio.com/pdf-abstract-generator' },
+  openGraph: {
+    title: 'AI PDF Abstract Generator – Create Research Abstracts | PDFilio',
+    description: 'Create a concise draft abstract from a research paper or supported PDF and review it against the source.',
+    url: 'https://pdfilio.com/pdf-abstract-generator',
+    type: 'website',
+  },
 };
 
 export default function Page() {
@@ -12,16 +19,31 @@ export default function Page() {
     <ToolLandingLayout
       toolName="AI PDF Abstract Generator"
       toolSlug="pdf-abstract-generator"
-      description="Generate professional academic abstracts automatically. Perfect for research papers and scholarly documents."
-      mainContent="Academic focus. Creates abstracts in academic style suitable for research papers. Concise, professional, publication-ready."
-      features={['Academic format', 'Research focused', 'Abstract style', 'Professional tone', 'Citation ready', 'Publication format', 'Scholarly language', 'Academic standards']}
-      benefits={['Academic style', 'Research ready', 'Publication suitable', 'Professional format', 'Time saving', 'Quality assured', 'Standards compliant', 'Scholarly output']}
-      useCase={['Research papers', 'Academic writing', 'Paper submission', 'Literature review', 'Thesis support', 'Journal preparation', 'Academic conference', 'Scholarly work'].join('\n')}
-      testimonials={[{name: 'Prof. Elena Rodriguez', role: 'Academic Advisor', text: 'Generates abstracts in proper academic format. Perfect for student papers and research.'}]}
-      faqs={[{q: 'Academic format?', a: 'Yes, generates abstracts in proper academic style suitable for publication.'}]}
-      relatedTools={[{name: 'AI PDF Summary', slug: 'ai-pdf-summary'}]}
+      description="Create a concise draft abstract from a research paper or supported PDF, then review the result against the original document."
+      mainContent={`Use AI assistance to turn a longer research document into a concise abstract draft. The generated text is a starting point, not a guarantee of publication acceptance or academic compliance.
+
+## How it works
+
+Upload a supported research PDF, generate an abstract draft, and compare the result with the source document. Check the study purpose, methods, key findings, limitations, and conclusion before using the abstract in academic work.
+
+## Review before submission
+
+AI-generated abstracts can omit context or misstate details. Always verify important claims, numbers, terminology, and conclusions against the original paper and follow the requirements of your target journal, conference, institution, or course.`}
+      features={['Research-document focused workflow', 'Concise abstract drafting', 'Key-point extraction support', 'Source review workflow', 'Academic writing assistance', 'Structured abstract drafting']}
+      benefits={['Reduce first-draft time', 'Start from the source document', 'Keep key findings visible', 'Review claims before submission']}
+      useCase={['Research papers', 'Literature review', 'Thesis and dissertation drafts', 'Journal article drafts', 'Conference paper preparation', 'Academic study materials'].join('\n')}
+      testimonials={[]}
+      faqs={[
+        { q: 'Is the generated abstract ready to submit without review?', a: 'No. Treat it as a draft and verify the purpose, methods, findings, numbers, limitations, and conclusions against the original source.' },
+        { q: 'Can it summarize a research PDF?', a: 'Yes, when the PDF is supported by the current upload and processing configuration. Results depend on document quality and available text extraction.' },
+      ]}
+      relatedTools={[
+        { name: 'AI PDF Summary', slug: 'ai-summary' },
+        { name: 'AI Research Assistant', slug: 'ai-research-assistant' },
+        { name: 'OCR PDF', slug: 'ocr' },
+      ]}
       primaryKeyword="PDF abstract generator"
-      secondaryKeywords={['academic abstract', 'research paper summary']}
+      secondaryKeywords={['AI abstract generator', 'research paper abstract', 'academic abstract tool']}
     />
   );
-}
+};
