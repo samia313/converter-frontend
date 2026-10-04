@@ -64,9 +64,6 @@ router.post('/', upload.single('file'), async (req, res, next) => {
     if (!allowed.includes(ext)) throw fail(`Unsupported input format for ${tool}`, 'UNSUPPORTED_INPUT_FORMAT', 415)
     if (ext === '.pdf') assertPdf(req.file.path)
 
-    const inputName = `jobs/${uuidv4()}/input${ext}`
-    const inputKey = await spaces.uploadFile(req.file.path, inputName, req.file.mimetype || 'application/octet-stream')
-
     let options = {}
     if (req.body?.options) {
       try { options = JSON.parse(req.body.options) } catch { throw fail('Invalid conversion options JSON', 'INVALID_OPTIONS') }
@@ -74,6 +71,9 @@ router.post('/', upload.single('file'), async (req, res, next) => {
     if (req.body?.level) options.level = req.body.level
     if (req.body?.password) options.password = req.body.password
     if (req.body?.language) options.language = req.body.language
+
+    const inputName = `jobs/${uuidv4()}/input${ext}`
+    const inputKey = await spaces.uploadFile(req.file.path, inputName, req.file.mimetype || 'application/octet-stream')
 
     let job
     try {
