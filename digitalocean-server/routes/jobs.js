@@ -79,13 +79,6 @@ router.post('/', upload.single('file'), async (req, res, next) => {
       submittedAt: new Date().toISOString(),
     })
 
-    await conversionQueue.add('cleanup-output', { key: inputKey }, {
-      delay: settings.outputTtlMs + (60 * 60 * 1000),
-      attempts: 3,
-      removeOnComplete: true,
-      removeOnFail: { age: 7 * 24 * 60 * 60 },
-    }).catch((error) => console.warn('[QUEUE] input cleanup scheduling failed:', error.message))
-
     res.status(202).json({
       success: true,
       jobId: String(job.id),
