@@ -30,9 +30,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Install Python PDF to Word engine
+        working-directory: digitalocean-server
+        run: python3 -m pip install -r engines/requirements.txt
+
       - name: Install conversion server dependencies
         working-directory: digitalocean-server
         run: npm install
+      - name: Python engine syntax check
+        working-directory: digitalocean-server
+        run: python3 -m py_compile engines/pdf_to_docx.py
+
       - name: Syntax check
         working-directory: digitalocean-server
         run: npm run check
