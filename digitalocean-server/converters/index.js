@@ -87,7 +87,57 @@ async function libreOfficeConvert(inputPath, outputPath, format) {
   })
 }
 
-const pdfToWord = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'docx')
+async function pdfToWord(inputPath, outputPath) {
+  return withConversionSlot(async () => {
+    const outputDir = path.dirname(outputPath)
+    const pythonScript = path.join(__dirname, '..', 'engines', 'pdf_to_docx.py')
+
+    // Primary engine: pdf2docx. It reconstructs editable Word structure from
+    // PDF layout instead of relying on LibreOffice's PDF/Draw importer.
+    try {
+      await runCommand('python3', [pythonScript, inputPath, outputPath])
+      ensureOutput(outputPath)
+      const fd = fs.openSync(outputPath, 'r')
+      try {
+        const header = Buffer.alloc(2)
+        const read = fs.readSync(fd, header, 0, 2, 0)
+        if (read !== 2 || header.toString('binary') !== 'PK') {
+          const error = new Error('PDF to Word produced an invalid DOCX container')
+          error.code = 'INVALID_DOCX_OUTPUT'
+          throw error
+        }
+      } finally { fs.closeSync(fd) }
+      return
+    } catch (error) {
+      if (error.code === 'INVALID_DOCX_OUTPUT') throw error
+    }
+
+    const profileDir = path.join(outputDir, '.lo-profile')
+    fs.mkdirSync(profileDir, { recursive: true, mode: 0o700 })
+    try {
+      await runCommand('libreoffice', [
+        '--headless', '--nologo', '--nodefault', '--nofirststartwizard', '--nolockcheck',
+        `-env:UserInstallation=file://${profileDir}`,
+        '--convert-to', 'docx:Office Open XML Text',
+        '--outdir', outputDir, inputPath,
+      ])
+      const generated = path.join(outputDir, `${path.basename(inputPath, path.extname(inputPath))}.docx`)
+      ensureOutput(generated)
+      if (generated !== outputPath) fs.renameSync(generated, outputPath)
+      ensureOutput(outputPath)
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        const unavailable = new Error('PDF to Word requires the pdf2docx Python engine or LibreOffice on the conversion server.')
+        unavailable.code = 'PDF_TO_WORD_ENGINE_UNAVAILABLE'
+        unavailable.status = 503
+        throw unavailable
+      }
+      throw error
+    } finally {
+      fs.rmSync(profileDir, { recursive: true, force: true })
+    }
+  })
+}
 const wordToPdf = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'pdf:writer_pdf_Export')
 const pdfToExcel = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'xlsx')
 const pdfToPowerPoint = (inputPath, outputPath) => libreOfficeConvert(inputPath, outputPath, 'pptx')
