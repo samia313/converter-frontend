@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import UnifiedToolsGrid from '@/components/unified-tools-grid'
 
 export const metadata: Metadata = {
-  title: 'PDF Tools – Free Online PDF Tools | PDFilio',
+  title: 'PDF Tools – Free Online PDF Tools',
   description:
     'Explore PDFilio PDF tools for merging, splitting, compressing, converting, editing, OCR, signing, and managing PDF files online.',
   alternates: {
