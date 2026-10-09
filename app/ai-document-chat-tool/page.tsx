@@ -2,7 +2,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Document Chat Tool – Chat with Documents Online | PDFilio',
+  title: 'AI Document Chat Tool – Chat with Documents Online',
   description: 'Chat with supported documents using AI assistance. Ask questions, find information, and review answers against the original document.',
   keywords: 'AI document chat, document chat tool, chat with documents, AI document assistant',
   alternates: { canonical: 'https://pdfilio.com/ai-document-chat-tool' },
