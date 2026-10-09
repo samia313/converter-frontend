@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Sitemap - PDFilio',
   description: 'Complete sitemap of all PDFilio pages and PDF tools. Browse all available features and resources.',
   alternates: {
-    canonical: 'https://pdfilio.com/sitemap',
+    canonical: 'https://pdfilio.com/sitemap-page',
   },
 };
 
@@ -143,7 +143,7 @@ export default function SitemapPage() {
             <li>Connect with our API documentation</li>
           </ul>
           <p className="text-gray-600 text-sm mt-4">
-            For a machine-readable XML sitemap, visit <Link href="/sitemap.xml" className="text-blue-600 hover:underline">/sitemap.xml</Link>
+            For a machine-readable XML sitemap, visit <Link href="/sitemap-index.xml" className="text-blue-600 hover:underline">/sitemap-index.xml</Link>
           </p>
         </section>
       </div>
