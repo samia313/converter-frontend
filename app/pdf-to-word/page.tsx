@@ -4,7 +4,7 @@ import PDFToWordTool from '@/components/tools/pdf-to-word-tool';
 
 export const metadata: Metadata = {
   title: 'PDF to Word Online – Convert PDF to DOCX',
-  description: 'Convert PDF to Word DOCX online and turn supported PDFs into editable Word documents. Convert reports, forms, and text-based PDFs, then review formatting, tables, images, and scanned pages.',
+  description: 'Convert PDF to Word online and create editable DOCX files from supported PDFs. Review formatting, tables, images, and scanned pages after conversion.',
   keywords: [
     'PDF to Word',
     'PDF to Word converter',
