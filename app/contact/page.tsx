@@ -7,7 +7,6 @@ import Link from 'next/link';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-  const [submitted, setSubmitted] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -16,12 +15,10 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setSubmitted(false);
-    }, 3000);
+    const subject = encodeURIComponent(formData.subject || 'PDFilio support request');
+    const body = encodeURIComponent(`Name: ${formData.name}\nReply email: ${formData.email}\n\n${formData.message}`);
+    // This form has no server-side submission endpoint; open an email draft rather than falsely claiming delivery.
+    window.location.href = `mailto:support@pdfilio.com?subject=${subject}&body=${body}`;
   };
 
   const contactOptions = [
@@ -58,9 +55,8 @@ export default function ContactPage() {
           </div>
 
           <div className="max-w-2xl mx-auto bg-white border border-gray-200 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
-            {submitted ? <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center"><p className="text-green-800 font-semibold">Thank you for your message! We'll get back to you soon.</p></div> : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Send us a Message</h2><p className="mb-6 text-sm leading-6 text-gray-600">Submitting opens your email app with your message prepared. You will need to send the email to contact support.</p>
+            <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div><label className="block text-sm font-semibold text-gray-900 mb-2">Full Name</label><input type="text" name="name" value={formData.name} onChange={handleInputChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Your name" /></div>
                   <div><label className="block text-sm font-semibold text-gray-900 mb-2">Email Address</label><input type="email" name="email" value={formData.email} onChange={handleInputChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="your@email.com" /></div>
@@ -69,7 +65,6 @@ export default function ContactPage() {
                 <div><label className="block text-sm font-semibold text-gray-900 mb-2">Message</label><textarea name="message" value={formData.message} onChange={handleInputChange} required rows={6} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Your message..." /></div>
                 <button type="submit" className="w-full bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors">Send Message</button>
               </form>
-            )}
           </div>
         </section>
 

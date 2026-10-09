@@ -4,7 +4,7 @@ import { editorialBlogPosts } from '@/lib/content/editorial-blog-posts'
 
 export const BASE_URL = 'https://pdfilio.com'
 
-const corePages = ['/', '/tools', '/features', '/blog', '/ai-tools', '/comparisons', '/guides', '/use-cases', '/security', '/about', '/contact', '/privacy', '/terms', '/cookies']
+const corePages = ['/', '/tools', '/features', '/blog', '/ai-tools', '/comparisons', '/guides', '/use-cases', '/security', '/about', '/contact', '/pricing', '/faq', '/privacy', '/terms', '/cookies']
 const pdfTools = ['merge-pdf','merge-pdf-files','merge-pdf-online','split-pdf','split-pdf-files','split-pdf-online','rotate-pdf','rotate-pdf-files','rotate-pages','organize-pdf','remove-pages','remove-pages-online','crop-pdf','crop-pdf-online','page-numbers','page-numbers-online','compress-pdf','compress-pdf-online','compress-pdf-files','flatten-pdf','extract-pages','pdf-metadata','pdf-metadata-editor','batch-conversion','qr-code-generator']
 const converters = ['word-to-pdf','word-to-pdf-online','word-document-to-pdf','excel-to-pdf','excel-spreadsheet-to-pdf','powerpoint-to-pdf','powerpoint-presentation-to-pdf','jpg-to-pdf','jpg-images-to-pdf','html-to-pdf','html-file-to-pdf','image-to-pdf','images-to-pdf','pdf-to-word','pdf-to-word-online','pdf-file-to-word','pdf-to-excel','pdf-file-to-excel','pdf-to-powerpoint','pdf-file-to-powerpoint','pdf-to-jpg','pdf-file-to-jpg','pdf-to-png','pdf-file-to-png']
 const securityEditing = ['protect-pdf','protect-pdf-online','password-protect-pdf','unlock-pdf','unlock-pdf-online','sign-pdf','sign-pdf-online','edit-pdf','edit-pdf-online','view-and-annotate','watermark-pdf','watermark-pdf-online','redact-pdf','redact-pdf-online']

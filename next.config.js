@@ -22,10 +22,11 @@ const nextConfig = {
     ],
   }],
   redirects: async () => [
-    { source: '/tools-sitemap.xml', destination: '/sitemap.xml', permanent: true },
-    { source: '/blog-sitemap.xml', destination: '/sitemap.xml', permanent: true },
-
-    { source: '/sitemap', destination: '/sitemap.xml', permanent: true },
+    // Sitemap aliases must resolve to routes that actually exist.
+    { source: '/tools-sitemap.xml', destination: '/sitemap-index.xml', permanent: true },
+    { source: '/blog-sitemap.xml', destination: '/sitemap-index.xml', permanent: true },
+    { source: '/sitemap.xml', destination: '/sitemap-index.xml', permanent: true },
+    { source: '/sitemap', destination: '/sitemap-page', permanent: true },
     { source: '/robots', destination: '/robots.txt', permanent: true },
     { source: '/blog/rotate-pdf-pages-correct-orientation', destination: '/rotate-pdf', permanent: true },
     { source: '/blog/convert-pdf-to-word-editable', destination: '/pdf-to-word', permanent: true },
@@ -42,6 +43,7 @@ const nextConfig = {
     { source: '/add-page-numbers', destination: '/page-numbers', permanent: true },
     { source: '/delete-pdf-pages', destination: '/remove-pages', permanent: true },
     { source: '/pdf-compressor', destination: '/compress-pdf', permanent: true },
+    // Legacy premium URL points to the canonical pricing page.
     { source: '/premium', destination: '/pricing', permanent: true },
     { source: '/resources', destination: '/guides', permanent: true },
 
