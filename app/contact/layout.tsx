@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Contact PDFilio Support | PDFilio',
+  title: 'Contact PDFilio Support',
   description: 'Contact PDFilio for product support, privacy questions, and help with online PDF tools.',
   alternates: { canonical: 'https://pdfilio.com/contact' },
   openGraph: {
