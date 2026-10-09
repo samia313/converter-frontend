@@ -43,7 +43,10 @@ const nextConfig = {
     { source: '/add-page-numbers', destination: '/page-numbers', permanent: true },
     { source: '/delete-pdf-pages', destination: '/remove-pages', permanent: true },
     { source: '/pdf-compressor', destination: '/compress-pdf', permanent: true },
-    { source: '/premium', destination: '/pricing', permanent: true },
+    // Pricing and FAQ have no standalone route in the current app; send visitors to live destinations.
+    { source: '/pricing', destination: '/tools', permanent: true },
+    { source: '/faq', destination: '/contact', permanent: true },
+    { source: '/premium', destination: '/tools', permanent: true },
     { source: '/resources', destination: '/guides', permanent: true },
 
     // Old category tool-hub URLs are no longer standalone pages. Preserve their intent by
