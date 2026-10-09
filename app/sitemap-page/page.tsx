@@ -24,7 +24,9 @@ const sections: { title: string; entries: SitemapEntry[] }[] = [
 ]
 
 function entryPath(entry: SitemapEntry) {
-  return typeof entry === 'string' ? entry : entry.url
+  const path = typeof entry === 'string' ? entry : entry.url
+  if (path === '/') return '/'
+  return path.startsWith('/') ? path : `/${path}`
 }
 
 function entryLabel(entry: SitemapEntry) {
