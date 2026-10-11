@@ -24,8 +24,6 @@ const nextConfig = {
   redirects: async () => [
     // Sitemap aliases must resolve to routes that actually exist.
     { source: '/tools-sitemap.xml', destination: '/sitemap-index.xml', permanent: true },
-    { source: '/blog-sitemap.xml', destination: '/sitemap-index.xml', permanent: true },
-    { source: '/sitemap.xml', destination: '/sitemap-index.xml', permanent: true },
     { source: '/sitemap', destination: '/sitemap-page', permanent: true },
     { source: '/robots', destination: '/robots.txt', permanent: true },
     { source: '/blog/rotate-pdf-pages-correct-orientation', destination: '/rotate-pdf', permanent: true },
