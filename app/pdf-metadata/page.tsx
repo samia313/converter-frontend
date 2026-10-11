@@ -3,11 +3,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import PdfMetadataTool from '@/components/tools/pdf-metadata-tool';
 
 export const metadata: Metadata = {
-  title: 'PDF Metadata Editor Online – Edit PDF Properties | PDFilio',
+  title: 'PDF Metadata Editor Online – Edit PDF Properties',
   description: 'Edit PDF metadata online, including title, author, subject, keywords, creator, and producer fields. Create a new PDF without changing the original file.',
   keywords: ['PDF metadata editor','edit PDF metadata','PDF properties','PDF title editor','PDF author metadata','PDF keywords'],
   alternates: { canonical: 'https://pdfilio.com/pdf-metadata' },
-  openGraph: { title: 'PDF Metadata Editor Online | PDFilio', description: 'Edit common PDF document properties online.', url: 'https://pdfilio.com/pdf-metadata', type: 'website' },
+  openGraph: { title: 'PDF Metadata Editor Online', description: 'Edit common PDF document properties online.', url: 'https://pdfilio.com/pdf-metadata', type: 'website' },
 };
 
 export default function PdfMetadataPage() {
