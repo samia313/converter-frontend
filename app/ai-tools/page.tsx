@@ -36,9 +36,31 @@ const CANONICAL_AI_ROUTES: Record<string, string> = {
   extraction: '/ocr',
 };
 
+// Prefer the closest matching published landing page; use category routes only as a safe fallback.
+const TOOL_ROUTES_BY_SLUG: Record<string, string> = {
+  'ai-chat-pdf': '/pdf-chat',
+  'ai-document-chat': '/ai-document-chat-tool',
+  'ai-chat-large-pdf': '/ai-document-chat-tool',
+  'ai-chat-scanned-pdf': '/ai-document-chat-tool',
+  'ai-chat-pdf-without-login': '/pdf-chat',
+  'ai-document-translation-tool': '/translate-pdf-online',
+  'ai-ocr-pdf-translator': '/translate-pdf-online',
+  'ai-document-translator': '/translate-pdf-online',
+  'ai-document-summarizer': '/ai-summary',
+  'ai-file-summarizer': '/ai-summary',
+  'ai-academic-research-assistant': '/ai-academic-research-assistant',
+  'ai-dissertation-assistant': '/ai-dissertation-assistant',
+  'ai-document-research-assistant': '/ai-document-research-assistant',
+  'ai-journal-research-assistant': '/ai-journal-research-assistant',
+  'ai-document-rewriter': '/ai-document-rewriter',
+  'ai-ocr': '/ocr',
+};
+
 function ToolCard({ tool }: { tool: (typeof AI_TOOLS_MAPPING)[0] }) {
+  const href = TOOL_ROUTES_BY_SLUG[tool.slug] ?? CANONICAL_AI_ROUTES[tool.category] ?? '/ai-tools';
+
   return (
-    <Link href={CANONICAL_AI_ROUTES[tool.category] ?? '/ai-tools'} className="group bg-white rounded-xl shadow hover:shadow-lg transition border border-gray-200 hover:border-blue-300 p-6">
+    <Link href={href} className="group bg-white rounded-xl shadow hover:shadow-lg transition border border-gray-200 hover:border-blue-300 p-6">
       <div className="flex items-start justify-between mb-4">
         <div>
           <h3 className="font-semibold text-lg text-gray-900 group-hover:text-blue-600 transition">{tool.name}</h3>
