@@ -275,6 +275,10 @@ const nextConfig = {
     { source: '/ask-pdf-questions', destination: '/pdf-chat', permanent: true },
 
     // Consolidate duplicate PDF summarization landing pages.
+    // Next GSC 404 audit batch: retired use-case URLs with direct tool equivalents.
+    { source: '/use-cases/split-pdf-for-upload', destination: '/split-pdf', permanent: true },
+    { source: '/use-cases/merge-pdf-for-resume', destination: '/merge-pdf', permanent: true },
+    { source: '/use-cases/split-pdf-for-sharing', destination: '/split-pdf', permanent: true },
   ],
   rewrites: async () => ({ beforeFiles: [], afterFiles: [], fallback: [] }),
   turbopack: {},
