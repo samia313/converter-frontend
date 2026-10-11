@@ -3,7 +3,7 @@ import PDFChatTool from '@/components/tools/pdf-chat-tool';
 import ToolLandingLayout from '@/components/tool-landing-layout';
 
 export const metadata: Metadata = {
-  title: 'PDF Chat with AI – Ask Questions About PDF Documents | PDFilio',
+  title: 'PDF Chat with AI – Ask Questions About PDF Documents',
   description: 'Chat with supported PDF documents using AI. Ask questions, explore document content, and find information faster online with PDFilio.',
   keywords: ['PDF chat', 'AI PDF chat', 'chat with PDF', 'ask PDF questions', 'PDF chatbot', 'AI PDF reader', 'talk to PDF'],
   alternates: { canonical: 'https://pdfilio.com/pdf-chat' },
