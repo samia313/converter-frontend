@@ -27,6 +27,13 @@ const nextConfig = {
     { source: '/blog/compress-pdf-for-email-best-practices', destination: '/blog/how-to-make-a-pdf-smaller-for-email', permanent: true },
     { source: '/guides/how-to-reduce-pdf-file-size', destination: '/guides/how-to-compress-pdf', permanent: true },
 
+    // Confirmed obsolete guide URLs -> closest live tool landing pages.
+    { source: '/guides/how-to-delete-pages-from-pdf', destination: '/remove-pages', permanent: true },
+    { source: '/guides/how-to-remove-pdf-password', destination: '/unlock-pdf', permanent: true },
+    { source: '/guides/how-to-add-watermark-to-pdf', destination: '/watermark-pdf', permanent: true },
+    { source: '/guides/how-to-convert-pdf-to-word', destination: '/pdf-to-word', permanent: true },
+    { source: '/guides/how-to-convert-pdf-to-png', destination: '/pdf-to-png', permanent: true },
+
     // Sitemap aliases must resolve to routes that actually exist.
     { source: '/tools-sitemap.xml', destination: '/sitemap-index.xml', permanent: true },
     { source: '/sitemap', destination: '/sitemap-page', permanent: true },
