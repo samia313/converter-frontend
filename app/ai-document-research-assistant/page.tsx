@@ -70,11 +70,11 @@ A practical workflow is to provide supported documents, define the research ques
         { q: 'Is AI Document Research Assistant free?', a: 'PDFilio provides the online research tool; current usage limits, account requirements, and availability depend on the product configuration shown in the interface.' },
       ]}
       relatedTools={[
-        { name: 'AI Document Chat', slug: 'ai-document-chat' },
-        { name: 'Chat with PDF', slug: 'chat-with-pdf' },
-        { name: 'AI Document Summarizer', slug: 'ai-document-summarizer' },
+        { name: 'AI Document Chat', slug: 'ai-document-chat-tool' },
+        { name: 'Chat with PDF', slug: 'pdf-chat' },
+        { name: 'AI PDF Summarizer', slug: 'ai-summary' },
         { name: 'AI Document Rewriter', slug: 'ai-document-rewriter' },
-        { name: 'AI Document Assistant', slug: 'ai-document-assistant' },
+        { name: 'AI Research Assistant', slug: 'ai-research-assistant' },
       ]}
       primaryKeyword="AI document research assistant"
       secondaryKeywords={['document research AI', 'AI document analysis', 'research assistant AI', 'document comparison AI', 'AI research tool', 'document insights']}
