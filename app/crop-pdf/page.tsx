@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout'
 import CropPdfTool from '@/components/tools/crop-pdf-tool'
 
 export const metadata: Metadata = {
-  title: 'Crop PDF Online – Trim PDF Pages and Margins'
+  title: 'Crop PDF Online – Trim PDF Pages and Margins',
   description: 'Crop PDF pages online by trimming visible margins. Apply precise crop margins to create a cleaner PDF for printing, sharing, and editing.',
   keywords: ['crop PDF', 'crop PDF online', 'trim PDF pages', 'crop PDF pages', 'remove PDF margins'],
   alternates: { canonical: 'https://pdfilio.com/crop-pdf' },
