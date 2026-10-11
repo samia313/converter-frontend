@@ -2,7 +2,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Resume Builder Online | Create a Professional Resume | PDFilio',
+  title: 'AI Resume Builder Online | Create a Professional Resume',
   description: 'Create and refine professional resumes with AI assistance. Improve wording, organize experience, and tailor your resume to supported job requirements.',
   keywords: ['AI resume builder', 'AI resume generator', 'resume builder online', 'professional resume builder', 'ATS resume'],
   alternates: { canonical: 'https://pdfilio.com/ai-resume-builder' },
