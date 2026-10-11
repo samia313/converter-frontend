@@ -5,7 +5,7 @@ import { editorialBlogPosts } from '@/lib/content/editorial-blog-posts'
 export const BASE_URL = 'https://pdfilio.com'
 
 const corePages = ['/', '/tools', '/features', '/blog', '/ai-tools', '/comparisons', '/guides', '/use-cases', '/security', '/about', '/contact', '/pricing', '/faq', '/privacy', '/terms', '/cookies']
-const pdfTools = ['merge-pdf','split-pdf','rotate-pdf','organize-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf','flatten-pdf','extract-pages','pdf-metadata','pdf-metadata-editor','batch-conversion','qr-code-generator']
+const pdfTools = ['merge-pdf','split-pdf','rotate-pdf','organize-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf','flatten-pdf','extract-pages','pdf-metadata-editor','batch-conversion','qr-code-generator']
 const converters = ['word-to-pdf','excel-to-pdf','powerpoint-to-pdf','jpg-to-pdf','html-to-pdf','image-to-pdf','pdf-to-word','pdf-to-excel','pdf-to-powerpoint','pdf-to-jpg','pdf-to-png']
 const securityEditing = ['protect-pdf','password-protect-pdf','unlock-pdf','sign-pdf','edit-pdf','view-and-annotate','watermark-pdf','redact-pdf']
 const ocrExtraction = ['ocr','ai-table-extraction']
