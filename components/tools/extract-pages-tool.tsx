@@ -37,7 +37,7 @@ export default function ExtractPagesTool() {
       <div className="container mx-auto max-w-2xl px-4">
         <div className="text-center mb-10">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-blue-700"><FileOutput className="h-7 w-7" /></div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Extract Pages from PDF</h1>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Extract Pages from PDF</h2>
           <p className="text-lg text-gray-600">Select specific pages and create a new PDF containing only those pages.</p>
         </div>
         <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">

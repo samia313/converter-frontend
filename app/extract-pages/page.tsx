@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import ExtractPagesTool from '@/components/tools/extract-pages-tool';
 
 export const metadata: Metadata = {
-  title: 'Extract Pages from PDF Online – Create a New PDF | PDFilio',
+  title: 'Extract Pages from PDF Online – Create a New PDF',
   description: 'Extract selected pages from a PDF online and create a separate PDF containing only the pages you choose.',
   keywords: ['extract pages from PDF', 'extract PDF pages', 'extract pages from PDF online', 'PDF page extractor'],
   alternates: { canonical: 'https://pdfilio.com/extract-pages' },

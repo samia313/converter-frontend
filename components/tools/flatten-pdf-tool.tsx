@@ -46,7 +46,7 @@ export default function FlattenPdfTool() {
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-blue-700">
             <Layers3 className="h-7 w-7" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Flatten PDF Online</h1>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Flatten PDF Online</h2>
           <p className="text-lg text-gray-600">Flatten supported PDF form fields into a non-editable page appearance.</p>
         </div>
 

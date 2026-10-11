@@ -25,7 +25,7 @@ export default function PageNumbersTool() {
   function reset(){resetUrl();setFile(null);setError('');setStart('1');setFontSize('10');setPosition('bottom-center');if(inputRef.current)inputRef.current.value=''}
   return <section className="mx-auto w-full max-w-3xl px-4 py-8">
     <div className="rounded-2xl border bg-background p-5 shadow-sm sm:p-7">
-      <h1 className="text-2xl font-bold sm:text-3xl">Add Page Numbers to PDF</h1>
+      <h2 className="text-2xl font-bold sm:text-3xl">Add Page Numbers to PDF</h2>
       <p className="mt-2 text-muted-foreground">Add sequential numbers to every page with a selectable position and font size.</p>
       <input ref={inputRef} type="file" accept=".pdf,application/pdf" onChange={e=>{resetUrl();setFile(e.target.files?.[0]??null);setError('')}} className="mt-6 block w-full rounded-lg border p-3 text-sm"/>
       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
