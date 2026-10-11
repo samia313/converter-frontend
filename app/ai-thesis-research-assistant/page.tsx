@@ -2,11 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Thesis Research Assistant – Organize Thesis Research and Literature | PDFilio',
+  title: 'AI Thesis Research Assistant – Organize Thesis Research and Literature',
   description: 'AI-assisted thesis research support for literature organization, document analysis, finding synthesis, and research preparation. Check important conclusions against sources.',
   keywords: 'AI thesis research assistant, thesis research AI, literature review assistant, academic research tool',
   alternates: { canonical: 'https://pdfilio.com/ai-thesis-research-assistant' },
-  openGraph: { title: 'AI Thesis Research Assistant – Organize Thesis Research and Literature | PDFilio', description: 'AI-assisted thesis research support for literature organization, document analysis, finding synthesis, and research preparation. Check important conclusions against sources.', url: 'https://pdfilio.com/ai-thesis-research-assistant', type: 'website' },
+  openGraph: { title: 'AI Thesis Research Assistant – Organize Thesis Research and Literature', description: 'AI-assisted thesis research support for literature organization, document analysis, finding synthesis, and research preparation. Check important conclusions against sources.', url: 'https://pdfilio.com/ai-thesis-research-assistant', type: 'website' },
 };
 
 export default function Page() {
