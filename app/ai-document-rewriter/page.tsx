@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
 
 export const metadata: Metadata = {
-  title: 'AI Document Rewriter Online – Rewrite & Improve Documents | PDFilio',
+  title: 'AI Document Rewriter Online – Rewrite & Improve Documents',
   description: 'Rewrite and improve supported document content with AI. Refine wording, clarity, tone, and readability while reviewing the generated result before using it.',
   keywords: ['AI document rewriter', 'AI rewrite document', 'document rewriting AI', 'rewrite text with AI', 'AI document editor', 'AI writing assistant'],
   alternates: { canonical: 'https://pdfilio.com/ai-document-rewriter' },
