@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import ExcelToPDFTool from '@/components/tools/excel-to-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Excel to PDF Converter Online – Convert XLSX to PDF | PDFilio',
+  title: 'Excel to PDF Converter Online – Convert XLSX to PDF'
   description: 'Convert supported XLSX spreadsheets to PDF online. Prepare reports, tables, budgets, invoices, and workbooks for sharing, printing, and archiving.',
   keywords: ['Excel to PDF', 'Excel to PDF converter', 'convert Excel to PDF', 'XLSX to PDF', 'spreadsheet to PDF', 'Excel to PDF online'],
   alternates: { canonical: 'https://pdfilio.com/excel-to-pdf' },

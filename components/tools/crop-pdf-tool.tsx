@@ -29,7 +29,7 @@ export default function CropPdfTool() {
 
   return <section className="mx-auto w-full max-w-3xl px-4 py-8">
     <div className="rounded-2xl border bg-background p-5 shadow-sm sm:p-7">
-      <h1 className="text-2xl font-bold sm:text-3xl">Crop PDF</h1>
+      <h2 className="text-2xl font-bold sm:text-3xl">Crop PDF</h2>
       <p className="mt-2 text-muted-foreground">Trim visible page margins using point measurements. The same crop margins are applied to every page.</p>
       <input ref={inputRef} type="file" accept=".pdf,application/pdf" onChange={e => { resetUrl(); setFile(e.target.files?.[0] ?? null); setError('') }} className="mt-6 block w-full rounded-lg border p-3 text-sm" />
       <div className="mt-5 grid grid-cols-2 gap-4">
