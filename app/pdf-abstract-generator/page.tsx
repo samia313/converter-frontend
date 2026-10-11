@@ -2,12 +2,12 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI PDF Abstract Generator – Create Research Abstracts | PDFilio',
+  title: 'AI PDF Abstract Generator – Create Research Abstracts',
   description: 'Create a concise draft abstract from a research paper or supported PDF. Review the generated abstract against the source before submission.',
   keywords: ['PDF abstract generator', 'AI abstract generator', 'research paper abstract', 'academic abstract tool'],
   alternates: { canonical: 'https://pdfilio.com/pdf-abstract-generator' },
   openGraph: {
-    title: 'AI PDF Abstract Generator – Create Research Abstracts | PDFilio',
+    title: 'AI PDF Abstract Generator – Create Research Abstracts',
     description: 'Create a concise draft abstract from a research paper or supported PDF and review it against the source.',
     url: 'https://pdfilio.com/pdf-abstract-generator',
     type: 'website',
