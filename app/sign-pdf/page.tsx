@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import SignPdfTool from '@/components/tools/sign-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Sign PDF Online – Add an Electronic Signature to PDF | PDFilio',
+  title: 'Sign PDF Online – Add an Electronic Signature to PDF',
   description: 'Sign supported PDF documents online by adding an electronic signature or signature mark. Review the signed PDF before sharing or submitting it.',
   keywords: ['sign PDF', 'sign PDF online', 'electronic signature PDF', 'add signature to PDF', 'sign document online', 'PDF signature', 'e-sign PDF'],
   alternates: { canonical: 'https://pdfilio.com/sign-pdf' },
