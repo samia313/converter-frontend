@@ -2,12 +2,12 @@ import type { Metadata } from 'next'
 import ToolLandingLayout from '@/components/tool-landing-layout'
 
 export const metadata: Metadata = {
-  title: 'PDF Metadata Editor Online | Edit PDF Properties | PDFilio',
+  title: 'PDF Metadata Editor Online | Edit PDF Properties',
   description: 'Edit PDF metadata online, including title, author, subject, keywords, creator, and producer. Create a separate PDF with updated document properties.',
   keywords: ['PDF metadata editor', 'edit PDF metadata', 'PDF properties editor', 'PDF title editor', 'PDF author editor', 'edit PDF properties online'],
   alternates: { canonical: 'https://pdfilio.com/pdf-metadata-editor' },
   openGraph: {
-    title: 'PDF Metadata Editor Online | PDFilio',
+    title: 'PDF Metadata Editor Online',
     description: 'Edit common PDF document properties online.',
     url: 'https://pdfilio.com/pdf-metadata-editor',
     type: 'website',
