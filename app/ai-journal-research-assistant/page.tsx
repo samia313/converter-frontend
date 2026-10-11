@@ -2,11 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Journal Research Assistant – Analyze and Organize Research Articles | PDFilio',
+  title: 'AI Journal Research Assistant – Analyze and Organize Research Articles',
   description: 'AI-assisted support for reviewing academic journal articles, organizing findings, comparing research themes, and tracking information across supported documents.',
   keywords: 'AI journal research assistant, academic article analysis, research paper assistant, literature review AI',
   alternates: { canonical: 'https://pdfilio.com/ai-journal-research-assistant' },
-  openGraph: { title: 'AI Journal Research Assistant – Analyze and Organize Research Articles | PDFilio', description: 'AI-assisted support for reviewing academic journal articles, organizing findings, comparing research themes, and tracking information across supported documents.', url: 'https://pdfilio.com/ai-journal-research-assistant', type: 'website' },
+  openGraph: { title: 'AI Journal Research Assistant – Analyze and Organize Research Articles', description: 'AI-assisted support for reviewing academic journal articles, organizing findings, comparing research themes, and tracking information across supported documents.', url: 'https://pdfilio.com/ai-journal-research-assistant', type: 'website' },
 };
 
 export default function Page() {
