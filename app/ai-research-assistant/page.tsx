@@ -2,7 +2,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Research Assistant – Research and Document Analysis | PDFilio',
+  title: 'AI Research Assistant – Research and Document Analysis',
   description: 'AI-assisted research support for analyzing documents, organizing information, synthesizing findings, and exploring research questions.',
   keywords: ['AI research assistant', 'research assistant AI', 'AI document research', 'research analysis tool', 'AI research workflow'],
   alternates: { canonical: 'https://pdfilio.com/ai-research-assistant' },
