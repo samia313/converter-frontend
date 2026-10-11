@@ -138,6 +138,37 @@ const workflowLinksBySlug: Record<string, WorkflowLink[]> = {
     { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce the source PDF size before conversion when upload limits are a concern.' },
     { href: '/jpg-to-pdf', label: 'Convert JPG to PDF', context: 'Turn JPG images into a PDF when you need a document rather than separate images.' },
   ],
+  'excel-to-pdf': [
+    { href: '/pdf-to-excel', label: 'Convert PDF to Excel', context: 'Switch to spreadsheet output when a PDF contains tables or data you need to analyze.' },
+    { href: '/pdf-to-word', label: 'Convert PDF to Word', context: 'Use an editable DOCX workflow when you need to revise document text.' },
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce the size of a generated PDF when sharing or upload limits matter.' },
+  ],
+  'powerpoint-to-pdf': [
+    { href: '/pdf-to-powerpoint', label: 'Convert PDF to PowerPoint', context: 'Create a presentation workflow from a supported PDF when you need editable slides.' },
+    { href: '/merge-pdf', label: 'Merge PDF files', context: 'Combine the exported presentation PDF with other documents for a single handout.' },
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce the exported PDF size for sharing or uploading.' },
+  ],
+  'pdf-to-powerpoint': [
+    { href: '/powerpoint-to-pdf', label: 'Convert PowerPoint to PDF', context: 'Export a presentation to PDF when you need a shareable or printable copy.' },
+    { href: '/pdf-to-word', label: 'Convert PDF to Word', context: 'Choose Word output when the PDF content is better suited to document editing.' },
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce the size of the source PDF when upload limits are a concern.' },
+  ],
+  'pdf-to-png': [
+    { href: '/pdf-to-jpg', label: 'Convert PDF to JPG', context: 'Choose JPG output for common image-sharing and preview workflows.' },
+    { href: '/image-to-pdf', label: 'Convert images to PDF', context: 'Turn image files back into a document when you need a single PDF.' },
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce the source PDF size before conversion when needed.' },
+  ],
+  'html-to-pdf': [
+    { href: '/image-to-pdf', label: 'Convert images to PDF', context: 'Create a PDF from supported image files when your source is a scan or picture.' },
+    { href: '/merge-pdf', label: 'Merge PDF files', context: 'Combine the generated PDF with related documents into one file.' },
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce the resulting PDF size when preparing it for upload or sharing.' },
+  ],
+  'image-to-pdf': [
+    { href: '/jpg-to-pdf', label: 'Convert JPG to PDF', context: 'Use the JPG-specific workflow when your source images are JPG or JPEG files.' },
+    { href: '/merge-pdf', label: 'Merge PDF files', context: 'Combine the created PDF with other documents into one organized file.' },
+    { href: '/compress-pdf', label: 'Compress PDF files', context: 'Reduce a large image-based PDF before sharing or uploading it.' },
+  ],
+
 };
 
 function ContentBlocks({ content }: { content: string }) {
