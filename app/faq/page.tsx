@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'PDFilio FAQ | PDF Tools, File Limits, AI Features and Privacy',
+  title: 'FAQ | PDF Tools, File Limits, AI Features and Privacy',
   description: 'Get answers about PDFilio PDF conversion tools, supported formats, file-size limits, AI features, file handling, accounts, and support.',
   alternates: { canonical: 'https://pdfilio.com/faq' },
   openGraph: {
