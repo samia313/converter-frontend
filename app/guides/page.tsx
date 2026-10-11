@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const guides = [...coreGuides, ...additionalGuides];
 
-export const metadata = { title: 'PDF How-To Guides | PDFilio', description: 'Practical step-by-step guides for compressing, merging, splitting, converting, editing, OCR, and working with PDF files.', keywords: 'PDF how-to guides, PDF tutorials, PDF instructions, PDF help', alternates: { canonical: 'https://pdfilio.com/guides' } };
+export const metadata = { title: 'PDF How-To Guides', description: 'Practical step-by-step guides for compressing, merging, splitting, converting, editing, OCR, and working with PDF files.', keywords: 'PDF how-to guides, PDF tutorials, PDF instructions, PDF help', alternates: { canonical: 'https://pdfilio.com/guides' } };
 
 export default function GuidesPage() {
   const groups = { beginner: guides.filter((g) => g.difficulty === 'beginner'), intermediate: guides.filter((g) => g.difficulty === 'intermediate'), advanced: guides.filter((g) => g.difficulty === 'advanced') };
