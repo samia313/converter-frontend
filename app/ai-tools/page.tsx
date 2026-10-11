@@ -4,7 +4,7 @@ import { AI_TOOLS_MAPPING, getFeaturedAITools, getAIToolsByCategory } from '@/li
 import { ArrowRight, Zap, Globe, FileText, Search, Pencil } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'AI PDF Tools – Chat, Summarize, Translate & Analyze PDFs | PDFilio',
+  title: 'AI PDF Tools – Chat, Summarize, Translate & Analyze PDFs',
   description: 'Explore PDFilio AI tools for chatting with PDFs, summarizing documents, translating PDFs, OCR, and research assistance.',
   keywords: 'AI PDF tools, chat with PDF, AI PDF summarizer, translate PDF, PDF OCR, document analysis',
   alternates: { canonical: 'https://pdfilio.com/ai-tools' },
