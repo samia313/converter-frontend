@@ -2,11 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI PDF Reader – Read and Understand PDF Documents with AI | PDFilio',
+  title: 'AI PDF Reader – Read and Understand PDF Documents with AI',
   description: 'AI-assisted PDF reading for explanations, summaries, terminology help, and document understanding. Verify important answers against the source PDF.',
   keywords: 'AI PDF reader, PDF reading assistant, intelligent PDF reader, AI document reader',
   alternates: { canonical: 'https://pdfilio.com/ai-pdf-reader' },
-  openGraph: { title: 'AI PDF Reader – Read and Understand PDF Documents with AI | PDFilio', description: 'AI-assisted PDF reading for explanations, summaries, terminology help, and document understanding. Verify important answers against the source PDF.', url: 'https://pdfilio.com/ai-pdf-reader', type: 'website' },
+  openGraph: { title: 'AI PDF Reader – Read and Understand PDF Documents with AI', description: 'AI-assisted PDF reading for explanations, summaries, terminology help, and document understanding. Verify important answers against the source PDF.', url: 'https://pdfilio.com/ai-pdf-reader', type: 'website' },
 };
 
 export default function Page() {
