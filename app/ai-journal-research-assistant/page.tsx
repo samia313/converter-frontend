@@ -15,13 +15,15 @@ export default function Page() {
       toolName="AI Journal Research Assistant"
       toolSlug="ai-journal-research-assistant"
       description="AI-assisted support for reviewing academic journal articles, organizing findings, comparing themes, and exploring research documents."
-      mainContent={`Stay current with journal research. Track publication trends automatically. Identify emerging research. Monitor your field continuously.
+      mainContent={`Use AI-assisted document review to organize notes from supported journal articles, compare themes you identify in the source material, and prepare questions for deeper reading. The workflow depends on the documents you provide and the capabilities currently available in the tool.
 
-Publication Intelligence:
-AI monitors journal articles across your field. Identifies publication trends. Tracks researcher networks. Monitors emerging methodologies.
+## Review Journal Articles
 
-Research Evolution Tracking:
-Understand how your field evolves. Identify influential publications. Spot emerging trends. Plan future research strategically.`}
+For each article, record the research question, methods, sample or data, main findings, limitations, and publication details. Use AI-generated notes as a reading aid, then confirm each point against the article itself.
+
+## Compare Themes Carefully
+
+When reviewing several papers, build your own comparison of methods, evidence, and conclusions. This page does not imply automatic journal monitoring, citation-network tracking, alerts, or access to publication databases unless those functions are explicitly available in the product.`}
       useCase={`Publication tracking
 Research trend monitoring
 Emerging research identification
@@ -32,29 +34,27 @@ Field development tracking
 Research landscape monitoring`}
       testimonials={[]}
       features={[
-        'Publication tracking',
-        'Trend analysis',
-        'Impact assessment',
-        'Network mapping',
-        'Methodology evolution',
-        'Field monitoring',
-        'Alert system',
-        'Research mapping',
+        'Organize notes from supported articles',
+        'Review research questions and methods',
+        'Summarize source material for review',
+        'Compare themes across provided documents when supported',
+        'Identify follow-up questions',
+        'Verify findings against original articles',
       ]}
       benefits={[
-        'Stay current',
-        'Field understanding',
-        'Strategic planning',
-        'Competitive edge',
+        'Create structured article notes',
+        'Keep research observations organized',
+        'Prepare a clearer literature comparison',
+        'Spot points that need closer source review',
       ]}
       faqs={[
         {
-          q: 'Multiple journal tracking?',
-          a: 'Yes. Monitors major journals across your field simultaneously for comprehensive coverage.',
+          q: 'Does this tool automatically monitor journals?',
+          a: 'Do not assume automatic journal monitoring or database access. Use the document workflows and input formats currently offered in the product interface.'
         },
         {
-          q: 'Trend alerts?',
-          a: 'Absolutely. Receives notifications about emerging trends and important publications.',
+          q: 'Can it verify research findings for me?',
+          a: 'No AI workflow guarantees accuracy. Check findings, citations, methods, and conclusions against the original publication.'
         },
       ]}
       relatedTools={[
@@ -62,7 +62,7 @@ Research landscape monitoring`}
         { name: 'AI Literature Review Assistant', slug: 'ai-literature-review-assistant' },
       ]}
       primaryKeyword="ai journal research assistant"
-      secondaryKeywords={['journal analysis', 'publication tracking', 'research trends']}
+      secondaryKeywords={['journal article analysis', 'research paper notes', 'literature review workflow']}
     />
   );
 }

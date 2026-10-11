@@ -15,13 +15,15 @@ export default function Page() {
       toolName="AI Thesis Research Assistant"
       toolSlug="ai-thesis-research-assistant"
       description="AI-assisted thesis research support for literature organization, document analysis, finding synthesis, and structured research workflows."
-      mainContent={`Thesis research made manageable. Literature comprehensively analyzed. Findings organized systematically. Defense preparation streamlined.
+      mainContent={`Use AI-assisted document workflows to organize thesis sources, prepare notes, and identify topics for further reading. The tool can help you get started with supported documents, but it cannot guarantee a complete literature review or determine whether a thesis argument is academically sound.
 
-Research Synthesis Support:
-AI organizes thesis research. Synthesizes literature findings. Identifies research contributions. Supports thesis argumentation.
+## Organize Thesis Sources
 
-Thesis Excellence:
-Complete thesis research efficiently. Develop compelling arguments. Prepare confident defense. Achieve thesis success.`}
+For each source, capture its research question, methods, findings, limitations, and relevance to your thesis. Compare these notes with the original paper and maintain accurate source details.
+
+## Develop Your Own Argument
+
+Use generated notes to guide further reading and discussion, not as a substitute for your own analysis. Verify quotations and citations, and follow your university’s rules for AI-assisted academic work.`}
       useCase={`Literature review compilation
 Research synthesis
 Argument development
@@ -32,29 +34,27 @@ Conclusion development
 Publication preparation`}
       testimonials={[]}
       features={[
-        'Literature synthesis',
-        'Research organization',
-        'Finding compilation',
-        'Argument development',
-        'Defense preparation',
-        'Methodology documentation',
-        'Conclusion support',
-        'Publication readiness',
+        'Organize supported thesis documents',
+        'Prepare structured source notes',
+        'Explore recurring themes in provided material',
+        'Generate follow-up research questions',
+        'Review AI-assisted document summaries',
+        'Verify claims against original sources',
       ]}
       benefits={[
-        'Research organization',
-        'Process efficiency',
-        'Quality improvement',
-        'Stress reduction',
+        'Keep thesis research notes organized',
+        'Create a starting point for source comparison',
+        'Identify questions for deeper reading',
+        'Maintain a source-checking habit',
       ]}
       faqs={[
         {
-          q: 'Organize thesis research?',
-          a: 'Yes. Systematically organizes all thesis research and literature finding comprehensively.',
+          q: 'Can this tool organize all my thesis research automatically?',
+          a: 'It can assist with supported document workflows, but it does not guarantee complete coverage or automatically validate every source. Review the tool limits and check the results yourself.'
         },
         {
-          q: 'Prepare defense?',
-          a: 'Absolutely. Supports defense preparation with organized research and strong arguments.',
+          q: 'Can I rely on AI-generated thesis findings without checking them?',
+          a: 'No. Verify findings, quotations, and citations against original sources and follow your institution’s academic-integrity and AI-use policies.'
         },
       ]}
       relatedTools={[
@@ -62,7 +62,7 @@ Publication preparation`}
         { name: 'AI Academic Research Assistant', slug: 'ai-academic-research-assistant' },
       ]}
       primaryKeyword="ai thesis research assistant"
-      secondaryKeywords={['thesis support', 'master thesis', 'research organization']}
+      secondaryKeywords={['thesis research assistant', 'thesis source organization', 'thesis document analysis']}
     />
   );
 }
