@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout'
 import PageNumbersTool from '@/components/tools/page-numbers-tool'
 
 export const metadata: Metadata = {
-  title: 'Add Page Numbers to PDF Online | PDFilio',
+  title: 'Add Page Numbers to PDF Online',
   description: 'Add sequential page numbers to PDF files online. Choose the starting number, font size, and page number position.',
   keywords: ['add page numbers to PDF','page numbers PDF','number PDF pages','PDF page numbering'],
   alternates:{canonical:'https://pdfilio.com/page-numbers'},
