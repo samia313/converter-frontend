@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Cookie Policy | PDFilio',
+  title: 'Cookie Policy',
   description: 'Learn how PDFilio uses essential technologies and, with consent, analytics and advertising technologies.',
   alternates: { canonical: 'https://pdfilio.com/cookies' },
 }
