@@ -2,7 +2,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Translate PDF Online – Translate PDF Documents | PDFilio',
+  title: 'Translate PDF Online – Translate PDF Documents',
   description: 'Translate supported PDF documents online with a browser-based PDFilio workflow. Review translated text and formatting against the original document.',
   keywords: ['translate PDF online', 'PDF translator', 'translate PDF document', 'online PDF translation', 'translate PDF to English'],
   alternates: { canonical: 'https://pdfilio.com/translate-pdf-online' },
