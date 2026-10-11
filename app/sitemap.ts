@@ -15,6 +15,8 @@ const staticPages = [
   ['/', 1.0, 'weekly'],
   ['/tools', 0.9, 'weekly'],
   ['/features', 0.8, 'monthly'],
+  ['/pricing', 0.75, 'monthly'],
+  ['/faq', 0.65, 'monthly'],
   ['/blog', 0.85, 'weekly'],
   ['/ai-tools', 0.8, 'weekly'],
   ['/comparisons', 0.75, 'monthly'],
