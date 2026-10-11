@@ -42,6 +42,9 @@ const nextConfig = {
     { source: '/blog/convert-pdf-to-word-editable', destination: '/pdf-to-word', permanent: true },
     { source: '/use-cases/sign-pdf-for-students', destination: '/use-cases', permanent: true },
     { source: '/use-cases/rotate-pdf-for-college', destination: '/rotate-pdf', permanent: true },
+    { source: '/use-cases/rotate-pdf-for-upload', destination: '/rotate-pdf', permanent: true },
+    { source: '/use-cases/sign-pdf-for-professionals', destination: '/sign-pdf', permanent: true },
+    { source: '/use-cases/compress-pdf-for-college', destination: '/compress-pdf', permanent: true },
     // Legacy/alternate tool URLs -> current canonical routes
     // Legacy core URLs from the original PDFilio URL map -> current canonical routes
     { source: '/convert-pdf-to-word', destination: '/pdf-to-word', permanent: true },
