@@ -19,7 +19,7 @@ const staticPages = [
   ['/blog', 0.85, 'weekly'],
   ['/ai-tools', 0.8, 'weekly'],
   ['/comparisons', 0.75, 'monthly'],
-  ['/guides', 0.8, 'monthly'],
+  ['/guides', 0.8, 'weekly'],
   ['/use-cases', 0.8, 'monthly'],
   ['/security', 0.7, 'monthly'],
   ['/about', 0.5, 'monthly'],
