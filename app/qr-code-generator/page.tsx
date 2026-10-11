@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import ToolLandingLayout from '@/components/tool-landing-layout'
 
 export const metadata: Metadata = {
-  title: 'QR Code Generator Online | Create QR Codes | PDFilio',
+  title: 'QR Code Generator Online | Create QR Codes',
   description: 'Create QR codes online for links, text, contact details, and other supported information. Generate a QR code and review it before sharing or printing.',
   keywords: ['QR code generator', 'QR code generator online', 'create QR code', 'QR code maker', 'free QR code generator', 'generate QR code online'],
   alternates: { canonical: 'https://pdfilio.com/qr-code-generator' },
