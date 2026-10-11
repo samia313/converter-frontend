@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import ToolLandingLayout from '@/components/tool-landing-layout'
 
 export const metadata: Metadata = {
-  title: 'AI Invoice Generator Online | Create Professional Invoices | PDFilio',
+  title: 'AI Invoice Generator Online | Create Professional Invoices',
   description: 'Create professional invoices with AI assistance. Organize customer, item, pricing, tax, payment, and invoice details into a clear document ready for review.',
   keywords: ['AI invoice generator', 'AI invoice', 'invoice generator online', 'create invoice with AI', 'professional invoice generator', 'invoice maker'],
   alternates: { canonical: 'https://pdfilio.com/ai-invoice' },

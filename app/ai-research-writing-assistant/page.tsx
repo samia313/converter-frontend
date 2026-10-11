@@ -2,7 +2,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Research Writing Assistant – Academic Writing Support | PDFilio',
+  title: 'AI Research Writing Assistant – Academic Writing Support',
   description: 'AI-assisted support for improving research writing clarity, structure, wording, and organization. Review important claims and citations against the source material.',
   alternates: { canonical: 'https://pdfilio.com/ai-research-writing-assistant' },
 };

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import ToolLandingLayout from '@/components/tool-landing-layout'
 
 export const metadata: Metadata = {
-  title: 'AI Notes Generator Online | Generate Notes with AI | PDFilio',
+  title: 'AI Notes Generator Online | Generate Notes with AI',
   description: 'Generate clear, organized notes with AI assistance from your study material, documents, or provided content. Create structured notes for review and learning.',
   keywords: ['AI notes generator', 'notes generator AI', 'AI note maker', 'generate notes with AI', 'AI study notes generator', 'automatic notes generator'],
   alternates: { canonical: 'https://pdfilio.com/ai-notes-generator' },

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import ToolLandingLayout from '@/components/tool-landing-layout'
 
 export const metadata: Metadata = {
-  title: 'AI Cover Letter Generator Online | Create Cover Letters with AI | PDFilio',
+  title: 'AI Cover Letter Generator Online | Create Cover Letters with AI',
   description: 'Create tailored cover letters with AI assistance. Organize your experience, skills, and job requirements into a professional cover letter draft for review.',
   keywords: ['AI cover letter generator', 'cover letter generator AI', 'AI cover letter writer', 'cover letter maker', 'create cover letter with AI', 'job application letter'],
   alternates: { canonical: 'https://pdfilio.com/ai-cover-letter-generator' },

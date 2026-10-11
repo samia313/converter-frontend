@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import ToolLandingLayout from '@/components/tool-landing-layout'
 
 export const metadata: Metadata = {
-  title: 'AI Business Proposal Generator Online | Create Proposals with AI | PDFilio',
+  title: 'AI Business Proposal Generator Online | Create Proposals with AI',
   description: 'Create professional business proposal drafts with AI assistance. Organize services, scope, pricing, timelines, and client requirements into a clear proposal for review.',
   keywords: ['AI business proposal generator', 'business proposal generator AI', 'AI proposal writer', 'business proposal maker', 'create business proposal with AI', 'proposal generator'],
   alternates: { canonical: 'https://pdfilio.com/ai-business-proposal' },

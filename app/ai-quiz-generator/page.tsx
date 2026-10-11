@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import ToolLandingLayout from '@/components/tool-landing-layout'
 
 export const metadata: Metadata = {
-  title: 'AI Quiz Generator Online | Create Quizzes with AI | PDFilio',
+  title: 'AI Quiz Generator Online | Create Quizzes with AI',
   description: 'Create quizzes with AI assistance from study material, documents, and provided content. Generate structured questions for learning, revision, and practice.',
   keywords: ['AI quiz generator', 'quiz generator AI', 'AI question generator', 'create quiz with AI', 'AI test generator', 'study quiz generator'],
   alternates: { canonical: 'https://pdfilio.com/ai-quiz-generator' },

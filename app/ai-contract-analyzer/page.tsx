@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import ToolLandingLayout from '@/components/tool-landing-layout'
 
 export const metadata: Metadata = {
-  title: 'AI Contract Analyzer Online | Analyze Contracts with AI | PDFilio',
+  title: 'AI Contract Analyzer Online | Analyze Contracts with AI',
   description: 'Analyze supported contracts with AI to organize key clauses, terms, obligations, dates, and questions for review. Always verify important details against the original contract.',
   keywords: ['AI contract analyzer', 'contract analyzer AI', 'AI contract review', 'contract analysis AI', 'analyze contract online', 'AI legal document analyzer'],
   alternates: { canonical: 'https://pdfilio.com/ai-contract-analyzer' },
