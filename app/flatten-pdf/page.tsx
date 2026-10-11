@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import FlattenPdfTool from '@/components/tools/flatten-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Flatten PDF Online – Flatten PDF Form Fields | PDFilio',
+  title: 'Flatten PDF Online – Flatten PDF Form Fields',
   description: 'Flatten supported PDF form fields online so entered values become part of the page appearance and are no longer interactive.',
   keywords: ['flatten PDF', 'flatten PDF online', 'flatten PDF form', 'PDF form flattening', 'make PDF form non editable'],
   alternates: { canonical: 'https://pdfilio.com/flatten-pdf' },
