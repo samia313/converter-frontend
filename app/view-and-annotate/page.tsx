@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
 
 export const metadata: Metadata = {
-  title: 'View & Annotate PDF Online | Add Notes to PDF | PDFilio',
+  title: 'View & Annotate PDF Online | Add Notes to PDF',
   description: 'View and annotate PDF documents online with a focused workflow for adding text notes, labels, instructions, and review comments to supported PDF files.',
   keywords: ['view and annotate PDF','annotate PDF online','PDF annotator','PDF annotation online','view PDF online','add notes to PDF','annotate PDF'],
   alternates: { canonical: 'https://pdfilio.com/view-and-annotate' },

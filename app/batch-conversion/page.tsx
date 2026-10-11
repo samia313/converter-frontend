@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import ToolLandingLayout from '@/components/tool-landing-layout'
 
 export const metadata: Metadata = {
-  title: 'Batch PDF Conversion Online | Convert Multiple Files at Once | PDFilio',
+  title: 'Batch PDF Conversion Online | Convert Multiple Files at Once',
   description: 'Batch PDF conversion landing page for converting multiple supported documents in one workflow. Save time when you have many files to process.',
   keywords: ['batch PDF conversion', 'batch converter', 'convert multiple PDF files', 'bulk PDF conversion', 'batch file conversion', 'convert multiple files online'],
   alternates: { canonical: 'https://pdfilio.com/batch-conversion' },
