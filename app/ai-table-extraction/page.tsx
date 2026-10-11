@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import ToolLandingLayout from '@/components/tool-landing-layout'
 
 export const metadata: Metadata = {
-  title: 'AI Table Extraction Online | Extract Tables from PDF | PDFilio',
+  title: 'AI Table Extraction Online | Extract Tables from PDF',
   description: 'Extract tables from supported PDFs and documents with AI assistance. Turn tabular information into structured, editable data for analysis and review.',
   keywords: ['AI table extraction', 'extract tables from PDF', 'PDF table extraction', 'AI PDF table extractor', 'extract table from PDF online', 'table extraction AI'],
   alternates: { canonical: 'https://pdfilio.com/ai-table-extraction' },
