@@ -22,6 +22,11 @@ const nextConfig = {
     ],
   }],
   redirects: async () => [
+    // Confirmed legacy URLs from the GSC 404 audit; each target is a close, live canonical replacement.
+    { source: '/blog/how-to-compress-pdf-without-losing-quality', destination: '/blog/how-to-compress-a-pdf-without-losing-quality', permanent: true },
+    { source: '/blog/compress-pdf-for-email-best-practices', destination: '/blog/how-to-make-a-pdf-smaller-for-email', permanent: true },
+    { source: '/guides/how-to-reduce-pdf-file-size', destination: '/guides/how-to-compress-pdf', permanent: true },
+
     // Sitemap aliases must resolve to routes that actually exist.
     { source: '/tools-sitemap.xml', destination: '/sitemap-index.xml', permanent: true },
     { source: '/sitemap', destination: '/sitemap-page', permanent: true },
