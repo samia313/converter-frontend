@@ -279,6 +279,12 @@ const nextConfig = {
     { source: '/use-cases/split-pdf-for-upload', destination: '/split-pdf', permanent: true },
     { source: '/use-cases/merge-pdf-for-resume', destination: '/merge-pdf', permanent: true },
     { source: '/use-cases/split-pdf-for-sharing', destination: '/split-pdf', permanent: true },
+    // GSC 404 audit: additional retired use-case URLs with closely matching live tools.
+    { source: '/use-cases/convert-pdf-for-visa', destination: '/pdf-to-word', permanent: true },
+    { source: '/use-cases/extract-images-for-backup', destination: '/pdf-to-jpg', permanent: true },
+    { source: '/use-cases/compress-pdf-for-backup', destination: '/compress-pdf', permanent: true },
+    { source: '/use-cases/remove-password-for-backup', destination: '/unlock-pdf', permanent: true },
+    { source: '/use-cases/split-pdf-for-resume', destination: '/split-pdf', permanent: true },
   ],
   rewrites: async () => ({ beforeFiles: [], afterFiles: [], fallback: [] }),
   turbopack: {},
