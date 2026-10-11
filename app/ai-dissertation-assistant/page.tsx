@@ -15,13 +15,15 @@ export default function Page() {
       toolName="AI Dissertation Assistant"
       toolSlug="ai-dissertation-assistant"
       description="AI-assisted support for dissertation research, literature organization, document analysis, and structured research workflows."
-      mainContent={`Doctoral research excellence. Complex research managed systematically. Comprehensive literature synthesized intelligently. Dissertation contributions articulated clearly.
+      mainContent={`Use this AI-assisted workflow as a starting point for organizing dissertation research, reviewing supported documents, and turning source material into structured notes. The tool can help you explore themes and prepare questions for further investigation; it does not independently validate research or guarantee a complete literature review.
 
-Research Management Engine:
-AI handles dissertation complexity. Organizes extensive research. Synthesizes comprehensive literature. Supports original contributions.
+## A Practical Dissertation Workflow
 
-Doctoral Success:
-Complete doctoral research confidently. Develop compelling scholarship. Defend dissertation powerfully. Launch academic career.`}
+Start with a focused research question, review the documents supported by the current workflow, and use the results to group relevant ideas or identify areas that need closer reading. Keep a record of source details as you work.
+
+## Verify Evidence and Originality
+
+Check quotations, citations, methods, and conclusions against the original publications. Your argument, interpretation, and original contribution must remain your own, and you should follow your institution’s academic-integrity and AI-use policies.`}
       useCase={`Doctoral literature review
 Research project management
 Comprehensive analysis
@@ -32,29 +34,27 @@ Defense preparation
 Academic publication`}
       testimonials={[]}
       features={[
-        'Extensive literature synthesis',
-        'Research organization',
-        'Original contribution',
-        'Methodology development',
-        'Defense preparation',
-        'Complex analysis',
-        'Academic publishing',
-        'Career launch',
+        'Organize supported research documents',
+        'Prepare structured research notes',
+        'Explore themes in source material',
+        'Develop follow-up research questions',
+        'Review AI-generated summaries',
+        'Keep source verification in the workflow',
       ]}
       benefits={[
-        'Research rigor',
-        'Organization clarity',
-        'Timeline efficiency',
-        'Academic excellence',
+        'Create a starting point for document review',
+        'Organize research material more consistently',
+        'Identify topics for further investigation',
+        'Keep human review central to dissertation work',
       ]}
       faqs={[
         {
-          q: 'Manage complex dissertation research?',
-          a: 'Yes. Systematically manages extensive doctoral research projects with comprehensive organization.',
+          q: 'Can this tool complete my dissertation research for me?',
+          a: 'No. It can assist with supported document workflows and research organization, but you remain responsible for research design, interpretation, evidence, and original writing.',
         },
         {
-          q: 'Support original contributions?',
-          a: 'Absolutely. Identifies and develops original scholarship contributions.',
+          q: 'Should I verify AI-generated findings?',
+          a: 'Yes. Check facts, quotations, citations, and conclusions against original sources and follow your institution’s academic-integrity policies.',
         },
       ]}
       relatedTools={[
@@ -62,7 +62,7 @@ Academic publication`}
         { name: 'AI Academic Research Assistant', slug: 'ai-academic-research-assistant' },
       ]}
       primaryKeyword="ai dissertation assistant"
-      secondaryKeywords={['doctoral support', 'dissertation research', 'doctoral excellence']}
+      secondaryKeywords={['dissertation research assistant', 'dissertation document analysis', 'doctoral research organization']}
     />
   );
 }
