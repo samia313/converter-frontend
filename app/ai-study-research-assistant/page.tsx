@@ -2,11 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Study Research Assistant – Study and Understand Research Documents | PDFilio',
+  title: 'AI Study Research Assistant – Study and Understand Research Documents',
   description: 'AI-assisted study support for simplifying complex material, organizing notes, reviewing documents, and preparing practice questions from supported content.',
   keywords: 'AI study research assistant, AI study assistant, research study tool, document study assistant',
   alternates: { canonical: 'https://pdfilio.com/ai-study-research-assistant' },
-  openGraph: { title: 'AI Study Research Assistant – Study and Understand Research Documents | PDFilio', description: 'AI-assisted study support for simplifying complex material, organizing notes, reviewing documents, and preparing practice questions from supported content.', url: 'https://pdfilio.com/ai-study-research-assistant', type: 'website' },
+  openGraph: { title: 'AI Study Research Assistant – Study and Understand Research Documents', description: 'AI-assisted study support for simplifying complex material, organizing notes, reviewing documents, and preparing practice questions from supported content.', url: 'https://pdfilio.com/ai-study-research-assistant', type: 'website' },
 };
 
 export default function Page() {

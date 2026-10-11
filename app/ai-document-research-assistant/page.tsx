@@ -2,12 +2,12 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Document Research Assistant Online – Analyze & Research Documents | PDFilio',
+  title: 'AI Document Research Assistant Online – Analyze & Research Documents',
   description: 'Use AI to explore supported documents, extract relevant information, compare content, and organize research findings. Review AI-generated results against the source.',
   keywords: ['AI document research assistant', 'document research AI', 'AI document analysis', 'research assistant AI', 'document comparison AI', 'AI research tool', 'document insights'],
   alternates: { canonical: 'https://pdfilio.com/ai-document-research-assistant' },
   openGraph: {
-    title: 'AI Document Research Assistant Online | PDFilio',
+    title: 'AI Document Research Assistant Online',
     description: 'Explore supported documents with AI-assisted research, information extraction, comparison, and finding organization.',
     url: 'https://pdfilio.com/ai-document-research-assistant',
     type: 'website',

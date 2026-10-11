@@ -2,11 +2,11 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Dissertation Assistant – Organize and Analyze Dissertation Research | PDFilio',
+  title: 'AI Dissertation Assistant – Organize and Analyze Dissertation Research',
   description: 'AI-assisted support for dissertation research, literature organization, document analysis, and research workflows. Verify important findings against source material.',
   keywords: 'AI dissertation assistant, dissertation research AI, PhD research assistant, literature review assistant',
   alternates: { canonical: 'https://pdfilio.com/ai-dissertation-assistant' },
-  openGraph: { title: 'AI Dissertation Assistant – Organize and Analyze Dissertation Research | PDFilio', description: 'AI-assisted support for dissertation research, literature organization, document analysis, and research workflows. Verify important findings against source material.', url: 'https://pdfilio.com/ai-dissertation-assistant', type: 'website' },
+  openGraph: { title: 'AI Dissertation Assistant – Organize and Analyze Dissertation Research', description: 'AI-assisted support for dissertation research, literature organization, document analysis, and research workflows. Verify important findings against source material.', url: 'https://pdfilio.com/ai-dissertation-assistant', type: 'website' },
 };
 
 export default function Page() {
