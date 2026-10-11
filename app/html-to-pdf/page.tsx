@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import HtmlToPdfTool from '@/components/tools/html-to-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'HTML to PDF Converter Online – Convert HTML to PDF'
+  title: 'HTML to PDF Converter Online – Convert HTML to PDF',
   description: 'Convert HTML and HTM files to PDF online using PDFilio. Upload an HTML document and download a PDF copy.',
   keywords: ['HTML to PDF', 'HTML to PDF online', 'convert HTML to PDF', 'HTML file to PDF', 'web page to PDF', 'HTML PDF converter'],
   alternates: { canonical: 'https://pdfilio.com/html-to-pdf' },
