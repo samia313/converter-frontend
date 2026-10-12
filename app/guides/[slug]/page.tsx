@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation';
 import { guides as coreGuides, type Guide } from '@/lib/content/how-to-guides';
 import { additionalGuides } from '@/lib/content/additional-guides';
+import { redirectedGuideSlugs } from '@/lib/seo/sitemap-categories';
 import Link from 'next/link';
 
-const guides: Guide[] = [...coreGuides, ...additionalGuides];
+const guides: Guide[] = [...coreGuides, ...additionalGuides].filter((guide) => !redirectedGuideSlugs.has(guide.slug));
 const toolLabels: Record<string, { label: string; context: string }> = {
   'compress-pdf': { label: 'Compress PDF Online', context: 'Reduce PDF file size for uploads, email, and sharing.' },
   'merge-pdf': { label: 'Merge PDF Files', context: 'Combine multiple PDFs into one document in the order you choose.' },
