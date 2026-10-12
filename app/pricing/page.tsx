@@ -11,6 +11,12 @@ export const metadata: Metadata = {
     url: 'https://pdfilio.com/pricing',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PDFilio Pricing | Free PDF Tools and AI Features',
+    description: 'Explore PDFilio’s free online PDF tools and learn how access, limits, and availability work for AI and premium features.',
+    images: ['/og-image.png'],
+  },
 }
 
 const included = [
