@@ -10,7 +10,17 @@ const converters = ['word-to-pdf','excel-to-pdf','powerpoint-to-pdf','jpg-to-pdf
 const securityEditing = ['protect-pdf','password-protect-pdf','unlock-pdf','sign-pdf','edit-pdf','view-and-annotate','watermark-pdf','redact-pdf']
 const ocrExtraction = ['ocr','ai-table-extraction']
 const aiTools = ['ai-document-rewriter','ai-research-writing-assistant','ai-document-chat-tool','ai-research-assistant','ai-summary','pdf-chat','translate-pdf-online','ai-rewrite-pdf','ai-resume-builder','ai-contract-analyzer','ai-invoice','ai-cover-letter-generator','ai-business-proposal','ai-notes-generator','ai-quiz-generator','ai-academic-research-assistant','ai-dissertation-assistant','ai-document-research-assistant','ai-journal-research-assistant','ai-thesis-research-assistant','ai-research-analysis-tool','ai-study-research-assistant','ai-pdf-reader','pdf-abstract-generator']
-const guides = [...coreGuides, ...additionalGuides].map((g) => ({ url: `/guides/${g.slug}`, lastModified: new Date(g.publishedAt) }))
+const redirectedGuideSlugs = new Set([
+  'how-to-reduce-pdf-file-size',
+  'how-to-delete-pages-from-pdf',
+  'how-to-remove-pdf-password',
+  'how-to-add-watermark-to-pdf',
+  'how-to-convert-pdf-to-word',
+  'how-to-convert-pdf-to-png',
+])
+const guides = [...coreGuides, ...additionalGuides]
+  .filter((g) => !redirectedGuideSlugs.has(g.slug))
+  .map((g) => ({ url: `/guides/${g.slug}`, lastModified: new Date(g.publishedAt) }))
 const blog = editorialBlogPosts.map((p) => ({ url: `/blog/${p.slug}`, lastModified: new Date(p.updatedAt) }))
 
 export const sitemapGroups = { core: corePages, 'pdf-tools': pdfTools, converters, 'security-editing': securityEditing, 'ocr-extraction': ocrExtraction, 'ai-tools': aiTools, guides, blog }
