@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://pdfilio.com/compress-pdf' },
   openGraph: {
     title: 'Compress PDF File Size Online Free | PDFilio',
-    description: 'Compress PDF files online for free to reduce file size for email, uploads, and sharing. Compare the compressed size and review document quality before downloading your PDF.',
+    description: 'Compress a PDF online for free to reduce file size for email, uploads, and sharing. Check the actual size reduction and review your PDF before downloading.',
     url: 'https://pdfilio.com/compress-pdf',
     type: 'website',
   },
