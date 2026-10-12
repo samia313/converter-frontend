@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'PDFilio FAQ | Frequently Asked Questions',
     description: 'Answers about using PDFilio PDF tools, conversion, AI features, privacy, and troubleshooting.',
-    images: ['/og-image.png'],
+    images: ['/icon-512x512.png'],
   },
 }
 
