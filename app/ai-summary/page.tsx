@@ -4,14 +4,19 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 
 export const metadata: Metadata = {
   title: 'AI PDF Summarizer – Summarize PDF Documents Online',
-  description: 'Summarize supported PDF documents with AI. Get a concise overview of key points and verify important details against the original document.',
+  description: 'Summarize a PDF online with AI to review key points, main ideas, and document sections. Check important details against the original PDF before relying on the summary.',
   keywords: ['AI PDF summarizer', 'PDF summarizer', 'summarize PDF', 'AI document summary', 'PDF summary'],
   alternates: { canonical: 'https://pdfilio.com/ai-summary' },
   openGraph: {
     title: 'AI PDF Summarizer – Summarize PDF Documents Online',
-    description: 'Summarize supported PDF documents with AI and review key points against the original.',
+    description: 'Summarize a PDF online with AI to review key points and main ideas. Verify important details against the original document.',
     url: 'https://pdfilio.com/ai-summary',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'AI PDF Summarizer – Summarize PDF Documents Online',
+    description: 'Summarize a PDF online with AI, then check key details against the original document.',
   },
 };
 
