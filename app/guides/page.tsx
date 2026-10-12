@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const guides = [...coreGuides, ...additionalGuides].filter((guide) => !redirectedGuideSlugs.has(guide.slug));
 
-export const metadata = { title: 'PDF How-To Guides', description: 'Practical step-by-step guides for compressing, merging, splitting, converting, editing, OCR, and working with PDF files.', keywords: 'PDF how-to guides, PDF tutorials, PDF instructions, PDF help', alternates: { canonical: 'https://pdfilio.com/guides' } };
+export const metadata = { title: 'PDF How-To Guides | PDFilio', description: 'Practical step-by-step guides for compressing, merging, splitting, converting, editing, OCR, and working with PDF files.', keywords: 'PDF how-to guides, PDF tutorials, PDF instructions, PDF help', alternates: { canonical: 'https://pdfilio.com/guides' }, openGraph: { type: 'website', title: 'PDF How-To Guides | PDFilio', description: 'Practical step-by-step guides for compressing, merging, splitting, converting, editing, OCR, and working with PDF files.', url: 'https://pdfilio.com/guides', siteName: 'PDFilio' }, twitter: { card: 'summary_large_image', title: 'PDF How-To Guides | PDFilio', description: 'Practical step-by-step guides for compressing, merging, splitting, converting, editing, OCR, and working with PDF files.' } };
 
 export default function GuidesPage() {
   const groups = { beginner: guides.filter((g) => g.difficulty === 'beginner'), intermediate: guides.filter((g) => g.difficulty === 'intermediate'), advanced: guides.filter((g) => g.difficulty === 'advanced') };
