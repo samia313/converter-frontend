@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'PDF to Word Online – Convert PDF to DOCX | PDFilio',
     description: 'Convert supported PDFs to editable Word documents and review formatting, tables, images, and page breaks after conversion.',
-    images: ['/og-image.png'],
+    images: ['/icon-512x512.png'],
   },
 };
 
