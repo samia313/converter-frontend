@@ -13,6 +13,12 @@ export const metadata: Metadata = {
     url: 'https://pdfilio.com/pdf-to-excel',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PDF to Excel Online – Convert PDF to XLSX | PDFilio',
+    description: 'Convert supported PDF tables into editable Excel spreadsheets. Review extracted figures and tables before using the XLSX file.',
+    images: ['/tool-images/pdf-to-excel-hero.png'],
+  },
 };
 
 export default function PDFToExcelPage() {
@@ -33,11 +39,25 @@ export default function PDFToExcelPage() {
         toolSlug="pdf-to-excel"
         description="Convert supported PDF tables and structured data into editable Excel spreadsheets for analysis, reporting, accounting, and data workflows."
         heroImage="/tool-images/pdf-to-excel-hero.png"
-        mainContent={`PDF to Excel helps turn supported PDF tables and structured information into editable Excel spreadsheets. It is useful when data is locked inside reports, invoices, financial statements, research papers, or other PDF documents and you need to analyze or edit it in a spreadsheet.
+        mainContent={`## Convert PDF to Excel Online
 
-Digital PDFs with clear table structure are generally easier to extract than scanned or heavily formatted documents. For scanned PDFs, OCR may be needed first. Complex layouts, merged cells, unusual fonts, images, and poor document quality can affect the resulting spreadsheet, so important financial or business data should always be reviewed after conversion.
+PDF to Excel helps turn supported PDF tables and structured information into editable Excel spreadsheets. Use it when data is inside reports, invoices, financial statements, research papers, or other PDF documents and you need to sort, review, or analyze it in a spreadsheet.
 
-Typical workflow: upload a supported PDF, let the converter process the document, review the extracted spreadsheet, and download the resulting XLSX file.`}
+## Convert PDF Tables to XLSX
+
+Digital PDFs with selectable text and clear table structure are generally easier to extract than scanned or heavily formatted documents. Table layouts, merged cells, unusual fonts, and multi-column pages can affect how rows and columns appear in the resulting workbook.
+
+## What About Scanned PDFs?
+
+Scanned or image-only PDFs may need optical character recognition (OCR) before table data can be extracted. Recognition quality depends on scan resolution, contrast, page alignment, and the clarity of the printed text. If the table is important, check the recognized values against the source.
+
+## Review Excel Data Before Using It
+
+Conversion results can require cleanup. Verify names, dates, decimal points, totals, currency values, row order, and column headings against the original PDF—especially for invoices, accounting records, statements, and research data. The output should be treated as a starting point for review, not a substitute for checking critical figures.
+
+## How to Convert PDF to Excel
+
+Upload a supported PDF, start the conversion, download the resulting XLSX file, and open it in a spreadsheet application to review the extracted data. If the source is a scan or has a complex layout, consider OCR first and allow time to check the output before relying on it.`}
         useCase={[
           'Converting financial reports into spreadsheets',
           'Extracting invoice and billing tables',
