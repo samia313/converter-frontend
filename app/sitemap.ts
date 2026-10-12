@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { guides as coreGuides } from '@/lib/content/how-to-guides'
 import { additionalGuides } from '@/lib/content/additional-guides'
 import { redirectedGuideSlugs } from '@/lib/seo/sitemap-categories'
+import { editorialBlogPosts } from '@/lib/content/editorial-blog-posts'
 
 const BASE_URL = 'https://pdfilio.com'
 const guides = [...coreGuides, ...additionalGuides].filter((guide) => !redirectedGuideSlugs.has(guide.slug))
@@ -148,6 +149,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: page.changeFrequency,
     })),
   ]
+
+  entries.push(...editorialBlogPosts.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    priority: 0.7,
+    changeFrequency: 'monthly' as const,
+    lastModified: new Date(post.updatedAt),
+  })))
 
   return uniqueEntries(entries.filter((entry) => isValidSitemapUrl(entry.url)))
 }
