@@ -1,9 +1,10 @@
 import type { MetadataRoute } from 'next'
 import { guides as coreGuides } from '@/lib/content/how-to-guides'
 import { additionalGuides } from '@/lib/content/additional-guides'
+import { redirectedGuideSlugs } from '@/lib/seo/sitemap-categories'
 
 const BASE_URL = 'https://pdfilio.com'
-const guides = [...coreGuides, ...additionalGuides]
+const guides = [...coreGuides, ...additionalGuides].filter((guide) => !redirectedGuideSlugs.has(guide.slug))
 
 /**
  * Only canonical, index-worthy URLs belong in the XML sitemap.
