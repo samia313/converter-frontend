@@ -21,6 +21,12 @@ export const metadata: Metadata = {
     url: 'https://pdfilio.com/pdf-to-word',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PDF to Word Online – Convert PDF to DOCX | PDFilio',
+    description: 'Convert supported PDFs to editable Word documents and review formatting, tables, images, and page breaks after conversion.',
+    images: ['/og-image.png'],
+  },
 };
 
 export default function PDFToWordPage() {
