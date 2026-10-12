@@ -278,6 +278,19 @@ const nextConfig = {
     { source: '/pdf-summarizer-ai', destination: '/ai-summary', permanent: true },
     { source: '/ask-pdf-questions', destination: '/pdf-chat', permanent: true },
 
+    // GSC 404 audit: redirect legacy use-case blog URLs to the closest live tool or guide.
+    { source: '/blog/merge-pdf-for-whatsapp', destination: '/merge-pdf', permanent: true },
+    { source: '/blog/convert-pdf-to-word-for-whatsapp', destination: '/pdf-to-word', permanent: true },
+    { source: '/blog/pdf-search-for-whatsapp', destination: '/pdf-chat', permanent: true },
+    { source: '/blog/pdf-to-excel-for-whatsapp', destination: '/pdf-to-excel', permanent: true },
+    { source: '/blog/split-pdf-for-whatsapp', destination: '/split-pdf', permanent: true },
+    { source: '/blog/pdf-search-for-compliance', destination: '/pdf-chat', permanent: true },
+    { source: '/blog/pdf-page-number-for-whatsapp', destination: '/page-numbers', permanent: true },
+    { source: '/blog/pdf-unlocker-for-whatsapp', destination: '/unlock-pdf', permanent: true },
+    { source: '/blog/chat-with-pdf-vs-chatgpt', destination: '/pdf-chat', permanent: true },
+    { source: '/blog/pdf-to-text-for-whatsapp', destination: '/pdf-to-word', permanent: true },
+    { source: '/blog/image-to-pdf-for-email', destination: '/image-to-pdf', permanent: true },
+
     // Consolidate duplicate PDF summarization landing pages.
   ],
   rewrites: async () => ({ beforeFiles: [], afterFiles: [], fallback: [] }),
