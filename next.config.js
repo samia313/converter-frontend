@@ -23,6 +23,13 @@ const nextConfig = {
   }],
   redirects: async () => [
     // Confirmed legacy URLs from the GSC 404 audit; each target is a close, live canonical replacement.
+    // Retired blog URLs with a close, published editorial replacement.
+    { source: '/blog/merge-multiple-pdfs', destination: '/blog/how-to-merge-pdf-files-in-the-right-order', permanent: true },
+    { source: '/blog/how-to-merge-pdfs-online-free', destination: '/blog/how-to-merge-pdf-files-in-the-right-order', permanent: true },
+    { source: '/blog/convert-pdf-to-word-without-formatting-loss', destination: '/blog/pdf-to-word-when-conversion-is-useful', permanent: true },
+    { source: '/blog/ocr-scanned-pdf-online', destination: '/blog/scanned-pdf-ocr-what-to-expect', permanent: true },
+    { source: '/blog/reduce-pdf-size-online', destination: '/blog/how-to-compress-a-pdf-without-losing-quality', permanent: true },
+
     { source: '/blog/how-to-compress-pdf-without-losing-quality', destination: '/blog/how-to-compress-a-pdf-without-losing-quality', permanent: true },
     { source: '/blog/compress-pdf-for-email-best-practices', destination: '/blog/how-to-make-a-pdf-smaller-for-email', permanent: true },
     { source: '/guides/how-to-reduce-pdf-file-size', destination: '/guides/how-to-compress-pdf', permanent: true },
@@ -42,6 +49,9 @@ const nextConfig = {
     { source: '/blog/convert-pdf-to-word-editable', destination: '/pdf-to-word', permanent: true },
     { source: '/use-cases/sign-pdf-for-students', destination: '/use-cases', permanent: true },
     { source: '/use-cases/rotate-pdf-for-college', destination: '/rotate-pdf', permanent: true },
+    { source: '/use-cases/rotate-pdf-for-upload', destination: '/rotate-pdf', permanent: true },
+    { source: '/use-cases/sign-pdf-for-professionals', destination: '/sign-pdf', permanent: true },
+    { source: '/use-cases/compress-pdf-for-college', destination: '/compress-pdf', permanent: true },
     // Legacy/alternate tool URLs -> current canonical routes
     // Legacy core URLs from the original PDFilio URL map -> current canonical routes
     { source: '/convert-pdf-to-word', destination: '/pdf-to-word', permanent: true },
@@ -272,6 +282,35 @@ const nextConfig = {
     { source: '/ask-pdf-questions', destination: '/pdf-chat', permanent: true },
 
     // Consolidate duplicate PDF summarization landing pages.
+    // Next GSC 404 audit batch: retired use-case URLs with direct tool equivalents.
+    { source: '/use-cases/split-pdf-for-upload', destination: '/split-pdf', permanent: true },
+    { source: '/use-cases/merge-pdf-for-resume', destination: '/merge-pdf', permanent: true },
+    { source: '/use-cases/split-pdf-for-sharing', destination: '/split-pdf', permanent: true },
+    // GSC 404 audit: additional retired use-case URLs with closely matching live tools.
+    { source: '/use-cases/convert-pdf-for-visa', destination: '/pdf-to-word', permanent: true },
+    { source: '/use-cases/extract-images-for-backup', destination: '/pdf-to-jpg', permanent: true },
+    { source: '/use-cases/compress-pdf-for-backup', destination: '/compress-pdf', permanent: true },
+    { source: '/use-cases/remove-password-for-backup', destination: '/unlock-pdf', permanent: true },
+    { source: '/use-cases/split-pdf-for-resume', destination: '/split-pdf', permanent: true },
+    { source: '/use-cases/rotate-pdf-for-government-jobs', destination: '/rotate-pdf', permanent: true },
+    { source: '/use-cases/rotate-pdf-for-resume', destination: '/rotate-pdf', permanent: true },
+    { source: '/use-cases/rotate-pdf-for-archive', destination: '/rotate-pdf', permanent: true },
+    { source: '/use-cases/remove-password-for-archive', destination: '/unlock-pdf', permanent: true },
+    { source: '/use-cases/compress-pdf-for-government-jobs', destination: '/compress-pdf', permanent: true },
+    { source: '/use-cases/sign-pdf-for-government-jobs', destination: '/sign-pdf', permanent: true },
+    { source: '/use-cases/extract-images-for-printing', destination: '/pdf-to-jpg', permanent: true },
+    { source: '/use-cases/rotate-pdf-for-students', destination: '/rotate-pdf', permanent: true },
+    { source: '/use-cases/rotate-pdf-for-passport', destination: '/rotate-pdf', permanent: true },
+    { source: '/use-cases/compress-pdf-for-students', destination: '/compress-pdf', permanent: true },
+    { source: '/use-cases/sign-pdf-for-whatsapp', destination: '/sign-pdf', permanent: true },
+    { source: '/use-cases/extract-images-for-students', destination: '/pdf-to-jpg', permanent: true },
+    { source: '/use-cases/extract-images-for-archive', destination: '/pdf-to-jpg', permanent: true },
+    { source: '/use-cases/extract-images-for-upload', destination: '/pdf-to-jpg', permanent: true },
+    { source: '/use-cases/remove-password-for-visa', destination: '/unlock-pdf', permanent: true },
+    { source: '/use-cases/merge-pdf-for-visa', destination: '/merge-pdf', permanent: true },
+    { source: '/use-cases/split-pdf-for-printing', destination: '/split-pdf', permanent: true },
+    { source: '/use-cases/convert-pdf-for-college', destination: '/pdf-to-word', permanent: true },
+    { source: '/use-cases/extract-images-for-professionals', destination: '/pdf-to-jpg', permanent: true },
   ],
   rewrites: async () => ({ beforeFiles: [], afterFiles: [], fallback: [] }),
   turbopack: {},

@@ -1,9 +1,20 @@
 import type { MetadataRoute } from 'next'
 import { guides as coreGuides } from '@/lib/content/how-to-guides'
 import { additionalGuides } from '@/lib/content/additional-guides'
+import { editorialBlogPosts } from '@/lib/content/editorial-blog-posts'
 
 const BASE_URL = 'https://pdfilio.com'
-const guides = [...coreGuides, ...additionalGuides]
+
+// Redirected legacy guide URLs must not appear as sitemap targets.
+const redirectedGuideSlugs = new Set([
+  'how-to-reduce-pdf-file-size',
+  'how-to-delete-pages-from-pdf',
+  'how-to-remove-pdf-password',
+  'how-to-add-watermark-to-pdf',
+  'how-to-convert-pdf-to-word',
+  'how-to-convert-pdf-to-png',
+])
+const guides = [...coreGuides, ...additionalGuides].filter((guide) => !redirectedGuideSlugs.has(guide.slug))
 
 /**
  * Only canonical, index-worthy URLs belong in the XML sitemap.
@@ -101,6 +112,13 @@ const longTailGuides = guides.map((guide) => ({
   lastModified: new Date(guide.publishedAt),
 }))
 
+const editorialBlogPages = editorialBlogPosts.map((post) => ({
+  path: `/blog/${post.slug}`,
+  priority: 0.7,
+  changeFrequency: 'monthly' as const,
+  lastModified: new Date(post.updatedAt),
+}))
+
 
 function uniqueEntries(entries: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
   const seen = new Set<string>()
@@ -143,6 +161,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: page.changeFrequency,
     })),
     ...longTailGuides.map((page) => ({
+      url: `${BASE_URL}${page.path}`,
+      priority: page.priority,
+      changeFrequency: page.changeFrequency,
+      lastModified: page.lastModified,
+    })),
+    ...editorialBlogPages.map((page) => ({
       url: `${BASE_URL}${page.path}`,
       priority: page.priority,
       changeFrequency: page.changeFrequency,
