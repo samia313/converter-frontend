@@ -23,6 +23,13 @@ const nextConfig = {
   }],
   redirects: async () => [
     // Confirmed legacy URLs from the GSC 404 audit; each target is a close, live canonical replacement.
+    // Retired blog URLs with a close, published editorial replacement.
+    { source: '/blog/merge-multiple-pdfs', destination: '/blog/how-to-merge-pdf-files-in-the-right-order', permanent: true },
+    { source: '/blog/how-to-merge-pdfs-online-free', destination: '/blog/how-to-merge-pdf-files-in-the-right-order', permanent: true },
+    { source: '/blog/convert-pdf-to-word-without-formatting-loss', destination: '/blog/pdf-to-word-when-conversion-is-useful', permanent: true },
+    { source: '/blog/ocr-scanned-pdf-online', destination: '/blog/scanned-pdf-ocr-what-to-expect', permanent: true },
+    { source: '/blog/reduce-pdf-size-online', destination: '/blog/how-to-compress-a-pdf-without-losing-quality', permanent: true },
+
     { source: '/blog/how-to-compress-pdf-without-losing-quality', destination: '/blog/how-to-compress-a-pdf-without-losing-quality', permanent: true },
     { source: '/blog/compress-pdf-for-email-best-practices', destination: '/blog/how-to-make-a-pdf-smaller-for-email', permanent: true },
     { source: '/guides/how-to-reduce-pdf-file-size', destination: '/guides/how-to-compress-pdf', permanent: true },
