@@ -4,7 +4,7 @@ import WordToPDFTool from '@/components/tools/word-to-pdf-tool';
 
 export const metadata: Metadata = {
   title: { absolute: 'Word to PDF Converter Free Online | DOCX to PDF | PDFilio' },
-  description: 'Convert Word DOC and DOCX to PDF online for free with PDFilio. Turn Word documents into shareable PDFs for resumes, reports, and forms, then review and download your file.',
+  description: 'Convert Word to PDF free online with PDFilio. Turn DOC and DOCX files into shareable PDFs for resumes, reports, forms, and applications. Review the result before downloading.',
   keywords: ['Word to PDF', 'Word to PDF converter', 'convert Word to PDF', 'DOC to PDF', 'DOCX to PDF', 'Word document to PDF', 'Word to PDF online'],
   alternates: { canonical: 'https://pdfilio.com/word-to-pdf' },
   openGraph: {
@@ -12,6 +12,13 @@ export const metadata: Metadata = {
     description: 'Convert Word DOC and DOCX to PDF online for free with PDFilio. Turn Word documents into shareable PDFs for resumes, reports, and forms, then review and download your file.',
     url: 'https://pdfilio.com/word-to-pdf',
     type: 'website',
+    images: [{ url: 'https://pdfilio.com/tool-images/word-to-pdf-hero.png', alt: 'Convert Word documents to PDF with PDFilio' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Word to PDF Converter Free Online | DOCX to PDF | PDFilio',
+    description: 'Convert Word to PDF free online with PDFilio. Turn DOC and DOCX files into shareable PDFs, then review before downloading.',
+    images: ['https://pdfilio.com/tool-images/word-to-pdf-hero.png'],
   },
 };
 
