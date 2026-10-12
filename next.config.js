@@ -36,6 +36,12 @@ const nextConfig = {
 
     // Sitemap aliases must resolve to routes that actually exist.
     { source: '/tools-sitemap.xml', destination: '/sitemap-index.xml', permanent: true },
+    { source: '/sitemap.xml', destination: '/sitemap-index.xml', permanent: true },
+    { source: '/blog-sitemap.xml', destination: '/sitemaps/blog.xml', permanent: true },
+    { source: '/api/sitemap-index', destination: '/sitemap-index.xml', permanent: true },
+    // Retire mistakenly submitted legacy sitemap URLs that currently return 404.
+    { source: '/about.xml', destination: '/sitemap-index.xml', permanent: true },
+    { source: '/pricing.xml', destination: '/sitemap-index.xml', permanent: true },
     { source: '/sitemap', destination: '/sitemap-page', permanent: true },
     { source: '/robots', destination: '/robots.txt', permanent: true },
     { source: '/blog/rotate-pdf-pages-correct-orientation', destination: '/rotate-pdf', permanent: true },
