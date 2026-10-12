@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://pdfilio.com/word-to-pdf' },
   openGraph: {
     title: 'Word to PDF Converter Free Online | DOCX to PDF | PDFilio',
-    description: 'Convert Word DOC and DOCX to PDF online for free with PDFilio. Turn Word documents into shareable PDFs for resumes, reports, and forms, then review and download your file.',
+    description: 'Convert Word to PDF free online with PDFilio. Turn DOC and DOCX files into shareable PDFs for resumes, reports, forms, and applications. Review the result before downloading.',
     url: 'https://pdfilio.com/word-to-pdf',
     type: 'website',
     images: [{ url: 'https://pdfilio.com/tool-images/word-to-pdf-hero.png', alt: 'Convert Word documents to PDF with PDFilio' }],
