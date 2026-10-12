@@ -53,6 +53,9 @@ export default function ToolsPage() {
             <a href="/split-pdf" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Split PDF files</a>
             <a href="/jpg-to-pdf" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Convert JPG to PDF</a>
             <a href="/pdf-to-jpg" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Convert PDF to JPG</a>
+            <a href="/pdf-metadata-editor" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Edit PDF metadata</a>
+            <a href="/batch-conversion" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Batch convert files</a>
+            <a href="/qr-code-generator" className="rounded-lg border border-gray-200 bg-white p-4 font-semibold text-gray-900 hover:border-gray-400">Generate QR codes</a>
           </div>
         </div>
       </section>
