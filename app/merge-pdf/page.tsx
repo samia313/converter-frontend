@@ -3,13 +3,13 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import MergePDFTool from '@/components/tools/merge-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'Merge PDF Online – Combine PDF Files into One',
-  description: 'Merge multiple PDF files online into one document in your chosen order. Combine reports, forms, scans, and contracts for easy sharing, printing, or submission.',
+  title: { absolute: 'Merge PDF Files Online – Combine PDFs | PDFilio' },
+  description: 'Combine multiple PDF files online into one PDF. Choose file order, merge reports, forms, scans, and contracts, then review and download the combined document.',
   keywords: ['merge PDF', 'merge PDF online', 'combine PDF', 'combine PDF files', 'PDF merger', 'join PDF files', 'merge PDF documents'],
   alternates: { canonical: 'https://pdfilio.com/merge-pdf' },
   openGraph: {
-    title: 'Merge PDF Online – Combine PDF Files into One',
-    description: 'Combine supported PDF files into one document and arrange them in the order you want before merging.',
+    title: 'Merge PDF Files Online – Combine PDFs | PDFilio',
+    description: 'Combine multiple PDF files online into one PDF. Choose file order, merge reports, forms, scans, and contracts, then review and download the combined document.',
     url: 'https://pdfilio.com/merge-pdf',
     type: 'website',
   },
