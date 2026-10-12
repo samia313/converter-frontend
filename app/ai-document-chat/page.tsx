@@ -2,15 +2,20 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Document Chat Online – Ask Questions About Documents | PDFilio',
-  description: 'Chat with supported PDFs and documents using AI. Ask questions, explore sections, and review document content through a conversational workflow.',
-  keywords: ['AI document chat', 'chat with documents', 'AI PDF chat', 'chat with scanned documents', 'document AI assistant', 'document question answering', 'AI document reader'],
+  title: 'Chat with PDF Online Free – AI Document Chat | PDFilio',
+  description: 'Chat with a PDF online using AI. Ask questions about supported documents, explore key sections, and verify answers against the original file.',
+  keywords: ['chat with PDF', 'AI PDF chat', 'AI document chat', 'ask questions about PDF', 'chat with documents', 'document question answering', 'AI document reader'],
   alternates: { canonical: 'https://pdfilio.com/ai-document-chat' },
   openGraph: {
-    title: 'AI Document Chat Online | PDFilio',
-    description: 'Ask questions about supported PDFs and documents through an AI-assisted conversational workflow.',
+    title: 'Chat with PDF Online – AI Document Chat | PDFilio',
+    description: 'Ask questions about supported PDFs with AI, explore document sections, and check important answers against the original file.',
     url: 'https://pdfilio.com/ai-document-chat',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Chat with PDF Online – AI Document Chat | PDFilio',
+    description: 'Ask questions about a PDF with AI, then verify important answers against the original document.',
   },
 };
 
@@ -50,7 +55,7 @@ AI responses can contain errors, omit context, or misunderstand ambiguous questi
         'Users working with supported scanned or image-based files',
         'Teams gathering information from longer documents',
         'Readers who want a quick starting point before deeper review',
-      ].join('\n')}
+      ].join('\\n')}
       testimonials={[]}
       faqs={[
         {q: 'What is AI Document Chat?', a: 'AI Document Chat is a conversational document tool that lets you ask questions about supported files and explore their content through AI-generated responses.'},
@@ -75,7 +80,7 @@ AI responses can contain errors, omit context, or misunderstand ambiguous questi
         {name: 'AI Document Rewriter', slug: 'ai-document-rewriter'},
       ]}
       primaryKeyword="AI document chat"
-      secondaryKeywords={['chat with documents', 'AI PDF chat', 'chat with scanned documents', 'document AI assistant', 'document question answering', 'AI document reader']}
+      secondaryKeywords={['chat with PDF', 'AI PDF chat', 'ask questions about PDF', 'chat with documents', 'document question answering', 'AI document reader']}
     />
   );
 }
