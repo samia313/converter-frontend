@@ -59,7 +59,7 @@ Image dimensions and orientation affect how each page looks. After conversion, r
         ]}
         testimonials={[]}
         faqs={[
-          { q: 'How do I convert JPG to PDF online?', a: 'Upload supported JPG or JPEG images, arrange them if the tool provides page ordering, create the PDF, review the result, and download the generated file.' },
+          { q: 'How do I convert JPG to PDF online?', a: 'Select supported JPG or JPEG images in the order you want them to appear, create the PDF, then review and download the generated file. The current interface does not provide drag-and-drop reordering after selection.' },
           { q: 'Can I convert JPEG to PDF?', a: 'Yes. JPG and JPEG images are supported input formats for the JPG to PDF workflow.' },
           { q: 'Can I combine multiple JPG images into one PDF?', a: 'Yes. Multiple supported images can be combined into a single PDF document.' },
           { q: 'Can I convert photos to PDF?', a: 'Yes. Photos saved as JPG or JPEG files can be converted into PDF documents.' },
