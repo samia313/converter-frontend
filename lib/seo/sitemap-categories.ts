@@ -4,13 +4,25 @@ import { editorialBlogPosts } from '@/lib/content/editorial-blog-posts'
 
 export const BASE_URL = 'https://pdfilio.com'
 
+// Keep every permanently redirected guide URL out of all sitemap variants.
+export const redirectedGuideSlugs = new Set([
+  'how-to-reduce-pdf-file-size',
+  'how-to-delete-pages-from-pdf',
+  'how-to-remove-pdf-password',
+  'how-to-add-watermark-to-pdf',
+  'how-to-convert-pdf-to-word',
+  'how-to-convert-pdf-to-png',
+])
+
 const corePages = ['/', '/tools', '/features', '/blog', '/ai-tools', '/comparisons', '/guides', '/use-cases', '/security', '/about', '/contact', '/pricing', '/faq', '/privacy', '/terms', '/cookies']
 const pdfTools = ['merge-pdf','split-pdf','rotate-pdf','organize-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf','flatten-pdf','extract-pages','pdf-metadata-editor','batch-conversion','qr-code-generator']
 const converters = ['word-to-pdf','excel-to-pdf','powerpoint-to-pdf','jpg-to-pdf','html-to-pdf','image-to-pdf','pdf-to-word','pdf-to-excel','pdf-to-powerpoint','pdf-to-jpg','pdf-to-png']
 const securityEditing = ['protect-pdf','password-protect-pdf','unlock-pdf','sign-pdf','edit-pdf','view-and-annotate','watermark-pdf','redact-pdf']
 const ocrExtraction = ['ocr','ai-table-extraction']
 const aiTools = ['ai-document-rewriter','ai-research-writing-assistant','ai-document-chat-tool','ai-research-assistant','ai-summary','pdf-chat','translate-pdf-online','ai-rewrite-pdf','ai-resume-builder','ai-contract-analyzer','ai-invoice','ai-cover-letter-generator','ai-business-proposal','ai-notes-generator','ai-quiz-generator','ai-academic-research-assistant','ai-dissertation-assistant','ai-document-research-assistant','ai-journal-research-assistant','ai-thesis-research-assistant','ai-research-analysis-tool','ai-study-research-assistant','ai-pdf-reader','pdf-abstract-generator']
-const guides = [...coreGuides, ...additionalGuides].map((g) => ({ url: `/guides/${g.slug}`, lastModified: new Date(g.publishedAt) }))
+const guides = [...coreGuides, ...additionalGuides]
+  .filter((g) => !redirectedGuideSlugs.has(g.slug))
+  .map((g) => ({ url: `/guides/${g.slug}`, lastModified: new Date(g.publishedAt) }))
 const blog = editorialBlogPosts.map((p) => ({ url: `/blog/${p.slug}`, lastModified: new Date(p.updatedAt) }))
 
 export const sitemapGroups = { core: corePages, 'pdf-tools': pdfTools, converters, 'security-editing': securityEditing, 'ocr-extraction': ocrExtraction, 'ai-tools': aiTools, guides, blog }
