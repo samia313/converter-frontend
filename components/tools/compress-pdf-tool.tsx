@@ -110,7 +110,7 @@ export default function CompressPDFTool() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-sky-50 py-8 md:py-12">
       <div className="max-w-3xl mx-auto px-4">
         <div className="text-center mb-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-3">Compress PDF</h2>
+          <p className="text-4xl md:text-5xl font-bold text-blue-900 mb-3">Compress PDF</p>
           <p className="text-lg text-gray-600">Reduce PDF file size while preserving its document structure</p>
           <p className="text-sm text-gray-500 mt-2">Maximum file size: {MAX_FILE_SIZE_MB}MB</p>
         </div>
