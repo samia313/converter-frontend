@@ -152,6 +152,7 @@ const nextConfig = {
     // Collapse overlapping AI-PDF chat landing pages into the canonical tool.
     { source: '/ai-pdf-chat', destination: '/pdf-chat', permanent: true },
     { source: '/ai-document-chat', destination: '/pdf-chat', permanent: true },
+    { source: '/ai-document-chat-tool', destination: '/pdf-chat', permanent: true },
 
     // Consolidate duplicate PDF chat/search-intent landing pages.
     { source: '/chat-with-pdf', destination: '/pdf-chat', permanent: true },
