@@ -99,7 +99,6 @@ const longTailGuides = guides.map((guide) => ({
   path: `/guides/${guide.slug}`,
   priority: 0.75,
   changeFrequency: 'monthly' as const,
-  lastModified: new Date(guide.publishedAt),
 }))
 
 
@@ -147,7 +146,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${BASE_URL}${page.path}`,
       priority: page.priority,
       changeFrequency: page.changeFrequency,
-      lastModified: page.lastModified,
     })),
   ]
 
