@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'PDFilio Pricing | Free PDF Tools and AI Features',
     description: 'Explore PDFilio’s free online PDF tools and learn how access, limits, and availability work for AI and premium features.',
-    images: ['/og-image.png'],
+    images: ['/icon-512x512.png'],
   },
 }
 
