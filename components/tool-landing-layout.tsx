@@ -259,7 +259,9 @@ export default function ToolLandingLayout({
             </div>
           </div>
         </section>
-      )}\n\n      {guideLinksBySlug[toolSlug] && guideLinksBySlug[toolSlug].length > 0 && (
+      )}
+
+      {guideLinksBySlug[toolSlug] && guideLinksBySlug[toolSlug].length > 0 && (
         <section className="px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
           <div className="mx-auto w-full max-w-4xl">
             <h2 className="text-2xl font-black text-gray-900 sm:text-3xl">Helpful PDF guides</h2>
