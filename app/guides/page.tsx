@@ -1,8 +1,9 @@
 import { guides as coreGuides } from '@/lib/content/how-to-guides';
 import { additionalGuides } from '@/lib/content/additional-guides';
+import { redirectedGuideSlugs } from '@/lib/seo/sitemap-categories';
 import Link from 'next/link';
 
-const guides = [...coreGuides, ...additionalGuides];
+const guides = [...coreGuides, ...additionalGuides].filter((guide) => !redirectedGuideSlugs.has(guide.slug));
 
 export const metadata = { title: 'PDF How-To Guides', description: 'Practical step-by-step guides for compressing, merging, splitting, converting, editing, OCR, and working with PDF files.', keywords: 'PDF how-to guides, PDF tutorials, PDF instructions, PDF help', alternates: { canonical: 'https://pdfilio.com/guides' } };
 
