@@ -11,6 +11,12 @@ export const metadata: Metadata = {
     url: 'https://pdfilio.com/faq',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PDFilio FAQ | Frequently Asked Questions',
+    description: 'Answers about using PDFilio PDF tools, conversion, AI features, privacy, and troubleshooting.',
+    images: ['/og-image.png'],
+  },
 }
 
 const faqs = [
