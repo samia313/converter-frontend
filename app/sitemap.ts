@@ -3,7 +3,17 @@ import { guides as coreGuides } from '@/lib/content/how-to-guides'
 import { additionalGuides } from '@/lib/content/additional-guides'
 
 const BASE_URL = 'https://pdfilio.com'
-const guides = [...coreGuides, ...additionalGuides]
+
+// Redirected legacy guide URLs must not appear as sitemap targets.
+const redirectedGuideSlugs = new Set([
+  'how-to-reduce-pdf-file-size',
+  'how-to-delete-pages-from-pdf',
+  'how-to-remove-pdf-password',
+  'how-to-add-watermark-to-pdf',
+  'how-to-convert-pdf-to-word',
+  'how-to-convert-pdf-to-png',
+])
+const guides = [...coreGuides, ...additionalGuides].filter((guide) => !redirectedGuideSlugs.has(guide.slug))
 
 /**
  * Only canonical, index-worthy URLs belong in the XML sitemap.
