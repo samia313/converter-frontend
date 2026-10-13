@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function PngToPDFPage() {
   return (
     <>
-      <ImageToPDFTool />
+      <ImageToPDFTool heading="PNG to PDF Converter" subtitle="Convert PNG images into PDF pages" />
       <ToolLandingLayout
         toolName="PNG to PDF"
         toolSlug="png-to-pdf"
