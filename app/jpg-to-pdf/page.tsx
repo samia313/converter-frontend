@@ -76,6 +76,7 @@ Image dimensions and orientation affect how each page looks. After conversion, r
         ]}
         relatedTools={[
           { name: 'PDF to JPG', slug: 'pdf-to-jpg' },
+          { name: 'PDF to PNG', slug: 'pdf-to-png' },
           { name: 'Merge PDF', slug: 'merge-pdf' },
           { name: 'Compress PDF', slug: 'compress-pdf' },
           { name: 'Split PDF', slug: 'split-pdf' },

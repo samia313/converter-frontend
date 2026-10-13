@@ -63,7 +63,13 @@ Use clear file names, remove pages you do not want included, and make sure the s
           { q: 'What happens to my uploaded files?', a: 'Processing depends on the current tool workflow. PDFilio is not a permanent file-storage service; see the Privacy Policy for the general data-handling approach.' },
           { q: 'Is there a file-size limit?', a: 'The current Merge PDF uploader accepts individual PDF files up to 100MB, with a 500MB total selected-file limit. Follow any limit shown in the live uploader if it changes.' },
         ]}
-        relatedTools={[{name:'Split PDF',slug:'split-pdf'},{name:'Compress PDF',slug:'compress-pdf'},{name:'PDF to Word',slug:'pdf-to-word'}]}
+        relatedTools={[
+          { name: 'Split PDF', slug: 'split-pdf' },
+          { name: 'Compress PDF', slug: 'compress-pdf' },
+          { name: 'PDF to Word', slug: 'pdf-to-word' },
+          { name: 'PDF to JPG', slug: 'pdf-to-jpg' },
+          { name: 'PDF to PNG', slug: 'pdf-to-png' },
+        ]}
         primaryKeyword="merge PDF"
         secondaryKeywords={['combine PDF files','merge PDF online','combine PDF online','join PDF files','merge multiple PDFs']}
       />

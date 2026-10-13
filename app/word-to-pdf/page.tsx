@@ -88,6 +88,7 @@ DOC and DOCX are different Word file formats, and the formats available for conv
           { name: 'Compress PDF', slug: 'compress-pdf' },
           { name: 'Merge PDF', slug: 'merge-pdf' },
           { name: 'PDF to JPG', slug: 'pdf-to-jpg' },
+          { name: 'PDF to PNG', slug: 'pdf-to-png' },
         ]}
         primaryKeyword="Word to PDF"
         secondaryKeywords={['Word to PDF converter', 'convert Word to PDF', 'convert Word to PDF free', 'DOC to PDF', 'DOCX to PDF', 'Word document to PDF', 'Word to PDF online']}
