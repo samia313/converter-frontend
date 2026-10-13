@@ -2,16 +2,26 @@ import { Metadata } from 'next';
 import ToolLandingLayout from '@/components/tool-landing-layout';
 import ImageToPDFTool from '@/components/tools/image-to-pdf-tool';
 
+const pageTitle = 'PNG to PDF Converter Online – Convert PNG Images | PDFilio';
+const pageDescription = 'Convert PNG images to PDF online with PDFilio. Combine PNG files into a PDF for diagrams, screenshots, forms, and documents. Review the result before downloading.';
+
 export const metadata: Metadata = {
-  title: 'PNG to PDF Converter Online – Convert PNG Images',
-  description: 'Convert PNG images to PDF online with PDFilio. Combine PNG files into a PDF for diagrams, screenshots, forms, and documents. Review the result before downloading.',
+  title: { absolute: pageTitle },
+  description: pageDescription,
   keywords: ['PNG to PDF', 'PNG to PDF converter', 'convert PNG to PDF', 'PNG images to PDF', 'PNG files to PDF online'],
   alternates: { canonical: 'https://pdfilio.com/png-to-pdf' },
   openGraph: {
-    title: 'PNG to PDF Converter Online – Convert PNG Images',
-    description: 'Convert supported PNG images into PDF pages for sharing, printing, and document workflows.',
+    title: pageTitle,
+    description: pageDescription,
     url: 'https://pdfilio.com/png-to-pdf',
     type: 'website',
+    images: [{ url: 'https://pdfilio.com/tool-images/image-to-pdf-hero.png', alt: 'Convert PNG images to PDF with PDFilio' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: pageTitle,
+    description: pageDescription,
+    images: ['https://pdfilio.com/tool-images/image-to-pdf-hero.png'],
   },
 };
 
@@ -38,7 +48,7 @@ For important documents, keep the original image files until you have reviewed t
           'Preparing images for printing',
           'Archiving image-based records',
           'Sharing several images as one document',
-        ].join('\n')}
+        ].join('\\n')}
         features={[
           'Convert supported image files to PDF',
           'Combine multiple images into one PDF',
