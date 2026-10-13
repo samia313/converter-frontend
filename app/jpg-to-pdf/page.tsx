@@ -3,13 +3,13 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import JpgToPdfTool from '@/components/tools/jpg-to-pdf-tool';
 
 export const metadata: Metadata = {
-  title: { absolute: 'JPG to PDF Free Online Converter | PDFilio' },
-  description: 'Convert JPG to PDF free online with PDFilio. Combine multiple JPG or JPEG images into one PDF for sharing, printing, or submission. No software installation needed.',
-  keywords: ['JPG to PDF', 'JPG to PDF converter', 'JPEG to PDF', 'convert JPG to PDF', 'JPG to PDF online', 'image to PDF', 'photos to PDF'],
+  title: { absolute: 'JPG to PDF Free Online – Combine JPG Images | PDFilio' },
+  description: 'Convert JPG to PDF online free with PDFilio. Combine multiple JPG or JPEG images into one PDF for photos, receipts, forms, and scanned pages. Upload, convert, and download without installing software.',
+  keywords: ['JPG to PDF', 'JPG to PDF converter', 'JPEG to PDF', 'convert JPG to PDF', 'JPG to PDF free online', 'image to PDF', 'photos to PDF'],
   alternates: { canonical: 'https://pdfilio.com/jpg-to-pdf' },
   openGraph: {
-    title: 'JPG to PDF Free Online Converter | PDFilio',
-    description: 'Convert JPG to PDF free online with PDFilio. Combine multiple JPG or JPEG images into one PDF for sharing, printing, or submission. No software installation needed.',
+    title: 'JPG to PDF Free Online – Combine JPG Images | PDFilio',
+    description: 'Convert JPG to PDF online free with PDFilio. Combine multiple JPG or JPEG images into one PDF for photos, receipts, forms, and scanned pages. Upload, convert, and download without installing software.',
     url: 'https://pdfilio.com/jpg-to-pdf',
     type: 'website',
   },
@@ -83,7 +83,7 @@ Image dimensions and orientation affect how each page looks. After conversion, r
           { name: 'PDF to Word', slug: 'pdf-to-word' },
         ]}
         primaryKeyword="JPG to PDF"
-        secondaryKeywords={['JPG to PDF converter', 'JPEG to PDF', 'convert JPG to PDF', 'JPG to PDF online', 'image to PDF', 'photos to PDF']}
+        secondaryKeywords={['JPG to PDF converter', 'JPEG to PDF', 'convert JPG to PDF', 'JPG to PDF free online', 'image to PDF', 'photos to PDF']}
       />
     </>
   );
