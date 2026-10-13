@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
       }
 
       const bytes = new Uint8Array(await entry.arrayBuffer());
-      let metadata: sharp.Metadata;
+      let metadata: { format?: string; width?: number; height?: number };
       try {
         metadata = await sharp(bytes, { limitInputPixels: MAX_IMAGE_PIXELS }).metadata();
       } catch {
@@ -82,11 +82,7 @@ export async function POST(request: NextRequest) {
 
       const pixelWidth = metadata.width;
       const pixelHeight = metadata.height;
-      if (
-        !pixelWidth ||
-        !pixelHeight ||
-        pixelWidth * pixelHeight > MAX_IMAGE_PIXELS
-      ) {
+      if (!pixelWidth || !pixelHeight || pixelWidth * pixelHeight > MAX_IMAGE_PIXELS) {
         return NextResponse.json(
           { error: 'An image is too large to process. Use images with 40 megapixels or fewer.' },
           { status: 413 },
