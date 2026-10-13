@@ -3,15 +3,20 @@ import PDFChatTool from '@/components/tools/pdf-chat-tool';
 import ToolLandingLayout from '@/components/tool-landing-layout';
 
 export const metadata: Metadata = {
-  title: 'PDF Chat with AI – Ask Questions About PDF Documents',
-  description: 'Chat with supported PDF documents using AI. Ask questions, explore document content, and find information faster online with PDFilio.',
-  keywords: ['PDF chat', 'AI PDF chat', 'chat with PDF', 'ask PDF questions', 'PDF chatbot', 'AI PDF reader', 'talk to PDF'],
+  title: 'Chat with PDF Online Free – AI PDF Chat',
+  description: 'Chat with a PDF online using AI. Ask questions about supported documents, explore key sections, and check important answers against the original PDF.',
+  keywords: ['chat with PDF online', 'free PDF chat', 'AI PDF chat', 'ask questions about PDF', 'PDF chatbot', 'AI PDF reader', 'talk to PDF'],
   alternates: { canonical: 'https://pdfilio.com/pdf-chat' },
   openGraph: {
-    title: 'PDF Chat with AI – Ask Questions About PDF Documents | PDFilio',
-    description: 'Ask questions about supported PDF documents and explore their content with an AI-powered PDF chat workflow.',
+    title: 'Chat with PDF Online Free – AI PDF Chat | PDFilio',
+    description: 'Ask questions about a supported PDF, explore document sections, and verify important answers against the original file.',
     url: 'https://pdfilio.com/pdf-chat',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Chat with PDF Online Free – AI PDF Chat | PDFilio',
+    description: 'Ask AI questions about a supported PDF and check important answers against the original document.',
   },
 };
 
@@ -56,7 +61,7 @@ AI-generated responses can contain errors or omit context. For legal, financial,
           'Professionals checking business documents',
           'Teams searching long internal PDFs',
           'Readers who want explanations of document content',
-        ].join('\n')}
+        ].join('\\n')}
         faqs={[
           { q: 'What is PDF Chat?', a: 'PDF Chat is an AI-powered workflow that lets you ask questions about a supported PDF and explore its content conversationally.' },
           { q: 'Can I ask questions about a PDF?', a: 'Yes. You can ask natural-language questions about the content of a supported PDF.' },
@@ -70,14 +75,14 @@ AI-generated responses can contain errors or omit context. For legal, financial,
           { q: 'What type of PDFs are supported?', a: 'Use PDFs supported by PDFilio’s current processing workflow. Results can vary with file quality, text extraction, scans, and document complexity.' },
         ]}
         relatedTools={[
-          { name: 'AI Document Chat', slug: 'ai-document-chat-tool' },
+          { name: 'AI Document Summarizer', slug: 'ai-summary' },
           { name: 'AI Document Rewriter', slug: 'ai-document-rewriter' },
           { name: 'PDF to Word', slug: 'pdf-to-word' },
           { name: 'Split PDF', slug: 'split-pdf' },
           { name: 'Merge PDF', slug: 'merge-pdf' },
         ]}
-        primaryKeyword="pdf chat"
-        secondaryKeywords={['AI PDF chat', 'chat with PDF', 'ask PDF questions', 'PDF chatbot', 'AI PDF reader', 'talk to PDF']}
+        primaryKeyword="chat with PDF online"
+        secondaryKeywords={['AI PDF chat', 'ask PDF questions', 'PDF chatbot', 'AI PDF reader', 'talk to PDF', 'free PDF chat']}
       />
     </>
   );

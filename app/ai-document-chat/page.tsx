@@ -50,7 +50,7 @@ AI responses can contain errors, omit context, or misunderstand ambiguous questi
         'Users working with supported scanned or image-based files',
         'Teams gathering information from longer documents',
         'Readers who want a quick starting point before deeper review',
-      ].join('\n')}
+      ].join('\\n')}
       testimonials={[]}
       faqs={[
         {q: 'What is AI Document Chat?', a: 'AI Document Chat is a conversational document tool that lets you ask questions about supported files and explore their content through AI-generated responses.'},
