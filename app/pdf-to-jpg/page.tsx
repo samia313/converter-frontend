@@ -12,6 +12,13 @@ export const metadata: Metadata = {
     description: 'Convert supported PDF pages into JPG images for sharing, previews, presentations, and design workflows.',
     url: 'https://pdfilio.com/pdf-to-jpg',
     type: 'website',
+    images: [{ url: 'https://pdfilio.com/tool-images/pdf-to-jpg-hero.png', alt: 'PDF to JPG Converter' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PDF to JPG Converter Online – Convert PDF to JPG | PDFilio',
+    description: 'Convert PDF pages to JPG images online for previews, presentations, websites, and design workflows. Review your images before sharing or publishing.',
+    images: ['https://pdfilio.com/tool-images/pdf-to-jpg-hero.png'],
   },
 };
 
@@ -33,11 +40,30 @@ export default function PDFToJpgToolPage() {
         toolSlug="pdf-to-jpg"
         description="Convert supported PDF pages into JPG images for previews, presentations, sharing, websites, and design workflows."
         heroImage="/tool-images/pdf-to-jpg-hero.png"
-        mainContent={`PDF to JPG Converter turns supported PDF pages into JPG images that are easier to preview, share, upload, and use in image-based workflows. It is useful when a document page needs to be used as an image instead of remaining in PDF format.
+        mainContent={`## Convert PDF Pages to JPG Online
 
-Common uses include presentation slides, document previews, websites, design projects, social media assets, reports, forms, and image-based uploads. Output quality and processing time can vary with page size, embedded images, fonts, transparency, and the structure of the source PDF.
+Use PDFilio to turn supported PDF pages into JPG images when you need a visual copy for sharing, presentations, website previews, forms, reports, or design projects. Upload a PDF, start the conversion, then review and download the generated image output.
 
-Typical workflow: upload a supported PDF, start the conversion, review the generated JPG images, and download the output. For important documents, check the images before publishing or printing to make sure text and visual details are clear.`}
+## When to Use JPG Images from a PDF
+
+JPG files are widely accepted by websites, presentation tools, messaging apps, and image editors. Converting pages to JPG can be useful when a service accepts image uploads but does not accept PDFs, or when you want to share a page as a static visual.
+
+## What Happens to Text, Links, and Formatting?
+
+A JPG is a raster image, not an editable PDF document. Text in the output is not selectable, and interactive PDF features such as hyperlinks, form fields, bookmarks, and embedded actions do not remain interactive. Visual results can vary with the original page size, fonts, transparency, images, and rendering settings.
+
+## JPG Quality and File Size
+
+JPG uses lossy image compression, so fine text, small details, and sharp edges may look different from the original PDF. Review the output at the size you plan to use, especially before printing or publishing. If your workflow needs a lossless image format for diagrams or text-heavy pages, compare the PDF to PNG option.
+
+## How to Convert PDF to JPG
+
+1. Open the PDF to JPG converter and upload a supported PDF.
+2. Start conversion and wait for the tool to process the document.
+3. Preview the generated JPG images and check that the pages look correct.
+4. Download the output and use it in your intended workflow.
+
+For scanned PDFs, conversion creates an image of the scanned page; OCR is not needed unless you also want to extract searchable text.`}
         useCase={[
           'Creating JPG images from PDF pages',
           'Preparing document pages for presentations',
