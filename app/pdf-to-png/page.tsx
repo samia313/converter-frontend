@@ -12,6 +12,13 @@ export const metadata: Metadata = {
     description: 'Convert supported PDF pages into PNG images for previews, presentations, design and sharing.',
     url: 'https://pdfilio.com/pdf-to-png',
     type: 'website',
+    images: [{ url: 'https://pdfilio.com/tool-images/pdf-to-png-hero.png', alt: 'PDF to PNG Converter' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PDF to PNG Converter Online – Convert PDF to PNG | PDFilio',
+    description: 'Convert PDF pages to PNG images for text, diagrams, presentations, websites, and design workflows. Review image dimensions and quality before use.',
+    images: ['https://pdfilio.com/tool-images/pdf-to-png-hero.png'],
   },
 };
 
@@ -24,11 +31,30 @@ export default function PDFToPngToolPage() {
         toolSlug="pdf-to-png"
         description="Convert supported PDF pages into PNG images for presentations, previews, websites, design workflows, sharing, and image-based document use."
         heroImage="/tool-images/pdf-to-png-hero.png"
-        mainContent={`PDF to PNG converts supported PDF pages into PNG image files. This is useful when you need an image version of a document page for a presentation, website, design project, preview, social post, or another workflow that works better with image files.
+        mainContent={`## Convert PDF Pages to PNG Online
 
-PNG can be useful for pages containing text, diagrams, screenshots, graphics, or other visual content where a lossless image format is preferred. The resulting image dimensions and visual quality depend on the source PDF, page content, rendering settings, and current conversion workflow.
+PDFilio converts supported PDF pages into PNG images for presentations, website previews, diagrams, document screenshots, design projects, and other image-based workflows. Upload a supported PDF, start the conversion, then review and download the resulting image files.
 
-Because a PNG is an image rather than a PDF document, interactive PDF features such as links, form fields, bookmarks, and selectable text are not retained as interactive elements in the image. Review important outputs before publishing or sharing them.`}
+## When PNG Is Useful for PDF Pages
+
+PNG uses lossless image compression and can be a useful choice for text-heavy pages, diagrams, screenshots, charts, and graphics where crisp edges matter. The resulting image dimensions and visual quality depend on the source PDF and the converter's rendering settings.
+
+## Text, Links, and Other PDF Features
+
+A PNG is a static image, not an editable PDF. Text rendered into the image is not selectable, and links, form fields, bookmarks, and other interactive PDF features do not remain interactive. If you need searchable text from a scanned document, use an OCR workflow rather than relying on image conversion alone.
+
+## PNG vs JPG: Which Should You Choose?
+
+PNG can be preferable for diagrams, screenshots, and text-heavy pages where lossless compression is useful. JPG may be a better fit when smaller image files are more important. Compare the output with your intended use in mind; neither format preserves the original PDF's interactive behavior.
+
+## How to Convert PDF to PNG
+
+1. Open the PDF to PNG converter and upload a supported PDF.
+2. Start conversion and wait for the tool to process the pages.
+3. Review the generated images for readability, dimensions, and visual details.
+4. Download the PNG output and use it in your intended workflow.
+
+Scanned PDF pages can be rendered to PNG without OCR when your goal is an image copy. OCR is needed only when you want to extract text from the scan.`}
         useCase={[
           'Creating presentation images from PDF pages',
           'Preparing PDF page previews',
