@@ -98,6 +98,8 @@ No. PDF compression depends on the source document and the available compression
           { name: 'Merge PDF', slug: 'merge-pdf' },
           { name: 'PDF to Word', slug: 'pdf-to-word' },
           { name: 'PDF to Excel', slug: 'pdf-to-excel' },
+          { name: 'PDF to JPG', slug: 'pdf-to-jpg' },
+          { name: 'PDF to PNG', slug: 'pdf-to-png' },
           { name: 'Rotate PDF', slug: 'rotate-pdf' },
         ]}
         primaryKeyword="compress PDF"
