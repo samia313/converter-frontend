@@ -3,12 +3,12 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import ImageToPDFTool from '@/components/tools/image-to-pdf-tool';
 
 export const metadata: Metadata = {
-  title: 'PNG to PDF Converter Online – Convert PNG Images | PDFilio',
+  title: 'PNG to PDF Converter Online – Convert PNG Images',
   description: 'Convert PNG images to PDF online with PDFilio. Combine PNG files into a PDF for diagrams, screenshots, forms, and documents. Review the result before downloading.',
   keywords: ['PNG to PDF', 'PNG to PDF converter', 'convert PNG to PDF', 'PNG images to PDF', 'PNG files to PDF online'],
   alternates: { canonical: 'https://pdfilio.com/png-to-pdf' },
   openGraph: {
-    title: 'PNG to PDF Converter Online – Convert PNG Images | PDFilio',
+    title: 'PNG to PDF Converter Online – Convert PNG Images',
     description: 'Convert supported PNG images into PDF pages for sharing, printing, and document workflows.',
     url: 'https://pdfilio.com/png-to-pdf',
     type: 'website',
