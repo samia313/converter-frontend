@@ -3,7 +3,7 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 
 export const metadata: Metadata = {
   title: 'AI Document Rewriter Online – Rewrite & Improve Documents',
-  description: 'Rewrite and improve supported document content with AI. Refine wording, clarity, tone, and readability while reviewing the generated result before using it.',
+  description: 'Rewrite document text online with AI to improve clarity, tone, and readability. Review the rewritten content against your original before using or publishing it with PDFilio.',
   keywords: ['AI document rewriter', 'AI rewrite document', 'document rewriting AI', 'rewrite text with AI', 'AI document editor', 'AI writing assistant'],
   alternates: { canonical: 'https://pdfilio.com/ai-document-rewriter' },
   openGraph: {
@@ -11,6 +11,13 @@ export const metadata: Metadata = {
     description: 'Use AI to rewrite supported document content for clearer wording, readability, and different writing styles.',
     url: 'https://pdfilio.com/ai-document-rewriter',
     type: 'website',
+    images: [{ url: 'https://pdfilio.com/tool-images/ai-document-rewriter-hero.png', alt: 'AI document rewriter by PDFilio' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AI Document Rewriter Online – Rewrite & Improve Documents',
+    description: 'Rewrite document text online with AI for clearer wording, tone, and readability. Review the result before using it.',
+    images: ['https://pdfilio.com/tool-images/ai-document-rewriter-hero.png'],
   },
 };
 
