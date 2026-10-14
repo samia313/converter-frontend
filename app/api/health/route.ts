@@ -11,6 +11,11 @@ import { getMetricsService } from '@/lib/services/metrics-service';
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
+  const conversionWorkerConfigured = Boolean(process.env.DIGITALOCEAN_CONVERTER_URL && process.env.DIGITALOCEAN_CONVERTER_API_KEY);
+  const aiProviderConfigured = Boolean(
+    process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY_2 ||
+    process.env.OPENAI_API_KEY_3 || process.env.OPENAI_API_KEY_4
+  );
 
   try {
     const queue = getQueueService();
@@ -41,7 +46,12 @@ export async function GET(request: NextRequest) {
 
     if (queueHealth.status === 'unhealthy') {
       overallStatus = 'unhealthy';
-    } else if (queueHealth.status === 'degraded' || alerts.some((a) => a.level === 'critical')) {
+    } else if (
+      queueHealth.status === 'degraded' ||
+      alerts.some((a) => a.level === 'critical') ||
+      !conversionWorkerConfigured ||
+      !aiProviderConfigured
+    ) {
       overallStatus = 'degraded';
     }
 
@@ -64,9 +74,15 @@ export async function GET(request: NextRequest) {
           status: 'healthy',
           ...loggingStats,
         },
+        conversionWorker: {
+          status: conversionWorkerConfigured ? 'configured' : 'not_configured',
+        },
+        aiProvider: {
+          status: aiProviderConfigured ? 'configured' : 'not_configured',
+        },
         database: {
-          status: 'healthy',
-          message: 'Connected',
+          status: 'unknown',
+          message: 'Database connectivity is not verified by this health check.',
         },
       },
       performance: performanceSummary,
