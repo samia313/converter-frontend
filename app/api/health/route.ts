@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getDigitalOceanConfig } from '@/lib/digitalocean-config';
 import { getQueueService } from '@/lib/services/queue';
 import { getStorageService } from '@/lib/services/storage-service';
 import { getLoggingService } from '@/lib/services/logging-service';
@@ -11,7 +12,8 @@ import { getMetricsService } from '@/lib/services/metrics-service';
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
-  const conversionWorkerConfigured = Boolean(process.env.DIGITALOCEAN_CONVERTER_URL && process.env.DIGITALOCEAN_CONVERTER_API_KEY);
+  const converterConfig = getDigitalOceanConfig();
+  const conversionWorkerConfigured = Boolean(converterConfig.baseUrl && converterConfig.apiKey);
   const aiProviderConfigured = Boolean(
     process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY_2 ||
     process.env.OPENAI_API_KEY_3 || process.env.OPENAI_API_KEY_4
@@ -19,9 +21,9 @@ export async function GET(request: NextRequest) {
   let conversionWorkerReachable = false;
   if (conversionWorkerConfigured) {
     try {
-      const baseUrl = process.env.DIGITALOCEAN_CONVERTER_URL!.replace(/\/$/, '');
+      const baseUrl = converterConfig.baseUrl!;
       const response = await fetch(baseUrl, {
-        headers: { Authorization: `Bearer ${process.env.DIGITALOCEAN_CONVERTER_API_KEY}` },
+        headers: { Authorization: `Bearer ${converterConfig.apiKey}` },
         cache: 'no-store',
         signal: AbortSignal.timeout(4000),
       });
