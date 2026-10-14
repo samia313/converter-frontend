@@ -367,9 +367,8 @@ export async function executeToolOperation(request: ToolRequest): Promise<ToolRe
 
       default:
         return {
-          success: true,
-          message: `Operation "${request.operation}" is ready for implementation`,
-          data: 'Tool framework ready',
+          success: false,
+          error: `Operation "${request.operation}" is not implemented yet`,
         };
     }
   } catch (error) {
