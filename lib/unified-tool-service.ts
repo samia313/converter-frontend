@@ -162,14 +162,23 @@ export class PDFOperations {
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
       const bytes = await pdf.save({ useObjectStreams: true });
-      const compressed = Buffer.from(bytes);
+      const candidate = Buffer.from(bytes);
+      const reducedSize = candidate.length < file.size;
+      const output = reducedSize ? candidate : Buffer.from(await file.arrayBuffer());
+      const ratio = reducedSize ? Math.round((1 - output.length / file.size) * 100) : 0;
 
-      const ratio = Math.round((1 - compressed.length / file.size) * 100);
       return {
         success: true,
-        data: compressed,
-        message: `Compressed ${ratio}%`,
-        metadata: { originalSize: file.size, compressedSize: compressed.length, ratio },
+        data: output,
+        message: reducedSize
+          ? `PDF size reduced by ${ratio}%`
+          : 'No size reduction was achieved; the original PDF is preserved.',
+        metadata: {
+          originalSize: file.size,
+          compressedSize: output.length,
+          ratio,
+          sizeReduced: reducedSize,
+        },
         processingTime: Date.now() - startTime,
       };
     } catch (error) {
