@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-type Plan = 'pro_monthly' | 'pro_yearly' | 'ai_pro_monthly'
+type Plan = 'pro_monthly' | 'pro_yearly'
 
 const plans: { id: Plan; name: string; price: string; cadence: string; note: string; features: string[]; featured?: boolean }[] = [
   {
@@ -22,14 +22,6 @@ const plans: { id: Plan; name: string; price: string; cadence: string; note: str
     features: ['Pro access for a full year', 'Lower effective price than monthly billing', 'Renewal and cancellation terms shown before payment'],
     featured: true,
   },
-  {
-    id: 'ai_pro_monthly',
-    name: 'AI Pro',
-    price: '$4.99',
-    cadence: '/ month',
-    note: 'For AI-assisted document workflows',
-    features: ['Access to supported AI document tools', 'Summaries, document chat and translation where available', 'AI usage limits disclosed before purchase'],
-  }
 ]
 
 export default function PricingPlans() {
@@ -84,6 +76,18 @@ export default function PricingPlans() {
             </button>
           </article>
         ))}
+        <article className="rounded-2xl border border-gray-200 p-6 shadow-sm">
+          <p className="text-xs font-bold uppercase tracking-wide text-gray-500">Coming soon</p>
+          <h2 className="mt-2 text-xl font-bold">AI Pro</h2>
+          <p className="mt-4 text-2xl font-black">Not available yet</p>
+          <p className="mt-2 min-h-12 text-sm text-gray-600">AI subscriptions will open after chat, summaries and translation are configured and tested end to end.</p>
+          <ul className="mt-5 space-y-3 text-sm leading-6 text-gray-700">
+            <li>• AI document chat</li>
+            <li>• Document summaries</li>
+            <li>• Document translation</li>
+          </ul>
+          <button type="button" disabled className="mt-6 w-full cursor-not-allowed rounded-lg bg-gray-200 px-4 py-3 font-semibold text-gray-500">Coming soon</button>
+        </article>
       </div>
       {message && <p role="status" aria-live="polite" className="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">{message}</p>}
       <p className="mt-5 text-sm leading-6 text-gray-500">
