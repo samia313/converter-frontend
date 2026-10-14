@@ -7,6 +7,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { executeToolOperation, ToolRequest, ToolResponse } from '@/lib/unified-tool-service';
+import { auth } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { subscription } from '@/lib/db/schema';
+import { eq } from 'drizzle-orm';
+import { headers } from 'next/headers';
 
 export const maxDuration = 300;
 
@@ -15,8 +20,25 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const operation = formData.get('operation') as string;
 
-    if (!operation) {
-      return NextResponse.json({ success: false, error: 'Operation type required' }, { status: 400 });
+    const allowedOperations = new Set([
+      'merge', 'split', 'compress', 'rotate', 'crop',
+      'pdf-to-word', 'pdf-to-excel', 'pdf-to-ppt', 'pdf-to-jpg', 'pdf-to-png', 'pdf-to-text',
+      'word-to-pdf', 'excel-to-pdf', 'ppt-to-pdf', 'jpg-to-pdf', 'html-to-pdf',
+      'chat', 'summarize', 'translate', 'ocr', 'extract', 'analyze',
+      'watermark', 'unlock', 'protect', 'redact', 'sign',
+      'page-numbers', 'organize', 'repair', 'compare',
+    ]);
+    if (!operation || !allowedOperations.has(operation)) {
+      return NextResponse.json({ success: false, error: 'A valid, supported operation type is required' }, { status: 400 });
+    }
+
+    // The unified service currently has placeholder implementations for these AI operations.
+    // Fail closed rather than returning fabricated "successful" AI results.
+    if (operation === 'chat' || operation === 'summarize' || operation === 'translate') {
+      return NextResponse.json(
+        { success: false, error: 'This AI operation is not available through the unified execution API yet.' },
+        { status: 503 }
+      );
     }
 
     const toolRequest: ToolRequest = { operation: operation as any };
