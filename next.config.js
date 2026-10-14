@@ -94,7 +94,6 @@ const nextConfig = {
     { source: '/tools/edit-pdf/:category', destination: '/edit-pdf', permanent: true },
 
     { source: '/ppt-to-pdf', destination: '/powerpoint-to-pdf', permanent: true },
-    { source: '/png-to-pdf', destination: '/image-to-pdf', permanent: true },
     { source: '/ocr-pdf', destination: '/ocr', permanent: true },
     { source: '/pdf-editor', destination: '/edit-pdf', permanent: true },
 
