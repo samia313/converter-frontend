@@ -15,7 +15,6 @@ function getPlanForPrice(priceId?: string): string | null {
   const configuredPrices: Array<[string | undefined, string]> = [
     [process.env.STRIPE_PRICE_ID_PRO_MONTHLY, 'pro_monthly'],
     [process.env.STRIPE_PRICE_ID_PRO_YEARLY, 'pro_yearly'],
-    [process.env.STRIPE_PRICE_ID_AI_PRO_MONTHLY, 'ai_pro_monthly'],
   ];
   return configuredPrices.find(([configuredId]) => configuredId && configuredId === priceId)?.[1] ?? null;
 }
