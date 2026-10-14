@@ -14,7 +14,8 @@ export const redirectedGuideSlugs = new Set([
   'how-to-convert-pdf-to-png',
 ])
 
-const corePages = ['/', '/tools', '/features', '/blog', '/ai-tools', '/comparisons', '/guides', '/use-cases', '/security', '/about', '/contact', '/privacy', '/terms', '/cookies']
+// Include core landing pages only when their canonical production URLs return 200.
+const corePages = ['/', '/tools', '/features', '/blog', '/ai-tools', '/comparisons', '/guides', '/use-cases', '/security', '/about', '/contact', '/pricing', '/faq', '/privacy', '/terms', '/cookies']
 const pdfTools = ['merge-pdf','split-pdf','rotate-pdf','organize-pdf','remove-pages','crop-pdf','page-numbers','compress-pdf','flatten-pdf','extract-pages','pdf-metadata-editor','batch-conversion','qr-code-generator']
 const converters = ['word-to-pdf','excel-to-pdf','powerpoint-to-pdf','jpg-to-pdf','html-to-pdf','image-to-pdf','pdf-to-word','pdf-to-excel','pdf-to-powerpoint','pdf-to-jpg','pdf-to-png']
 const securityEditing = ['protect-pdf','password-protect-pdf','unlock-pdf','sign-pdf','edit-pdf','view-and-annotate','watermark-pdf','redact-pdf']
