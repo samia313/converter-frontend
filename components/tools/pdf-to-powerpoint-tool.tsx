@@ -42,7 +42,15 @@ export default function PdftopowerpointTool() {
         throw new Error(data?.error || 'PDF to PowerPoint conversion failed.');
       }
       const blob = await response.blob();
-      if (!blob.size) throw new Error('The converter returned an empty PowerPoint file.');
+      if (blob.size < 4) throw new Error('The converter returned an empty or incomplete PowerPoint file.');
+      const signature = new Uint8Array(await blob.slice(0, 4).arrayBuffer());
+      if (signature[0] !== 0x50 || signature[1] !== 0x4b || signature[2] !== 0x03 || signature[3] !== 0x04) {
+        throw new Error('The converter response is not a valid PowerPoint archive. Please try again.');
+      }
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/vnd.openxmlformats-officedocument.presentationml.presentation')) {
+        throw new Error('The converter returned an unexpected file format.');
+      }
       setDownloadUrl(URL.createObjectURL(blob));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'PDF to PowerPoint conversion failed.');
