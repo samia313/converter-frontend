@@ -128,11 +128,10 @@ export default function AIChatPDFTool() {
         }),
       });
 
+      const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error('Failed to get response');
+        throw new Error(typeof data.error === 'string' ? data.error : 'Failed to get a response. Please try again.');
       }
-
-      const data = await response.json();
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: data.response || 'I could not find an answer to your question.',
