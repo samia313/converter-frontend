@@ -16,6 +16,20 @@ export async function GET(request: NextRequest) {
     process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY_2 ||
     process.env.OPENAI_API_KEY_3 || process.env.OPENAI_API_KEY_4
   );
+  let conversionWorkerReachable = false;
+  if (conversionWorkerConfigured) {
+    try {
+      const baseUrl = process.env.DIGITALOCEAN_CONVERTER_URL!.replace(/\/$/, '');
+      const response = await fetch(baseUrl, {
+        headers: { Authorization: `Bearer ${process.env.DIGITALOCEAN_CONVERTER_API_KEY}` },
+        cache: 'no-store',
+        signal: AbortSignal.timeout(4000),
+      });
+      conversionWorkerReachable = response.ok;
+    } catch {
+      conversionWorkerReachable = false;
+    }
+  }
 
   try {
     const queue = getQueueService();
@@ -50,6 +64,7 @@ export async function GET(request: NextRequest) {
       queueHealth.status === 'degraded' ||
       alerts.some((a) => a.level === 'critical') ||
       !conversionWorkerConfigured ||
+      !conversionWorkerReachable ||
       !aiProviderConfigured
     ) {
       overallStatus = 'degraded';
@@ -75,7 +90,7 @@ export async function GET(request: NextRequest) {
           ...loggingStats,
         },
         conversionWorker: {
-          status: conversionWorkerConfigured ? 'configured' : 'not_configured',
+          status: !conversionWorkerConfigured ? 'not_configured' : conversionWorkerReachable ? 'reachable' : 'unreachable',
         },
         aiProvider: {
           status: aiProviderConfigured ? 'configured' : 'not_configured',
