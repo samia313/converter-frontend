@@ -73,8 +73,13 @@ export async function POST(request: Request) {
 
     const output = await fetch(downloadUrl, {
       cache: 'no-store',
+      redirect: 'manual',
       signal: AbortSignal.timeout(30000),
     });
+    // Do not follow an upstream redirect: that would bypass the origin check above.
+    if (output.status >= 300 && output.status < 400) {
+      return NextResponse.json({ error: 'The converter output URL redirected unexpectedly.', code: 'OUTPUT_REDIRECT_REJECTED' }, { status: 502 });
+    }
     if (!output.ok) {
       return NextResponse.json({ error: 'Converted PDF could not be retrieved.', code: 'OUTPUT_FETCH_FAILED' }, { status: 502 });
     }
