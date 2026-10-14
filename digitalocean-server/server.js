@@ -46,7 +46,30 @@ const upload = multer({
 })
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() })
+  const spacesConfigured = Boolean(
+    settings.spaces.key &&
+    settings.spaces.secret &&
+    settings.spaces.bucket &&
+    settings.spaces.endpoint &&
+    settings.spaces.region
+  )
+  let tempDirectoryWritable = false
+  try {
+    fs.accessSync(settings.uploadTempDir, fs.constants.W_OK)
+    tempDirectoryWritable = true
+  } catch {}
+
+  const components = {
+    apiKeyConfigured: Boolean(settings.apiKey),
+    spacesConfigured,
+    tempDirectoryWritable,
+  }
+  const ready = components.apiKeyConfigured && components.spacesConfigured && components.tempDirectoryWritable
+  res.status(ready ? 200 : 503).json({
+    status: ready ? 'ok' : 'not_ready',
+    timestamp: new Date().toISOString(),
+    components,
+  })
 })
 
 app.get('/version', (req, res) => {
