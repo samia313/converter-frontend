@@ -50,8 +50,16 @@ export async function POST(request: NextRequest) {
     if (singleFile) toolRequest.file = singleFile as File;
 
     const options: Record<string, any> = {};
+    const numericOptionKeys = new Set(['x', 'y', 'width', 'height', 'angle', 'page']);
     for (const [key, value] of formData.entries()) {
-      if (key.startsWith('options.')) options[key.replace('options.', '')] = value;
+      if (!key.startsWith('options.')) continue;
+      const optionKey = key.replace('options.', '');
+      if (numericOptionKeys.has(optionKey)) {
+        const rawValue = typeof value === 'string' ? value.trim() : '';
+        options[optionKey] = rawValue !== '' && Number.isFinite(Number(rawValue)) ? Number(rawValue) : Number.NaN;
+      } else {
+        options[optionKey] = value;
+      }
     }
     if (Object.keys(options).length > 0) toolRequest.options = options;
 
