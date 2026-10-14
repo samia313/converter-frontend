@@ -22,7 +22,7 @@ export default function SplitPDFToolEnhanced() {
       setError('Please select a PDF file.');
       return;
     }
-    if (splitPage.trim() && (!/^\\d+$/.test(splitPage.trim()) || Number(splitPage) < 1)) {
+    if (splitPage.trim() && (!/^\d+$/.test(splitPage.trim()) || Number(splitPage) < 1)) {
       setError('Enter a whole page number greater than zero, or leave it blank to split in the middle.');
       return;
     }
@@ -76,7 +76,7 @@ export default function SplitPDFToolEnhanced() {
     if (!downloadUrl || !selectedFile) return;
     const link = document.createElement('a');
     link.href = downloadUrl;
-    link.download = selectedFile.name.replace(/\\.pdf$/i, '') + '-split.zip';
+    link.download = selectedFile.name.replace(/\.pdf$/i, '') + '-split.zip';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
