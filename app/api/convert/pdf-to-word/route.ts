@@ -99,6 +99,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Word document creation failed' }, { status: 500 });
     }
 
+    // DOCX is a ZIP package; validate its container signature before offering a download.
+    if (
+      wordBuffer.length < 4 ||
+      wordBuffer[0] !== 0x50 ||
+      wordBuffer[1] !== 0x4b ||
+      wordBuffer[2] !== 0x03 ||
+      wordBuffer[3] !== 0x04
+    ) {
+      console.error('[pdf-to-word] Generated DOCX failed container validation.');
+      return NextResponse.json({ error: 'The Word output failed file integrity validation. Please try again.' }, { status: 500 });
+    }
+    if (wordBuffer.length > 100 * 1024 * 1024) {
+      return NextResponse.json({ error: 'The generated Word document exceeds the 100MB download limit.' }, { status: 413 });
+    }
+
     const safeBaseName = file.name
       .replace(/\.pdf$/i, '')
       .replace(/[\\\/\r\n"\x00-\x1f]/g, '_')
@@ -113,6 +128,7 @@ export async function POST(request: NextRequest) {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Content-Length': String(wordBuffer.length),
         'X-Converted-Pages': String(pageCount),
+        'X-Conversion-Limitations': 'Text-only conversion; original layout, images, and tables may not be preserved.',
       },
     });
   } catch (error) {
