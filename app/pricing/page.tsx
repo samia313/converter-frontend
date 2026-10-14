@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import PricingPlans from './pricing-plans'
 
 export const metadata: Metadata = {
   title: 'Pricing | Free PDF Tools and AI Features',
@@ -25,11 +26,6 @@ const included = [
   'No payment required to try tools that are marked free',
 ]
 
-const notes = [
-  { title: 'Free PDF tools', body: 'Start with the free tools available on PDFilio. Each tool page explains its supported formats and any file or usage limits that apply.' },
-  { title: 'AI and advanced features', body: 'Availability, account requirements, and usage limits can differ by feature. Check the relevant tool page or in-product prompt before relying on a particular limit or capability.' },
-  { title: 'Premium billing', body: 'PDFilio does not currently publish a verified price list on this page. We do not want to display an outdated or unverified subscription price. If a paid option is shown in the product, review its price, billing period, renewal, and cancellation terms before confirming payment.' },
-]
 
 export default function PricingPage() {
   return (
@@ -52,27 +48,16 @@ export default function PricingPage() {
       </section>
 
       <section className="px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
-          <article className="rounded-2xl border border-gray-200 p-7 shadow-sm">
-            <p className="text-sm font-bold uppercase tracking-wide text-green-700">Get started</p>
-            <h2 className="mt-2 text-2xl font-bold">Free PDF tools</h2>
-            <p className="mt-3 text-3xl font-black">$0 <span className="text-base font-medium text-gray-500">to use tools marked free</span></p>
-            <p className="mt-4 leading-7 text-gray-600">Use available free tools for everyday PDF and document workflows. Limits and supported formats are shown on individual tool pages.</p>
-            <ul className="mt-5 space-y-3">{included.map((item) => <li key={item} className="flex gap-2 text-sm leading-6 text-gray-700"><span aria-hidden="true" className="font-bold text-green-700">✓</span><span>{item}</span></li>)}</ul>
-            <Link href="/tools" className="mt-7 inline-flex font-semibold text-red-700 hover:underline">Browse free tools →</Link>
-          </article>
-          <article className="rounded-2xl border border-gray-200 p-7 shadow-sm">
-            <p className="text-sm font-bold uppercase tracking-wide text-blue-700">Feature-dependent</p>
-            <h2 className="mt-2 text-2xl font-bold">AI and advanced tools</h2>
-            <p className="mt-3 text-3xl font-black">Check in product</p>
-            <p className="mt-4 leading-7 text-gray-600">Some AI or advanced features may have account, usage, or payment requirements. The current tool interface is the source of truth for availability and any price shown.</p>
-            <ul className="mt-5 space-y-3 text-sm leading-6 text-gray-700">
-              <li>• AI PDF summary and document chat</li>
-              <li>• PDF translation and rewriting</li>
-              <li>• OCR and document extraction</li>
-            </ul>
-            <Link href="/ai-tools" className="mt-7 inline-flex font-semibold text-red-700 hover:underline">Explore AI tools →</Link>
-          </article>
+        <div className="mx-auto max-w-7xl">
+          <p className="mb-6 max-w-3xl leading-7 text-gray-600">
+            Choose a plan in USD. PDFilio’s proposed prices are deliberately below publicly listed competitor benchmarks. Before paying, verify the included features, limits, billing interval, and cancellation terms in checkout.
+          </p>
+          <PricingPlans />
+          <div className="mt-8 rounded-xl border border-gray-200 bg-gray-50 p-5">
+            <h2 className="text-lg font-bold">Free plan</h2>
+            <p className="mt-2 text-sm leading-6 text-gray-600">$0. Use tools marked free, subject to each tool’s stated limits and availability.</p>
+            <Link href="/tools" className="mt-3 inline-flex font-semibold text-red-700 hover:underline">Browse free tools →</Link>
+          </div>
         </div>
       </section>
 
