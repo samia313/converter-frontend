@@ -27,11 +27,10 @@ export default function AISummaryTool() {
         body: formData,
       });
 
+      const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error('Summary generation failed');
+        throw new Error(typeof data.error === 'string' ? data.error : 'Summary generation failed. Please try again.');
       }
-
-      const data = await response.json();
       setSummary(data.summary || data.response || 'Could not generate summary');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate summary');
