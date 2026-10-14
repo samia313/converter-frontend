@@ -142,6 +142,39 @@ async function createXlsx(rows: string[][]): Promise<Buffer> {
   return zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });
 }
 
+async function validateXlsxStructure(buffer: Buffer): Promise<boolean> {
+  try {
+    const archive = await JSZip.loadAsync(buffer, { checkCRC32: true });
+    const requiredFiles = [
+      '[Content_Types].xml',
+      '_rels/.rels',
+      'xl/workbook.xml',
+      'xl/_rels/workbook.xml.rels',
+      'xl/worksheets/sheet1.xml',
+    ];
+
+    for (const path of requiredFiles) {
+      if (!archive.file(path)) return false;
+    }
+
+    const [contentTypes, rootRels, workbook, workbookRels, worksheet] = await Promise.all(
+      requiredFiles.map(async (path) => archive.file(path)!.async('string')),
+    );
+
+    return (
+      contentTypes.includes('spreadsheetml.sheet.main+xml') &&
+      rootRels.includes('Target="xl/workbook.xml"') &&
+      workbook.includes('<sheet name="PDF Data"') &&
+      workbookRels.includes('Target="worksheets/sheet1.xml"') &&
+      worksheet.includes('<sheetData>') &&
+      worksheet.includes('</sheetData>') &&
+      worksheet.includes('<row ')
+    );
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -197,6 +230,10 @@ export async function POST(request: NextRequest) {
     }
     const baseName = file.name.replace(/\.pdf$/i, '').replace(/[\\/\r\n"]/g, '_').slice(0, 150) || 'document';
     const fileName = baseName + '.xlsx';
+    if (!(await validateXlsxStructure(xlsxBuffer))) {
+      console.error('[pdf-to-excel] Generated XLSX failed internal workbook validation.');
+      return NextResponse.json({ error: 'The generated Excel workbook failed structural validation.' }, { status: 500 });
+    }
 
     return new NextResponse(xlsxBuffer as BodyInit, {
       headers: {
