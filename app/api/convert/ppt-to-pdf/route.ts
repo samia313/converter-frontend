@@ -49,6 +49,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'PowerPoint conversion service configuration is invalid.', code: 'INVALID_CONVERTER_CONFIG' }, { status: 503 });
     }
 
+    const inputBytes = Buffer.from(await file.slice(0, 8).arrayBuffer());
+    const isPptxZip = extension === '.pptx' &&
+      inputBytes.length >= 4 &&
+      inputBytes[0] === 0x50 && inputBytes[1] === 0x4b &&
+      inputBytes[2] === 0x03 && inputBytes[3] === 0x04;
+    const isLegacyPpt = extension === '.ppt' &&
+      inputBytes.length >= 8 &&
+      inputBytes.equals(Buffer.from([0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]));
+    if (!isPptxZip && !isLegacyPpt) {
+      return NextResponse.json({ error: 'The uploaded file does not match a supported PowerPoint file format.', code: 'INVALID_INPUT_FILE' }, { status: 400 });
+    }
+
     const formData = new FormData();
     formData.append('file', file, file.name);
 
