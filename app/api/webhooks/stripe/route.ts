@@ -39,16 +39,15 @@ export async function POST(req: NextRequest) {
     switch (event.type) {
       case 'customer.subscription.created':
       case 'customer.subscription.updated': {
-        const stripeSub = event.data.object as Stripe.Subscription;
-        const customerId = typeof stripeSub.customer === 'string' ? stripeSub.customer : stripeSub.customer.id;
-        const priceId = stripeSub.items.data[0]?.price.id;
+        const eventSubscription = event.data.object as Stripe.Subscription;
+
+        // Webhook delivery is at-least-once and can be out of order. Read the current
+        // subscription from Stripe instead of trusting a potentially stale event snapshot.
+        // If Stripe is temporarily unavailable, return 500 so Stripe retries the event.
+        const sub = await getStripe().subscriptions.retrieve(eventSubscription.id);
+        const customerId = typeof sub.customer === 'string' ? sub.customer : sub.customer.id;
+        const priceId = sub.items.data[0]?.price.id;
         const mappedPlan = getPlanForPrice(priceId);
-        const sub = stripeSub as unknown as {
-          id: string;
-          status: string;
-          current_period_start: number;
-          current_period_end: number;
-        };
 
         // Unknown or intentionally unoffered prices must never inherit paid access.
         const plan = mappedPlan ?? 'free';
