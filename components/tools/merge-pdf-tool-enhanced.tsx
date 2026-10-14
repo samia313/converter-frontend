@@ -66,6 +66,8 @@ export default function MergePDFToolEnhanced() {
     setError(null);
     setResult(null);
     setProgress(0);
+    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    setDownloadUrl(null);
 
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
     try {
