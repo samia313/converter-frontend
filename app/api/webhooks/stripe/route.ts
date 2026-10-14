@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 import { subscription } from '@/lib/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, isNull, or } from 'drizzle-orm';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
@@ -60,7 +60,9 @@ export async function POST(req: NextRequest) {
           });
         }
 
-        await db.update(subscription).set({
+        // Stripe may deliver events out of order. Do not let an older subscription's
+        // update overwrite a different subscription already attached to this customer.
+        const result = await db.update(subscription).set({
           stripeSubscriptionId: sub.id,
           plan,
           status,
@@ -71,7 +73,20 @@ export async function POST(req: NextRequest) {
             ? new Date(sub.current_period_end * 1000)
             : null,
           updatedAt: new Date(),
-        }).where(eq(subscription.stripeCustomerId, customerId));
+        }).where(and(
+          eq(subscription.stripeCustomerId, customerId),
+          or(
+            isNull(subscription.stripeSubscriptionId),
+            eq(subscription.stripeSubscriptionId, sub.id),
+          ),
+        )).returning({ id: subscription.id });
+
+        if (result.length === 0) {
+          console.warn('Ignored stale Stripe subscription update; customer is linked to a different subscription.', {
+            customerId,
+            incomingSubscriptionId: sub.id,
+          });
+        }
         break;
       }
 
