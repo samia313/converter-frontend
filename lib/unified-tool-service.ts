@@ -4,7 +4,7 @@
  * NO ERRORS - All validations and error handling built-in
  */
 
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, degrees } from 'pdf-lib';
 
 export type ToolOperation =
   | 'merge' | 'split' | 'compress' | 'rotate' | 'crop'
@@ -184,17 +184,13 @@ export class PDFOperations {
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
       
       const pages = pdf.getPages();
-      const rotationMap: Record<number, any> = {
-        0: 'Normal',
-        90: 'Degrees90',
-        180: 'Degrees180',
-        270: 'Degrees270',
-      };
+      const normalizedAngle = ((angle % 360) + 360) % 360;
+      if (![0, 90, 180, 270].includes(normalizedAngle)) {
+        return { success: false, error: 'Rotation angle must be 0, 90, 180, or 270 degrees' };
+      }
 
       pages.forEach(page => {
-        const normalizedAngle = ((angle % 360) + 360) % 360;
-        const rotationKey = (normalizedAngle / 90) * 90;
-        // pdf-lib handles rotation internally, just marking successful completion
+        page.setRotation(degrees(normalizedAngle));
       });
 
       const bytes = await pdf.save();
