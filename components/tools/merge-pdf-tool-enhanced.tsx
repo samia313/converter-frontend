@@ -67,6 +67,7 @@ export default function MergePDFToolEnhanced() {
     setResult(null);
     setProgress(0);
 
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     try {
       const formData = new FormData();
       selectedFiles.forEach(file => {
@@ -76,7 +77,7 @@ export default function MergePDFToolEnhanced() {
       setProgress(25);
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 60000);
+      timeoutId = setTimeout(() => controller.abort(), 60000);
 
       const response = await fetch('/api/convert/merge-pdf', {
         method: 'POST',
@@ -84,28 +85,51 @@ export default function MergePDFToolEnhanced() {
         signal: controller.signal,
       });
 
-      clearTimeout(timeoutId);
-
       if (!response.ok) {
-        throw new Error('Failed to merge PDFs');
+        let message = 'Failed to merge PDFs. Please check the files and try again.';
+        try {
+          const payload = await response.json();
+          if (typeof payload?.error === 'string') message = payload.error;
+        } catch {
+          // Keep the safe fallback when the server response is not JSON.
+        }
+        throw new Error(message);
+      }
+
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.toLowerCase().includes('application/pdf')) {
+        throw new Error('Merge service returned an unexpected file format. No download was created.');
       }
 
       setProgress(75);
       const blob = await response.blob();
+      if (blob.size < 5) {
+        throw new Error('Merge produced an empty or invalid PDF. Please try again.');
+      }
+      const header = new Uint8Array(await blob.slice(0, 5).arrayBuffer());
+      if (String.fromCharCode(...header) !== '%PDF-') {
+        throw new Error('Merge output failed PDF integrity validation. No download was created.');
+      }
+
+      if (downloadUrl) URL.revokeObjectURL(downloadUrl);
       const url = URL.createObjectURL(blob);
-      
+      const reportedPages = Number(response.headers.get('x-pages') || 0);
+
       setDownloadUrl(url);
       setResult({
         filesCount: selectedFiles.length,
-        totalPages: 0,
+        totalPages: Number.isFinite(reportedPages) ? reportedPages : 0,
         outputSize: blob.size,
         successMessage: 'PDFs merged successfully!'
       });
       setProgress(100);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to merge PDFs');
+      setError(err instanceof DOMException && err.name === 'AbortError'
+        ? 'Merging took too long. Try smaller PDFs.'
+        : err instanceof Error ? err.message : 'Failed to merge PDFs');
       setProgress(0);
     } finally {
+      if (timeoutId) clearTimeout(timeoutId);
       setIsProcessing(false);
     }
   };
@@ -200,7 +224,7 @@ export default function MergePDFToolEnhanced() {
                   <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
                   <div>
                     <p className="text-sm font-semibold text-green-900">{result.successMessage}</p>
-                    <p className="text-xs text-green-700">Output: {(result.outputSize / 1024 / 1024).toFixed(2)} MB</p>
+                    <p className="text-xs text-green-700">Output: {(result.outputSize / 1024 / 1024).toFixed(2)} MB{result.totalPages > 0 ? ` · ${result.totalPages} pages` : ''}</p>
                   </div>
                 </div>
               )}
