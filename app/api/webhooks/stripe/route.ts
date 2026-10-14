@@ -44,7 +44,14 @@ export async function POST(req: NextRequest) {
         // Webhook delivery is at-least-once and can be out of order. Read the current
         // subscription from Stripe instead of trusting a potentially stale event snapshot.
         // If Stripe is temporarily unavailable, return 500 so Stripe retries the event.
-        const sub = await getStripe().subscriptions.retrieve(eventSubscription.id);
+        const sub = await getStripe().subscriptions.retrieve(eventSubscription.id) as unknown as {
+          id: string;
+          customer: string | Stripe.Customer;
+          status: string;
+          items: { data: Array<{ price: { id: string } }> };
+          current_period_start: number;
+          current_period_end: number;
+        };
         const customerId = typeof sub.customer === 'string' ? sub.customer : sub.customer.id;
         const priceId = sub.items.data[0]?.price.id;
         const mappedPlan = getPlanForPrice(priceId);
