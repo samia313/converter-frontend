@@ -5,7 +5,6 @@ import FileUploader from '@/components/file-uploader';
 import { Copy, Download } from 'lucide-react';
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
-const MAX_PDF_PAGES = 10;
 const OCR_LANG = 'eng';
 const TESSERACT_CDN = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
 
@@ -91,8 +90,25 @@ export default function OcrTool() {
       throw new Error('OCR completed without extracted text.');
     }
 
+    let validatedDownloadUrl: string | null = null;
+    if (data?.downloadUrl != null) {
+      if (typeof data.downloadUrl !== 'string' || data.downloadUrl.length > 4096) {
+        throw new Error('OCR returned an invalid download link.');
+      }
+      let outputUrl: URL;
+      try {
+        outputUrl = new URL(data.downloadUrl);
+      } catch {
+        throw new Error('OCR returned an invalid download link.');
+      }
+      if (!['http:', 'https:'].includes(outputUrl.protocol) || outputUrl.username || outputUrl.password) {
+        throw new Error('OCR returned an unsafe download link.');
+      }
+      validatedDownloadUrl = outputUrl.toString();
+    }
+
     setProgress(100);
-    setOcrPdfUrl(typeof data?.downloadUrl === 'string' ? data.downloadUrl : null);
+    setOcrPdfUrl(validatedDownloadUrl);
     return data.text.trim();
   };
 
@@ -157,7 +173,7 @@ export default function OcrTool() {
     link.href = url;
     link.download = `${selectedFile?.name.replace(/\\.[^.]+$/, '') || 'ocr-result'}.txt`;
     link.click();
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   return (
