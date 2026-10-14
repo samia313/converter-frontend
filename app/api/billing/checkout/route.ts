@@ -6,7 +6,7 @@ import { headers } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-type PaidPlan = 'pro_monthly' | 'pro_yearly' | 'ai_pro_monthly'
+type PaidPlan = 'pro_monthly' | 'pro_yearly'
 
 function getStripe() {
   const secretKey = process.env.STRIPE_SECRET_KEY
@@ -18,7 +18,6 @@ function getPriceId(plan: PaidPlan) {
   const priceIds: Record<PaidPlan, string | undefined> = {
     pro_monthly: process.env.STRIPE_PRICE_ID_PRO_MONTHLY,
     pro_yearly: process.env.STRIPE_PRICE_ID_PRO_YEARLY,
-    ai_pro_monthly: process.env.STRIPE_PRICE_ID_AI_PRO_MONTHLY,
   }
   return priceIds[plan]
 }
@@ -37,8 +36,8 @@ export async function POST(request: NextRequest) {
   let plan: PaidPlan
   try {
     const body = await request.json()
-    if (!['pro_monthly', 'pro_yearly', 'ai_pro_monthly'].includes(body?.plan)) {
-      return NextResponse.json({ error: 'Choose a valid paid plan.' }, { status: 400 })
+    if (!['pro_monthly', 'pro_yearly'].includes(body?.plan)) {
+      return NextResponse.json({ error: 'This plan is not available for purchase yet.' }, { status: 400 })
     }
     plan = body.plan
   } catch {
