@@ -50,9 +50,9 @@ export async function POST(req: NextRequest) {
           const priceId = stripeSubscription.items.data[0]?.price.id;
           let plan = 'basic';
 
-          // Map Stripe price IDs to plans
-          if (priceId?.includes('professional')) plan = 'professional';
-          if (priceId?.includes('enterprise')) plan = 'enterprise';
+          // Stripe price IDs are opaque identifiers; compare exact configured IDs.
+          if (priceId && priceId === process.env.STRIPE_PRICE_ID_PROFESSIONAL) plan = 'professional';
+          if (priceId && priceId === process.env.STRIPE_PRICE_ID_ENTERPRISE) plan = 'enterprise';
 
           const sub = stripeSubscription as any;
           await db
