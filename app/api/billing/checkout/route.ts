@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
   let plan: PaidPlan
   try {
     const body = await request.json()
-    if (!['pro_monthly', 'pro_yearly', 'ai_pro_monthly', 'team_monthly'].includes(body?.plan)) {
+    if (!['pro_monthly', 'pro_yearly', 'ai_pro_monthly'].includes(body?.plan)) {
       return NextResponse.json({ error: 'Choose a valid paid plan.' }, { status: 400 })
     }
     plan = body.plan
