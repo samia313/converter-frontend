@@ -85,6 +85,29 @@ export class ToolValidator {
   }
 }
 
+/** Validate both the file label and the actual PDF signature before PDF-only operations. */
+async function validatePdfFile(file: File | null): Promise<FileValidationResult> {
+  const base = await ToolValidator.validateFile(file);
+  if (!base.valid || !file) return base;
+
+  const looksLikePdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+  if (!looksLikePdf) {
+    return { valid: false, error: 'This tool requires a PDF file. Please upload a .pdf document.' };
+  }
+
+  try {
+    const header = new Uint8Array(await file.slice(0, 5).arrayBuffer());
+    const signature = String.fromCharCode(...header);
+    if (signature !== '%PDF-') {
+      return { valid: false, error: 'The uploaded file does not contain a valid PDF signature. Please upload a valid PDF.' };
+    }
+  } catch {
+    return { valid: false, error: 'Unable to read the uploaded PDF. Please try the file again.' };
+  }
+
+  return base;
+}
+
 /**
  * PDF Operations - All PDF manipulation functions
  */
@@ -92,8 +115,13 @@ export class PDFOperations {
   static async merge(files: File[]): Promise<ToolResponse> {
     const startTime = Date.now();
     try {
-      const validation = await ToolValidator.validateFiles(files);
-      if (!validation.valid) return { success: false, error: validation.error };
+      if (!files || files.length < 2) {
+        return { success: false, error: 'At least 2 PDF files are required for merge.' };
+      }
+      for (const file of files) {
+        const validation = await validatePdfFile(file);
+        if (!validation.valid) return { success: false, error: validation.error };
+      }
 
       const mergedPdf = await PDFDocument.create();
       let totalPages = 0;
@@ -123,7 +151,7 @@ export class PDFOperations {
   static async split(file: File, splitPage?: number): Promise<ToolResponse> {
     const startTime = Date.now();
     try {
-      const validation = await ToolValidator.validateFile(file);
+      const validation = await validatePdfFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
       const arrayBuffer = await file.arrayBuffer();
@@ -153,7 +181,7 @@ export class PDFOperations {
   static async compress(file: File): Promise<ToolResponse> {
     const startTime = Date.now();
     try {
-      const validation = await ToolValidator.validateFile(file);
+      const validation = await validatePdfFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
       const arrayBuffer = await file.arrayBuffer();
@@ -177,7 +205,7 @@ export class PDFOperations {
   static async rotate(file: File, angle: number = 90): Promise<ToolResponse> {
     const startTime = Date.now();
     try {
-      const validation = await ToolValidator.validateFile(file);
+      const validation = await validatePdfFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
       const arrayBuffer = await file.arrayBuffer();
@@ -208,7 +236,7 @@ export class PDFOperations {
   static async crop(file: File, options?: { x: number; y: number; width: number; height: number }): Promise<ToolResponse> {
     const startTime = Date.now();
     try {
-      const validation = await ToolValidator.validateFile(file);
+      const validation = await validatePdfFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
       const arrayBuffer = await file.arrayBuffer();
