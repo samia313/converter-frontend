@@ -1,35 +1,37 @@
 import { db } from '@/lib/db';
 import { subscription } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
-import { headers } from 'next/headers';
+import { and, eq, isNull, or } from 'drizzle-orm';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 function getStripe() {
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error('STRIPE_SECRET_KEY is not set');
-  }
-  return new Stripe(process.env.STRIPE_SECRET_KEY);
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  if (!secretKey) throw new Error('STRIPE_SECRET_KEY is not set');
+  return new Stripe(secretKey);
 }
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
+function getPlanForPrice(priceId?: string): string | null {
+  if (!priceId) return null;
+  const configuredPrices: Array<[string | undefined, string]> = [
+    [process.env.STRIPE_PRICE_ID_PRO_MONTHLY, 'pro_monthly'],
+    [process.env.STRIPE_PRICE_ID_PRO_YEARLY, 'pro_yearly'],
+  ];
+  return configuredPrices.find(([configuredId]) => configuredId && configuredId === priceId)?.[1] ?? null;
+}
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
-  const headersList = await headers();
-  const sig = headersList.get('stripe-signature');
+  const sig = req.headers.get('stripe-signature');
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   let event: Stripe.Event;
-
   try {
     if (!sig || !webhookSecret) {
-      return NextResponse.json({ error: 'Missing signature or secret' }, { status: 400 });
+      return NextResponse.json({ error: 'Missing signature or webhook secret' }, { status: 400 });
     }
-
-    const stripe = getStripe();
-    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
+    event = getStripe().webhooks.constructEvent(body, sig, webhookSecret);
   } catch (error) {
-    console.error('Webhook signature verification failed:', error);
+    console.error('Stripe webhook signature verification failed:', error);
     return NextResponse.json({ error: 'Webhook signature verification failed' }, { status: 400 });
   }
 
@@ -37,91 +39,94 @@ export async function POST(req: NextRequest) {
     switch (event.type) {
       case 'customer.subscription.created':
       case 'customer.subscription.updated': {
-        const stripeSubscription = event.data.object as Stripe.Subscription;
-        const customerId = stripeSubscription.customer as string;
+        const eventSubscription = event.data.object as Stripe.Subscription;
 
-        // Find user by stripe customer id
-        const subs = await db
-          .select()
-          .from(subscription)
-          .where(eq(subscription.stripeCustomerId, customerId));
+        // Webhook delivery is at-least-once and can be out of order. Read the current
+        // subscription from Stripe instead of trusting a potentially stale event snapshot.
+        // If Stripe is temporarily unavailable, return 500 so Stripe retries the event.
+        const sub = await getStripe().subscriptions.retrieve(eventSubscription.id) as unknown as {
+          id: string;
+          customer: string | Stripe.Customer;
+          status: string;
+          items: { data: Array<{ price: { id: string } }> };
+          current_period_start: number;
+          current_period_end: number;
+        };
+        const customerId = typeof sub.customer === 'string' ? sub.customer : sub.customer.id;
+        const priceId = sub.items.data[0]?.price.id;
+        const mappedPlan = getPlanForPrice(priceId);
 
-        if (subs.length > 0) {
-          const priceId = stripeSubscription.items.data[0]?.price.id;
-          let plan = 'basic';
+        // Unknown or intentionally unoffered prices must never inherit paid access.
+        const plan = mappedPlan ?? 'free';
+        const status = mappedPlan ? sub.status : 'unmapped_price';
+        if (!mappedPlan) {
+          console.error('Stripe subscription has an unrecognized or unoffered price; paid access disabled.', {
+            subscriptionId: sub.id,
+            priceId: priceId ?? null,
+          });
+        }
 
-          // Map Stripe price IDs to plans
-          if (priceId?.includes('professional')) plan = 'professional';
-          if (priceId?.includes('enterprise')) plan = 'enterprise';
+        // Stripe may deliver events out of order. Do not let an older subscription's
+        // update overwrite a different subscription already attached to this customer.
+        const result = await db.update(subscription).set({
+          stripeSubscriptionId: sub.id,
+          plan,
+          status,
+          currentPeriodStart: Number.isFinite(sub.current_period_start)
+            ? new Date(sub.current_period_start * 1000)
+            : null,
+          currentPeriodEnd: Number.isFinite(sub.current_period_end)
+            ? new Date(sub.current_period_end * 1000)
+            : null,
+          updatedAt: new Date(),
+        }).where(and(
+          eq(subscription.stripeCustomerId, customerId),
+          or(
+            isNull(subscription.stripeSubscriptionId),
+            eq(subscription.stripeSubscriptionId, sub.id),
+          ),
+        )).returning({ id: subscription.id });
 
-          const sub = stripeSubscription as any;
-          await db
-            .update(subscription)
-            .set({
-              stripeSubscriptionId: sub.id,
-              plan,
-              status: sub.status,
-              currentPeriodStart: new Date(sub.current_period_start * 1000),
-              currentPeriodEnd: new Date(sub.current_period_end * 1000),
-              updatedAt: new Date(),
-            })
-            .where(eq(subscription.stripeCustomerId, customerId));
+        if (result.length === 0) {
+          console.warn('Ignored stale Stripe subscription update; customer is linked to a different subscription.', {
+            customerId,
+            incomingSubscriptionId: sub.id,
+          });
         }
         break;
       }
 
       case 'customer.subscription.deleted': {
-        const stripeSubscription = event.data.object as Stripe.Subscription;
-        const customerId = stripeSubscription.customer as string;
+        const stripeSub = event.data.object as Stripe.Subscription;
+        const customerId = typeof stripeSub.customer === 'string' ? stripeSub.customer : stripeSub.customer.id;
 
-        await db
-          .update(subscription)
-          .set({
-            status: 'canceled',
-            canceledAt: new Date(),
-            updatedAt: new Date(),
-          })
-          .where(eq(subscription.stripeCustomerId, customerId));
-        break;
-      }
-
-      case 'invoice.payment_succeeded': {
-        const invoice = event.data.object as Stripe.Invoice;
-        const customerId = invoice.customer as string;
-
-        // Update subscription status to active
-        await db
-          .update(subscription)
-          .set({
-            status: 'active',
-            updatedAt: new Date(),
-          })
-          .where(eq(subscription.stripeCustomerId, customerId));
-        break;
-      }
-
-      case 'invoice.payment_failed': {
-        const invoice = event.data.object as Stripe.Invoice;
-        const customerId = invoice.customer as string;
-
-        // Update subscription status to past_due
-        await db
-          .update(subscription)
-          .set({
-            status: 'past_due',
-            updatedAt: new Date(),
-          })
-          .where(eq(subscription.stripeCustomerId, customerId));
+        // Only cancel the row if it still points to this exact subscription. A delayed
+        // deletion event for an older subscription must not cancel a newer subscription
+        // belonging to the same Stripe customer.
+        await db.update(subscription).set({
+          stripeSubscriptionId: null,
+          plan: 'free',
+          status: 'canceled',
+          currentPeriodStart: null,
+          currentPeriodEnd: null,
+          canceledAt: new Date(),
+          updatedAt: new Date(),
+        }).where(and(
+          eq(subscription.stripeCustomerId, customerId),
+          eq(subscription.stripeSubscriptionId, stripeSub.id),
+        ));
         break;
       }
 
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        // Subscription lifecycle events are the source of truth for entitlement status.
+        // Avoid stale invoice events accidentally reactivating a canceled subscription.
+        console.log(`Ignoring unhandled Stripe event type: ${event.type}`);
     }
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error('Error processing webhook:', error);
+    console.error('Error processing Stripe webhook:', error);
     return NextResponse.json({ error: 'Error processing webhook' }, { status: 500 });
   }
 }
