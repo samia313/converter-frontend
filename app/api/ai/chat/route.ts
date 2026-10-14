@@ -1,4 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { auth } from '@/lib/auth'
+import { db } from '@/lib/db'
+import { subscription } from '@/lib/db/schema'
+import { eq } from 'drizzle-orm'
+import { headers } from 'next/headers'
 
 export const maxDuration = 60
 
@@ -20,6 +25,29 @@ interface ChatRequest {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Please sign in to use AI document chat.' }, { status: 401 })
+    }
+
+    let hasAiProAccess = false
+    try {
+      const rows = await db
+        .select({ plan: subscription.plan, status: subscription.status })
+        .from(subscription)
+        .where(eq(subscription.userId, session.user.id))
+        .limit(1)
+      const current = rows[0]
+      hasAiProAccess = current?.plan === 'ai_pro_monthly' && (current.status === 'active' || current.status === 'trialing')
+    } catch (error) {
+      console.error('Failed to verify AI chat entitlement:', error)
+      return NextResponse.json({ error: 'AI access verification is temporarily unavailable.' }, { status: 503 })
+    }
+
+    if (!hasAiProAccess) {
+      return NextResponse.json({ error: 'AI document chat requires an active AI Pro subscription.' }, { status: 403 })
+    }
+
     if (!openai) {
       return NextResponse.json(
         { error: 'OpenAI API is not configured' },
