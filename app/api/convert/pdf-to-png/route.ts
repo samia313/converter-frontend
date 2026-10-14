@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     const isPngSignature = outputBytes.length >= 8 && outputBytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
     if (isZip ? !isZipSignature : !isPngSignature) return NextResponse.json({ error: 'Converter returned an invalid PNG/ZIP output.', code: 'INVALID_OUTPUT' }, { status: 502 });
     const safeBaseName = file.name.replace(/\.pdf$/i, '').replace(/[\\/\r\n"\x00-\x1f]/g, '_').trim().slice(0, 150) || 'converted-document';
-    return new NextResponse(outputBytes, { headers: { 'Content-Type': isZip ? 'application/zip' : 'image/png', 'Content-Disposition': `attachment; filename="${safeBaseName}-png.${isZip ? 'zip' : 'png'}`, 'Content-Length': String(outputBytes.length), 'Cache-Control': 'no-store' } });
+    return new NextResponse(outputBytes, { headers: { 'Content-Type': isZip ? 'application/zip' : 'image/png', 'Content-Disposition': `attachment; filename="${safeBaseName}-png.${isZip ? 'zip' : 'png'}"`, 'Content-Length': String(outputBytes.length), 'Cache-Control': 'no-store' } });
   } catch (error) { console.error('[converter] Request failed:', error instanceof Error ? error.message : 'Unknown error');
     return NextResponse.json({ error: 'PDF to PNG conversion failed. Please try again later.', code: 'CONVERTER_UNAVAILABLE' }, { status: 502 }); }
 }
