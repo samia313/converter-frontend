@@ -6,9 +6,9 @@ export const dynamicParams = true;
 export const revalidate = 3600;
 
 interface Props {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -18,11 +18,13 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const comparison = getComparisonBySlug(params.slug);
+  const { slug } = await params;
+  const comparison = getComparisonBySlug(slug);
 
   if (!comparison) {
     return {
       title: 'Comparison Not Found',
+      robots: { index: false, follow: true },
     };
   }
 
@@ -34,8 +36,9 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default function ComparisonPage({ params }: Props) {
-  const comparison = getComparisonBySlug(params.slug);
+export default async function ComparisonPage({ params }: Props) {
+  const { slug } = await params;
+  const comparison = getComparisonBySlug(slug);
 
   if (!comparison) {
     notFound();
@@ -48,7 +51,6 @@ export default function ComparisonPage({ params }: Props) {
   return (
     <main className="min-h-screen bg-background">
       <article className="max-w-4xl mx-auto px-4 py-12">
-        {/* Header */}
         <header className="mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">{comparison.title}</h1>
           <p className="text-lg text-muted-foreground">PDFilio vs {comparison.competitor} - Detailed comparison</p>
@@ -59,7 +61,6 @@ export default function ComparisonPage({ params }: Props) {
           </div>
         </header>
 
-        {/* Content */}
         <div className="prose prose-invert max-w-none mb-12">
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">Why Choose PDFilio?</h2>
@@ -69,7 +70,6 @@ export default function ComparisonPage({ params }: Props) {
           </section>
         </div>
 
-        {/* CTA */}
         <div className="bg-blue-600/10 border border-blue-500/20 rounded-lg p-8 mb-12">
           <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Switch?</h2>
           <p className="text-muted-foreground mb-6">
@@ -83,7 +83,6 @@ export default function ComparisonPage({ params }: Props) {
           </Link>
         </div>
 
-        {/* Related Comparisons */}
         {relatedComparisons.length > 0 && (
           <div className="mb-12">
             <h3 className="text-lg font-semibold text-foreground mb-4">Other Comparisons</h3>
@@ -101,7 +100,6 @@ export default function ComparisonPage({ params }: Props) {
           </div>
         )}
 
-        {/* Navigation */}
         <div className="flex justify-between items-center mt-12 pt-8 border-t border-border">
           <Link href="/comparisons" className="text-blue-600 hover:text-blue-700">
             ← All Comparisons
