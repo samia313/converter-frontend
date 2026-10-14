@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 import { subscription } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
@@ -81,13 +81,21 @@ export async function POST(req: NextRequest) {
         const stripeSub = event.data.object as Stripe.Subscription;
         const customerId = typeof stripeSub.customer === 'string' ? stripeSub.customer : stripeSub.customer.id;
 
-        // Stripe sends this when the subscription has actually ended, so remove paid plan access.
+        // Only cancel the row if it still points to this exact subscription. A delayed
+        // deletion event for an older subscription must not cancel a newer subscription
+        // belonging to the same Stripe customer.
         await db.update(subscription).set({
+          stripeSubscriptionId: null,
           plan: 'free',
           status: 'canceled',
+          currentPeriodStart: null,
+          currentPeriodEnd: null,
           canceledAt: new Date(),
           updatedAt: new Date(),
-        }).where(eq(subscription.stripeCustomerId, customerId));
+        }).where(and(
+          eq(subscription.stripeCustomerId, customerId),
+          eq(subscription.stripeSubscriptionId, stripeSub.id),
+        ));
         break;
       }
 
