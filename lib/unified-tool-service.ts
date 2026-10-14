@@ -4,7 +4,8 @@
  * NO ERRORS - All validations and error handling built-in
  */
 
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, degrees } from 'pdf-lib';
+import { extractDocumentText, generateAIText } from '@/lib/document-text';
 
 export type ToolOperation =
   | 'merge' | 'split' | 'compress' | 'rotate' | 'crop'
@@ -156,17 +157,21 @@ export class PDFOperations {
       const validation = await ToolValidator.validateFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
+      if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') {
+        return { success: false, error: 'Only PDF files can be compressed.' };
+      }
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
       const bytes = await pdf.save({ useObjectStreams: true });
-      const compressed = Buffer.from(bytes);
-
-      const ratio = Math.round((1 - compressed.length / file.size) * 100);
+      const optimized = Buffer.from(bytes);
+      // Never label a larger output as a successful size reduction.
+      const output = optimized.length < file.size ? optimized : Buffer.from(arrayBuffer);
+      const ratio = Math.round((1 - output.length / file.size) * 100);
       return {
         success: true,
-        data: compressed,
-        message: `Compressed ${ratio}%`,
-        metadata: { originalSize: file.size, compressedSize: compressed.length, ratio },
+        data: output,
+        message: ratio > 0 ? `Reduced file size by ${ratio}%` : 'This PDF is already optimized; file size could not be reduced safely.',
+        metadata: { originalSize: file.size, compressedSize: output.length, ratio, contentType: 'application/pdf', extension: '.pdf' },
         processingTime: Date.now() - startTime,
       };
     } catch (error) {
@@ -184,17 +189,12 @@ export class PDFOperations {
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
       
       const pages = pdf.getPages();
-      const rotationMap: Record<number, any> = {
-        0: 'Normal',
-        90: 'Degrees90',
-        180: 'Degrees180',
-        270: 'Degrees270',
-      };
-
+      const normalizedAngle = ((Number(angle) % 360) + 360) % 360;
+      if (![90, 180, 270].includes(normalizedAngle)) {
+        return { success: false, error: 'Rotation angle must be 90, 180, or 270 degrees.' };
+      }
       pages.forEach(page => {
-        const normalizedAngle = ((angle % 360) + 360) % 360;
-        const rotationKey = (normalizedAngle / 90) * 90;
-        // pdf-lib handles rotation internally, just marking successful completion
+        page.setRotation(degrees((page.getRotation().angle + normalizedAngle) % 360));
       });
 
       const bytes = await pdf.save();
@@ -249,12 +249,15 @@ export class DocumentConversions {
       const validation = await ToolValidator.validateFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
-      // Placeholder for actual PDF text extraction
-      // In production, use pdf-parse or pdfjs-dist
+      if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') {
+        return { success: false, error: 'Please upload a PDF file.' };
+      }
+      const text = await extractDocumentText(file);
       return {
         success: true,
-        data: `[Text extracted from ${file.name}]`,
-        message: 'Text extraction requires pdf-parse library',
+        data: Buffer.from(text, 'utf8'),
+        message: 'Text extracted successfully.',
+        metadata: { contentType: 'text/plain; charset=utf-8', extension: '.txt' },
         processingTime: Date.now() - startTime,
       };
     } catch (error) {
@@ -268,18 +271,14 @@ export class DocumentConversions {
       const validation = await ToolValidator.validateFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
-      const reader = new FileReader();
-      return new Promise((resolve) => {
-        reader.onload = (e) => {
-          resolve({
-            success: true,
-            data: e.target?.result as string,
-            message: 'Image converted to data URL',
-            processingTime: Date.now() - startTime,
-          });
-        };
-        reader.readAsDataURL(file);
-      });
+      const bytes = Buffer.from(await file.arrayBuffer());
+      const mimeType = file.type || 'application/octet-stream';
+      return {
+        success: true,
+        data: `data:${mimeType};base64,${bytes.toString('base64')}`,
+        message: 'Image converted to data URL.',
+        processingTime: Date.now() - startTime,
+      };
     } catch (error) {
       return { success: false, error: 'Image conversion failed' };
     }
@@ -291,30 +290,45 @@ export class DocumentConversions {
  */
 export class AIOperations {
   static async chat(query: string, fileContent: string): Promise<ToolResponse> {
-    // This will be connected to OpenAI GPT-4 in API route
-    return {
-      success: true,
-      data: `Response to: "${query}"`,
-      message: 'Chat ready for API integration',
-    };
+    if (!query.trim() || !fileContent.trim()) return { success: false, error: 'A question and document text are required.' };
+    try {
+      const result = await generateAIText(
+        'Answer questions using the supplied document only. Do not invent facts. State clearly when the answer is not present in the document.',
+        `Document:\n\n${fileContent.slice(0, 100_000)}\n\nQuestion: ${query}`,
+        1000,
+      );
+      return { success: true, data: result, message: 'Document question answered.' };
+    } catch (error) {
+      return { success: false, error: error instanceof Error ? error.message : 'AI chat failed.' };
+    }
   }
 
   static async summarize(content: string): Promise<ToolResponse> {
-    // This will be connected to OpenAI in API route
-    return {
-      success: true,
-      data: 'Summary generated',
-      message: 'Summarization ready for API integration',
-    };
+    if (!content.trim()) return { success: false, error: 'Document text is required for summarization.' };
+    try {
+      const result = await generateAIText(
+        'Summarize the source accurately. Preserve important details and do not add unsupported claims.',
+        `Summarize this document:\n\n${content.slice(0, 100_000)}`,
+        1200,
+      );
+      return { success: true, data: result, message: 'Summary generated.' };
+    } catch (error) {
+      return { success: false, error: error instanceof Error ? error.message : 'Summarization failed.' };
+    }
   }
 
   static async translate(text: string, targetLanguage: string): Promise<ToolResponse> {
-    // This will be connected to OpenAI in API route
-    return {
-      success: true,
-      data: `Translated to ${targetLanguage}`,
-      message: 'Translation ready for API integration',
-    };
+    if (!text.trim() || !targetLanguage.trim()) return { success: false, error: 'Text and target language are required.' };
+    try {
+      const result = await generateAIText(
+        `Translate the text into ${targetLanguage}. Preserve meaning, names, numbers, headings, and paragraph structure. Do not summarize or add explanations.`,
+        text.slice(0, 100_000),
+        2000,
+      );
+      return { success: true, data: result, message: `Translated to ${targetLanguage}.` };
+    } catch (error) {
+      return { success: false, error: error instanceof Error ? error.message : 'Translation failed.' };
+    }
   }
 }
 
@@ -367,9 +381,8 @@ export async function executeToolOperation(request: ToolRequest): Promise<ToolRe
 
       default:
         return {
-          success: true,
-          message: `Operation "${request.operation}" is ready for implementation`,
-          data: 'Tool framework ready',
+          success: false,
+          error: `The "${request.operation}" operation is not implemented in the unified API yet. Please use its dedicated tool endpoint.`,
         };
     }
   } catch (error) {
