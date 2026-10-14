@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { createHmac } from 'node:crypto';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -52,7 +53,11 @@ export async function POST(request: Request) {
       downloadUrls.push(outputUrl.toString());
     }
 
-    const proxiedDownloadUrls = downloadUrls.map((url) => '/api/convert/pdf-to-images/download?url=' + encodeURIComponent(url));
+    if (!apiKey) return NextResponse.json({ error: 'Image download signing is not configured.', code: 'MISSING_SIGNING_KEY' }, { status: 503 });
+    const proxiedDownloadUrls = downloadUrls.map((url) => {
+      const signature = createHmac('sha256', apiKey).update(url).digest('hex');
+      return '/api/convert/pdf-to-images/download?url=' + encodeURIComponent(url) + '&sig=' + signature;
+    });
     return NextResponse.json({ success: true, count: proxiedDownloadUrls.length, downloadUrls: proxiedDownloadUrls });
   } catch {
     return NextResponse.json({ error: 'PDF to images conversion is temporarily unavailable.', code: 'CONVERTER_UNAVAILABLE' }, { status: 502 });
