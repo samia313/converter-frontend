@@ -15,6 +15,7 @@ function isImageSignature(bytes: Uint8Array) {
 
 export async function GET(request: Request) {
   const baseUrl = process.env.DIGITALOCEAN_CONVERTER_URL?.replace(/\/$/, '');
+  const apiKey = process.env.DIGITALOCEAN_CONVERTER_API_KEY;
   if (!baseUrl) return NextResponse.json({ error: 'Image download service is not configured.' }, { status: 503 });
 
   let converterOrigin: string;
@@ -40,7 +41,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const response = await fetch(imageUrl, { cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(20000) });
+    const response = await fetch(imageUrl, { headers: apiKey ? { Authorization: 'Bearer ' + apiKey } : {}, cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(20000) });
     if (response.status >= 300 && response.status < 400) return NextResponse.json({ error: 'Image redirects are not allowed.' }, { status: 502 });
     if (!response.ok || !response.body) return NextResponse.json({ error: 'Could not retrieve converted image.' }, { status: 502 });
     const declaredLength = Number(response.headers.get('content-length') || 0);
