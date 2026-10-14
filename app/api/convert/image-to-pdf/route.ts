@@ -16,6 +16,16 @@ function getExtension(name: string) {
   return index >= 0 ? name.slice(index).toLowerCase() : '';
 }
 
+function sanitizeDownloadBaseName(name: string) {
+  const sanitized = name
+    .replace(/\.[^.]+$/, '')
+    .replace(/[\r\n"/\\]/g, '_')
+    .replace(/[^\w.-]+/g, '_')
+    .replace(/^\.+/, '')
+    .slice(0, 100);
+  return sanitized || 'images';
+}
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -87,9 +97,9 @@ export async function POST(request: NextRequest) {
     }
 
     const pdfBytes = await pdfDoc.save();
-    const baseName = files.length === 1 && files[0] instanceof File
-      ? files[0].name.replace(/\.[^.]+$/, '')
-      : 'images';
+    const baseName = sanitizeDownloadBaseName(
+      files.length === 1 && files[0] instanceof File ? files[0].name : 'images',
+    );
 
     return new NextResponse(Buffer.from(pdfBytes), {
       headers: {
