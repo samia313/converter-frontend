@@ -6,7 +6,7 @@ import { headers } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-type PaidPlan = 'pro_monthly' | 'pro_yearly' | 'ai_pro_monthly' | 'team_monthly'
+type PaidPlan = 'pro_monthly' | 'pro_yearly' | 'ai_pro_monthly'
 
 function getStripe() {
   const secretKey = process.env.STRIPE_SECRET_KEY
@@ -19,7 +19,6 @@ function getPriceId(plan: PaidPlan) {
     pro_monthly: process.env.STRIPE_PRICE_ID_PRO_MONTHLY,
     pro_yearly: process.env.STRIPE_PRICE_ID_PRO_YEARLY,
     ai_pro_monthly: process.env.STRIPE_PRICE_ID_AI_PRO_MONTHLY,
-    team_monthly: process.env.STRIPE_PRICE_ID_TEAM_MONTHLY,
   }
   return priceIds[plan]
 }
