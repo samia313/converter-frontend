@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-const PAID_PLANS = new Set(['pro_monthly', 'pro_yearly', 'ai_pro_monthly', 'team_monthly'])
+const PAID_PLANS = new Set(['pro_monthly', 'pro_yearly', 'ai_pro_monthly'])
 const ACCESS_STATUSES = new Set(['active', 'trialing'])
 
 export async function GET() {
