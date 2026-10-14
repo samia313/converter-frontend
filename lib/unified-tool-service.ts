@@ -245,14 +245,31 @@ export class DocumentConversions {
       const validation = await ToolValidator.validateFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
-      // Placeholder for actual PDF text extraction
-      // In production, use pdf-parse or pdfjs-dist
-      return {
-        success: true,
-        data: `[Text extracted from ${file.name}]`,
-        message: 'Text extraction requires pdf-parse library',
-        processingTime: Date.now() - startTime,
-      };
+      const parser = new (await import('pdf-parse')).PDFParse({
+        data: new Uint8Array(await file.arrayBuffer()),
+      });
+
+      try {
+        const result = await parser.getText();
+        const text = result.text?.trim();
+        if (!text) {
+          return {
+            success: false,
+            error: 'No selectable text was found in this PDF. If it is a scanned document, use OCR.',
+            processingTime: Date.now() - startTime,
+          };
+        }
+
+        return {
+          success: true,
+          data: text,
+          message: 'PDF text extracted successfully',
+          metadata: { characterCount: text.length },
+          processingTime: Date.now() - startTime,
+        };
+      } finally {
+        await parser.destroy();
+      }
     } catch (error) {
       return { success: false, error: 'Text extraction failed' };
     }
