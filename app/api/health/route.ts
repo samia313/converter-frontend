@@ -22,8 +22,7 @@ export async function GET(request: NextRequest) {
   if (conversionWorkerConfigured) {
     try {
       const baseUrl = converterConfig.baseUrl!;
-      const response = await fetch(baseUrl, {
-        headers: { Authorization: `Bearer ${converterConfig.apiKey}` },
+      const response = await fetch(`${baseUrl}/health`, {
         cache: 'no-store',
         signal: AbortSignal.timeout(4000),
       });
