@@ -22,6 +22,15 @@ const nextConfig = {
     ],
   }],
   redirects: async () => [
+    // Legacy comparison URLs used a misspelled brand slug; redirect to the matching canonical comparison.
+    { source: '/vs/poppler-vs-pdffilio', destination: '/vs/poppler-vs-pdfilio', permanent: true },
+    { source: '/vs/asposepdf-vs-pdffilio', destination: '/vs/asposepdf-vs-pdfilio', permanent: true },
+    { source: '/vs/reportlab-vs-pdffilio', destination: '/vs/reportlab-vs-pdfilio', permanent: true },
+    { source: '/vs/pdfsharp-vs-pdffilio', destination: '/vs/pdfsharp-vs-pdfilio', permanent: true },
+    { source: '/vs/fitz-vs-pdffilio', destination: '/vs/fitz-vs-pdfilio', permanent: true },
+    { source: '/vs/pdf24-vs-pdffilio', destination: '/vs/pdf24-vs-pdfilio', permanent: true },
+    { source: '/vs/adobe-vs-pdffilio', destination: '/vs/adobe-vs-pdfilio', permanent: true },
+
     // Confirmed legacy URLs from the GSC 404 audit; each target is a close, live canonical replacement.
     { source: '/blog/how-to-compress-pdf-without-losing-quality', destination: '/blog/how-to-compress-a-pdf-without-losing-quality', permanent: true },
     { source: '/blog/compress-pdf-for-email-best-practices', destination: '/blog/how-to-make-a-pdf-smaller-for-email', permanent: true },
