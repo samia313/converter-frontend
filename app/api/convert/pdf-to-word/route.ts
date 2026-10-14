@@ -61,6 +61,10 @@ export async function POST(request: NextRequest) {
     if (pdfBuffer.length === 0) {
       return NextResponse.json({ error: 'File is empty' }, { status: 400 });
     }
+    // Extension and MIME type can be spoofed; reject files without a PDF signature.
+    if (pdfBuffer.length < 5 || pdfBuffer.subarray(0, 5).toString('ascii') !== '%PDF-') {
+      return NextResponse.json({ error: 'The uploaded file is not a valid PDF.' }, { status: 400 });
+    }
     const maxSize = 100 * 1024 * 1024;
     if (pdfBuffer.length > maxSize) {
       return NextResponse.json({ error: 'File size exceeds the 100MB limit.' }, { status: 413 });
@@ -95,7 +99,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Word document creation failed' }, { status: 500 });
     }
 
-    const fileName = file.name.replace(/\.pdf$/i, '') + '.docx';
+    const safeBaseName = file.name
+      .replace(/\.pdf$/i, '')
+      .replace(/[\\/\\r\\n\\"\\x00-\\x1f]/g, '_')
+      .trim()
+      .slice(0, 150) || 'converted-document';
+    const fileName = `${safeBaseName}.docx`;
 
     return new NextResponse(wordBuffer as BodyInit, {
       headers: {
@@ -107,9 +116,9 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('[pdf-to-word] Conversion error:', error);
+    console.error('[pdf-to-word] Conversion error:', error instanceof Error ? error.message : 'Unknown error');
     return NextResponse.json(
-      { error: 'Conversion failed', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Conversion failed. Please check that the PDF is valid and try again.' },
       { status: 500 },
     );
   }
