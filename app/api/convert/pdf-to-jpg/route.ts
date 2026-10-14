@@ -9,6 +9,14 @@ export async function POST(request: Request) {
   const baseUrl = process.env.DIGITALOCEAN_CONVERTER_URL?.replace(/\/$/, '');
   const apiKey = process.env.DIGITALOCEAN_CONVERTER_API_KEY;
   if (!baseUrl || !apiKey) return NextResponse.json({ error: 'PDF to JPG conversion service is not configured yet.', code: 'CONVERTER_NOT_CONFIGURED' }, { status: 503 });
+  let converterOrigin: string;
+  try {
+    const converterUrl = new URL(baseUrl);
+    if (!['http:', 'https:'].includes(converterUrl.protocol) || converterUrl.username || converterUrl.password) throw new Error('Invalid converter URL');
+    converterOrigin = converterUrl.origin;
+  } catch {
+    return NextResponse.json({ error: 'Conversion service configuration is invalid.', code: 'INVALID_CONVERTER_CONFIG' }, { status: 503 });
+  }
   try {
     const incoming = await request.formData();
     const file = incoming.get('file');
@@ -16,18 +24,41 @@ export async function POST(request: Request) {
     if (!file.size) return NextResponse.json({ error: 'The PDF file is empty.', code: 'EMPTY_FILE' }, { status: 400 });
     if (file.size > MAX_FILE_SIZE) return NextResponse.json({ error: 'PDF file exceeds the 100MB limit.', code: 'FILE_TOO_LARGE' }, { status: 413 });
     if (!file.name.toLowerCase().endsWith('.pdf')) return NextResponse.json({ error: 'Please upload a PDF file.', code: 'UNSUPPORTED_FORMAT' }, { status: 415 });
+    const pdfHeader = Buffer.from(await file.slice(0, 5).arrayBuffer());
+    if (pdfHeader.toString('ascii') !== '%PDF-') return NextResponse.json({ error: 'The uploaded file is not a valid PDF.', code: 'INVALID_INPUT_FILE' }, { status: 400 });
     const body = new FormData();
     body.append('file', file, file.name);
-    const response = await fetch(baseUrl + '/convert/pdf-to-jpg', { method: 'POST', headers: { Authorization: 'Bearer ' + apiKey }, body, cache: 'no-store', signal: AbortSignal.timeout(75000) });
+    const response = await fetch(baseUrl + '/convert/pdf-to-jpg', { method: 'POST', headers: { Authorization: 'Bearer ' + apiKey }, body, cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(75000) });
+    if (response.status >= 300 && response.status < 400) {
+      return NextResponse.json({ error: 'The conversion service redirected unexpectedly.', code: 'UPSTREAM_REDIRECT_REJECTED' }, { status: 502 });
+    }
     const data = await response.json().catch(() => ({}));
     if (!response.ok) return NextResponse.json({ error: typeof data?.error === 'string' ? data.error : 'PDF to JPG conversion failed.', code: data?.code || 'CONVERSION_FAILED' }, { status: response.status });
     if (!data?.downloadUrl) return NextResponse.json({ error: 'Conversion completed without a download URL.', code: 'MISSING_OUTPUT' }, { status: 502 });
-    const output = await fetch(data.downloadUrl, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
+    let downloadUrl: URL;
+    try {
+      downloadUrl = new URL(data.downloadUrl, baseUrl);
+      if (downloadUrl.origin !== converterOrigin || downloadUrl.username || downloadUrl.password || !['http:', 'https:'].includes(downloadUrl.protocol)) {
+        return NextResponse.json({ error: 'Converter returned an untrusted output location.', code: 'INVALID_OUTPUT_URL' }, { status: 502 });
+      }
+    } catch {
+      return NextResponse.json({ error: 'Converter returned an invalid output location.', code: 'INVALID_OUTPUT_URL' }, { status: 502 });
+    }
+    const output = await fetch(downloadUrl, { cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(30000) });
+    if (output.status >= 300 && output.status < 400) {
+      return NextResponse.json({ error: 'The converter output URL redirected unexpectedly.', code: 'OUTPUT_REDIRECT_REJECTED' }, { status: 502 });
+    }
     if (!output.ok) return NextResponse.json({ error: 'Converted image could not be retrieved.', code: 'OUTPUT_FETCH_FAILED' }, { status: 502 });
-    const contentType = data.format === 'zip' ? 'application/zip' : 'image/jpeg';
-    const ext = data.format === 'zip' ? 'zip' : 'jpg';
-    return new NextResponse(await output.arrayBuffer(), { headers: { 'Content-Type': contentType, 'Content-Disposition': 'attachment; filename="' + file.name.replace(/\.pdf$/i, '-jpg.' + ext) + '"', 'Cache-Control': 'no-store' } });
+    const outputBytes = Buffer.from(await output.arrayBuffer());
+    const isZip = data.format === 'zip';
+    const isZipSignature = outputBytes.length >= 4 && outputBytes[0] === 0x50 && outputBytes[1] === 0x4b && outputBytes[2] === 0x03 && outputBytes[3] === 0x04;
+    const isJpegSignature = outputBytes.length >= 3 && outputBytes[0] === 0xff && outputBytes[1] === 0xd8 && outputBytes[2] === 0xff;
+    if (isZip ? !isZipSignature : !isJpegSignature) return NextResponse.json({ error: 'Converter returned an invalid JPG/ZIP output.', code: 'INVALID_OUTPUT' }, { status: 502 });
+    const ext = isZip ? 'zip' : 'jpg';
+    const safeBaseName = file.name.replace(/\.pdf$/i, '').replace(/[\\/\r\n"\x00-\x1f]/g, '_').trim().slice(0, 150) || 'converted-document';
+    return new NextResponse(outputBytes, { headers: { 'Content-Type': isZip ? 'application/zip' : 'image/jpeg', 'Content-Disposition': `attachment; filename="${safeBaseName}-jpg.${ext}"`, 'Content-Length': String(outputBytes.length), 'Cache-Control': 'no-store' } });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'PDF to JPG conversion failed.', code: 'CONVERTER_UNAVAILABLE' }, { status: 502 });
+    console.error('[converter] Request failed:', error instanceof Error ? error.message : 'Unknown error');
+    return NextResponse.json({ error: 'PDF to JPG conversion failed. Please try again later.', code: 'CONVERTER_UNAVAILABLE' }, { status: 502 });
   }
 }
