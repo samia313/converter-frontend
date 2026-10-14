@@ -27,11 +27,10 @@ export default function AIResearchTool() {
         body: formData,
       });
 
+      const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error('Analysis failed');
+        throw new Error(typeof data.error === 'string' ? data.error : 'Analysis failed. Please try again.');
       }
-
-      const data = await response.json();
       setResults(data.analysis || data.response || 'Could not analyze document');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to analyze document');

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getDigitalOceanConfig } from '@/lib/digitalocean-config';
 import { getQueueService } from '@/lib/services/queue';
 import { getStorageService } from '@/lib/services/storage-service';
 import { getLoggingService } from '@/lib/services/logging-service';
@@ -11,6 +12,25 @@ import { getMetricsService } from '@/lib/services/metrics-service';
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
+  const converterConfig = getDigitalOceanConfig();
+  const conversionWorkerConfigured = Boolean(converterConfig.baseUrl && converterConfig.apiKey);
+  const aiProviderConfigured = Boolean(
+    process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY_2 ||
+    process.env.OPENAI_API_KEY_3 || process.env.OPENAI_API_KEY_4
+  );
+  let conversionWorkerReachable = false;
+  if (conversionWorkerConfigured) {
+    try {
+      const baseUrl = converterConfig.baseUrl!;
+      const response = await fetch(`${baseUrl}/health`, {
+        cache: 'no-store',
+        signal: AbortSignal.timeout(4000),
+      });
+      conversionWorkerReachable = response.ok;
+    } catch {
+      conversionWorkerReachable = false;
+    }
+  }
 
   try {
     const queue = getQueueService();
@@ -41,7 +61,13 @@ export async function GET(request: NextRequest) {
 
     if (queueHealth.status === 'unhealthy') {
       overallStatus = 'unhealthy';
-    } else if (queueHealth.status === 'degraded' || alerts.some((a) => a.level === 'critical')) {
+    } else if (
+      queueHealth.status === 'degraded' ||
+      alerts.some((a) => a.level === 'critical') ||
+      !conversionWorkerConfigured ||
+      !conversionWorkerReachable ||
+      !aiProviderConfigured
+    ) {
       overallStatus = 'degraded';
     }
 
@@ -64,9 +90,15 @@ export async function GET(request: NextRequest) {
           status: 'healthy',
           ...loggingStats,
         },
+        conversionWorker: {
+          status: !conversionWorkerConfigured ? 'not_configured' : conversionWorkerReachable ? 'reachable' : 'unreachable',
+        },
+        aiProvider: {
+          status: aiProviderConfigured ? 'configured' : 'not_configured',
+        },
         database: {
-          status: 'healthy',
-          message: 'Connected',
+          status: 'unknown',
+          message: 'Database connectivity is not verified by this health check.',
         },
       },
       performance: performanceSummary,

@@ -24,7 +24,8 @@ class LoggingService {
   private localLogs: LogEntry[] = [];
 
   constructor() {
-    const url = process.env.REDIS_URL || process.env.KV_REST_API_URL;
+    // @upstash/redis expects the HTTPS REST endpoint; REDIS_URL may be a raw rediss:// TCP URL.
+    const url = process.env.KV_REST_API_URL || process.env.REDIS_URL;
     const token = process.env.KV_REST_API_TOKEN;
 
     if (!url || !token) {
