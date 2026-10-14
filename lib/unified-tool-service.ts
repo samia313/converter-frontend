@@ -92,6 +92,9 @@ export class PDFOperations {
   static async merge(files: File[]): Promise<ToolResponse> {
     const startTime = Date.now();
     try {
+      if (files.some(file => !(file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')))) {
+        return { success: false, error: 'Merge accepts PDF files only' };
+      }
       const validation = await ToolValidator.validateFiles(files);
       if (!validation.valid) return { success: false, error: validation.error };
 
@@ -215,12 +218,23 @@ export class PDFOperations {
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
 
-      if (options) {
-        const pages = pdf.getPages();
-        pages.forEach(page => {
-          page.setCropBox(options.x, options.y, options.width, options.height);
-        });
+      if (!options ||
+          ![options.x, options.y, options.width, options.height].every(Number.isFinite) ||
+          options.x < 0 || options.y < 0 || options.width <= 0 || options.height <= 0) {
+        return { success: false, error: 'Valid crop coordinates are required; width and height must be positive' };
       }
+
+      const pages = pdf.getPages();
+      for (const page of pages) {
+        const pageWidth = page.getWidth();
+        const pageHeight = page.getHeight();
+        if (options.x + options.width > pageWidth || options.y + options.height > pageHeight) {
+          return { success: false, error: 'Crop rectangle must fit within every page' };
+        }
+      }
+      pages.forEach(page => {
+        page.setCropBox(options.x, options.y, options.width, options.height);
+      });
 
       const bytes = await pdf.save();
       return {
