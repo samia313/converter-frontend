@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
 
@@ -11,6 +11,8 @@ export default function ImageToPDFTool() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+  useEffect(() => () => { if (downloadUrl) URL.revokeObjectURL(downloadUrl); }, [downloadUrl]);
 
   const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
   const totalSizeMb = (totalSize / (1024 * 1024)).toFixed(1);
@@ -35,6 +37,10 @@ export default function ImageToPDFTool() {
       }
 
       const blob = await response.blob();
+      const signature = new Uint8Array(await blob.slice(0, 5).arrayBuffer());
+      if (blob.type !== 'application/pdf' || signature.length !== 5 || String.fromCharCode(...signature) !== '%PDF-') {
+        throw new Error('The converter returned an invalid PDF file. Please try again.');
+      }
       if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
       setDownloadUrl(window.URL.createObjectURL(blob));
     } catch (err) {
@@ -75,7 +81,7 @@ export default function ImageToPDFTool() {
           <FileUploader
             accept=".jpg,.jpeg,.png"
             multiple
-            onFileSelected={setSelectedFiles}
+            onFileSelected={(files) => { if (downloadUrl) URL.revokeObjectURL(downloadUrl); setSelectedFiles(files); setDownloadUrl(null); setError(null); }}
             maxSize={100}
           />
 
