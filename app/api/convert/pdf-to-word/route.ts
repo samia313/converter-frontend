@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
 
     const safeBaseName = file.name
       .replace(/\.pdf$/i, '')
-      .replace(/[\\/\\r\\n\\"\\x00-\\x1f]/g, '_')
+      .replace(/[\\\/\r\n"\x00-\x1f]/g, '_')
       .trim()
       .slice(0, 150) || 'converted-document';
     const fileName = `${safeBaseName}.docx`;
