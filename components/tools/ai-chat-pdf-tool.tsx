@@ -19,6 +19,7 @@ interface FileInfo {
 
 export default function AIChatPDFTool() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [documentContent, setDocumentContent] = useState('');
   const [fileInfo, setFileInfo] = useState<FileInfo | null>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -76,10 +77,15 @@ export default function AIChatPDFTool() {
         body: formData,
       });
 
+      const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error('Failed to load document');
+        throw new Error(typeof data.error === 'string' ? data.error : 'Failed to load document');
+      }
+      if (typeof data.documentContent !== 'string' || !data.documentContent.trim()) {
+        throw new Error('No readable text was extracted from this document. Try OCR for scanned PDFs.');
       }
 
+      setDocumentContent(data.documentContent);
       setFileLoaded(true);
       setMessages([
         {
@@ -118,6 +124,7 @@ export default function AIChatPDFTool() {
         body: JSON.stringify({
           query: inputText,
           fileName: selectedFile?.name,
+          documentContent,
         }),
       });
 
@@ -147,6 +154,7 @@ export default function AIChatPDFTool() {
 
   const handleReset = () => {
     setSelectedFile(null);
+    setDocumentContent('');
     setFileInfo(null);
     setMessages([
       {
