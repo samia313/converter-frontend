@@ -54,9 +54,10 @@ export async function POST(request: Request) {
     }
 
     if (!apiKey) return NextResponse.json({ error: 'Image download signing is not configured.', code: 'MISSING_SIGNING_KEY' }, { status: 503 });
+    const expiresAt = Math.floor(Date.now() / 1000) + 15 * 60;
     const proxiedDownloadUrls = downloadUrls.map((url) => {
-      const signature = createHmac('sha256', apiKey).update(url).digest('hex');
-      return '/api/convert/pdf-to-images/download?url=' + encodeURIComponent(url) + '&sig=' + signature;
+      const signature = createHmac('sha256', apiKey).update(url + '\n' + expiresAt).digest('hex');
+      return '/api/convert/pdf-to-images/download?url=' + encodeURIComponent(url) + '&exp=' + expiresAt + '&sig=' + signature;
     });
     return NextResponse.json({ success: true, count: proxiedDownloadUrls.length, downloadUrls: proxiedDownloadUrls });
   } catch {
