@@ -1,98 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument } from 'pdf-lib';
+import { extractDocumentText, generateAIText } from '@/lib/document-text';
 
-export const maxDuration = 30;
-
-function generateSummary(text: string): string {
-  // Extract key sentences (basic implementation)
-  const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-  
-  if (sentences.length === 0) return 'No content to summarize.';
-  
-  // Take first 3-5 sentences as summary
-  const summaryLength = Math.min(Math.ceil(sentences.length * 0.3), 5);
-  const summary = sentences.slice(0, summaryLength).join('. ') + '.';
-  
-  return summary;
-}
-
-async function extractTextFromPDF(pdfBytes: Uint8Array): Promise<string> {
-  try {
-    const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
-    let extractedText = '';
-    
-    for (let i = 0; i < pdfDoc.getPageCount(); i++) {
-      const page = pdfDoc.getPage(i);
-      extractedText += `\n--- Page ${i + 1} ---\n`;
-      // Note: pdf-lib doesn't have built-in text extraction
-      // For production, use specialized library like pdf-parse
-    }
-    
-    return extractedText || 'PDF processed. Use production text extraction library for better results.';
-  } catch (err) {
-    throw new Error('Failed to process PDF');
-  }
-}
+export const runtime = 'nodejs';
+export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData();
-    const file = formData.get('file') as File;
-
-    if (!file) {
-      return NextResponse.json(
-        { error: 'No file provided' },
-        { status: 400 }
-      );
+    const form = await request.formData();
+    const file = form.get('file');
+    const length = form.get('length');
+    if (!(file instanceof File)) return NextResponse.json({ error: 'Please upload a PDF file.' }, { status: 400 });
+    if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') {
+      return NextResponse.json({ error: 'This summary tool accepts PDF files only.' }, { status: 415 });
     }
 
-    if (!file.type.includes('pdf') && !file.name.endsWith('.pdf')) {
-      return NextResponse.json(
-        { error: 'File must be a PDF' },
-        { status: 400 }
-      );
-    }
-
-    const arrayBuffer = await file.arrayBuffer();
-    const pdfBytes = new Uint8Array(arrayBuffer);
-
-    // Validate PDF
-    try {
-      const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
-      console.log(`[v0] PDF Summary: Processing ${pdfDoc.getPageCount()} pages`);
-    } catch (err) {
-      return NextResponse.json(
-        { error: 'Invalid PDF file' },
-        { status: 400 }
-      );
-    }
-
-    // Extract text
-    const extractedText = await extractTextFromPDF(pdfBytes);
-    
-    // Generate summary
-    const summary = generateSummary(extractedText);
-
-    // Return as text file
-    const summaryContent = `DOCUMENT SUMMARY\n${'='.repeat(50)}\n\nOriginal Document: ${file.name}\nPages: Unknown (use production PDF parser for page count)\n\n${'='.repeat(50)}\nSUMMARY:\n${'='.repeat(50)}\n\n${summary}\n\n${'='.repeat(50)}\nFull Text:\n${'='.repeat(50)}\n\n${extractedText}`;
-
-    const buffer = Buffer.from(summaryContent, 'utf-8');
-
-    return new NextResponse(buffer, {
+    const text = await extractDocumentText(file);
+    const instruction = length === 'short'
+      ? 'Write a short summary in 3–5 bullet points.'
+      : length === 'long'
+        ? 'Write a detailed, structured summary including key points and conclusions.'
+        : 'Write a clear medium-length summary with the main ideas and important details.';
+    const summary = await generateAIText(
+      'Summarize the source faithfully. Do not invent facts or remove important caveats. If the document is incomplete or ambiguous, say so.',
+      `${instruction}\n\nSummarize the following document:\n\n${text}`,
+      length === 'long' ? 1800 : 1000,
+    );
+    const content = `DOCUMENT SUMMARY\n\nFile: ${file.name.replace(/[\\r\\n"]/g, '_')}\n\n${summary}\n`;
+    const baseName = file.name.replace(/\.pdf$/i, '').replace(/[\\/\\r\\n"]/g, '_').slice(0, 120) || 'document';
+    return new NextResponse(Buffer.from(content, 'utf8'), {
       headers: {
-        'Content-Disposition': `attachment; filename="${file.name.replace('.pdf', '-summary.txt')}"`,
+        'Content-Disposition': `attachment; filename="${baseName}-summary.txt"`,
         'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Cache-Control': 'no-store',
+        'X-Content-Type-Options': 'nosniff',
       },
     });
   } catch (error) {
-    console.error('[v0] AI Summary error:', error);
-    return NextResponse.json(
-      {
-        error: 'Summary generation failed',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
+    const message = error instanceof Error ? error.message : 'Summary generation failed.';
+    const status = /not configured/i.test(message) ? 503 : /temporarily busy/i.test(message) ? 429 : /could not process|empty result/i.test(message) ? 502 : 422;
+    console.error('[PDFilio AI] convert summary failed:', message);
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }
