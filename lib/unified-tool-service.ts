@@ -157,7 +157,13 @@ export class PDFOperations {
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
       const pageCount = pdf.getPageCount();
-      const split = splitPage || Math.ceil(pageCount / 2);
+      if (pageCount < 2) {
+        return { success: false, error: 'This PDF has fewer than 2 pages and cannot be split into separate parts.' };
+      }
+      const split = splitPage === undefined ? Math.ceil(pageCount / 2) : Number(splitPage);
+      if (!Number.isInteger(split) || split < 1 || split >= pageCount) {
+        return { success: false, error: `Choose a split point from page 1 to page ${pageCount - 1}.` };
+      }
 
       const part1 = await PDFDocument.create();
       for (let i = 0; i < Math.min(split, pageCount); i++) {
@@ -189,12 +195,17 @@ export class PDFOperations {
       const bytes = await pdf.save({ useObjectStreams: true });
       const compressed = Buffer.from(bytes);
 
-      const ratio = Math.round((1 - compressed.length / file.size) * 100);
+      const ratio = file.size > 0
+        ? Math.round((1 - compressed.length / file.size) * 100)
+        : 0;
+      const reduced = compressed.length < file.size;
       return {
         success: true,
         data: compressed,
-        message: `Compressed ${ratio}%`,
-        metadata: { originalSize: file.size, compressedSize: compressed.length, ratio },
+        message: reduced
+          ? `PDF optimized: file size reduced by ${ratio}%.`
+          : 'PDF processed, but this file could not be made smaller with the available compression method.',
+        metadata: { originalSize: file.size, compressedSize: compressed.length, ratio, sizeReduced: reduced },
         processingTime: Date.now() - startTime,
       };
     } catch (error) {
@@ -243,7 +254,17 @@ export class PDFOperations {
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
 
       if (options) {
+        const values = [options.x, options.y, options.width, options.height];
+        if (!values.every(Number.isFinite) || options.width <= 0 || options.height <= 0 || options.x < 0 || options.y < 0) {
+          return { success: false, error: 'Crop coordinates must be non-negative numbers, and width and height must be greater than zero.' };
+        }
         const pages = pdf.getPages();
+        for (const page of pages) {
+          const pageSize = page.getSize();
+          if (options.x + options.width > pageSize.width || options.y + options.height > pageSize.height) {
+            return { success: false, error: 'Crop area exceeds at least one page boundary. Please choose a smaller crop area.' };
+          }
+        }
         pages.forEach(page => {
           page.setCropBox(options.x, options.y, options.width, options.height);
         });
