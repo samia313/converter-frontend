@@ -15,14 +15,12 @@ export default function PDFToImagesTool() {
   useEffect(() => () => { if (zipUrl) URL.revokeObjectURL(zipUrl); }, [zipUrl]);
 
   const reset = () => {
-    if (zipUrl) URL.revokeObjectURL(zipUrl);
     setFile(null); setUrls([]); setZipUrl(null); setError('');
   };
 
   const convert = async () => {
     if (!file) return;
     setBusy(true); setError('');
-    if (zipUrl) URL.revokeObjectURL(zipUrl);
     setZipUrl(null); setUrls([]);
     try {
       const form = new FormData();
@@ -45,7 +43,14 @@ export default function PDFToImagesTool() {
       for (let i = 0; i < urls.length; i++) {
         const response = await fetch(urls[i], { cache: 'no-store' });
         if (!response.ok) throw new Error('Could not retrieve image ' + (i + 1) + '.');
-        zip.file('page-' + String(i + 1).padStart(3, '0') + '.png', await response.blob());
+        const blob = await response.blob();
+        const bytes = new Uint8Array(await blob.slice(0, 12).arrayBuffer());
+        const isPng = bytes.length >= 8 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47 && bytes[4] === 0x0d && bytes[5] === 0x0a && bytes[6] === 0x1a && bytes[7] === 0x0a;
+        const isJpeg = bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+        const isWebp = bytes.length >= 12 && String.fromCharCode(...bytes.slice(0, 4)) === 'RIFF' && String.fromCharCode(...bytes.slice(8, 12)) === 'WEBP';
+        if (!isPng && !isJpeg && !isWebp) throw new Error('Converter output ' + (i + 1) + ' is not a supported image file.');
+        const extension = isPng ? 'png' : isJpeg ? 'jpg' : 'webp';
+        zip.file('page-' + String(i + 1).padStart(3, '0') + '.' + extension, blob);
       }
       const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
       const nextUrl = URL.createObjectURL(blob);
@@ -67,7 +72,7 @@ export default function PDFToImagesTool() {
           <p className="text-lg text-gray-600">Convert PDF pages into PNG images.</p>
         </div>
         <div className="bg-white rounded-2xl shadow-lg p-8">
-          <FileUploader accept=".pdf" onFileSelected={(files) => { setFile(files[0] || null); setUrls([]); setError(''); }} maxSize={100} />
+          <FileUploader accept=".pdf" onFileSelected={(files) => { setFile(files[0] || null); setUrls([]); setZipUrl(null); setError(''); }} maxSize={100} />
           {file && <p className="mt-4 text-sm text-gray-600">PDF selected · Maximum 100MB</p>}
           {error && <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4"><p className="text-sm text-red-700">{error}</p></div>}
           {!urls.length ? (
@@ -76,7 +81,7 @@ export default function PDFToImagesTool() {
             </button>
           ) : (
             <div className="mt-6 text-center">
-              <p className="font-semibold text-green-600">{urls.length} PNG {urls.length === 1 ? 'image' : 'images'} created successfully.</p>
+              <p className="font-semibold text-green-600">{urls.length} image {urls.length === 1 ? 'is' : 's are'} ready to download.</p>
               <div className="mt-4 flex flex-wrap justify-center gap-3">
                 <button onClick={downloadAll} disabled={busy} className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white disabled:bg-gray-400">
                   <Download className="h-5 w-5" /> {busy ? 'Preparing ZIP...' : 'Download All as ZIP'}
