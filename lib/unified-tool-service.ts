@@ -4,7 +4,7 @@
  * NO ERRORS - All validations and error handling built-in
  */
 
-import { PDFDocument } from 'pdf-lib';
+import { degrees, PDFDocument } from 'pdf-lib';
 
 export type ToolOperation =
   | 'merge' | 'split' | 'compress' | 'rotate' | 'crop'
@@ -184,17 +184,12 @@ export class PDFOperations {
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
       
       const pages = pdf.getPages();
-      const rotationMap: Record<number, any> = {
-        0: 'Normal',
-        90: 'Degrees90',
-        180: 'Degrees180',
-        270: 'Degrees270',
-      };
-
+      const normalizedAngle = ((angle % 360) + 360) % 360;
+      if (![0, 90, 180, 270].includes(normalizedAngle)) {
+        return { success: false, error: 'Rotation angle must be 0, 90, 180, or 270 degrees.' };
+      }
       pages.forEach(page => {
-        const normalizedAngle = ((angle % 360) + 360) % 360;
-        const rotationKey = (normalizedAngle / 90) * 90;
-        // pdf-lib handles rotation internally, just marking successful completion
+        page.setRotation(degrees(normalizedAngle));
       });
 
       const bytes = await pdf.save();
@@ -291,29 +286,26 @@ export class DocumentConversions {
  */
 export class AIOperations {
   static async chat(query: string, fileContent: string): Promise<ToolResponse> {
-    // This will be connected to OpenAI GPT-4 in API route
+    // Never report success without a real AI response. The API route must perform model inference.
     return {
-      success: true,
-      data: `Response to: "${query}"`,
-      message: 'Chat ready for API integration',
+      success: false,
+      error: 'Chat is not available through the unified service yet. Please use the configured AI chat API.',
     };
   }
 
   static async summarize(content: string): Promise<ToolResponse> {
-    // This will be connected to OpenAI in API route
+    // Never report success without a real AI response.
     return {
-      success: true,
-      data: 'Summary generated',
-      message: 'Summarization ready for API integration',
+      success: false,
+      error: 'Summarization is not available through the unified service yet. Please use the configured AI summary API.',
     };
   }
 
   static async translate(text: string, targetLanguage: string): Promise<ToolResponse> {
-    // This will be connected to OpenAI in API route
+    // Never report success without a real AI response.
     return {
-      success: true,
-      data: `Translated to ${targetLanguage}`,
-      message: 'Translation ready for API integration',
+      success: false,
+      error: 'Translation is not available through the unified service yet. Please use the configured AI translation API.',
     };
   }
 }
@@ -367,9 +359,8 @@ export async function executeToolOperation(request: ToolRequest): Promise<ToolRe
 
       default:
         return {
-          success: true,
-          message: `Operation "${request.operation}" is ready for implementation`,
-          data: 'Tool framework ready',
+          success: false,
+          error: `The "${request.operation}" operation is not implemented yet. No output was generated.`,
         };
     }
   } catch (error) {
