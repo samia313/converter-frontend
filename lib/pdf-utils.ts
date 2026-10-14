@@ -21,20 +21,29 @@ export interface ProcessingResult {
 
 // File validation
 export async function validatePdfFile(file: File): Promise<ValidationResult> {
-  if (!file) {
-    return { valid: false, error: 'No file provided' };
+  if (!(file instanceof File) || file.size === 0) {
+    return { valid: false, error: 'Please provide a non-empty PDF file.' };
   }
 
-  if (!file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf')) {
+  if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') {
     return { valid: false, error: 'File must be a PDF' };
   }
 
-  const maxSize = 100 * 1024 * 1024; // 100MB
+  const maxSize = 100 * 1024 * 1024; // 100MB per file
   if (file.size > maxSize) {
     return {
       valid: false,
       error: `File size ${(file.size / 1024 / 1024).toFixed(2)}MB exceeds limit of 100MB`,
     };
+  }
+
+  try {
+    const header = new Uint8Array(await file.slice(0, 5).arrayBuffer());
+    if (String.fromCharCode(...header) !== '%PDF-') {
+      return { valid: false, error: `"${file.name}" does not contain a valid PDF signature.` };
+    }
+  } catch {
+    return { valid: false, error: `Could not read "${file.name}". Please upload it again.` };
   }
 
   return { valid: true, details: { size: file.size, name: file.name } };
@@ -53,12 +62,13 @@ export async function validatePdfFiles(
     return { valid: false, error: `Please provide at least ${minFiles} PDF files` };
   }
 
-  const validFiles = files.filter((f) => f.type.includes('pdf') || f.name.toLowerCase().endsWith('.pdf'));
-  if (validFiles.length < minFiles) {
-    return { valid: false, error: `Please provide at least ${minFiles} valid PDF files` };
+  // Reject the whole request if any item is invalid; never silently omit an uploaded file.
+  for (const file of files) {
+    const validation = await validatePdfFile(file);
+    if (!validation.valid) return validation;
   }
 
-  const totalSize = validFiles.reduce((sum, f) => sum + f.size, 0);
+  const totalSize = files.reduce((sum, file) => sum + file.size, 0);
   if (totalSize > maxTotalSize) {
     return {
       valid: false,
@@ -69,9 +79,9 @@ export async function validatePdfFiles(
   return {
     valid: true,
     details: {
-      count: validFiles.length,
+      count: files.length,
       totalSize,
-      files: validFiles.map((f) => f.name),
+      files: files.map((file) => file.name),
     },
   };
 }
