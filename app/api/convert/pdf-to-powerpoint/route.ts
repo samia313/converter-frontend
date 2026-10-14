@@ -1,10 +1,51 @@
 import { NextResponse } from 'next/server';
+import JSZip from 'jszip';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
+
+async function validatePptxStructure(buffer: Buffer): Promise<boolean> {
+  try {
+    const archive = await JSZip.loadAsync(buffer, { checkCRC32: true });
+    const requiredFiles = [
+      '[Content_Types].xml',
+      '_rels/.rels',
+      'ppt/presentation.xml',
+      'ppt/_rels/presentation.xml.rels',
+    ];
+
+    for (const path of requiredFiles) {
+      if (!archive.file(path)) return false;
+    }
+
+    const slidePaths = Object.keys(archive.files).filter(
+      (path) => /^ppt\/slides\/slide\d+\.xml$/.test(path) && !archive.files[path].dir,
+    );
+    if (slidePaths.length === 0) return false;
+
+    const [contentTypes, rootRels, presentation, presentationRels, firstSlide] = await Promise.all([
+      ...requiredFiles.map(async (path) => archive.file(path)!.async('string')),
+      archive.file(slidePaths.sort((a, b) => {
+        const ai = Number(a.match(/slide(\d+)\.xml$/)?.[1] || 0);
+        const bi = Number(b.match(/slide(\d+)\.xml$/)?.[1] || 0);
+        return ai - bi;
+      })[0])!.async('string'),
+    ]);
+
+    return (
+      contentTypes.includes('presentationml.presentation.main+xml') &&
+      rootRels.includes('Target="ppt/presentation.xml"') &&
+      presentation.includes('<p:presentation') &&
+      presentationRels.includes('/slide') &&
+      firstSlide.includes('<p:sld')
+    );
+  } catch {
+    return false;
+  }
+}
 
 export async function POST(request: Request) {
   const baseUrl = process.env.DIGITALOCEAN_CONVERTER_URL?.replace(/\/$/, '');
@@ -44,12 +85,22 @@ export async function POST(request: Request) {
     const output = await fetch(data.downloadUrl, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
     if (!output.ok) return NextResponse.json({ error: 'Converted PowerPoint could not be retrieved.', code: 'OUTPUT_FETCH_FAILED' }, { status: 502 });
 
-    const baseName = file.name.replace(/\.pdf$/i, '');
-    return new NextResponse(await output.arrayBuffer(), {
+    const outputBuffer = Buffer.from(await output.arrayBuffer());
+    if (outputBuffer.length < 4 || outputBuffer[0] !== 0x50 || outputBuffer[1] !== 0x4b ||
+        outputBuffer[2] !== 0x03 || outputBuffer[3] !== 0x04) {
+      return NextResponse.json({ error: 'The converter returned an invalid PowerPoint file.', code: 'INVALID_OUTPUT' }, { status: 502 });
+    }
+    if (!(await validatePptxStructure(outputBuffer))) {
+      return NextResponse.json({ error: 'The generated PowerPoint failed internal file validation.', code: 'INVALID_PPTX_STRUCTURE' }, { status: 502 });
+    }
+
+    const baseName = file.name.replace(/\.pdf$/i, '').replace(/[\\/\r\n"]/g, '_').slice(0, 150) || 'presentation';
+    return new NextResponse(outputBuffer as BodyInit, {
       status: 200,
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         'Content-Disposition': 'attachment; filename="' + baseName + '.pptx"',
+        'Content-Length': String(outputBuffer.length),
         'Cache-Control': 'no-store',
       },
     });
