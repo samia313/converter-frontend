@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { createHmac, timingSafeEqual } from 'node:crypto';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -27,8 +28,10 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Image download service is misconfigured.' }, { status: 503 });
   }
 
-  const value = new URL(request.url).searchParams.get('url');
-  if (!value || value.length > 4096) return NextResponse.json({ error: 'A valid image URL is required.' }, { status: 400 });
+  const params = new URL(request.url).searchParams;
+  const value = params.get('url');
+  const signature = params.get('sig');
+  if (!value || value.length > 4096 || !signature || !/^[a-f0-9]{64}$/.test(signature)) return NextResponse.json({ error: 'A valid image URL is required.' }, { status: 400 });
 
   let imageUrl: URL;
   try {
@@ -38,6 +41,12 @@ export async function GET(request: Request) {
   }
   if (!['http:', 'https:'].includes(imageUrl.protocol) || imageUrl.username || imageUrl.password || imageUrl.origin !== converterOrigin) {
     return NextResponse.json({ error: 'Image URL is not allowed.' }, { status: 403 });
+  }
+  if (!apiKey) return NextResponse.json({ error: 'Image download signing is not configured.' }, { status: 503 });
+  const expectedSignature = createHmac('sha256', apiKey).update(value).digest();
+  const suppliedSignature = Buffer.from(signature, 'hex');
+  if (suppliedSignature.length !== expectedSignature.length || !timingSafeEqual(suppliedSignature, expectedSignature)) {
+    return NextResponse.json({ error: 'Image download signature is invalid.' }, { status: 403 });
   }
 
   try {
