@@ -27,6 +27,12 @@ const included = [
 ]
 
 
+const notes = [
+  { title: 'Free PDF tools', body: 'Use tools marked free, subject to each tool’s supported formats and stated limits.' },
+  { title: 'AI and advanced features', body: 'AI availability and usage limits vary by feature. Verify the exact included access and limits before purchasing.' },
+  { title: 'Premium billing', body: 'All prices are in USD. Review the exact price, billing interval, renewal and cancellation terms shown at checkout before confirming payment.' },
+]
+
 export default function PricingPage() {
   return (
     <main className="min-h-screen bg-white text-gray-900">
