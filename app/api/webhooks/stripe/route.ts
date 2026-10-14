@@ -16,7 +16,6 @@ function getPlanForPrice(priceId?: string): string | null {
     [process.env.STRIPE_PRICE_ID_PRO_MONTHLY, 'pro_monthly'],
     [process.env.STRIPE_PRICE_ID_PRO_YEARLY, 'pro_yearly'],
     [process.env.STRIPE_PRICE_ID_AI_PRO_MONTHLY, 'ai_pro_monthly'],
-    [process.env.STRIPE_PRICE_ID_TEAM_MONTHLY, 'team_monthly'],
   ];
   return configuredPrices.find(([configuredId]) => configuredId && configuredId === priceId)?.[1] ?? null;
 }
@@ -52,11 +51,11 @@ export async function POST(req: NextRequest) {
           current_period_end: number;
         };
 
-        // Unknown prices must never inherit paid access. Mark them explicitly for investigation.
+        // Unknown or intentionally unoffered prices must never inherit paid access.
         const plan = mappedPlan ?? 'free';
         const status = mappedPlan ? sub.status : 'unmapped_price';
         if (!mappedPlan) {
-          console.error('Stripe subscription has an unrecognized price; paid access disabled.', {
+          console.error('Stripe subscription has an unrecognized or unoffered price; paid access disabled.', {
             subscriptionId: sub.id,
             priceId: priceId ?? null,
           });
