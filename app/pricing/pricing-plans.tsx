@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-type Plan = 'pro_monthly' | 'pro_yearly' | 'ai_pro_monthly' | 'team_monthly'
+type Plan = 'pro_monthly' | 'pro_yearly' | 'ai_pro_monthly'
 
 const plans: { id: Plan; name: string; price: string; cadence: string; note: string; features: string[]; featured?: boolean }[] = [
   {
@@ -29,15 +29,7 @@ const plans: { id: Plan; name: string; price: string; cadence: string; note: str
     cadence: '/ month',
     note: 'For AI-assisted document workflows',
     features: ['Access to supported AI document tools', 'Summaries, document chat and translation where available', 'AI usage limits disclosed before purchase'],
-  },
-  {
-    id: 'team_monthly',
-    name: 'Team',
-    price: '$4.99',
-    cadence: '/ seat / month',
-    note: 'For small teams; billed monthly per seat',
-    features: ['Per-seat pricing', 'Shared access to eligible paid features', 'Team features only where available in PDFilio'],
-  },
+  }
 ]
 
 export default function PricingPlans() {
@@ -72,7 +64,7 @@ export default function PricingPlans() {
 
   return (
     <div>
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {plans.map((plan) => (
           <article key={plan.id} className={`rounded-2xl border p-6 shadow-sm ${plan.featured ? 'border-red-600 ring-2 ring-red-100' : 'border-gray-200'}`}>
             {plan.featured && <p className="text-xs font-bold uppercase tracking-wide text-red-700">Best value</p>}
@@ -95,7 +87,7 @@ export default function PricingPlans() {
       </div>
       {message && <p role="status" aria-live="polite" className="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">{message}</p>}
       <p className="mt-5 text-sm leading-6 text-gray-500">
-        Prices are in USD, before any applicable taxes. The displayed rates are PDFilio’s proposed introductory prices and remain subject to payment configuration, feature availability, and the final terms shown by Stripe at checkout. Do not purchase until the checkout confirms the exact amount and billing interval.
+        Prices are in USD, before any applicable taxes. The displayed rates are proposed introductory prices. Plan access depends on successful payment and configured features. Review the exact amount, billing interval, renewal and cancellation terms in Stripe Checkout before confirming payment.
       </p>
     </div>
   )
