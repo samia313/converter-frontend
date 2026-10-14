@@ -52,7 +52,8 @@ export async function POST(request: Request) {
       downloadUrls.push(outputUrl.toString());
     }
 
-    return NextResponse.json({ success: true, count: downloadUrls.length, downloadUrls });
+    const proxiedDownloadUrls = downloadUrls.map((url) => '/api/convert/pdf-to-images/download?url=' + encodeURIComponent(url));
+    return NextResponse.json({ success: true, count: proxiedDownloadUrls.length, downloadUrls: proxiedDownloadUrls });
   } catch {
     return NextResponse.json({ error: 'PDF to images conversion is temporarily unavailable.', code: 'CONVERTER_UNAVAILABLE' }, { status: 502 });
   }
