@@ -60,7 +60,18 @@ export async function POST(request: NextRequest) {
       .where(eq(subscription.userId, session.user.id))
       .limit(1)
 
-    let customerId = existingRows[0]?.stripeCustomerId
+    const existingSubscription = existingRows[0]
+    if (
+      existingSubscription?.stripeSubscriptionId &&
+      ['active', 'trialing', 'past_due', 'unpaid', 'incomplete'].includes(existingSubscription.status)
+    ) {
+      return NextResponse.json(
+        { error: 'A subscription already exists for this account. Manage your current plan before starting another checkout.' },
+        { status: 409 },
+      )
+    }
+
+    let customerId = existingSubscription?.stripeCustomerId
     if (!customerId) {
       const customer = await stripe.customers.create({
         email: session.user.email,
