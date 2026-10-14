@@ -51,8 +51,10 @@ export async function POST(req: NextRequest) {
           let plan = 'basic';
 
           // Stripe price IDs are opaque identifiers; compare exact configured IDs.
-          if (priceId && priceId === process.env.STRIPE_PRICE_ID_PROFESSIONAL) plan = 'professional';
-          if (priceId && priceId === process.env.STRIPE_PRICE_ID_ENTERPRISE) plan = 'enterprise';
+          if (priceId && priceId === process.env.STRIPE_PRICE_ID_PRO_MONTHLY) plan = 'pro_monthly';
+          if (priceId && priceId === process.env.STRIPE_PRICE_ID_PRO_YEARLY) plan = 'pro_yearly';
+          if (priceId && priceId === process.env.STRIPE_PRICE_ID_AI_PRO_MONTHLY) plan = 'ai_pro_monthly';
+          if (priceId && priceId === process.env.STRIPE_PRICE_ID_TEAM_MONTHLY) plan = 'team_monthly';
 
           const sub = stripeSubscription as any;
           await db
