@@ -185,7 +185,18 @@ export async function POST(request: NextRequest) {
     }
 
     const xlsxBuffer = await createXlsx(rows);
-    const fileName = file.name.replace(/\.pdf$/i, '') + '.xlsx';
+    if (
+      xlsxBuffer.length < 4 ||
+      xlsxBuffer[0] !== 0x50 ||
+      xlsxBuffer[1] !== 0x4b ||
+      xlsxBuffer[2] !== 0x03 ||
+      xlsxBuffer[3] !== 0x04
+    ) {
+      console.error('[pdf-to-excel] Generated XLSX failed ZIP signature validation.');
+      return NextResponse.json({ error: 'Conversion output failed file integrity validation.' }, { status: 500 });
+    }
+    const baseName = file.name.replace(/\.pdf$/i, '').replace(/[\\/\r\n"]/g, '_').slice(0, 150) || 'document';
+    const fileName = baseName + '.xlsx';
 
     return new NextResponse(xlsxBuffer as BodyInit, {
       headers: {
