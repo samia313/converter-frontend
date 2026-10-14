@@ -31,7 +31,11 @@ export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const value = params.get('url');
   const signature = params.get('sig');
-  if (!value || value.length > 4096 || !signature || !/^[a-f0-9]{64}$/.test(signature)) return NextResponse.json({ error: 'A valid image URL is required.' }, { status: 400 });
+  const expiresValue = params.get('exp');
+  if (!value || value.length > 4096 || !expiresValue || !/^\\d{10}$/.test(expiresValue) || !signature || !/^[a-f0-9]{64}$/.test(signature)) return NextResponse.json({ error: 'A valid image URL is required.' }, { status: 400 });
+  const expiresAt = Number(expiresValue);
+  const now = Math.floor(Date.now() / 1000);
+  if (expiresAt < now || expiresAt > now + 15 * 60 + 30) return NextResponse.json({ error: 'Image download link has expired or is invalid.' }, { status: 403 });
 
   let imageUrl: URL;
   try {
@@ -43,7 +47,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Image URL is not allowed.' }, { status: 403 });
   }
   if (!apiKey) return NextResponse.json({ error: 'Image download signing is not configured.' }, { status: 503 });
-  const expectedSignature = createHmac('sha256', apiKey).update(value).digest();
+  const expectedSignature = createHmac('sha256', apiKey).update(value + '\\n' + expiresValue).digest();
   const suppliedSignature = Buffer.from(signature, 'hex');
   if (suppliedSignature.length !== expectedSignature.length || !timingSafeEqual(suppliedSignature, expectedSignature)) {
     return NextResponse.json({ error: 'Image download signature is invalid.' }, { status: 403 });
