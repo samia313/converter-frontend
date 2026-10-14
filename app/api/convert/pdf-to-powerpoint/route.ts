@@ -80,9 +80,37 @@ export async function POST(request: Request) {
         code: data?.code || 'CONVERSION_FAILED',
       }, { status: response.status });
     }
-    if (!data?.downloadUrl) return NextResponse.json({ error: 'Conversion completed without a download URL.', code: 'MISSING_OUTPUT' }, { status: 502 });
+    if (typeof data?.downloadUrl !== 'string' || !data.downloadUrl.trim()) {
+      return NextResponse.json({ error: 'Conversion completed without a download URL.', code: 'MISSING_OUTPUT' }, { status: 502 });
+    }
 
-    const output = await fetch(data.downloadUrl, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
+    // Only fetch output from the configured converter origin; never let an upstream
+    // response turn this endpoint into a server-side request forgery proxy.
+    let downloadUrl: URL;
+    let converterUrl: URL;
+    try {
+      converterUrl = new URL(baseUrl);
+      downloadUrl = new URL(data.downloadUrl, converterUrl);
+    } catch {
+      return NextResponse.json({ error: 'The converter returned an invalid download URL.', code: 'INVALID_OUTPUT_URL' }, { status: 502 });
+    }
+    if (
+      downloadUrl.origin !== converterUrl.origin ||
+      downloadUrl.username ||
+      downloadUrl.password ||
+      !['http:', 'https:'].includes(downloadUrl.protocol)
+    ) {
+      return NextResponse.json({ error: 'The converter returned an untrusted download URL.', code: 'UNTRUSTED_OUTPUT_URL' }, { status: 502 });
+    }
+
+    const output = await fetch(downloadUrl, {
+      cache: 'no-store',
+      redirect: 'manual',
+      signal: AbortSignal.timeout(30000),
+    });
+    if (output.status >= 300 && output.status < 400) {
+      return NextResponse.json({ error: 'The converter output URL redirected unexpectedly.', code: 'OUTPUT_REDIRECT_REJECTED' }, { status: 502 });
+    }
     if (!output.ok) return NextResponse.json({ error: 'Converted PowerPoint could not be retrieved.', code: 'OUTPUT_FETCH_FAILED' }, { status: 502 });
 
     const outputBuffer = Buffer.from(await output.arrayBuffer());
