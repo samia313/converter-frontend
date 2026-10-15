@@ -193,7 +193,7 @@ try {
   const pdfToExcel = await fetch(`${baseUrl}/api/convert/pdf-to-excel`, {
     method: 'POST', body: pdfToExcelForm, signal: AbortSignal.timeout(30_000),
   });
-  assert.equal(pdfToExcel.status, 200, `PDF-to-Excel should convert selectable text; got ${pdfToExcel.status}: ${await pdfToExcel.clone().text()}`);
+  assert.equal(pdfToExcel.status, 200, `PDF-to-Excel should convert selectable text; got ${pdfToExcel.status}: ${await pdfToExcel.clone().text()}\nServer output:\n${serverOutput.slice(-8000)}`);
   assert.match(pdfToExcel.headers.get('content-type') || '', /spreadsheetml\.sheet/i);
   const xlsxBytes = new Uint8Array(await pdfToExcel.arrayBuffer());
   assert.deepEqual(Array.from(xlsxBytes.slice(0, 4)), [0x50, 0x4b, 0x03, 0x04], 'XLSX output must be a ZIP package');
