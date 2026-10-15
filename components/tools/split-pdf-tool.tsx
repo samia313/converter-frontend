@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
+import JSZip from 'jszip';
 
 export default function SplitPDFTool() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -71,6 +72,29 @@ export default function SplitPDFTool() {
       const header = new Uint8Array(await blob.slice(0, 4).arrayBuffer());
       if (header[0] !== 0x50 || header[1] !== 0x4b || header[2] !== 0x03 || header[3] !== 0x04) {
         throw new Error('Split service returned an invalid ZIP archive. Please try again.');
+      }
+
+      // Inspect the archive itself so a ZIP header alone cannot trigger a
+      // false success when the archive is truncated or contains wrong files.
+      let archive: JSZip;
+      try {
+        archive = await JSZip.loadAsync(blob);
+      } catch {
+        throw new Error('Split output is damaged or incomplete. Please try again.');
+      }
+
+      const pdfEntries = Object.values(archive.files).filter(
+        (entry) => !entry.dir && entry.name.toLowerCase().endsWith('.pdf')
+      );
+      if (pdfEntries.length !== 2) {
+        throw new Error('Split output must contain exactly two PDF files.');
+      }
+
+      for (const entry of pdfEntries) {
+        const pdfHeader = new Uint8Array(await (await entry.async('blob')).slice(0, 5).arrayBuffer());
+        if (String.fromCharCode(...pdfHeader) !== '%PDF-') {
+          throw new Error('Split output contains an invalid PDF part. Please try again.');
+        }
       }
 
       const url = window.URL.createObjectURL(blob);
