@@ -104,6 +104,35 @@ try {
   }
   assert.deepEqual(splitPageCounts.sort((left, right) => left - right), [2, 2]);
 
+  // Verify merge handles multiple real PDFs and returns a parseable combined document.
+  const mergeForm = new FormData();
+  mergeForm.append('files', sourceBlob, 'first.pdf');
+  mergeForm.append('files', sourceBlob, 'second.pdf');
+  const mergeResponse = await fetch(`${baseUrl}/api/convert/merge-pdf`, {
+    method: 'POST', body: mergeForm, signal: AbortSignal.timeout(20_000),
+  });
+  assert.equal(mergeResponse.status, 200, `merge should process valid PDFs; got ${mergeResponse.status}: ${await mergeResponse.clone().text()}`);
+  assert.match(mergeResponse.headers.get('content-type') || '', /application\/pdf/i);
+  const mergedBytes = new Uint8Array(await mergeResponse.arrayBuffer());
+  assert.equal(String.fromCharCode(...mergedBytes.slice(0, 5)), '%PDF-');
+  const mergedPdf = await PDFDocument.load(mergedBytes);
+  assert.equal(mergedPdf.getPageCount(), 8, 'merge should preserve all pages from both inputs');
+
+  const invalidSplitForm = new FormData();
+  invalidSplitForm.append('file', sourceBlob, 'api-smoke-test.pdf');
+  invalidSplitForm.append('splitPage', '4');
+  const invalidSplit = await fetch(`${baseUrl}/api/convert/split-pdf`, {
+    method: 'POST', body: invalidSplitForm,
+  });
+  assert.equal(invalidSplit.status, 400, 'split must reject a split point at the last page');
+
+  const malformedPdfForm = new FormData();
+  malformedPdfForm.append('file', new Blob(['not a PDF'], { type: 'application/pdf' }), 'fake.pdf');
+  const malformedPdf = await fetch(`${baseUrl}/api/convert/rotate-pdf`, {
+    method: 'POST', body: malformedPdfForm,
+  });
+  assert.equal(malformedPdf.status, 400, 'rotation must reject spoofed PDF uploads');
+
   const invalidRotationForm = new FormData();
   invalidRotationForm.append('file', sourceBlob, 'api-smoke-test.pdf');
   invalidRotationForm.append('rotation', '45');
@@ -112,7 +141,7 @@ try {
   });
   assert.equal(invalidRotation.status, 400, 'rotate route must reject unsupported angles');
 
-  console.log('API smoke tests passed: missing inputs rejected; valid PDF rotation and split produce parseable outputs; invalid angle rejected.');
+  console.log('API smoke tests passed: missing inputs rejected; valid rotation, split, and merge produce parseable outputs; malformed files and invalid options rejected.');
 } finally {
   server.kill('SIGTERM');
 }
