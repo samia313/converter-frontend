@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
 import JSZip from 'jszip';
+import { PDFDocument } from 'pdf-lib';
 
 export default function SplitPDFTool() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -90,10 +91,30 @@ export default function SplitPDFTool() {
         throw new Error('Split output must contain exactly two PDF files.');
       }
 
-      for (const entry of pdfEntries) {
-        const pdfHeader = new Uint8Array(await (await entry.async('blob')).slice(0, 5).arrayBuffer());
+      const expectedPart1Pages = Number(response.headers.get('X-Pages-Part1'));
+      const expectedPart2Pages = Number(response.headers.get('X-Pages-Part2'));
+      const expectedPageCounts = [expectedPart1Pages, expectedPart2Pages];
+
+      for (const [index, entry] of pdfEntries.entries()) {
+        const pdfBytes = await entry.async('uint8array');
+        const pdfHeader = new Uint8Array(pdfBytes.slice(0, 5));
         if (String.fromCharCode(...pdfHeader) !== '%PDF-') {
           throw new Error('Split output contains an invalid PDF part. Please try again.');
+        }
+
+        let parsedPdf: PDFDocument;
+        try {
+          parsedPdf = await PDFDocument.load(pdfBytes);
+        } catch {
+          throw new Error('Split output contains a damaged or unreadable PDF part.');
+        }
+
+        const expectedPages = expectedPageCounts[index];
+        if (!Number.isInteger(expectedPages) || expectedPages < 1) {
+          throw new Error('Split service did not provide valid page-count verification.');
+        }
+        if (parsedPdf.getPageCount() !== expectedPages) {
+          throw new Error('Split output page counts do not match the service validation. Please try again.');
         }
       }
 
