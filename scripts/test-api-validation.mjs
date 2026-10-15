@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, StandardFonts } from 'pdf-lib';
 import JSZip from 'jszip';
 import sharp from 'sharp';
 
@@ -173,8 +173,9 @@ try {
   // Verify PDF-to-Excel generates a valid XLSX package from selectable PDF text.
   const textPdf = await PDFDocument.create();
   const textPage = textPdf.addPage([612, 792]);
-  textPage.drawText('PDFilio spreadsheet smoke test', { x: 48, y: 720, size: 16 });
-  textPage.drawText('Revenue 123', { x: 48, y: 690, size: 12 });
+  const testFont = await textPdf.embedFont(StandardFonts.Helvetica);
+  textPage.drawText('PDFilio spreadsheet smoke test', { x: 48, y: 720, size: 16, font: testFont });
+  textPage.drawText('Revenue 123', { x: 48, y: 690, size: 12, font: testFont });
   const textPdfBytes = await textPdf.save();
   const pdfToExcelForm = new FormData();
   pdfToExcelForm.append('file', new Blob([textPdfBytes], { type: 'application/pdf' }), 'spreadsheet-source.pdf');
