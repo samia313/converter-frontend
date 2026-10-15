@@ -51,7 +51,21 @@ export default function RotatePDFTool() {
         throw new Error(message);
       }
 
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.toLowerCase().includes('application/pdf')) {
+        throw new Error('Rotation service returned an unexpected file type instead of a PDF.');
+      }
+
       const blob = await response.blob();
+      if (blob.size < 5) {
+        throw new Error('Rotation produced an empty or invalid PDF output.');
+      }
+
+      const header = new Uint8Array(await blob.slice(0, 5).arrayBuffer());
+      if (String.fromCharCode(...header) !== '%PDF-') {
+        throw new Error('Rotation service returned an invalid PDF file. Please try again.');
+      }
+
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
     } catch (err) {
