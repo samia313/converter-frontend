@@ -29,21 +29,31 @@ export default function MergePDFTool() {
   };
 
   const addFiles = (newFiles: FileList | null) => {
-    if (!newFiles) return;
+    if (!newFiles || newFiles.length === 0) return;
 
     const newFileItems: FileItem[] = [];
+    const maxFileSize = 100 * 1024 * 1024;
 
+    // Reject the entire selection if any file is invalid. Never silently skip
+    // an upload and then tell the visitor that the remaining files were merged.
     for (let i = 0; i < newFiles.length; i++) {
       const file = newFiles[i];
+      const hasPdfExtension = file.name.toLowerCase().endsWith('.pdf');
+      const hasPdfMimeType = file.type === 'application/pdf';
 
-      if (file.type !== 'application/pdf') {
-        setError(`"${file.name}" is not a PDF`);
-        continue;
+      if (!hasPdfExtension && !hasPdfMimeType) {
+        setError(`"${file.name}" is not a PDF. Please select only PDF files.`);
+        return;
       }
 
-      if (file.size > 100 * 1024 * 1024) {
-        setError(`"${file.name}" exceeds 100MB limit`);
-        continue;
+      if (file.size === 0) {
+        setError(`"${file.name}" is empty. Please select a valid PDF.`);
+        return;
+      }
+
+      if (file.size > maxFileSize) {
+        setError(`"${file.name}" exceeds the 100MB per-file limit.`);
+        return;
       }
 
       newFileItems.push({
