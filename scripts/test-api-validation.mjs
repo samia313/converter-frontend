@@ -170,6 +170,27 @@ try {
   });
   assert.equal(invalidImage.status, 415, 'image-to-PDF must reject spoofed image uploads');
 
+  // Verify PDF-to-Excel generates a valid XLSX package from selectable PDF text.
+  const textPdf = await PDFDocument.create();
+  const textPage = textPdf.addPage([612, 792]);
+  textPage.drawText('PDFilio spreadsheet smoke test', { x: 48, y: 720, size: 16 });
+  textPage.drawText('Revenue 123', { x: 48, y: 690, size: 12 });
+  const textPdfBytes = await textPdf.save();
+  const pdfToExcelForm = new FormData();
+  pdfToExcelForm.append('file', new Blob([textPdfBytes], { type: 'application/pdf' }), 'spreadsheet-source.pdf');
+  const pdfToExcel = await fetch(`${baseUrl}/api/convert/pdf-to-excel`, {
+    method: 'POST', body: pdfToExcelForm, signal: AbortSignal.timeout(30_000),
+  });
+  assert.equal(pdfToExcel.status, 200, `PDF-to-Excel should convert selectable text; got ${pdfToExcel.status}: ${await pdfToExcel.clone().text()}`);
+  assert.match(pdfToExcel.headers.get('content-type') || '', /spreadsheetml\.sheet/i);
+  const xlsxBytes = new Uint8Array(await pdfToExcel.arrayBuffer());
+  assert.deepEqual(Array.from(xlsxBytes.slice(0, 4)), [0x50, 0x4b, 0x03, 0x04], 'XLSX output must be a ZIP package');
+  const xlsx = await JSZip.loadAsync(xlsxBytes);
+  const worksheet = await xlsx.file('xl/worksheets/sheet1.xml')?.async('string');
+  assert.ok(worksheet, 'XLSX must contain a worksheet');
+  assert.match(worksheet, /PDFilio spreadsheet smoke test/, 'XLSX should preserve extracted PDF text');
+  assert.match(worksheet, /Revenue 123/, 'XLSX should preserve extracted values');
+
   const invalidRotationForm = new FormData();
   invalidRotationForm.append('file', sourceBlob, 'api-smoke-test.pdf');
   invalidRotationForm.append('rotation', '45');
@@ -178,7 +199,7 @@ try {
   });
   assert.equal(invalidRotation.status, 400, 'rotate route must reject unsupported angles');
 
-  console.log('API smoke tests passed: missing inputs rejected; valid rotation, split, and merge produce parseable outputs; malformed files and invalid options rejected; textless PDF-to-Word input returns a clear 422; valid image-to-PDF output is parseable and spoofed images are rejected.');
+  console.log('API smoke tests passed: missing inputs rejected; valid rotation, split, and merge produce parseable outputs; malformed files and invalid options rejected; textless PDF-to-Word input returns a clear 422; valid image-to-PDF output is parseable and spoofed images are rejected; PDF-to-Excel returns a valid XLSX with extracted text.');
 } finally {
   server.kill('SIGTERM');
 }
