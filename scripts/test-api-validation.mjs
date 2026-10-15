@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { PDFDocument } from 'pdf-lib';
 import JSZip from 'jszip';
+import sharp from 'sharp';
 
 const port = Number(process.env.PDFILIO_TEST_PORT || 3187);
 const baseUrl = `http://127.0.0.1:${port}`;
@@ -147,6 +148,28 @@ try {
   });
   assert.equal(textlessWord.status, 422, 'PDF-to-Word must clearly reject image-only/textless PDFs rather than return an empty DOCX');
 
+  // Verify the local image-to-PDF route produces a real, parseable PDF.
+  const pngBytes = await sharp({
+    create: { width: 8, height: 6, channels: 3, background: { r: 220, g: 80, b: 40 } },
+  }).png().toBuffer();
+  const imageForm = new FormData();
+  imageForm.append('file', new Blob([pngBytes], { type: 'image/png' }), 'smoke-test.png');
+  const imageToPdf = await fetch(`${baseUrl}/api/convert/image-to-pdf`, {
+    method: 'POST', body: imageForm, signal: AbortSignal.timeout(20_000),
+  });
+  assert.equal(imageToPdf.status, 200, `image-to-PDF should process a valid PNG; got ${imageToPdf.status}: ${await imageToPdf.clone().text()}`);
+  assert.match(imageToPdf.headers.get('content-type') || '', /application\/pdf/i);
+  const imagePdfBytes = new Uint8Array(await imageToPdf.arrayBuffer());
+  assert.equal(String.fromCharCode(...imagePdfBytes.slice(0, 5)), '%PDF-');
+  assert.equal((await PDFDocument.load(imagePdfBytes)).getPageCount(), 1, 'one uploaded image should produce one PDF page');
+
+  const invalidImageForm = new FormData();
+  invalidImageForm.append('file', new Blob(['not a PNG'], { type: 'image/png' }), 'fake.png');
+  const invalidImage = await fetch(`${baseUrl}/api/convert/image-to-pdf`, {
+    method: 'POST', body: invalidImageForm, signal: AbortSignal.timeout(20_000),
+  });
+  assert.equal(invalidImage.status, 415, 'image-to-PDF must reject spoofed image uploads');
+
   const invalidRotationForm = new FormData();
   invalidRotationForm.append('file', sourceBlob, 'api-smoke-test.pdf');
   invalidRotationForm.append('rotation', '45');
@@ -155,7 +178,7 @@ try {
   });
   assert.equal(invalidRotation.status, 400, 'rotate route must reject unsupported angles');
 
-  console.log('API smoke tests passed: missing inputs rejected; valid rotation, split, and merge produce parseable outputs; malformed files and invalid options rejected; textless PDF-to-Word input returns a clear 422.');
+  console.log('API smoke tests passed: missing inputs rejected; valid rotation, split, and merge produce parseable outputs; malformed files and invalid options rejected; textless PDF-to-Word input returns a clear 422; valid image-to-PDF output is parseable and spoofed images are rejected.');
 } finally {
   server.kill('SIGTERM');
 }
