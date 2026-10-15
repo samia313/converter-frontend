@@ -40,15 +40,9 @@ export async function POST(request: Request) {
     const data = await response.json().catch(() => ({}));
     if (!response.ok) return NextResponse.json({ error: typeof data?.error === 'string' ? data.error : 'OCR conversion failed.', code: data?.code || 'OCR_FAILED' }, { status: response.status });
     if (typeof data?.textExtracted !== 'string' || data.textExtracted.length > 20_000_000) return NextResponse.json({ error: 'OCR returned missing or oversized text.', code: 'MISSING_OR_INVALID_TEXT' }, { status: 502 });
-    let downloadUrl: string | null = null;
-    if (data.downloadUrl != null) {
-      if (typeof data.downloadUrl !== 'string' || data.downloadUrl.length > 4096 || !converterOrigin) return NextResponse.json({ error: 'OCR returned an invalid output URL.', code: 'INVALID_OUTPUT_URL' }, { status: 502 });
-      let outputUrl: URL;
-      try { outputUrl = new URL(data.downloadUrl, baseUrl + '/'); } catch { return NextResponse.json({ error: 'OCR returned an invalid output URL.', code: 'INVALID_OUTPUT_URL' }, { status: 502 }); }
-      if (!['http:', 'https:'].includes(outputUrl.protocol) || outputUrl.username || outputUrl.password || outputUrl.origin !== converterOrigin) return NextResponse.json({ error: 'OCR returned a disallowed output URL.', code: 'DISALLOWED_OUTPUT_URL' }, { status: 502 });
-      downloadUrl = outputUrl.toString();
-    }
-    return NextResponse.json({ success: true, text: data.textExtracted, downloadUrl });
+    // Do not expose the converter's private download URL to the browser.
+    // OCR text extraction is supported; downloadable OCR-PDF output needs a signed proxy endpoint.
+    return NextResponse.json({ success: true, text: data.textExtracted });
   } catch {
     return NextResponse.json({ error: 'OCR processing is temporarily unavailable.', code: 'OCR_UNAVAILABLE' }, { status: 502 });
   }
