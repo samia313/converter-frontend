@@ -57,15 +57,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'File must be a PDF' }, { status: 400 });
     }
 
+    const maxSize = 100 * 1024 * 1024;
+    // Check the multipart metadata before reading the entire upload into memory.
+    // This avoids allocating a huge Buffer for files that already exceed our limit.
+    if (file.size === 0) {
+      return NextResponse.json({ error: 'File is empty' }, { status: 400 });
+    }
+    if (file.size > maxSize) {
+      return NextResponse.json({ error: 'File size exceeds the 100MB limit.' }, { status: 413 });
+    }
+
+    // Extension and MIME type can be spoofed; validate the signature before parsing.
+    const header = Buffer.from(await file.slice(0, 5).arrayBuffer());
+    if (header.length < 5 || header.toString('ascii') !== '%PDF-') {
+      return NextResponse.json({ error: 'The uploaded file is not a valid PDF.' }, { status: 400 });
+    }
+
     const pdfBuffer = Buffer.from(await file.arrayBuffer());
+    // Recheck the actual buffer length as defense in depth.
     if (pdfBuffer.length === 0) {
       return NextResponse.json({ error: 'File is empty' }, { status: 400 });
     }
-    // Extension and MIME type can be spoofed; reject files without a PDF signature.
-    if (pdfBuffer.length < 5 || pdfBuffer.subarray(0, 5).toString('ascii') !== '%PDF-') {
-      return NextResponse.json({ error: 'The uploaded file is not a valid PDF.' }, { status: 400 });
-    }
-    const maxSize = 100 * 1024 * 1024;
     if (pdfBuffer.length > maxSize) {
       return NextResponse.json({ error: 'File size exceeds the 100MB limit.' }, { status: 413 });
     }
