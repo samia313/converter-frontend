@@ -128,10 +128,25 @@ export default function MergePDFTool() {
         throw new Error(`Status ${response.status}: ${text}`);
       }
 
-      const blob = await response.blob();
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.toLowerCase().includes('application/pdf')) {
+        const responseText = await response.text().catch(() => '');
+        throw new Error(
+          responseText.slice(0, 300) ||
+          'Merge service returned an unexpected file type instead of a PDF.'
+        );
+      }
 
-      if (blob.size === 0) {
-        throw new Error('Empty result');
+      const blob = await response.blob();
+      if (blob.size < 5) {
+        throw new Error('Merge produced an empty or invalid PDF output.');
+      }
+
+      // HTTP 200 and a PDF content-type are not enough: check the downloaded
+      // payload starts with a PDF signature before offering it as a PDF.
+      const header = new Uint8Array(await blob.slice(0, 5).arrayBuffer());
+      if (String.fromCharCode(...header) !== '%PDF-') {
+        throw new Error('Merge service returned an invalid PDF file. Please try again.');
       }
 
       const url = window.URL.createObjectURL(blob);
