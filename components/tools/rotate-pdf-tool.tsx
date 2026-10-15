@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
+import { PDFDocument } from 'pdf-lib';
 
 export default function RotatePDFTool() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -64,6 +65,31 @@ export default function RotatePDFTool() {
       const header = new Uint8Array(await blob.slice(0, 5).arrayBuffer());
       if (String.fromCharCode(...header) !== '%PDF-') {
         throw new Error('Rotation service returned an invalid PDF file. Please try again.');
+      }
+
+      // Parse both source and output PDFs before declaring success. A PDF
+      // signature alone does not prove the document is readable or rotated.
+      let sourcePdf: PDFDocument;
+      let outputPdf: PDFDocument;
+      try {
+        sourcePdf = await PDFDocument.load(await selectedFile.arrayBuffer(), { ignoreEncryption: true });
+        outputPdf = await PDFDocument.load(await blob.arrayBuffer(), { ignoreEncryption: true });
+      } catch {
+        throw new Error('Rotation output could not be opened as a PDF. Please try another file.');
+      }
+
+      const sourcePages = sourcePdf.getPages();
+      const outputPages = outputPdf.getPages();
+      if (sourcePages.length === 0 || outputPages.length !== sourcePages.length) {
+        throw new Error('Rotation output page count does not match the original PDF.');
+      }
+
+      const rotationsMatch = sourcePages.every((page, index) => {
+        const expected = (page.getRotation().angle + rotation) % 360;
+        return outputPages[index]?.getRotation().angle === expected;
+      });
+      if (!rotationsMatch) {
+        throw new Error('Rotation output did not apply the selected angle to every page.');
       }
 
       const url = window.URL.createObjectURL(blob);
