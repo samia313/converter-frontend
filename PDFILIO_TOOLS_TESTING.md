@@ -1,14 +1,21 @@
-# PDFilio Complete Tools Testing & Verification
+# PDFilio Tools: Verification Status
 
-## Build Status: PRODUCTION READY ✅
+> **Status: NOT VERIFIED FOR PRODUCTION.** This document previously overstated implementation and test coverage. The checklists and architecture notes below are historical test plans, not evidence that tools work. Do not advertise a tool as working until a real file is uploaded, the output is downloaded, and the output is independently validated in the target deployment.
 
-```
-✓ Compiled successfully in 13.2s
-✓ TypeScript strict mode: PASSING
-✓ All 1431+ pages generated
-✓ Zero build errors
-✓ All types properly defined
-```
+## Evidence currently available
+
+- A GitHub Actions run for PR #109 commit `e936cef19e3d14d0c6b0ac9bb8f3f9c554e554a7` reported successful CI workflows (frontend checks/build and conversion-server checks/smoke test).
+- These CI results do **not** prove live browser upload/download, production readiness, or that every tool works.
+- PR #109 remains a draft and is not merged. Preview/production end-to-end tests have not been confirmed because the deployment host could not be reached from the test environment.
+- AI summary/translation require `OPENAI_API_KEY`; server PDF OCR requires `DIGITALOCEAN_CONVERTER_URL` and `DIGITALOCEAN_CONVERTER_API_KEY`.
+
+## Release gate
+
+For every public tool, record: tested URL and deployment/commit, input fixture, expected result, actual HTTP status, output MIME type/signature, output page/content validation, download verification, and pass/fail. A build alone is not a tool-level pass. Tools that fail must be fixed or clearly marked unavailable/removed from public navigation. Keep core PDF tools free; billing work remains out of scope.
+
+---
+
+## Historical implementation notes (not a verified status report)
 
 ---
 
