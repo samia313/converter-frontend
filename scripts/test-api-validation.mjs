@@ -177,6 +177,17 @@ try {
   textPage.drawText('PDFilio spreadsheet smoke test', { x: 48, y: 720, size: 16, font: testFont });
   textPage.drawText('Revenue 123', { x: 48, y: 690, size: 12, font: testFont });
   const textPdfBytes = await textPdf.save();
+  // Diagnose the parser against the exact fixture before testing the HTTP route.
+  const { PDFParse } = await import('pdf-parse');
+  const diagnosticParser = new PDFParse({ data: Buffer.from(textPdfBytes) });
+  try {
+    const diagnosticText = await diagnosticParser.getText();
+    assert.match(diagnosticText.text, /PDFilio spreadsheet smoke test/, 'PDF text extractor must read the generated fixture');
+  } catch (error) {
+    throw new Error(`PDF-to-Excel test fixture text extraction failed: ${error instanceof Error ? error.stack || error.message : String(error)}`);
+  } finally {
+    await diagnosticParser.destroy();
+  }
   const pdfToExcelForm = new FormData();
   pdfToExcelForm.append('file', new Blob([textPdfBytes], { type: 'application/pdf' }), 'spreadsheet-source.pdf');
   const pdfToExcel = await fetch(`${baseUrl}/api/convert/pdf-to-excel`, {
