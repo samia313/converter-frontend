@@ -13,6 +13,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'PDF compression service is not configured yet.', code: 'CONVERTER_NOT_CONFIGURED' }, { status: 503 });
   }
 
+  let converterOrigin: string;
+  try {
+    const converterUrl = new URL(baseUrl);
+    if (!['http:', 'https:'].includes(converterUrl.protocol) || converterUrl.username || converterUrl.password) {
+      throw new Error('Invalid converter URL');
+    }
+    converterOrigin = converterUrl.origin;
+  } catch {
+    return NextResponse.json({ error: 'Compression service configuration is invalid.', code: 'INVALID_CONVERTER_CONFIG' }, { status: 503 });
+  }
+
   try {
     const incoming = await request.formData();
     const file = incoming.get('file');
@@ -44,16 +55,52 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!data?.downloadUrl) return NextResponse.json({ error: 'Compression completed without a download URL.', code: 'MISSING_OUTPUT' }, { status: 502 });
+    if (typeof data?.downloadUrl !== 'string' || !data.downloadUrl.trim()) {
+      return NextResponse.json({ error: 'Compression completed without a download URL.', code: 'MISSING_OUTPUT' }, { status: 502 });
+    }
 
-    const output = await fetch(data.downloadUrl, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
+    let downloadUrl: URL;
+    try {
+      downloadUrl = new URL(data.downloadUrl, baseUrl);
+      if (
+        downloadUrl.origin !== converterOrigin ||
+        downloadUrl.username ||
+        downloadUrl.password ||
+        !['http:', 'https:'].includes(downloadUrl.protocol)
+      ) {
+        return NextResponse.json({ error: 'Converter returned an untrusted output location.', code: 'INVALID_OUTPUT_URL' }, { status: 502 });
+      }
+    } catch {
+      return NextResponse.json({ error: 'Converter returned an invalid output location.', code: 'INVALID_OUTPUT_URL' }, { status: 502 });
+    }
+
+    const output = await fetch(downloadUrl, {
+      cache: 'no-store',
+      redirect: 'manual',
+      signal: AbortSignal.timeout(30000),
+    });
+    if (output.status >= 300 && output.status < 400) {
+      return NextResponse.json({ error: 'The converter output URL redirected unexpectedly.', code: 'OUTPUT_REDIRECT_REJECTED' }, { status: 502 });
+    }
     if (!output.ok) return NextResponse.json({ error: 'Compressed PDF could not be retrieved.', code: 'OUTPUT_FETCH_FAILED' }, { status: 502 });
 
-    return new NextResponse(await output.arrayBuffer(), {
+    const outputBytes = Buffer.from(await output.arrayBuffer());
+    if (outputBytes.length < 5 || outputBytes.subarray(0, 5).toString('ascii') !== '%PDF-') {
+      return NextResponse.json({ error: 'Converter returned an invalid PDF output.', code: 'INVALID_OUTPUT' }, { status: 502 });
+    }
+
+    const safeBaseName = file.name
+      .replace(/\.pdf$/i, '')
+      .replace(/[\\/\r\n"\x00-\x1f]/g, '_')
+      .trim()
+      .slice(0, 150) || 'document';
+
+    return new NextResponse(outputBytes, {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="' + file.name.replace(/\.pdf$/i, '-compressed.pdf') + '"',
-        'Cache-Control': 'no-store',
+        'Content-Disposition': `attachment; filename="${safeBaseName}-compressed.pdf"`,
+        'Content-Length': String(outputBytes.length),
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
       },
     });
   } catch (error) {
