@@ -24,6 +24,8 @@ jobs:
       - name: PDF split and rotation regression tests
         run: pnpm run test:pdf-operations
       - run: pnpm run build
+      - name: API validation smoke tests against built app
+        run: pnpm run test:api-validation
 
   conversion-server:
     runs-on: ubuntu-latest
