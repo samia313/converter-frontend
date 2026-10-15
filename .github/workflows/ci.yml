@@ -21,6 +21,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: TypeScript validation
         run: pnpm exec tsc --noEmit
+      - name: PDF split and rotation regression tests
+        run: pnpm run test:pdf-operations
       - run: pnpm run build
 
   conversion-server:
