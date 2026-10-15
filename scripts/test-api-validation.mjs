@@ -133,6 +133,20 @@ try {
   });
   assert.equal(malformedPdf.status, 400, 'rotation must reject spoofed PDF uploads');
 
+  const malformedWordForm = new FormData();
+  malformedWordForm.append('file', new Blob(['not a PDF'], { type: 'application/pdf' }), 'fake.pdf');
+  const malformedWord = await fetch(`${baseUrl}/api/convert/pdf-to-word`, {
+    method: 'POST', body: malformedWordForm, signal: AbortSignal.timeout(20_000),
+  });
+  assert.equal(malformedWord.status, 400, 'PDF-to-Word must reject spoofed PDF uploads');
+
+  const textlessPdfForm = new FormData();
+  textlessPdfForm.append('file', sourceBlob, 'textless.pdf');
+  const textlessWord = await fetch(`${baseUrl}/api/convert/pdf-to-word`, {
+    method: 'POST', body: textlessPdfForm, signal: AbortSignal.timeout(20_000),
+  });
+  assert.equal(textlessWord.status, 422, 'PDF-to-Word must clearly reject image-only/textless PDFs rather than return an empty DOCX');
+
   const invalidRotationForm = new FormData();
   invalidRotationForm.append('file', sourceBlob, 'api-smoke-test.pdf');
   invalidRotationForm.append('rotation', '45');
@@ -141,7 +155,7 @@ try {
   });
   assert.equal(invalidRotation.status, 400, 'rotate route must reject unsupported angles');
 
-  console.log('API smoke tests passed: missing inputs rejected; valid rotation, split, and merge produce parseable outputs; malformed files and invalid options rejected.');
+  console.log('API smoke tests passed: missing inputs rejected; valid rotation, split, and merge produce parseable outputs; malformed files and invalid options rejected; textless PDF-to-Word input returns a clear 422.');
 } finally {
   server.kill('SIGTERM');
 }
