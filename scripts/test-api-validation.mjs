@@ -143,10 +143,18 @@ try {
 
   const textlessPdfForm = new FormData();
   textlessPdfForm.append('file', sourceBlob, 'textless.pdf');
+  const textlessParser = new PDFParse({ data: Buffer.from(sourceBytes) });
+  let textlessDiagnostic = '';
+  try {
+    const result = await textlessParser.getText();
+    textlessDiagnostic = result.text;
+  } finally {
+    await textlessParser.destroy();
+  }
   const textlessWord = await fetch(`${baseUrl}/api/convert/pdf-to-word`, {
     method: 'POST', body: textlessPdfForm, signal: AbortSignal.timeout(20_000),
   });
-  assert.equal(textlessWord.status, 422, 'PDF-to-Word must clearly reject image-only/textless PDFs rather than return an empty DOCX');
+  assert.equal(textlessWord.status, 422, `PDF-to-Word must reject textless PDFs rather than return an empty DOCX; got ${textlessWord.status}. Direct parser text: ${JSON.stringify(textlessDiagnostic.slice(0, 500))}. Server output: ${serverOutput.slice(-4000)}`);
 
   // Verify the local image-to-PDF route produces a real, parseable PDF.
   const pngBytes = await sharp({
