@@ -42,6 +42,7 @@ export default function PDFToImagesTool() {
       const zip = new JSZip();
       for (let i = 0; i < urls.length; i++) {
         const response = await fetch(urls[i], { cache: 'no-store' });
+        if (response.status === 403) throw new Error('These download links may have expired. Please convert the PDF again and download the images within 15 minutes.');
         if (!response.ok) throw new Error('Could not retrieve image ' + (i + 1) + '.');
         const blob = await response.blob();
         const bytes = new Uint8Array(await blob.slice(0, 12).arrayBuffer());
