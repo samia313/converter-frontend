@@ -3,7 +3,7 @@ import { spawn } from 'node:child_process';
 
 const port = Number(process.env.PDFILIO_TEST_PORT || 3187);
 const baseUrl = `http://127.0.0.1:${port}`;
-const server = spawn('pnpm', ['start', '--', '-p', String(port)], {
+const server = spawn('pnpm', ['exec', 'next', 'start', '-p', String(port)], {
   env: { ...process.env, PORT: String(port), HOSTNAME: '127.0.0.1' },
   stdio: ['ignore', 'pipe', 'pipe'],
 });
