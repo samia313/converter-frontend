@@ -57,12 +57,21 @@ export default function SplitPDFTool() {
       }
 
       const contentType = response.headers.get('content-type') || '';
-      if (!contentType.includes('application/zip')) {
-        throw new Error('Split service returned an invalid file format.');
+      if (!contentType.toLowerCase().includes('application/zip')) {
+        throw new Error('Split service returned an unexpected file type instead of a ZIP archive.');
       }
 
       const blob = await response.blob();
-      if (blob.size === 0) throw new Error('Split produced an empty output. Please try another PDF.');
+      if (blob.size < 4) {
+        throw new Error('Split produced an empty or invalid ZIP output. Please try another PDF.');
+      }
+
+      // A successful HTTP response and ZIP content-type can still carry an
+      // HTML/JSON error page. Check the ZIP local-file header before download.
+      const header = new Uint8Array(await blob.slice(0, 4).arrayBuffer());
+      if (header[0] !== 0x50 || header[1] !== 0x4b || header[2] !== 0x03 || header[3] !== 0x04) {
+        throw new Error('Split service returned an invalid ZIP archive. Please try again.');
+      }
 
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
