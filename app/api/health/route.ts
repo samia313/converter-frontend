@@ -94,7 +94,7 @@ export async function GET(request: NextRequest) {
       {
         status: 'unhealthy',
         timestamp: new Date().toISOString(),
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: 'Health check failed. Check server logs for details.',
       },
       { status: 503 }
     );
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
     console.error('[v0] Health check POST failed:', error);
 
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Health check action failed. Check server logs for details.' },
       { status: 500 }
     );
   }
