@@ -19,11 +19,14 @@ async function extractPdfText(pdfBuffer: Buffer): Promise<string> {
 
   try {
     const result = await parser.getText();
+    // pdf-parse v2 inserts page-separator labels (for example, "-- 1 of 4 --")
+    // into result.text. Those labels are not document content and must not make
+    // a scanned or textless PDF appear to contain selectable text.
     return result.text
-      .split(/\f/)
-      .map((page: string) => normalizeText(page))
-      .filter(Boolean)
-      .join('\n\n');
+      .split(/\f|\n/)
+      .map((line: string) => normalizeText(line))
+      .filter((line: string) => line && !/^--\s*\d+\s+of\s+\d+\s*--$/i.test(line))
+      .join('\n');
   } finally {
     await parser.destroy();
   }
