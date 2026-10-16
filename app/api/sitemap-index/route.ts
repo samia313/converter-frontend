@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
-const CANONICAL_SITEMAP_INDEX = 'https://pdfilio.com/sitemap-index.xml'
+const SITE_URL = 'https://pdfilio.com'
+const CANONICAL_SITEMAP_INDEX = `${SITE_URL}/sitemap-index.xml`
 
 /**
  * Keep the legacy sitemap URL available, but direct crawlers to the canonical
