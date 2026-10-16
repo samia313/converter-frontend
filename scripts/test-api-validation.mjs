@@ -141,6 +141,7 @@ try {
   });
   assert.equal(malformedWord.status, 400, 'PDF-to-Word must reject spoofed PDF uploads');
 
+  const { PDFParse } = await import('pdf-parse');
   const textlessPdfForm = new FormData();
   textlessPdfForm.append('file', sourceBlob, 'textless.pdf');
   const textlessParser = new PDFParse({ data: Buffer.from(sourceBytes) });
@@ -186,7 +187,6 @@ try {
   textPage.drawText('Revenue 123', { x: 48, y: 690, size: 12, font: testFont });
   const textPdfBytes = await textPdf.save();
   // Diagnose the parser against the exact fixture before testing the HTTP route.
-  const { PDFParse } = await import('pdf-parse');
   const diagnosticParser = new PDFParse({ data: Buffer.from(textPdfBytes) });
   try {
     const diagnosticText = await diagnosticParser.getText();
