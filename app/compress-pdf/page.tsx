@@ -3,8 +3,8 @@ import ToolLandingLayout from '@/components/tool-landing-layout';
 import CompressPDFTool from '@/components/tools/compress-pdf-tool';
 
 export const metadata: Metadata = {
-  title: { absolute: 'Compress PDF Online Free – Reduce PDF File Size | PDFilio' },
-  description: 'Compress PDF online free to reduce file size for email, uploads, and sharing. Compare the original and compressed sizes before downloading.',
+  title: { absolute: 'Compress PDF Online Free – Reduce PDF Size | PDFilio' },
+  description: 'Compress PDF files online for free to reduce file size for email, uploads, and sharing. Compare the compressed size and review document quality before downloading your PDF.',
   keywords: [
     'compress PDF to 2MB',
     'compress PDF under 2MB',
