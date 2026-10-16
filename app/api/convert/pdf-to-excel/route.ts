@@ -20,77 +20,40 @@ function xmlEscape(value: string): string {
 }
 
 async function extractRows(pdfBuffer: Buffer): Promise<string[][]> {
-  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
-  const loadingTask = pdfjs.getDocument({
-    data: new Uint8Array(pdfBuffer),
-    useWorkerFetch: false,
-    disableFontFace: true,
-    verbosity: 0,
-  });
-  const pdf = await loadingTask.promise;
-  const rows: string[][] = [];
+  // Use the same maintained text-extraction engine as PDF-to-Word. The prior
+  // pdfjs-dist path failed on a valid pdf-lib-generated text PDF in CI.
+  const { PDFParse } = await import('pdf-parse');
+  const parser = new PDFParse({ data: pdfBuffer });
 
   try {
-    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-      const page = await pdf.getPage(pageNumber);
-      const content = await page.getTextContent();
-      const items = content.items as Array<{
-        str?: string;
-        transform?: number[];
-        width?: number;
-      }>;
+    const result = await parser.getText();
+    const pages = result.text.split(/\f/);
+    const rows: string[][] = [];
 
-      const pageItems: TextItem[] = items
-        .map((item) => ({
-          x: item.transform?.[4] ?? 0,
-          y: item.transform?.[5] ?? 0,
-          text: (item.str ?? '').trim(),
-          width: Math.max(1, item.width ?? 0),
-        }))
-        .filter((item) => item.text.length > 0);
+    for (const page of pages) {
+      const lines = page
+        .replace(/\r/g, '')
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean);
 
-      const pageRows: TextItem[][] = [];
-      for (const item of pageItems) {
-        let row = pageRows.find((candidate) => Math.abs(candidate[0].y - item.y) <= 3);
-        if (!row) {
-          row = [];
-          pageRows.push(row);
-        }
-        row.push(item);
+      for (const line of lines) {
+        // Preserve tabular spacing when the extractor exposes it; otherwise
+        // keep the complete line in one cell rather than inventing columns.
+        const cells = line.includes('\t')
+          ? line.split('\t').map((cell) => cell.trim())
+          : line.split(/ {2,}/).map((cell) => cell.trim());
+        rows.push(cells.filter((cell) => cell.length > 0));
       }
 
-      pageRows.sort((a, b) => b[0].y - a[0].y);
-
-      for (const row of pageRows) {
-        row.sort((a, b) => a.x - b.x);
-        const cells: string[] = [];
-        let current = '';
-        let previousRight = 0;
-
-        for (const item of row) {
-          const gap = item.x - previousRight;
-          const columnBreak = current.length > 0 && gap > Math.max(10, item.width * 0.35);
-          if (columnBreak) {
-            cells.push(current.trim());
-            current = item.text;
-          } else {
-            current = current ? `${current} ${item.text}` : item.text;
-          }
-          previousRight = item.x + item.width;
-        }
-
-        if (current.trim()) cells.push(current.trim());
-        if (cells.length) rows.push(cells);
-      }
-
-      if (pageNumber < pdf.numPages) rows.push([]);
+      if (rows.length && page !== pages[pages.length - 1]) rows.push([]);
     }
-  } finally {
-    await loadingTask.destroy();
-  }
 
-  while (rows.length && rows[rows.length - 1].length === 0) rows.pop();
-  return rows;
+    while (rows.length && rows[rows.length - 1].length === 0) rows.pop();
+    return rows;
+  } finally {
+    await parser.destroy();
+  }
 }
 
 function columnName(index: number): string {
@@ -142,6 +105,39 @@ async function createXlsx(rows: string[][]): Promise<Buffer> {
   return zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });
 }
 
+async function validateXlsxStructure(buffer: Buffer): Promise<boolean> {
+  try {
+    const archive = await JSZip.loadAsync(buffer, { checkCRC32: true });
+    const requiredFiles = [
+      '[Content_Types].xml',
+      '_rels/.rels',
+      'xl/workbook.xml',
+      'xl/_rels/workbook.xml.rels',
+      'xl/worksheets/sheet1.xml',
+    ];
+
+    for (const path of requiredFiles) {
+      if (!archive.file(path)) return false;
+    }
+
+    const [contentTypes, rootRels, workbook, workbookRels, worksheet] = await Promise.all(
+      requiredFiles.map(async (path) => archive.file(path)!.async('string')),
+    );
+
+    return (
+      contentTypes.includes('spreadsheetml.sheet.main+xml') &&
+      rootRels.includes('Target="xl/workbook.xml"') &&
+      workbook.includes('<sheet name="PDF Data"') &&
+      workbookRels.includes('Target="worksheets/sheet1.xml"') &&
+      worksheet.includes('<sheetData>') &&
+      worksheet.includes('</sheetData>') &&
+      worksheet.includes('<row ')
+    );
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -185,7 +181,22 @@ export async function POST(request: NextRequest) {
     }
 
     const xlsxBuffer = await createXlsx(rows);
-    const fileName = file.name.replace(/\.pdf$/i, '') + '.xlsx';
+    if (
+      xlsxBuffer.length < 4 ||
+      xlsxBuffer[0] !== 0x50 ||
+      xlsxBuffer[1] !== 0x4b ||
+      xlsxBuffer[2] !== 0x03 ||
+      xlsxBuffer[3] !== 0x04
+    ) {
+      console.error('[pdf-to-excel] Generated XLSX failed ZIP signature validation.');
+      return NextResponse.json({ error: 'Conversion output failed file integrity validation.' }, { status: 500 });
+    }
+    const baseName = file.name.replace(/\.pdf$/i, '').replace(/[\\/\r\n"]/g, '_').slice(0, 150) || 'document';
+    const fileName = baseName + '.xlsx';
+    if (!(await validateXlsxStructure(xlsxBuffer))) {
+      console.error('[pdf-to-excel] Generated XLSX failed internal workbook validation.');
+      return NextResponse.json({ error: 'The generated Excel workbook failed structural validation.' }, { status: 500 });
+    }
 
     return new NextResponse(xlsxBuffer as BodyInit, {
       headers: {

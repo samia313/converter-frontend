@@ -29,21 +29,31 @@ export default function MergePDFTool() {
   };
 
   const addFiles = (newFiles: FileList | null) => {
-    if (!newFiles) return;
+    if (!newFiles || newFiles.length === 0) return;
 
     const newFileItems: FileItem[] = [];
+    const maxFileSize = 100 * 1024 * 1024;
 
+    // Reject the entire selection if any file is invalid. Never silently skip
+    // an upload and then tell the visitor that the remaining files were merged.
     for (let i = 0; i < newFiles.length; i++) {
       const file = newFiles[i];
+      const hasPdfExtension = file.name.toLowerCase().endsWith('.pdf');
+      const hasPdfMimeType = file.type === 'application/pdf';
 
-      if (file.type !== 'application/pdf') {
-        setError(`"${file.name}" is not a PDF`);
-        continue;
+      if (!hasPdfExtension && !hasPdfMimeType) {
+        setError(`"${file.name}" is not a PDF. Please select only PDF files.`);
+        return;
       }
 
-      if (file.size > 100 * 1024 * 1024) {
-        setError(`"${file.name}" exceeds 100MB limit`);
-        continue;
+      if (file.size === 0) {
+        setError(`"${file.name}" is empty. Please select a valid PDF.`);
+        return;
+      }
+
+      if (file.size > maxFileSize) {
+        setError(`"${file.name}" exceeds the 100MB per-file limit.`);
+        return;
       }
 
       newFileItems.push({
@@ -118,10 +128,25 @@ export default function MergePDFTool() {
         throw new Error(`Status ${response.status}: ${text}`);
       }
 
-      const blob = await response.blob();
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.toLowerCase().includes('application/pdf')) {
+        const responseText = await response.text().catch(() => '');
+        throw new Error(
+          responseText.slice(0, 300) ||
+          'Merge service returned an unexpected file type instead of a PDF.'
+        );
+      }
 
-      if (blob.size === 0) {
-        throw new Error('Empty result');
+      const blob = await response.blob();
+      if (blob.size < 5) {
+        throw new Error('Merge produced an empty or invalid PDF output.');
+      }
+
+      // HTTP 200 and a PDF content-type are not enough: check the downloaded
+      // payload starts with a PDF signature before offering it as a PDF.
+      const header = new Uint8Array(await blob.slice(0, 5).arrayBuffer());
+      if (String.fromCharCode(...header) !== '%PDF-') {
+        throw new Error('Merge service returned an invalid PDF file. Please try again.');
       }
 
       const url = window.URL.createObjectURL(blob);
