@@ -53,7 +53,8 @@ export async function GET(request: NextRequest) {
       components: {
         queue: {
           status: queueHealth.status,
-          message: queueHealth.message,
+          // Queue healthCheck may embed raw infrastructure exceptions in its message.
+          message: queueHealth.status === 'unhealthy' ? 'Queue health check failed.' : queueHealth.message,
           metrics: queueHealth.metrics,
         },
         storage: {
