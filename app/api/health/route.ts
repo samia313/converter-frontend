@@ -89,7 +89,8 @@ export async function GET(request: NextRequest) {
       status: overallStatus === 'unhealthy' ? 503 : 200,
     });
   } catch (error) {
-    console.error('[v0] Health check failed:', error);
+    // Do not log raw infrastructure exceptions; they may contain connection credentials.
+    console.error('[v0] Health check failed.');
 
     return NextResponse.json(
       {
