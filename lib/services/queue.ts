@@ -295,7 +295,8 @@ class QueueService {
         metrics,
       };
     } catch (error) {
-      console.error('[v0] Queue health check failed:', error);
+      // Infrastructure exceptions may include Redis URLs or credentials; never log them raw.
+      console.error('[v0] Queue health check failed.');
       return {
         status: 'unhealthy',
         message: error instanceof Error ? error.message : 'Unknown error',
