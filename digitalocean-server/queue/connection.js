@@ -1,24 +1,26 @@
 const IORedis = require('ioredis')
 const settings = require('../config/settings')
 
-if (!settings.redisUrl) {
-  throw new Error('REDIS_URL is required for the PDFilio conversion queue')
-}
-
 const baseOptions = {
   maxRetriesPerRequest: 20,
   enableReadyCheck: true,
 }
 
-const createQueueConnection = () => new IORedis(settings.redisUrl, {
+const createQueueConnection = () => {
+  if (!settings.redisUrl) throw new Error('REDIS_URL is required for the PDFilio conversion queue')
+  return new IORedis(settings.redisUrl, {
   ...baseOptions,
   enableOfflineQueue: false,
-})
+  })
+}
 
-const createWorkerConnection = () => new IORedis(settings.redisUrl, {
+const createWorkerConnection = () => {
+  if (!settings.redisUrl) throw new Error('REDIS_URL is required for the PDFilio conversion queue')
+  return new IORedis(settings.redisUrl, {
   maxRetriesPerRequest: null,
   enableReadyCheck: true,
-})
+  })
+}
 
 // Short, bounded health probe. Never return or log the Redis URL or raw errors.
 const checkRedisConnectivity = async (timeoutMs = 2500) => {
