@@ -36,3 +36,6 @@ jobs:
       - name: Syntax check
         working-directory: digitalocean-server
         run: npm run check
+      - name: Worker configuration preflight tests
+        working-directory: digitalocean-server
+        run: npm run test:config-preflight
