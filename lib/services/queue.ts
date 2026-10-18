@@ -45,15 +45,27 @@ class QueueService {
   private readonly JOB_TIMEOUT = 300; // 5 minutes
 
   constructor() {
-    const url = process.env.REDIS_URL || process.env.KV_REST_API_URL;
+    // Prefer Upstash's HTTPS REST endpoint. REDIS_URL may be a rediss:// TCP URL,
+    // which is not compatible with @upstash/redis and must not override the REST URL.
+    const url = process.env.KV_REST_API_URL || process.env.REDIS_URL;
     const token = process.env.KV_REST_API_TOKEN;
 
     if (!url || !token) {
-      throw new Error('Redis connection details not configured');
+      throw new Error('Redis REST connection is not configured');
+    }
+
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(url);
+    } catch {
+      throw new Error('Redis REST endpoint configuration is invalid');
+    }
+    if (parsedUrl.protocol !== 'https:') {
+      throw new Error('Redis REST endpoint must use HTTPS');
     }
 
     this.redis = new Redis({
-      url,
+      url: parsedUrl.toString().replace(/\/$/, ''),
       token,
     });
   }
@@ -283,10 +295,11 @@ class QueueService {
         metrics,
       };
     } catch (error) {
-      console.error('[v0] Queue health check failed:', error);
+      // Infrastructure exceptions may include Redis URLs or credentials; never log them raw.
+      console.error('[v0] Queue health check failed.');
       return {
         status: 'unhealthy',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: 'Queue health check failed.',
         metrics: {
           totalJobs: 0,
           pendingJobs: 0,
