@@ -20,4 +20,36 @@ const createWorkerConnection = () => new IORedis(settings.redisUrl, {
   enableReadyCheck: true,
 })
 
-module.exports = { createQueueConnection, createWorkerConnection }
+// Short, bounded health probe. Never return or log the Redis URL or raw errors.
+const checkRedisConnectivity = async (timeoutMs = 2500) => {
+  if (!settings.redisUrl) return false
+  let client
+  let timer
+  try {
+    client = new IORedis(settings.redisUrl, {
+      lazyConnect: true,
+      connectTimeout: timeoutMs,
+      maxRetriesPerRequest: 1,
+      enableReadyCheck: true,
+      enableOfflineQueue: false,
+      retryStrategy: () => null,
+    })
+    const probe = async () => {
+      await client.connect()
+      return (await client.ping()) === 'PONG'
+    }
+    const timedOut = new Promise((resolve) => {
+      timer = setTimeout(() => resolve(false), timeoutMs)
+    })
+    return await Promise.race([probe().catch(() => false), timedOut])
+  } catch {
+    return false
+  } finally {
+    if (timer) clearTimeout(timer)
+    if (client) {
+      try { client.disconnect() } catch {}
+    }
+  }
+}
+
+module.exports = { createQueueConnection, createWorkerConnection, checkRedisConnectivity }
