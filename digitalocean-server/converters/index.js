@@ -37,8 +37,15 @@ function runCommand(command, args, timeoutMs = settings.conversionTimeout) {
         reject(error)
       }
     }, timeoutMs)
-    child.stdout.on('data', (chunk) => { stdout += chunk.toString() })
-    child.stderr.on('data', (chunk) => { stderr += chunk.toString() })
+    // Keep diagnostic buffers bounded so noisy or malformed input cannot exhaust worker memory.
+    const maxStdoutChars = 16 * 1024
+    const maxStderrChars = 8 * 1024
+    child.stdout.on('data', (chunk) => {
+      if (stdout.length < maxStdoutChars) stdout += chunk.toString().slice(0, maxStdoutChars - stdout.length)
+    })
+    child.stderr.on('data', (chunk) => {
+      if (stderr.length < maxStderrChars) stderr += chunk.toString().slice(0, maxStderrChars - stderr.length)
+    })
     child.on('error', (error) => {
       clearTimeout(timer)
       if (!settled) { settled = true; reject(error) }
