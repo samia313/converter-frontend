@@ -108,6 +108,7 @@ export async function GET(_request: NextRequest) {
 
     return NextResponse.json(response, {
       status: overallStatus === 'unhealthy' ? 503 : 200,
+      headers: { 'Cache-Control': 'no-store, max-age=0' },
     });
   } catch {
     // Infrastructure exceptions can contain secrets; do not log raw errors.
@@ -118,7 +119,7 @@ export async function GET(_request: NextRequest) {
         timestamp: new Date().toISOString(),
         error: 'Health check failed.',
       },
-      { status: 503 }
+      { status: 503, headers: { 'Cache-Control': 'no-store, max-age=0' } }
     );
   }
 }
@@ -130,7 +131,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     action = body?.action;
   } catch {
-    return NextResponse.json({ error: 'Invalid request body.' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid request body.' }, { status: 400, headers: { 'Cache-Control': 'no-store, max-age=0' } });
   }
 
   try {
@@ -151,14 +152,14 @@ export async function POST(request: NextRequest) {
       case 'reset-metrics': {
         const metrics = getMetricsService();
         metrics.reset();
-        return NextResponse.json({ status: 'success', message: 'Metrics reset' });
+        return NextResponse.json({ status: 'success', message: 'Metrics reset' }, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
       }
       default:
-        return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
+        return NextResponse.json({ error: 'Unknown action' }, { status: 400, headers: { 'Cache-Control': 'no-store, max-age=0' } });
     }
   } catch {
     // Infrastructure exceptions can contain secrets; do not log raw errors.
     console.error('[v0] Health check POST failed.');
-    return NextResponse.json({ error: 'Health check action failed.' }, { status: 500 });
+    return NextResponse.json({ error: 'Health check action failed.' }, { status: 500, headers: { 'Cache-Control': 'no-store, max-age=0' } });
   }
 }
