@@ -49,3 +49,21 @@ Keep input/output objects private. Use signed URLs only where the client must do
 ## Release gate
 
 Do not merge PR #107 or deploy to production until the owner explicitly approves it and preview upload/conversion plus an AI request pass. Payment configuration is out of scope and remains pending.
+
+## Latest read-only environment audit (2026-10-18)
+
+The Vercel environment-variable inventory was checked without decrypting values. The following required worker variables were not present in the project inventory at audit time:
+
+- `DIGITALOCEAN_CONVERTER_URL`
+- `DIGITALOCEAN_DROPLET_IP`
+- `CONVERTER_API_URL`
+- `DIGITALOCEAN_CONVERTER_API_KEY`
+- `DIGITALOCEAN_API_KEY`
+- `CONVERTER_API_KEY`
+- `HEALTH_CHECK_API_KEY`
+
+The Upstash REST variable names `KV_REST_API_URL` and `KV_REST_API_TOKEN` were present, but their values and actual connectivity were not inspected. Presence does not prove they contain valid REST credentials. This inventory is a snapshot and must be rechecked before release. No environment values were decrypted or printed.
+
+## Deployment guide caution
+
+The older deployment guide contains a typo in the PM2 save command (`npm2 save`). Use `pm2 save` after confirming the correct PM2 process is running. Do not run an unverified process-manager command on the production host.
