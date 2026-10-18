@@ -126,6 +126,17 @@ export async function GET(_request: NextRequest) {
 
 /** POST endpoint for manual health checks and cleanup */
 export async function POST(request: NextRequest) {
+  // This endpoint can trigger destructive maintenance actions. Fail closed
+  // unless an explicit server-side secret is configured.
+  const expectedKey = process.env.HEALTH_CHECK_API_KEY;
+  const authorization = request.headers.get('authorization') || '';
+  if (!expectedKey || authorization !== `Bearer ${expectedKey}`) {
+    return NextResponse.json(
+      { error: 'Unauthorized.' },
+      { status: 401, headers: { 'Cache-Control': 'no-store, max-age=0' } }
+    );
+  }
+
   let action: unknown;
   try {
     const body = await request.json();
