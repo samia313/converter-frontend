@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
           status: 'success',
           cleanup: { queueCleaned, storageCleaned, logsCleaned },
-        });
+        }, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
       }
       case 'reset-metrics': {
         const metrics = getMetricsService();
