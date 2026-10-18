@@ -29,14 +29,17 @@ export function getDigitalOceanConfig(): DigitalOceanConfig {
   let normalizedUrl = configuredUrl;
   if (!/^https?:\/\//i.test(normalizedUrl)) {
     const hostPart = normalizedUrl.split('/')[0];
-    const hostWithoutPort = hostPart.replace(/:\d+$/, '');
-    const isLoopback = hostWithoutPort === 'localhost' ||
+    // IPv6 loopback without brackets is a valid shorthand input too.
+    const rawIpv6Loopback = hostPart === '::1';
+    const hostWithoutPort = rawIpv6Loopback ? hostPart : hostPart.replace(/:\d+$/, '');
+    const isLoopback = rawIpv6Loopback ||
+      hostWithoutPort === 'localhost' ||
       hostWithoutPort === '127.0.0.1' ||
-      hostWithoutPort === '[::1]' ||
-      hostWithoutPort === '::1';
+      hostWithoutPort === '[::1]';
 
     if (isLoopback && !/:\d+$/.test(hostPart)) {
-      normalizedUrl = `http://${hostPart}:3001${normalizedUrl.slice(hostPart.length)}`;
+      const safeHost = rawIpv6Loopback ? '[::1]' : hostPart;
+      normalizedUrl = `http://${safeHost}:3001${normalizedUrl.slice(hostPart.length)}`;
     } else if (isLoopback || /:\d+$/.test(hostPart)) {
       normalizedUrl = `http://${normalizedUrl}`;
     } else {
