@@ -44,7 +44,7 @@ class LoggingService {
     }
 
     this.redis = new Redis({
-      url: parsedUrl.toString().replace(/\\/$/, ''),
+      url: parsedUrl.toString().replace(/\/$/, ''),
       token,
     });
   }
