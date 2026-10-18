@@ -42,11 +42,10 @@ export default function AITranslateTool() {
         body: formData,
       });
 
+      const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error('Translation failed');
+        throw new Error(typeof data.error === 'string' ? data.error : 'Translation failed. Please try again.');
       }
-
-      const data = await response.json();
       setTranslatedText(data.translatedText || data.response || 'Translation could not be completed');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to translate document');

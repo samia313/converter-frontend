@@ -3,9 +3,11 @@
  * Communicates with the PDF conversion API running on DigitalOcean Droplet
  */
 
-const DROPLET_IP = process.env.DIGITALOCEAN_DROPLET_IP || 'localhost:3001'
-const API_KEY = process.env.DIGITALOCEAN_API_KEY || ''
-const BASE_URL = `https://${DROPLET_IP}/convert`
+import { getDigitalOceanConfig } from './digitalocean-config'
+
+const { baseUrl, apiKey } = getDigitalOceanConfig()
+const API_KEY = apiKey || ''
+const BASE_URL = baseUrl ? `${baseUrl}/convert` : ''
 
 interface ConversionResponse {
   success: boolean
@@ -23,6 +25,9 @@ export async function callDigitalOceanAPI(
   file: Buffer,
   filename: string
 ): Promise<ConversionResponse> {
+  if (!BASE_URL || !API_KEY) {
+    throw new Error('DigitalOcean conversion service is not configured. Set DIGITALOCEAN_CONVERTER_URL and DIGITALOCEAN_CONVERTER_API_KEY (or the legacy variable names).')
+  }
   const formData = new FormData()
   formData.append('file', new Blob([file]), filename)
 

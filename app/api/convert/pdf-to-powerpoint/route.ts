@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { getDigitalOceanConfig } from '@/lib/digitalocean-config';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -7,8 +8,7 @@ export const maxDuration = 60;
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
 export async function POST(request: Request) {
-  const baseUrl = process.env.DIGITALOCEAN_CONVERTER_URL?.replace(/\/$/, '');
-  const apiKey = process.env.DIGITALOCEAN_CONVERTER_API_KEY;
+  const { baseUrl, apiKey } = getDigitalOceanConfig();
   if (!baseUrl || !apiKey) {
     return NextResponse.json({ error: 'PDF to PowerPoint conversion service is not configured yet.', code: 'CONVERTER_NOT_CONFIGURED' }, { status: 503 });
   }

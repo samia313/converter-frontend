@@ -1,16 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getDigitalOceanConfig } from '@/lib/digitalocean-config';
 import { getQueueService } from '@/lib/services/queue';
 import { getStorageService } from '@/lib/services/storage-service';
 import { getLoggingService } from '@/lib/services/logging-service';
 import { getMetricsService } from '@/lib/services/metrics-service';
 
-/**
- * Health check endpoint for production monitoring
- * Returns system status, metrics, and performance data
- */
-
-export async function GET(request: NextRequest) {
+/** Health check endpoint. It reports configuration and verified service status only. */
+export async function GET(_request: NextRequest) {
   const startTime = Date.now();
+  const converterConfig = getDigitalOceanConfig();
+  const conversionWorkerConfigured = Boolean(converterConfig.baseUrl && converterConfig.apiKey);
+  const aiProviderConfigured = Boolean(
+    process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY_2 ||
+    process.env.OPENAI_API_KEY_3 || process.env.OPENAI_API_KEY_4
+  );
+  let conversionWorkerReachable = false;
+
+  if (conversionWorkerConfigured) {
+    try {
+      const response = await fetch(`${converterConfig.baseUrl}/health`, {
+        cache: 'no-store',
+        signal: AbortSignal.timeout(4000),
+      });
+      conversionWorkerReachable = response.ok;
+    } catch {
+      conversionWorkerReachable = false;
+    }
+  }
 
   try {
     const queue = getQueueService();
@@ -18,30 +34,25 @@ export async function GET(request: NextRequest) {
     const logging = getLoggingService();
     const metrics = getMetricsService();
 
-    // Get queue health
     const queueHealth = await queue.healthCheck();
-
-    // Get storage stats
     const storageStats = storage.getStats();
-
-    // Get logging stats
     const loggingStats = logging.getStats();
-
-    // Get system metrics
     const systemMetrics = metrics.getSystemMetrics();
-
-    // Get performance summary
     const performanceSummary = metrics.getPerformanceSummary();
-
-    // Check alert conditions
     const alerts = metrics.checkAlertConditions();
 
-    // Determine overall health
+    const storageConfigured = storageStats.configured === true;
     let overallStatus: 'healthy' | 'degraded' | 'unhealthy' = 'healthy';
-
     if (queueHealth.status === 'unhealthy') {
       overallStatus = 'unhealthy';
-    } else if (queueHealth.status === 'degraded' || alerts.some((a) => a.level === 'critical')) {
+    } else if (
+      queueHealth.status === 'degraded' ||
+      alerts.some((a) => a.level === 'critical') ||
+      !storageConfigured ||
+      !conversionWorkerConfigured ||
+      !conversionWorkerReachable ||
+      !aiProviderConfigured
+    ) {
       overallStatus = 'degraded';
     }
 
@@ -53,20 +64,31 @@ export async function GET(request: NextRequest) {
       components: {
         queue: {
           status: queueHealth.status,
-          message: queueHealth.message,
+          // Queue errors may contain connection strings or credentials.
+          message: queueHealth.status === 'unhealthy' ? 'Queue health check failed.' : queueHealth.message,
           metrics: queueHealth.metrics,
         },
         storage: {
-          status: 'healthy',
           ...storageStats,
+          status: storageConfigured ? 'unknown' : 'not_configured',
+          message: storageConfigured
+            ? 'Storage connectivity is not checked by this endpoint.'
+            : 'Persistent storage is not configured.',
         },
         logging: {
-          status: 'healthy',
           ...loggingStats,
+          status: 'unknown',
+          message: 'Logging backend connectivity is not checked by this endpoint.',
+        },
+        conversionWorker: {
+          status: !conversionWorkerConfigured ? 'not_configured' : conversionWorkerReachable ? 'reachable' : 'unreachable',
+        },
+        aiProvider: {
+          status: aiProviderConfigured ? 'configured' : 'not_configured',
         },
         database: {
-          status: 'healthy',
-          message: 'Connected',
+          status: 'unknown',
+          message: 'Database connectivity is not checked by this endpoint.',
         },
       },
       performance: performanceSummary,
@@ -86,26 +108,31 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response, {
       status: overallStatus === 'unhealthy' ? 503 : 200,
+      headers: { 'Cache-Control': 'no-store, max-age=0' },
     });
-  } catch (error) {
-    console.error('[v0] Health check failed:', error);
-
+  } catch {
+    // Infrastructure exceptions can contain secrets; do not log raw errors.
+    console.error('[v0] Health check failed.');
     return NextResponse.json(
       {
         status: 'unhealthy',
         timestamp: new Date().toISOString(),
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: 'Health check failed.',
       },
-      { status: 503 }
+      { status: 503, headers: { 'Cache-Control': 'no-store, max-age=0' } }
     );
   }
 }
 
-/**
- * POST endpoint for manual health checks and cleanup
- */
+/** POST endpoint for manual health checks and cleanup */
 export async function POST(request: NextRequest) {
-  const { action } = await request.json();
+  let action: unknown;
+  try {
+    const body = await request.json();
+    action = body?.action;
+  } catch {
+    return NextResponse.json({ error: 'Invalid request body.' }, { status: 400, headers: { 'Cache-Control': 'no-store, max-age=0' } });
+  }
 
   try {
     const queue = getQueueService();
@@ -117,39 +144,22 @@ export async function POST(request: NextRequest) {
         const queueCleaned = await queue.cleanup();
         const storageCleaned = await storage.cleanup();
         const logsCleaned = await logging.cleanup();
-
         return NextResponse.json({
           status: 'success',
-          cleanup: {
-            queueCleaned,
-            storageCleaned,
-            logsCleaned,
-          },
-        });
+          cleanup: { queueCleaned, storageCleaned, logsCleaned },
+        }, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
       }
-
       case 'reset-metrics': {
         const metrics = getMetricsService();
         metrics.reset();
-
-        return NextResponse.json({
-          status: 'success',
-          message: 'Metrics reset',
-        });
+        return NextResponse.json({ status: 'success', message: 'Metrics reset' }, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
       }
-
       default:
-        return NextResponse.json(
-          { error: 'Unknown action' },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: 'Unknown action' }, { status: 400, headers: { 'Cache-Control': 'no-store, max-age=0' } });
     }
-  } catch (error) {
-    console.error('[v0] Health check POST failed:', error);
-
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 }
-    );
+  } catch {
+    // Infrastructure exceptions can contain secrets; do not log raw errors.
+    console.error('[v0] Health check POST failed.');
+    return NextResponse.json({ error: 'Health check action failed.' }, { status: 500, headers: { 'Cache-Control': 'no-store, max-age=0' } });
   }
 }

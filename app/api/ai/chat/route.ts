@@ -1,110 +1,54 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
+import { extractDocumentText, generateAIText } from '@/lib/document-text';
 
-export const maxDuration = 60
-
-let openai: any = null
-
-// Initialize OpenAI client only if API key is available
-if (process.env.OPENAI_API_KEY) {
-  const { OpenAI } = require('openai')
-  openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  })
-}
-
-interface ChatRequest {
-  query: string
-  documentContent: string
-  context?: string
-}
+export const runtime = 'nodejs';
+export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
   try {
-    if (!openai) {
-      return NextResponse.json(
-        { error: 'OpenAI API is not configured' },
-        { status: 503 }
-      )
+    const contentType = request.headers.get('content-type') || '';
+
+    // The initial upload request extracts text and returns it to the browser session.
+    if (contentType.includes('multipart/form-data')) {
+      const form = await request.formData();
+      const file = form.get('file');
+      if (!(file instanceof File)) {
+        return NextResponse.json({ success: false, error: 'Please upload a PDF, DOCX, or TXT file.' }, { status: 400 });
+      }
+      const documentContent = await extractDocumentText(file);
+      return NextResponse.json({
+        success: true,
+        fileName: file.name,
+        fileSize: file.size,
+        documentContent,
+        ready: true,
+        message: 'Document text extracted and is ready for questions.',
+      });
     }
 
-    const body = (await request.json()) as ChatRequest
-    const { query, documentContent, context } = body
-
+    const body = await request.json() as { query?: string; documentContent?: string; context?: string };
+    const query = body.query?.trim();
+    const documentContent = body.documentContent?.trim();
     if (!query || !documentContent) {
       return NextResponse.json(
-        { error: 'Query and document content required' },
-        { status: 400 }
-      )
+        { success: false, error: 'Load a document first, then enter a question.' },
+        { status: 400 },
+      );
+    }
+    if (query.length > 4000) {
+      return NextResponse.json({ success: false, error: 'Please keep your question under 4,000 characters.' }, { status: 413 });
     }
 
-    console.log('[v0] PDF Chat - Processing query with OpenAI:', query.substring(0, 50) + '...')
-
-    // Call OpenAI API
-    const response = await generateChatResponseWithOpenAI(query, documentContent, context)
-
-    return NextResponse.json({
-      success: true,
-      response,
-      tokensUsed: estimateTokens(query + documentContent + response),
-      timestamp: new Date().toISOString(),
-    })
+    const response = await generateAIText(
+      'You answer questions using the provided document as the primary source. Be accurate, concise, and transparent when the document does not contain the answer. Do not invent quotations, page numbers, or facts. If context is missing, say so.',
+      `Document text:\n\n${documentContent.slice(0, 100_000)}\n\nUser question:\n${query}${body.context ? `\n\nAdditional context: ${body.context.slice(0, 2000)}` : ''}`,
+      1000,
+    );
+    return NextResponse.json({ success: true, response, timestamp: new Date().toISOString() });
   } catch (error) {
-    console.error('[v0] Chat API error:', error)
-    return NextResponse.json(
-      {
-        error: 'Chat processing failed',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    )
+    const message = error instanceof Error ? error.message : 'Chat processing failed.';
+    const status = /not configured/i.test(message) ? 503 : /temporarily busy/i.test(message) ? 429 : /could not process|empty result/i.test(message) ? 502 : 422;
+    console.error('[PDFilio AI] chat failed:', message);
+    return NextResponse.json({ success: false, error: message }, { status });
   }
-}
-
-/**
- * OpenAI integration for PDF Chat
- * Uses GPT-3.5-turbo for document analysis and Q&A
- */
-async function generateChatResponseWithOpenAI(
-  query: string,
-  documentContent: string,
-  context?: string
-): Promise<string> {
-  try {
-    const systemPrompt = `You are a helpful AI assistant specialized in analyzing PDF documents. 
-Your task is to answer questions about the provided document content accurately and helpfully.
-Keep your responses concise and relevant to the query.
-${context ? `Additional context: ${context}` : ''}`
-
-    const userMessage = `Document Content:
-${documentContent.substring(0, 3000)}
-
-Question: ${query}`
-
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userMessage },
-      ],
-      temperature: 0.7,
-      max_tokens: 500,
-    })
-
-    const response = completion.choices[0].message.content || 'Unable to generate response'
-    console.log('[v0] OpenAI response generated successfully')
-    return response
-  } catch (error) {
-    console.error('[v0] OpenAI API error:', error)
-    throw error
-  }
-}
-
-function extractDocumentContext(content: string): string {
-  const lines = content.split('\n').filter(l => l.trim())
-  const summary = lines.slice(0, 5).join('\n')
-  return summary || 'Document content processed'
-}
-
-function estimateTokens(text: string): number {
-  return Math.ceil(text.length / 4) // Rough estimate
 }

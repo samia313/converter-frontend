@@ -42,9 +42,10 @@ const uploadFile = async (fileOrBuffer, filename, mimeType) => {
     })
     console.log('[SPACES] Private file uploaded:', key)
     return signedUrl
-  } catch (error) {
-    console.error('[SPACES] Upload error:', error)
-    throw error
+  } catch {
+    // SDK exceptions can include request metadata; never print raw objects.
+    console.error('[SPACES] Upload failed.')
+    throw new Error('Storage upload failed')
   }
 }
 
@@ -56,16 +57,16 @@ const downloadFile = async (key, destinationPath) => {
       Key: key,
     }).createReadStream()
     await new Promise((resolve, reject) => {
-      request.on('error', reject)
-      output.on('error', reject)
+      request.on('error', () => reject(new Error('Storage download failed')))
+      output.on('error', () => reject(new Error('Storage download failed')))
       output.on('finish', resolve)
       request.pipe(output)
     })
     return destinationPath
-  } catch (error) {
+  } catch {
     try { output.destroy() } catch {}
     try { fs.rmSync(destinationPath, { force: true }) } catch {}
-    throw error
+    throw new Error('Storage download failed')
   }
 }
 
@@ -73,8 +74,8 @@ const deleteFile = async (key) => {
   if (!key) return
   try {
     await s3Client.deleteObject({ Bucket: settings.spaces.bucket, Key: key }).promise()
-  } catch (error) {
-    console.warn('[SPACES] Delete error:', key, error.message)
+  } catch {
+    console.warn('[SPACES] Delete failed.')
   }
 }
 

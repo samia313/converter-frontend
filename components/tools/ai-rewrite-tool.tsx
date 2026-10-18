@@ -27,11 +27,10 @@ export default function AIRewriteTool() {
         body: formData,
       });
 
+      const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error('Rewrite failed');
+        throw new Error(typeof data.error === 'string' ? data.error : 'Rewrite failed. Please try again.');
       }
-
-      const data = await response.json();
       setRewrittenText(data.rewrittenText || data.response || 'Could not rewrite document');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to rewrite document');

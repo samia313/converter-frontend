@@ -9,7 +9,7 @@ const authMiddleware = require('./middleware/auth')
 const app = express()
 
 fs.mkdirSync(settings.uploadTempDir, { recursive: true, mode: 0o700 })
-try { fs.chmodSync(settings.uploadTempDir, 0o700) } catch (error) { console.warn('[SECURITY] Could not restrict temp directory permissions:', error.message) }
+try { fs.chmodSync(settings.uploadTempDir, 0o700) } catch { console.warn('[SECURITY] Could not restrict temp directory permissions.') }
 
 const allowedOrigins = new Set(settings.allowedOrigins.length
   ? settings.allowedOrigins
@@ -46,7 +46,30 @@ const upload = multer({
 })
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() })
+  const spacesConfigured = Boolean(
+    settings.spaces.key &&
+    settings.spaces.secret &&
+    settings.spaces.bucket &&
+    settings.spaces.endpoint &&
+    settings.spaces.region
+  )
+  let tempDirectoryWritable = false
+  try {
+    fs.accessSync(settings.uploadTempDir, fs.constants.W_OK)
+    tempDirectoryWritable = true
+  } catch {}
+
+  const components = {
+    apiKeyConfigured: Boolean(settings.apiKey),
+    spacesConfigured,
+    tempDirectoryWritable,
+  }
+  const ready = components.apiKeyConfigured && components.spacesConfigured && components.tempDirectoryWritable
+  res.status(ready ? 200 : 503).json({
+    status: ready ? 'ok' : 'not_ready',
+    timestamp: new Date().toISOString(),
+    components,
+  })
 })
 
 app.get('/version', (req, res) => {
@@ -60,12 +83,17 @@ const convertRoutes = require('./routes/convert')
 app.use('/convert', convertRoutes)
 
 app.use((err, req, res, next) => {
-  console.error('[ERROR]', err)
+  // Do not serialize/log SDK error objects: they can contain request metadata,
+  // endpoints, filenames, or authentication details.
   const status = Number.isInteger(err.status)
     ? err.status
     : (err.code === 'LIMIT_FILE_SIZE' ? 413
       : (err.code === 'LIMIT_UNEXPECTED_FILE' ? 400
         : (err.message === 'Origin not allowed by CORS' ? 403 : 500)))
+  console.error('[ERROR] Conversion request failed.', JSON.stringify({
+    status,
+    code: typeof err.code === 'string' ? err.code : 'INTERNAL_ERROR',
+  }))
   const message = status >= 500 ? 'Conversion server error' : (err.message || 'Request failed')
   res.status(status).json({ error: message, code: err.code || 'INTERNAL_ERROR' })
 })
@@ -81,12 +109,12 @@ const cleanupTempFiles = () => {
       try {
         const stat = fs.statSync(target)
         if (stat.mtimeMs < cutoff) fs.rmSync(target, { recursive: true, force: true })
-      } catch (error) {
-        console.warn('[CLEANUP] Could not inspect:', target, error.message)
+      } catch {
+        console.warn('[CLEANUP] Could not inspect temporary artifact.')
       }
     }
-  } catch (error) {
-    console.error('[CLEANUP] Scan failed:', error.message)
+  } catch {
+    console.error('[CLEANUP] Temporary artifact scan failed.')
   }
 }
 

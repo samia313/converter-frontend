@@ -1,32 +1,53 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { extractDocumentText, generateAIText } from '@/lib/document-text'
 
 export const maxDuration = 30
 
 export async function POST(request: NextRequest) {
   try {
-    const { content, analysisType } = await request.json()
-
-    if (!content) {
-      return NextResponse.json(
-        { error: 'Missing content field' },
-        { status: 400 }
-      )
+    if ((request.headers.get('content-type') || '').includes('multipart/form-data')) {
+      const form = await request.formData();
+      const file = form.get('file');
+      const toneValue = form.get('tone');
+      if (!(file instanceof File)) {
+        return NextResponse.json({ success: false, error: 'Please upload a PDF, DOCX, or TXT file.' }, { status: 400 });
+      }
+      const tones: Record<string, string> = {
+        professional: 'professional and polished',
+        casual: 'friendly and conversational',
+        formal: 'formal and precise',
+        creative: 'engaging and creative while preserving the source meaning',
+      };
+      const tone = typeof toneValue === 'string' ? tones[toneValue] : undefined;
+      if (!tone) return NextResponse.json({ success: false, error: 'Please choose a supported rewrite tone.' }, { status: 400 });
+      const content = await extractDocumentText(file);
+      const rewrittenText = await generateAIText(
+        'You rewrite documents for clarity and readability while preserving the original meaning, facts, names, numbers, and important caveats. Do not invent information. Return only the rewritten document.',
+        `Rewrite the following document in a ${tone} tone. Preserve headings and paragraph breaks where possible.\n\n${content}`,
+        2200,
+      );
+      return NextResponse.json({ success: true, rewrittenText, response: rewrittenText, sourceCharacters: content.length });
     }
 
-    const analysis = await analyzeContent(content, analysisType || 'general')
-
+    const { content, analysisType } = await request.json();
+    if (typeof content !== 'string' || !content.trim()) {
+      return NextResponse.json({ error: 'Missing content field' }, { status: 400 });
+    }
+    if (content.length > 100_000) {
+      return NextResponse.json({ error: 'Content exceeds the 100,000 character limit.' }, { status: 413 });
+    }
+    const analysis = await analyzeContent(content, analysisType || 'general');
     return NextResponse.json({
       success: true,
       analysis,
       contentLength: content.length,
       timestamp: new Date().toISOString(),
-    })
+    });
   } catch (error) {
-    console.error('[v0] Analyze API error:', error)
-    return NextResponse.json(
-      { error: 'Analysis failed', details: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 }
-    )
+    const message = error instanceof Error ? error.message : 'Analysis failed';
+    const status = /not configured/i.test(message) ? 503 : /temporarily busy/i.test(message) ? 429 : /could not process|empty result/i.test(message) ? 502 : 422;
+    console.error('[PDFilio AI] analyze/rewrite failed:', message);
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }
 
