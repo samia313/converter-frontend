@@ -9,7 +9,7 @@ import { getMetricsService } from '@/lib/services/metrics-service';
  * Returns system status, metrics, and performance data
  */
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   const startTime = Date.now();
 
   try {
@@ -44,9 +44,10 @@ export async function GET(request: NextRequest) {
           message: queueHealth.status === 'unhealthy' ? 'Queue health check failed.' : queueHealth.message,
           metrics: queueHealth.metrics,
         },
-        storage: { status: 'healthy', ...storageStats },
-        logging: { status: 'healthy', ...loggingStats },
-        database: { status: 'healthy', message: 'Connected' },
+        // These services expose local stats only; this endpoint does not verify external connectivity.
+        storage: { ...storageStats, status: 'unknown', message: 'Storage connectivity is not checked by this endpoint.' },
+        logging: { ...loggingStats, status: 'unknown', message: 'Logging backend connectivity is not checked by this endpoint.' },
+        database: { status: 'unknown', message: 'Database connectivity is not checked by this endpoint.' },
       },
       performance: performanceSummary,
       memory: {
