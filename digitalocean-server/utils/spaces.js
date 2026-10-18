@@ -17,7 +17,7 @@ const s3Client = new AWS.S3({
  * fileOrBuffer may be a Buffer or an on-disk file path. Using streams for paths
  * avoids loading large conversion results into Node's heap.
  */
-const uploadFile = async (fileOrBuffer, filename, mimeType) => {
+const uploadObject = async (fileOrBuffer, filename, mimeType) => {
   const safeFilename = path.basename(filename)
   const key = `conversions/${uuidv4()}-${safeFilename}`
   const body = typeof fileOrBuffer === 'string'
@@ -35,18 +35,22 @@ const uploadFile = async (fileOrBuffer, filename, mimeType) => {
 
   try {
     await s3Client.upload(params).promise()
-    const signedUrl = s3Client.getSignedUrl('getObject', {
-      Bucket: settings.spaces.bucket,
-      Key: key,
-      Expires: settings.spaces.signedUrlTtl,
-    })
-    console.log('[SPACES] Private file uploaded:', key)
-    return signedUrl
+    console.log('[SPACES] Private file uploaded.')
+    return key
   } catch {
     // SDK exceptions can include request metadata; never print raw objects.
     console.error('[SPACES] Upload failed.')
     throw new Error('Storage upload failed')
   }
+}
+
+const uploadFile = async (fileOrBuffer, filename, mimeType) => {
+  const key = await uploadObject(fileOrBuffer, filename, mimeType)
+  return s3Client.getSignedUrl('getObject', {
+    Bucket: settings.spaces.bucket,
+    Key: key,
+    Expires: settings.spaces.signedUrlTtl,
+  })
 }
 
 const downloadFile = async (key, destinationPath) => {
@@ -98,4 +102,4 @@ const signedDownloadUrl = (key) => s3Client.getSignedUrl('getObject', {
   Expires: settings.spaces.signedUrlTtl,
 })
 
-module.exports = { uploadFile, downloadFile, deleteFile, signedDownloadUrl, checkSpacesConnectivity }
+module.exports = { uploadFile, uploadObject, downloadFile, deleteFile, signedDownloadUrl, checkSpacesConnectivity }
