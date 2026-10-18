@@ -9,7 +9,8 @@
     "check": "node --check server.js && node --check routes/convert.js && node --check routes/jobs.js && node --check converters/index.js && node --check utils/spaces.js && node --check middleware/auth.js && node --check config/settings.js && node --check queue/connection.js && node --check queue/index.js && node --check queue/worker.js",
     "worker": "node queue/worker.js",
     "test:pdf-to-word": "node tests/pdf-to-word.test.js",
-    "check-config": "node scripts/check-config.js"
+    "check-config": "node scripts/check-config.js",
+    "test:config-preflight": "node --test tests/config-preflight.test.js"
   },
   "keywords": [
     "pdf",
