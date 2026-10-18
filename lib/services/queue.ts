@@ -299,7 +299,7 @@ class QueueService {
       console.error('[v0] Queue health check failed.');
       return {
         status: 'unhealthy',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: 'Queue health check failed.',
         metrics: {
           totalJobs: 0,
           pendingJobs: 0,
