@@ -151,7 +151,7 @@ const processConversion = async (job) => {
     const originalBase = path.basename(data.originalName || 'document', ext)
     const finalExt = result.format === 'zip' ? '.zip' : definition.outputExt
     const outputName = `${safeBaseName(originalBase)}${finalExt}`
-    const outputKey = await spaces.uploadFile(finalPath, outputName, result.format === 'zip' ? 'application/zip' : definition.mime)
+    const outputKey = await spaces.uploadObject(finalPath, outputName, result.format === 'zip' ? 'application/zip' : definition.mime)
 
     await spaces.deleteFile(data.inputKey)
     await conversionQueue.add('cleanup-output', { key: outputKey }, {
