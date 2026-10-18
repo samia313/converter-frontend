@@ -77,7 +77,9 @@ export async function POST(request: Request) {
         'X-Content-Type-Options': 'nosniff',
       },
     });
-  } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Word to PDF conversion failed.', code: 'CONVERTER_UNAVAILABLE' }, { status: 502 });
+  } catch {
+    // Do not expose fetch, URL, or upstream error details to public clients.
+    console.error('[word-to-pdf] Conversion request failed.');
+    return NextResponse.json({ error: 'Word to PDF conversion failed. Please try again later.', code: 'CONVERTER_UNAVAILABLE' }, { status: 502 });
   }
 }
