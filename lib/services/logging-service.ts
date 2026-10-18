@@ -24,15 +24,27 @@ class LoggingService {
   private localLogs: LogEntry[] = [];
 
   constructor() {
-    const url = process.env.REDIS_URL || process.env.KV_REST_API_URL;
+    // @upstash/redis requires the HTTPS REST endpoint; REDIS_URL may be a
+    // rediss:// TCP URL and must not override KV_REST_API_URL.
+    const url = process.env.KV_REST_API_URL || process.env.REDIS_URL;
     const token = process.env.KV_REST_API_TOKEN;
 
     if (!url || !token) {
-      console.warn('[v0] Redis not configured, logs will be stored in memory');
+      throw new Error('Redis REST connection is not configured');
+    }
+
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(url);
+    } catch {
+      throw new Error('Redis REST endpoint configuration is invalid');
+    }
+    if (parsedUrl.protocol !== 'https:') {
+      throw new Error('Redis REST endpoint must use HTTPS');
     }
 
     this.redis = new Redis({
-      url,
+      url: parsedUrl.toString().replace(/\/$/, ''),
       token,
     });
   }
@@ -124,7 +136,8 @@ class LoggingService {
           await this.redis.lpush(key, JSON.stringify(entry));
           await this.redis.expire(key, ttl);
         } catch (error) {
-          console.warn('[v0] Failed to write log to Redis:', error);
+          // Redis errors can contain connection details; never log raw exception text.
+          console.warn('[v0] Failed to write log to Redis.');
         }
       }
     } catch (error) {
