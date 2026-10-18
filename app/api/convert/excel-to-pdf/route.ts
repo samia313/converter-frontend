@@ -9,6 +9,14 @@ export async function POST(request: Request) {
   const baseUrl = process.env.DIGITALOCEAN_CONVERTER_URL?.replace(/\/$/, '');
   const apiKey = process.env.DIGITALOCEAN_CONVERTER_API_KEY;
   if (!baseUrl || !apiKey) return NextResponse.json({ error: 'Excel to PDF conversion service is not configured yet.', code: 'CONVERTER_NOT_CONFIGURED' }, { status: 503 });
+  let converterOrigin: string;
+  try {
+    const converterUrl = new URL(baseUrl);
+    if (!['http:', 'https:'].includes(converterUrl.protocol) || converterUrl.username || converterUrl.password) throw new Error('Invalid converter URL');
+    converterOrigin = converterUrl.origin;
+  } catch {
+    return NextResponse.json({ error: 'Conversion service configuration is invalid.', code: 'INVALID_CONVERTER_CONFIG' }, { status: 503 });
+  }
 
   try {
     const incoming = await request.formData();
@@ -25,22 +33,45 @@ export async function POST(request: Request) {
       headers: { Authorization: 'Bearer ' + apiKey },
       body,
       cache: 'no-store',
+      redirect: 'manual',
       signal: AbortSignal.timeout(60000),
     });
+    if (response.status >= 300 && response.status < 400) {
+      return NextResponse.json({ error: 'The conversion service redirected unexpectedly.', code: 'UPSTREAM_REDIRECT_REJECTED' }, { status: 502 });
+    }
     const data = await response.json().catch(() => ({}));
     if (!response.ok) return NextResponse.json({ error: typeof data?.error === 'string' ? data.error : 'Excel to PDF conversion failed.', code: data?.code || 'CONVERSION_FAILED' }, { status: response.status });
     if (!data?.downloadUrl) return NextResponse.json({ error: 'Conversion completed without a download URL.', code: 'MISSING_OUTPUT' }, { status: 502 });
 
-    const output = await fetch(data.downloadUrl, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
+    let downloadUrl: URL;
+    try {
+      downloadUrl = new URL(data.downloadUrl, baseUrl);
+      if (downloadUrl.origin !== converterOrigin || downloadUrl.username || downloadUrl.password || !['http:', 'https:'].includes(downloadUrl.protocol)) {
+        return NextResponse.json({ error: 'Converter returned an untrusted output location.', code: 'INVALID_OUTPUT_URL' }, { status: 502 });
+      }
+    } catch {
+      return NextResponse.json({ error: 'Converter returned an invalid output location.', code: 'INVALID_OUTPUT_URL' }, { status: 502 });
+    }
+    const output = await fetch(downloadUrl, { cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(30000) });
+    if (output.status >= 300 && output.status < 400) {
+      return NextResponse.json({ error: 'The converter output URL redirected unexpectedly.', code: 'OUTPUT_REDIRECT_REJECTED' }, { status: 502 });
+    }
     if (!output.ok) return NextResponse.json({ error: 'Converted PDF could not be retrieved.', code: 'OUTPUT_FETCH_FAILED' }, { status: 502 });
-    return new NextResponse(await output.arrayBuffer(), {
+    const outputBytes = Buffer.from(await output.arrayBuffer());
+    if (outputBytes.length < 5 || outputBytes.subarray(0, 5).toString('ascii') !== '%PDF-') {
+      return NextResponse.json({ error: 'Converter returned an invalid PDF output.', code: 'INVALID_OUTPUT' }, { status: 502 });
+    }
+    const safeBaseName = file.name.replace(/\.xlsx$/i, '').replace(/[\\/\r\n"\x00-\x1f]/g, '_').trim().slice(0, 150) || 'converted-document';
+    return new NextResponse(outputBytes, {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="' + file.name.replace(/\.xlsx$/i, '') + '.pdf"',
-        'Cache-Control': 'no-store',
+        'Content-Disposition': `attachment; filename="${safeBaseName}.pdf"`,
+        'Content-Length': String(outputBytes.length),
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
       },
     });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Excel to PDF conversion failed.', code: 'CONVERTER_UNAVAILABLE' }, { status: 502 });
+    console.error('[converter] Request failed:', error instanceof Error ? error.message : 'Unknown error');
+    return NextResponse.json({ error: 'Excel to PDF conversion failed. Please try again later.', code: 'CONVERTER_UNAVAILABLE' }, { status: 502 });
   }
 }

@@ -16,6 +16,8 @@ export default function PDFToExcelTool() {
     setError(null);
 
     try {
+      if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
+      setDownloadUrl(null);
       const formData = new FormData();
       formData.append('file', selectedFile);
 
@@ -32,7 +34,16 @@ export default function PDFToExcelTool() {
         } catch {}
         throw new Error(message);
       }
+      const contentType = (response.headers.get('content-type') || '').toLowerCase();
+      if (!contentType.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
+        throw new Error('The converter returned an unexpected file format. No download was created.');
+      }
       const blob = await response.blob();
+      if (blob.size < 4) throw new Error('The converter returned an empty or invalid Excel file.');
+      const header = new Uint8Array(await blob.slice(0, 4).arrayBuffer());
+      if (header[0] !== 0x50 || header[1] !== 0x4b || header[2] !== 0x03 || header[3] !== 0x04) {
+        throw new Error('The Excel file failed integrity validation. No download was created.');
+      }
       setDownloadUrl(window.URL.createObjectURL(blob));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Conversion failed');
@@ -61,7 +72,12 @@ export default function PDFToExcelTool() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-8">
-          <FileUploader accept=".pdf" onFileSelected={(files) => setSelectedFile(files[0] || null)} maxSize={100} />
+          <FileUploader accept=".pdf" onFileSelected={(files) => {
+            if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
+            setDownloadUrl(null);
+            setError(null);
+            setSelectedFile(files[0] || null);
+          }} maxSize={100} />
 
           {error && <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg"><p className="text-red-700 text-sm">{error}</p></div>}
 

@@ -4,7 +4,7 @@
  * NO ERRORS - All validations and error handling built-in
  */
 
-import { PDFDocument } from 'pdf-lib';
+import { degrees, PDFDocument } from 'pdf-lib';
 
 export type ToolOperation =
   | 'merge' | 'split' | 'compress' | 'rotate' | 'crop'
@@ -85,6 +85,29 @@ export class ToolValidator {
   }
 }
 
+/** Validate both the file label and the actual PDF signature before PDF-only operations. */
+async function validatePdfFile(file: File | null): Promise<FileValidationResult> {
+  const base = await ToolValidator.validateFile(file);
+  if (!base.valid || !file) return base;
+
+  const looksLikePdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+  if (!looksLikePdf) {
+    return { valid: false, error: 'This tool requires a PDF file. Please upload a .pdf document.' };
+  }
+
+  try {
+    const header = new Uint8Array(await file.slice(0, 5).arrayBuffer());
+    const signature = String.fromCharCode(...header);
+    if (signature !== '%PDF-') {
+      return { valid: false, error: 'The uploaded file does not contain a valid PDF signature. Please upload a valid PDF.' };
+    }
+  } catch {
+    return { valid: false, error: 'Unable to read the uploaded PDF. Please try the file again.' };
+  }
+
+  return base;
+}
+
 /**
  * PDF Operations - All PDF manipulation functions
  */
@@ -92,8 +115,13 @@ export class PDFOperations {
   static async merge(files: File[]): Promise<ToolResponse> {
     const startTime = Date.now();
     try {
-      const validation = await ToolValidator.validateFiles(files);
-      if (!validation.valid) return { success: false, error: validation.error };
+      if (!files || files.length < 2) {
+        return { success: false, error: 'At least 2 PDF files are required for merge.' };
+      }
+      for (const file of files) {
+        const validation = await validatePdfFile(file);
+        if (!validation.valid) return { success: false, error: validation.error };
+      }
 
       const mergedPdf = await PDFDocument.create();
       let totalPages = 0;
@@ -123,13 +151,19 @@ export class PDFOperations {
   static async split(file: File, splitPage?: number): Promise<ToolResponse> {
     const startTime = Date.now();
     try {
-      const validation = await ToolValidator.validateFile(file);
+      const validation = await validatePdfFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
       const pageCount = pdf.getPageCount();
-      const split = splitPage || Math.ceil(pageCount / 2);
+      if (pageCount < 2) {
+        return { success: false, error: 'This PDF has fewer than 2 pages and cannot be split into separate parts.' };
+      }
+      const split = splitPage === undefined ? Math.ceil(pageCount / 2) : Number(splitPage);
+      if (!Number.isInteger(split) || split < 1 || split >= pageCount) {
+        return { success: false, error: `Choose a split point from page 1 to page ${pageCount - 1}.` };
+      }
 
       const part1 = await PDFDocument.create();
       for (let i = 0; i < Math.min(split, pageCount); i++) {
@@ -153,7 +187,7 @@ export class PDFOperations {
   static async compress(file: File): Promise<ToolResponse> {
     const startTime = Date.now();
     try {
-      const validation = await ToolValidator.validateFile(file);
+      const validation = await validatePdfFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
       const arrayBuffer = await file.arrayBuffer();
@@ -161,12 +195,17 @@ export class PDFOperations {
       const bytes = await pdf.save({ useObjectStreams: true });
       const compressed = Buffer.from(bytes);
 
-      const ratio = Math.round((1 - compressed.length / file.size) * 100);
+      const ratio = file.size > 0
+        ? Math.round((1 - compressed.length / file.size) * 100)
+        : 0;
+      const reduced = compressed.length < file.size;
       return {
         success: true,
         data: compressed,
-        message: `Compressed ${ratio}%`,
-        metadata: { originalSize: file.size, compressedSize: compressed.length, ratio },
+        message: reduced
+          ? `PDF optimized: file size reduced by ${ratio}%.`
+          : 'PDF processed, but this file could not be made smaller with the available compression method.',
+        metadata: { originalSize: file.size, compressedSize: compressed.length, ratio, sizeReduced: reduced },
         processingTime: Date.now() - startTime,
       };
     } catch (error) {
@@ -177,24 +216,19 @@ export class PDFOperations {
   static async rotate(file: File, angle: number = 90): Promise<ToolResponse> {
     const startTime = Date.now();
     try {
-      const validation = await ToolValidator.validateFile(file);
+      const validation = await validatePdfFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
       
       const pages = pdf.getPages();
-      const rotationMap: Record<number, any> = {
-        0: 'Normal',
-        90: 'Degrees90',
-        180: 'Degrees180',
-        270: 'Degrees270',
-      };
-
+      const normalizedAngle = ((angle % 360) + 360) % 360;
+      if (![0, 90, 180, 270].includes(normalizedAngle)) {
+        return { success: false, error: 'Rotation angle must be 0, 90, 180, or 270 degrees.' };
+      }
       pages.forEach(page => {
-        const normalizedAngle = ((angle % 360) + 360) % 360;
-        const rotationKey = (normalizedAngle / 90) * 90;
-        // pdf-lib handles rotation internally, just marking successful completion
+        page.setRotation(degrees(normalizedAngle));
       });
 
       const bytes = await pdf.save();
@@ -213,14 +247,24 @@ export class PDFOperations {
   static async crop(file: File, options?: { x: number; y: number; width: number; height: number }): Promise<ToolResponse> {
     const startTime = Date.now();
     try {
-      const validation = await ToolValidator.validateFile(file);
+      const validation = await validatePdfFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
 
       if (options) {
+        const values = [options.x, options.y, options.width, options.height];
+        if (!values.every(Number.isFinite) || options.width <= 0 || options.height <= 0 || options.x < 0 || options.y < 0) {
+          return { success: false, error: 'Crop coordinates must be non-negative numbers, and width and height must be greater than zero.' };
+        }
         const pages = pdf.getPages();
+        for (const page of pages) {
+          const pageSize = page.getSize();
+          if (options.x + options.width > pageSize.width || options.y + options.height > pageSize.height) {
+            return { success: false, error: 'Crop area exceeds at least one page boundary. Please choose a smaller crop area.' };
+          }
+        }
         pages.forEach(page => {
           page.setCropBox(options.x, options.y, options.width, options.height);
         });
@@ -249,14 +293,33 @@ export class DocumentConversions {
       const validation = await ToolValidator.validateFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
-      // Placeholder for actual PDF text extraction
-      // In production, use pdf-parse or pdfjs-dist
-      return {
-        success: true,
-        data: `[Text extracted from ${file.name}]`,
-        message: 'Text extraction requires pdf-parse library',
-        processingTime: Date.now() - startTime,
-      };
+      if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+        return { success: false, error: 'Please upload a PDF file for text extraction.' };
+      }
+
+      // pdf-parse v2 performs real text extraction. Scanned/image-only PDFs may
+      // return no text; do not pretend OCR happened in that case.
+      const { PDFParse } = await import('pdf-parse');
+      const parser = new PDFParse({ data: new Uint8Array(await file.arrayBuffer()) });
+      try {
+        const result = await parser.getText();
+        const extractedText = typeof result.text === 'string' ? result.text.trim() : '';
+        if (!extractedText) {
+          return {
+            success: false,
+            error: 'No selectable text was found in this PDF. It may be scanned; OCR is required for image-only pages.',
+          };
+        }
+        return {
+          success: true,
+          data: extractedText,
+          message: 'Text extracted from PDF successfully.',
+          metadata: { characterCount: extractedText.length },
+          processingTime: Date.now() - startTime,
+        };
+      } finally {
+        await parser.destroy();
+      }
     } catch (error) {
       return { success: false, error: 'Text extraction failed' };
     }
@@ -291,29 +354,26 @@ export class DocumentConversions {
  */
 export class AIOperations {
   static async chat(query: string, fileContent: string): Promise<ToolResponse> {
-    // This will be connected to OpenAI GPT-4 in API route
+    // Never report success without a real AI response. The API route must perform model inference.
     return {
-      success: true,
-      data: `Response to: "${query}"`,
-      message: 'Chat ready for API integration',
+      success: false,
+      error: 'Chat is not available through the unified service yet. Please use the configured AI chat API.',
     };
   }
 
   static async summarize(content: string): Promise<ToolResponse> {
-    // This will be connected to OpenAI in API route
+    // Never report success without a real AI response.
     return {
-      success: true,
-      data: 'Summary generated',
-      message: 'Summarization ready for API integration',
+      success: false,
+      error: 'Summarization is not available through the unified service yet. Please use the configured AI summary API.',
     };
   }
 
   static async translate(text: string, targetLanguage: string): Promise<ToolResponse> {
-    // This will be connected to OpenAI in API route
+    // Never report success without a real AI response.
     return {
-      success: true,
-      data: `Translated to ${targetLanguage}`,
-      message: 'Translation ready for API integration',
+      success: false,
+      error: 'Translation is not available through the unified service yet. Please use the configured AI translation API.',
     };
   }
 }
@@ -367,9 +427,8 @@ export async function executeToolOperation(request: ToolRequest): Promise<ToolRe
 
       default:
         return {
-          success: true,
-          message: `Operation "${request.operation}" is ready for implementation`,
-          data: 'Tool framework ready',
+          success: false,
+          error: `The "${request.operation}" operation is not implemented yet. No output was generated.`,
         };
     }
   } catch (error) {
