@@ -93,7 +93,7 @@ const safeBaseName = (name) => {
 
 const cleanup = (target) => {
   if (!target) return
-  try { fs.rmSync(target, { recursive: true, force: true }) } catch (error) { console.warn('[WORKER] cleanup failed:', target, error.message) }
+  try { fs.rmSync(target, { recursive: true, force: true }) } catch { console.warn('[WORKER] Temporary job cleanup failed.') }
 }
 
 const processConversion = async (job) => {
@@ -192,8 +192,8 @@ const worker = new Worker(QUEUE, async (job) => {
 })
 
 worker.on('completed', (job) => console.log('[WORKER] completed', job.id, job.name))
-worker.on('failed', (job, error) => console.error('[WORKER] failed', job?.id, job?.name, error))
-worker.on('error', (error) => console.error('[WORKER] error', error))
+worker.on('failed', (job, error) => console.error('[WORKER] Job failed.', JSON.stringify({ jobId: String(job?.id || ''), jobType: String(job?.name || ''), code: typeof error?.code === 'string' ? error.code : 'CONVERSION_FAILED' })))
+worker.on('error', () => console.error('[WORKER] Queue worker encountered an internal error.'))
 
 const shutdown = async (signal) => {
   console.log(`[WORKER] ${signal} received, shutting down`)
