@@ -73,7 +73,7 @@ router.post('/', upload.single('file'), async (req, res, next) => {
     if (req.body?.language) options.language = req.body.language
 
     const inputName = `jobs/${uuidv4()}/input${ext}`
-    const inputKey = await spaces.uploadFile(req.file.path, inputName, req.file.mimetype || 'application/octet-stream')
+    const inputKey = await spaces.uploadObject(req.file.path, inputName, req.file.mimetype || 'application/octet-stream')
 
     let job
     try {
