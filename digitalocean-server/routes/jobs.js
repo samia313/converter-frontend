@@ -34,7 +34,7 @@ const TOOL_INPUTS = {
 
 const cleanup = (file) => {
   if (!file?.path) return
-  try { fs.rmSync(file.path, { force: true }) } catch (error) { console.warn('[QUEUE] upload cleanup failed:', error.message) }
+  try { fs.rmSync(file.path, { force: true }) } catch { console.warn('[QUEUE] Temporary upload cleanup failed.') }
 }
 
 const fail = (message, code, status = 400) => {
@@ -127,7 +127,7 @@ router.get('/:id', async (req, res, next) => {
     }
 
     if (state === 'failed') {
-      response.error = job.failedReason || 'Conversion failed'
+      response.error = 'Conversion failed. Please try again with a supported file.'
       response.code = 'CONVERSION_FAILED'
     }
 
