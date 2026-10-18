@@ -62,7 +62,7 @@ class QueueService {
       throw new Error('Upstash Redis REST endpoint is invalid');
     }
 
-    if (endpoint.protocol !== 'https:' || endpoint.username || endpoint.password) {
+    if (endpoint.protocol !== 'https:' || endpoint.username || endpoint.password || endpoint.search || endpoint.hash) {
       throw new Error('Upstash Redis REST endpoint must be a credential-free HTTPS URL');
     }
 
