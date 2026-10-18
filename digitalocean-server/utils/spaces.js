@@ -79,10 +79,23 @@ const deleteFile = async (key) => {
   }
 }
 
+const checkSpacesConnectivity = async () => {
+  if (!settings.spaces.key || !settings.spaces.secret || !settings.spaces.bucket || !settings.spaces.endpoint || !settings.spaces.region) {
+    return false
+  }
+  try {
+    await s3Client.headBucket({ Bucket: settings.spaces.bucket }).promise()
+    return true
+  } catch {
+    // Never expose SDK errors, endpoints, or credential metadata in health output.
+    return false
+  }
+}
+
 const signedDownloadUrl = (key) => s3Client.getSignedUrl('getObject', {
   Bucket: settings.spaces.bucket,
   Key: key,
   Expires: settings.spaces.signedUrlTtl,
 })
 
-module.exports = { uploadFile, downloadFile, deleteFile, signedDownloadUrl }
+module.exports = { uploadFile, downloadFile, deleteFile, signedDownloadUrl, checkSpacesConnectivity }
