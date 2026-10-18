@@ -18,27 +18,14 @@ export async function GET(request: NextRequest) {
     const logging = getLoggingService();
     const metrics = getMetricsService();
 
-    // Get queue health
     const queueHealth = await queue.healthCheck();
-
-    // Get storage stats
     const storageStats = storage.getStats();
-
-    // Get logging stats
     const loggingStats = logging.getStats();
-
-    // Get system metrics
     const systemMetrics = metrics.getSystemMetrics();
-
-    // Get performance summary
     const performanceSummary = metrics.getPerformanceSummary();
-
-    // Check alert conditions
     const alerts = metrics.checkAlertConditions();
 
-    // Determine overall health
     let overallStatus: 'healthy' | 'degraded' | 'unhealthy' = 'healthy';
-
     if (queueHealth.status === 'unhealthy') {
       overallStatus = 'unhealthy';
     } else if (queueHealth.status === 'degraded' || alerts.some((a) => a.level === 'critical')) {
@@ -57,18 +44,9 @@ export async function GET(request: NextRequest) {
           message: queueHealth.status === 'unhealthy' ? 'Queue health check failed.' : queueHealth.message,
           metrics: queueHealth.metrics,
         },
-        storage: {
-          status: 'healthy',
-          ...storageStats,
-        },
-        logging: {
-          status: 'healthy',
-          ...loggingStats,
-        },
-        database: {
-          status: 'healthy',
-          message: 'Connected',
-        },
+        storage: { status: 'healthy', ...storageStats },
+        logging: { status: 'healthy', ...loggingStats },
+        database: { status: 'healthy', message: 'Connected' },
       },
       performance: performanceSummary,
       memory: {
@@ -85,19 +63,12 @@ export async function GET(request: NextRequest) {
       responseTime: Date.now() - startTime,
     });
 
-    return NextResponse.json(response, {
-      status: overallStatus === 'unhealthy' ? 503 : 200,
-    });
-  } catch (error) {
-    // Do not log raw infrastructure exceptions; they may contain connection credentials.
+    return NextResponse.json(response, { status: overallStatus === 'unhealthy' ? 503 : 200 });
+  } catch {
+    // Infrastructure exceptions can contain credentials; do not log raw errors.
     console.error('[v0] Health check failed.');
-
     return NextResponse.json(
-      {
-        status: 'unhealthy',
-        timestamp: new Date().toISOString(),
-        error: 'Health check failed. Check server logs for details.',
-      },
+      { status: 'unhealthy', timestamp: new Date().toISOString(), error: 'Health check failed.' },
       { status: 503 }
     );
   }
@@ -107,7 +78,13 @@ export async function GET(request: NextRequest) {
  * POST endpoint for manual health checks and cleanup
  */
 export async function POST(request: NextRequest) {
-  const { action } = await request.json();
+  let action: unknown;
+  try {
+    const body = await request.json();
+    action = body?.action;
+  } catch {
+    return NextResponse.json({ error: 'Invalid request body.' }, { status: 400 });
+  }
 
   try {
     const queue = getQueueService();
@@ -119,39 +96,19 @@ export async function POST(request: NextRequest) {
         const queueCleaned = await queue.cleanup();
         const storageCleaned = await storage.cleanup();
         const logsCleaned = await logging.cleanup();
-
-        return NextResponse.json({
-          status: 'success',
-          cleanup: {
-            queueCleaned,
-            storageCleaned,
-            logsCleaned,
-          },
-        });
+        return NextResponse.json({ status: 'success', cleanup: { queueCleaned, storageCleaned, logsCleaned } });
       }
-
       case 'reset-metrics': {
         const metrics = getMetricsService();
         metrics.reset();
-
-        return NextResponse.json({
-          status: 'success',
-          message: 'Metrics reset',
-        });
+        return NextResponse.json({ status: 'success', message: 'Metrics reset' });
       }
-
       default:
-        return NextResponse.json(
-          { error: 'Unknown action' },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
     }
-  } catch (error) {
-    console.error('[v0] Health check POST failed:', error);
-
-    return NextResponse.json(
-      { error: 'Health check action failed. Check server logs for details.' },
-      { status: 500 }
-    );
+  } catch {
+    // Infrastructure exceptions can contain credentials; do not log raw errors.
+    console.error('[v0] Health check POST failed.');
+    return NextResponse.json({ error: 'Health check action failed.' }, { status: 500 });
   }
 }
