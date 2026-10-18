@@ -5,6 +5,7 @@ const fs = require('fs')
 const { v4: uuidv4 } = require('uuid')
 const settings = require('./config/settings')
 const authMiddleware = require('./middleware/auth')
+const { checkSpacesConnectivity } = require('./utils/spaces')
 
 const app = express()
 
@@ -45,7 +46,7 @@ const upload = multer({
   },
 })
 
-app.get('/health', (req, res) => {
+app.get('/health', async (req, res) => {
   const spacesConfigured = Boolean(
     settings.spaces.key &&
     settings.spaces.secret &&
@@ -59,12 +60,14 @@ app.get('/health', (req, res) => {
     tempDirectoryWritable = true
   } catch {}
 
+  const spacesReachable = spacesConfigured ? await checkSpacesConnectivity() : false
   const components = {
     apiKeyConfigured: Boolean(settings.apiKey),
     spacesConfigured,
+    spacesReachable,
     tempDirectoryWritable,
   }
-  const ready = components.apiKeyConfigured && components.spacesConfigured && components.tempDirectoryWritable
+  const ready = components.apiKeyConfigured && components.spacesConfigured && components.spacesReachable && components.tempDirectoryWritable
   res.status(ready ? 200 : 503).json({
     status: ready ? 'ok' : 'not_ready',
     timestamp: new Date().toISOString(),
