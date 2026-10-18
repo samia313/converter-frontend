@@ -531,3 +531,8 @@ Use the exact variable names consumed by the Vercel client:
 - `DIGITALOCEAN_CONVERTER_API_KEY`: the same bearer key configured as `API_KEY` on the worker.
 
 Legacy names are supported by the client, but the canonical names above should be used for new configuration. Set these as encrypted Vercel environment variables, never in client-side `NEXT_PUBLIC_*` variables. Configure the worker's Spaces credentials separately on the server. Do not consider the worker ready until `/health` reports readiness and a real conversion returns a valid downloadable output.
+
+
+## Health maintenance endpoint security
+
+The application `POST /api/health` endpoint can run cleanup and reset metrics. Configure a strong, unique `HEALTH_CHECK_API_KEY` in the Vercel project environment before invoking either action. Send it only in the request header `Authorization: Bearer <key>`; never put it in a URL or log it. Without the variable or a matching header, the endpoint returns HTTP 401 and does not execute maintenance actions. Keep the key out of source control and rotate it if exposed.
