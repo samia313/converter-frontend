@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require('uuid')
 const settings = require('./config/settings')
 const authMiddleware = require('./middleware/auth')
 const { checkSpacesConnectivity } = require('./utils/spaces')
+const { checkRedisConnectivity } = require('./queue/connection')
 
 const app = express()
 
@@ -61,13 +62,16 @@ app.get('/health', async (req, res) => {
   } catch {}
 
   const spacesReachable = spacesConfigured ? await checkSpacesConnectivity() : false
+  const redisReachable = await checkRedisConnectivity()
   const components = {
     apiKeyConfigured: Boolean(settings.apiKey),
     spacesConfigured,
     spacesReachable,
+    redisConfigured: Boolean(settings.redisUrl),
+    redisReachable,
     tempDirectoryWritable,
   }
-  const ready = components.apiKeyConfigured && components.spacesConfigured && components.spacesReachable && components.tempDirectoryWritable
+  const ready = components.apiKeyConfigured && components.spacesConfigured && components.spacesReachable && components.redisConfigured && components.redisReachable && components.tempDirectoryWritable
   res.status(ready ? 200 : 503).json({
     status: ready ? 'ok' : 'not_ready',
     timestamp: new Date().toISOString(),
