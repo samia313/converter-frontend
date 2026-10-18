@@ -507,3 +507,27 @@ A successful submission returns HTTP 202 and a `jobId`. The status endpoint retu
 ### Important
 
 This migration establishes the production queue/file pipeline. It does **not** claim every PDFilio tool is now using a new conversion engine. The next phase is tool-by-tool engine implementation and golden-file testing (PDF→Word, Office→PDF, PDF→Excel, PDF→PowerPoint, OCR, render/export, etc.).
+
+
+---
+
+## Critical incident response: exposed Redis credential
+
+If a Redis/Upstash connection string or credential appears in a public API response, treat it as compromised. Do not paste the old value into tickets, chat, terminal transcripts, or logs.
+
+1. In the Redis provider dashboard, rotate/revoke the exposed credential or create a replacement credential and revoke the old one. If the provider cannot rotate a single credential, replace the database credential according to its documented procedure.
+2. In Vercel Project Settings → Environment Variables, update the existing `KV_REST_API_URL` / `KV_REST_API_TOKEN` values with the provider's HTTPS REST endpoint and replacement token for every environment that is actually used (Production, Preview, Development). Do not copy a raw `rediss://` TCP connection URL into `KV_REST_API_URL`.
+3. Update `REDIS_URL` separately only if the BullMQ worker needs a TCP Redis connection. Use the provider's newly issued connection string, and never print it while verifying configuration.
+4. Redeploy affected Vercel environments after the values are updated. Restart the DigitalOcean queue/worker process if its Redis connection changed.
+5. Check `https://pdfilio.com/api/health` and the deployment preview. The response must not contain connection strings, host credentials, tokens, or raw SDK errors. A 503/unhealthy response means dependencies are still not ready; do not describe it as healthy.
+6. Test an authenticated sample upload, wait for job completion, download the result, and compare the output file signature and checksum/contents before declaring conversions operational.
+7. If a credential was exposed in a historical response, removing the response alone is not enough: revoke/rotate the credential first, then verify the old credential no longer works.
+
+### Worker configuration checklist
+
+Use the exact variable names consumed by the Vercel client:
+
+- `DIGITALOCEAN_CONVERTER_URL`: the reachable worker/API base URL; use HTTPS for a public host.
+- `DIGITALOCEAN_CONVERTER_API_KEY`: the same bearer key configured as `API_KEY` on the worker.
+
+Legacy names are supported by the client, but the canonical names above should be used for new configuration. Set these as encrypted Vercel environment variables, never in client-side `NEXT_PUBLIC_*` variables. Configure the worker's Spaces credentials separately on the server. Do not consider the worker ready until `/health` reports readiness and a real conversion returns a valid downloadable output.
