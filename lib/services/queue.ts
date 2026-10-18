@@ -45,16 +45,29 @@ class QueueService {
   private readonly JOB_TIMEOUT = 300; // 5 minutes
 
   constructor() {
-    // @upstash/redis expects the HTTPS REST endpoint; REDIS_URL may be a raw rediss:// TCP URL.
-    const url = process.env.KV_REST_API_URL || process.env.REDIS_URL;
-    const token = process.env.KV_REST_API_TOKEN;
+    // @upstash/redis only supports Upstash's HTTPS REST API. REDIS_URL is
+    // reserved for the DigitalOcean BullMQ worker's TCP Redis connection and
+    // must never be treated as an Upstash REST endpoint.
+    const url = (process.env.KV_REST_API_URL || '').trim();
+    const token = (process.env.KV_REST_API_TOKEN || '').trim();
 
     if (!url || !token) {
-      throw new Error('Redis connection details not configured');
+      throw new Error('Upstash Redis REST configuration is not configured');
+    }
+
+    let endpoint: URL;
+    try {
+      endpoint = new URL(url);
+    } catch {
+      throw new Error('Upstash Redis REST endpoint is invalid');
+    }
+
+    if (endpoint.protocol !== 'https:' || endpoint.username || endpoint.password) {
+      throw new Error('Upstash Redis REST endpoint must be a credential-free HTTPS URL');
     }
 
     this.redis = new Redis({
-      url,
+      url: endpoint.toString(),
       token,
     });
   }
