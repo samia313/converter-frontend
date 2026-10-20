@@ -11,7 +11,7 @@ interface AdSenseAdProps {
 
 export default function AdSenseAd({ slotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID || '', format = 'auto', responsive = true, className = '' }: AdSenseAdProps) {
   const [tcStringReady, setTcStringReady] = useState(false)
-  const hasValidSlotId = /^\\d+$/.test(slotId) && slotId !== '1234567890'
+  const hasValidSlotId = /^\d+$/.test(slotId) && slotId !== '1234567890'
 
   useEffect(() => {
     let cancelled = false
