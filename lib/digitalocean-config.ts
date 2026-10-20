@@ -38,7 +38,7 @@ export function getDigitalOceanConfig(): DigitalOceanConfig {
       hostWithoutPort === '[::1]';
 
     if (isLoopback) {
-      if (!/:\\d+$/.test(hostPart)) {
+      if (!/:\d+$/.test(hostPart)) {
         const safeHost = rawIpv6Loopback ? '[::1]' : hostPart;
         normalizedUrl = `http://${safeHost}:3001${normalizedUrl.slice(hostPart.length)}`;
       } else {
