@@ -9,8 +9,9 @@ interface AdSenseAdProps {
   className?: string
 }
 
-export default function AdSenseAd({ slotId = '1234567890', format = 'auto', responsive = true, className = '' }: AdSenseAdProps) {
+export default function AdSenseAd({ slotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID || '', format = 'auto', responsive = true, className = '' }: AdSenseAdProps) {
   const [tcStringReady, setTcStringReady] = useState(false)
+  const hasValidSlotId = /^\\d+$/.test(slotId) && slotId !== '1234567890'
 
   useEffect(() => {
     let cancelled = false
@@ -35,17 +36,17 @@ export default function AdSenseAd({ slotId = '1234567890', format = 'auto', resp
   }, [])
 
   useEffect(() => {
-    if (!tcStringReady) return
+    if (!tcStringReady || !hasValidSlotId) return
     let attempts = 0
     const pushAd = () => {
       if (window.adsbygoogle) {
-        try { window.adsbygoogle.push({}) ; return } catch (err) { console.error('[PDFilio] AdSense error:', err) }
+        try { window.adsbygoogle.push({}); return } catch (err) { console.error('[PDFilio] AdSense error:', err) }
       }
       attempts += 1
       if (attempts < 20) window.setTimeout(pushAd, 500)
     }
     pushAd()
-  }, [tcStringReady])
+  }, [tcStringReady, hasValidSlotId])
 
   const getAdStyle = () => {
     switch (format) {
@@ -56,7 +57,7 @@ export default function AdSenseAd({ slotId = '1234567890', format = 'auto', resp
     }
   }
 
-  if (!tcStringReady) return null
+  if (!tcStringReady || !hasValidSlotId) return null
 
   return (
     <div className={`adsense-container flex justify-center my-6 ${className}`} data-ad-format={format} aria-label="Advertisement">
