@@ -17,25 +17,33 @@ export interface LogEntry {
 }
 
 class LoggingService {
-  private redis: Redis;
+  private redis: Redis | null = null;
   private readonly LOG_PREFIX = 'pdf-logs:';
   private readonly RETENTION_DAYS = 30;
   private readonly MAX_LOGS_PER_CONVERSION = 1000;
   private localLogs: LogEntry[] = [];
 
   constructor() {
-    // @upstash/redis expects the HTTPS REST endpoint; REDIS_URL may be a raw rediss:// TCP URL.
-    const url = process.env.KV_REST_API_URL || process.env.REDIS_URL;
-    const token = process.env.KV_REST_API_TOKEN;
+    // This client accepts only Upstash's HTTPS REST endpoint. REDIS_URL is
+    // reserved for the worker's TCP connection and must not be used here.
+    const url = (process.env.KV_REST_API_URL || '').trim();
+    const token = (process.env.KV_REST_API_TOKEN || '').trim();
 
     if (!url || !token) {
-      console.warn('[v0] Redis not configured, logs will be stored in memory');
+      console.warn('[v0] Upstash REST logging is not configured; using in-memory logs.');
+      return;
     }
 
-    this.redis = new Redis({
-      url,
-      token,
-    });
+    try {
+      const endpoint = new URL(url);
+      if (endpoint.protocol !== 'https:' || endpoint.username || endpoint.password || endpoint.search || endpoint.hash) {
+        console.warn('[v0] Upstash REST logging endpoint is invalid; using in-memory logs.');
+        return;
+      }
+      this.redis = new Redis({ url: endpoint.toString(), token });
+    } catch {
+      console.warn('[v0] Upstash REST logging initialization failed; using in-memory logs.');
+    }
   }
 
   /**
