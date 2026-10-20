@@ -4,7 +4,7 @@
  * NO ERRORS - All validations and error handling built-in
  */
 
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, degrees } from 'pdf-lib';
 
 export type ToolOperation =
   | 'merge' | 'split' | 'compress' | 'rotate' | 'crop'
@@ -92,6 +92,9 @@ export class PDFOperations {
   static async merge(files: File[]): Promise<ToolResponse> {
     const startTime = Date.now();
     try {
+      if (files.some(file => !(file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')))) {
+        return { success: false, error: 'Merge accepts PDF files only' };
+      }
       const validation = await ToolValidator.validateFiles(files);
       if (!validation.valid) return { success: false, error: validation.error };
 
@@ -159,14 +162,23 @@ export class PDFOperations {
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
       const bytes = await pdf.save({ useObjectStreams: true });
-      const compressed = Buffer.from(bytes);
+      const candidate = Buffer.from(bytes);
+      const reducedSize = candidate.length < file.size;
+      const output = reducedSize ? candidate : Buffer.from(await file.arrayBuffer());
+      const ratio = reducedSize ? Math.round((1 - output.length / file.size) * 100) : 0;
 
-      const ratio = Math.round((1 - compressed.length / file.size) * 100);
       return {
         success: true,
-        data: compressed,
-        message: `Compressed ${ratio}%`,
-        metadata: { originalSize: file.size, compressedSize: compressed.length, ratio },
+        data: output,
+        message: reducedSize
+          ? `PDF size reduced by ${ratio}%`
+          : 'No size reduction was achieved; the original PDF is preserved.',
+        metadata: {
+          originalSize: file.size,
+          compressedSize: output.length,
+          ratio,
+          sizeReduced: reducedSize,
+        },
         processingTime: Date.now() - startTime,
       };
     } catch (error) {
@@ -184,17 +196,13 @@ export class PDFOperations {
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
       
       const pages = pdf.getPages();
-      const rotationMap: Record<number, any> = {
-        0: 'Normal',
-        90: 'Degrees90',
-        180: 'Degrees180',
-        270: 'Degrees270',
-      };
+      const normalizedAngle = ((angle % 360) + 360) % 360;
+      if (![0, 90, 180, 270].includes(normalizedAngle)) {
+        return { success: false, error: 'Rotation angle must be 0, 90, 180, or 270 degrees' };
+      }
 
       pages.forEach(page => {
-        const normalizedAngle = ((angle % 360) + 360) % 360;
-        const rotationKey = (normalizedAngle / 90) * 90;
-        // pdf-lib handles rotation internally, just marking successful completion
+        page.setRotation(degrees(normalizedAngle));
       });
 
       const bytes = await pdf.save();
@@ -219,12 +227,23 @@ export class PDFOperations {
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: true });
 
-      if (options) {
-        const pages = pdf.getPages();
-        pages.forEach(page => {
-          page.setCropBox(options.x, options.y, options.width, options.height);
-        });
+      if (!options ||
+          ![options.x, options.y, options.width, options.height].every(Number.isFinite) ||
+          options.x < 0 || options.y < 0 || options.width <= 0 || options.height <= 0) {
+        return { success: false, error: 'Valid crop coordinates are required; width and height must be positive' };
       }
+
+      const pages = pdf.getPages();
+      for (const page of pages) {
+        const pageWidth = page.getWidth();
+        const pageHeight = page.getHeight();
+        if (options.x + options.width > pageWidth || options.y + options.height > pageHeight) {
+          return { success: false, error: 'Crop rectangle must fit within every page' };
+        }
+      }
+      pages.forEach(page => {
+        page.setCropBox(options.x, options.y, options.width, options.height);
+      });
 
       const bytes = await pdf.save();
       return {
@@ -249,14 +268,31 @@ export class DocumentConversions {
       const validation = await ToolValidator.validateFile(file);
       if (!validation.valid) return { success: false, error: validation.error };
 
-      // Placeholder for actual PDF text extraction
-      // In production, use pdf-parse or pdfjs-dist
-      return {
-        success: true,
-        data: `[Text extracted from ${file.name}]`,
-        message: 'Text extraction requires pdf-parse library',
-        processingTime: Date.now() - startTime,
-      };
+      const parser = new (await import('pdf-parse')).PDFParse({
+        data: new Uint8Array(await file.arrayBuffer()),
+      });
+
+      try {
+        const result = await parser.getText();
+        const text = result.text?.trim();
+        if (!text) {
+          return {
+            success: false,
+            error: 'No selectable text was found in this PDF. If it is a scanned document, use OCR.',
+            processingTime: Date.now() - startTime,
+          };
+        }
+
+        return {
+          success: true,
+          data: text,
+          message: 'PDF text extracted successfully',
+          metadata: { characterCount: text.length },
+          processingTime: Date.now() - startTime,
+        };
+      } finally {
+        await parser.destroy();
+      }
     } catch (error) {
       return { success: false, error: 'Text extraction failed' };
     }
@@ -367,9 +403,8 @@ export async function executeToolOperation(request: ToolRequest): Promise<ToolRe
 
       default:
         return {
-          success: true,
-          message: `Operation "${request.operation}" is ready for implementation`,
-          data: 'Tool framework ready',
+          success: false,
+          error: `Operation "${request.operation}" is not implemented yet`,
         };
     }
   } catch (error) {
