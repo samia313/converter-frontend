@@ -37,13 +37,16 @@ export function getDigitalOceanConfig(): DigitalOceanConfig {
       hostWithoutPort === '127.0.0.1' ||
       hostWithoutPort === '[::1]';
 
-    if (isLoopback && !/:\d+$/.test(hostPart)) {
-      const safeHost = rawIpv6Loopback ? '[::1]' : hostPart;
-      normalizedUrl = `http://${safeHost}:3001${normalizedUrl.slice(hostPart.length)}`;
-    } else if (isLoopback || /:\d+$/.test(hostPart)) {
-      normalizedUrl = `http://${normalizedUrl}`;
+    if (isLoopback) {
+      if (!/:\\d+$/.test(hostPart)) {
+        const safeHost = rawIpv6Loopback ? '[::1]' : hostPart;
+        normalizedUrl = `http://${safeHost}:3001${normalizedUrl.slice(hostPart.length)}`;
+      } else {
+        // Loopback is the only endpoint allowed to use plaintext HTTP.
+        normalizedUrl = `http://${normalizedUrl}`;
+      }
     } else {
-      // Bare public IPs and hostnames default to HTTPS, never plaintext HTTP.
+      // Public hosts stay on HTTPS even when an explicit port is provided.
       normalizedUrl = `https://${normalizedUrl}`;
     }
   }
