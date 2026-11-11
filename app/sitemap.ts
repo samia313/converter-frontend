@@ -26,6 +26,8 @@ const staticPages = [
   ['/security', 0.7, 'monthly'],
   ['/about', 0.5, 'monthly'],
   ['/contact', 0.5, 'monthly'],
+  ['/pricing', 0.5, 'monthly'],
+  ['/faq', 0.5, 'monthly'],
   ['/privacy', 0.3, 'yearly'],
   ['/terms', 0.3, 'yearly'],
   ['/cookies', 0.3, 'yearly'],
