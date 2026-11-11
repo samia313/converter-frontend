@@ -1,96 +1,15 @@
 import { NextResponse } from 'next/server'
 
 const SITE_URL = 'https://pdfilio.com'
+const CANONICAL_SITEMAP_INDEX = `${SITE_URL}/sitemap-index.xml`
 
 /**
- * Generate complete sitemap index with all category sitemaps
- * This combines all 1200+ blog posts, guides, comparisons, use cases, and tools
+ * Keep the legacy sitemap URL available, but direct crawlers to the canonical
+ * sitemap index. This prevents the old, oversized sitemap index from competing
+ * with the current canonical sitemap structure.
  */
 export async function GET() {
-  const today = new Date().toISOString().split('T')[0]
-
-  // All sitemaps categorized
-  const sitemaps = [
-    // Main sitemaps
-    {
-      loc: `${SITE_URL}/sitemap.xml`,
-      lastmod: today,
-      description: 'Main sitemap with all core pages and 1200+ blog posts'
-    },
-    {
-      loc: `${SITE_URL}/blog-sitemap.xml`,
-      lastmod: today,
-      description: 'Blog posts sitemap (1200 posts)'
-    },
-    {
-      loc: `${SITE_URL}/tools-sitemap.xml`,
-      lastmod: today,
-      description: 'PDF tools and features sitemap'
-    },
-    // Blog Post Sitemap - 1200 individual posts
-    {
-      loc: `${SITE_URL}/api/sitemaps/blog-posts`,
-      lastmod: today,
-      description: 'Individual blog post pages (1200 URLs)'
-    },
-    // Category sitemaps
-    {
-      loc: `${SITE_URL}/api/sitemaps/blog`,
-      lastmod: today,
-      description: 'Blog collection pages (10+ URLs)'
-    },
-    {
-      loc: `${SITE_URL}/api/sitemaps/guides`,
-      lastmod: today,
-      description: 'Guide pages (150+ URLs)'
-    },
-    {
-      loc: `${SITE_URL}/api/sitemaps/comparisons`,
-      lastmod: today,
-      description: 'Comparison pages (150+ URLs)'
-    },
-    {
-      loc: `${SITE_URL}/api/sitemaps/use-cases`,
-      lastmod: today,
-      description: 'Use case pages (500+ URLs)'
-    },
-    {
-      loc: `${SITE_URL}/api/sitemaps/tools`,
-      lastmod: today,
-      description: 'Tools and features (100+ URLs)'
-    },
-    {
-      loc: `${SITE_URL}/api/sitemaps/pages`,
-      lastmod: today,
-      description: 'Static pages (20+ URLs)'
-    },
-    // Mobile sitemap
-    {
-      loc: `${SITE_URL}/api/sitemaps/mobile`,
-      lastmod: today,
-      description: 'Mobile-friendly URLs'
-    },
-  ]
-
-  // Generate XML sitemap index
-  const sitemapIndexXML = `<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${sitemaps
-  .map(
-    (sitemap) => `  <sitemap>
-    <loc>${sitemap.loc}</loc>
-    <lastmod>${sitemap.lastmod}</lastmod>
-  </sitemap>`
-  )
-  .join('\n')}
-</sitemapindex>`
-
-  return new NextResponse(sitemapIndexXML, {
-    headers: {
-      'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
-    },
-  })
+  return NextResponse.redirect(CANONICAL_SITEMAP_INDEX, 308)
 }
 
 /**
