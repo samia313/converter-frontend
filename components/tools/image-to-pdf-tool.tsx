@@ -6,7 +6,7 @@ import { Download } from 'lucide-react';
 
 const MAX_TOTAL_SIZE = 500 * 1024 * 1024;
 
-export default function ImageToPDFTool() {
+export default function ImageToPDFTool({ heading = 'Image to PDF Converter', subtitle = 'Convert JPG and PNG images into PDF pages' }: { heading?: string; subtitle?: string }) {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -67,8 +67,8 @@ export default function ImageToPDFTool() {
     <section className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 md:py-20">
       <div className="container mx-auto max-w-2xl px-4">
         <div className="text-center mb-12">
-          <p role="heading" aria-level={2} className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Image to PDF Converter</p>
-          <p className="text-lg text-gray-600">Convert JPG and PNG images into PDF pages</p>
+          <p role="heading" aria-level={2} className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{heading}</p>
+          <p className="text-lg text-gray-600">{subtitle}</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-8">
