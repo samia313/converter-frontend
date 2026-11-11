@@ -16,6 +16,16 @@ function getExtension(name: string) {
   return index >= 0 ? name.slice(index).toLowerCase() : '';
 }
 
+function safeBaseName(name: string) {
+  const base = name.replace(/\.[^.]+$/, '').normalize('NFKC').replace(/[\\/\r\n"<>:|?*]/g, '_').replace(/\s+/g, ' ').trim().replace(/[. ]+$/g, '').slice(0, 120);
+  return base || 'images';
+}
+
+function hasValidImageSignature(bytes: Uint8Array, extension: string) {
+  if (extension === '.png') return bytes.length >= 8 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47 && bytes[4] === 0x0d && bytes[5] === 0x0a && bytes[6] === 0x1a && bytes[7] === 0x0a;
+  return bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -57,6 +67,7 @@ export async function POST(request: NextRequest) {
       }
 
       const bytes = new Uint8Array(await entry.arrayBuffer());
+      if (!hasValidImageSignature(bytes, extension)) return NextResponse.json({ error: 'An uploaded file does not match its declared image type.' }, { status: 415 });
       const image = extension === '.png'
         ? await pdfDoc.embedPng(bytes)
         : await pdfDoc.embedJpg(bytes);
@@ -88,7 +99,7 @@ export async function POST(request: NextRequest) {
 
     const pdfBytes = await pdfDoc.save();
     const baseName = files.length === 1 && files[0] instanceof File
-      ? files[0].name.replace(/\.[^.]+$/, '')
+      ? safeBaseName(files[0].name)
       : 'images';
 
     return new NextResponse(Buffer.from(pdfBytes), {

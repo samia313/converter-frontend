@@ -28,6 +28,7 @@ export default function PDFToWordTool() {
     if (!selectedFile) return;
     setIsProcessing(true);
     setError(null);
+    if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
     setDownloadUrl(null);
     setIsComplete(false);
 
@@ -54,8 +55,17 @@ export default function PDFToWordTool() {
         throw new Error(errorMessage);
       }
 
+      const contentType = (response.headers.get('content-type') || '').toLowerCase();
+      if (!contentType.includes('application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+        throw new Error('The conversion service returned an unexpected file format. No download was created.');
+      }
+
       const blob = await response.blob();
-      if (blob.size === 0) throw new Error('Converted file is empty');
+      if (blob.size < 4) throw new Error('Converted Word file is empty or invalid.');
+      const header = new Uint8Array(await blob.slice(0, 4).arrayBuffer());
+      if (header[0] !== 0x50 || header[1] !== 0x4b || header[2] !== 0x03 || header[3] !== 0x04) {
+        throw new Error('The generated Word file failed integrity validation. Please try again.');
+      }
 
       setDownloadUrl(window.URL.createObjectURL(blob));
       setIsComplete(true);
@@ -83,6 +93,9 @@ export default function PDFToWordTool() {
     <div className="mx-auto w-full max-w-2xl py-8">
       <div className="rounded-lg bg-white p-6 shadow-md sm:p-8">
         <h2 className="mb-6 text-2xl font-bold text-gray-900">Convert PDF to Word</h2>
+        <p className="mb-5 rounded-md bg-amber-50 p-3 text-sm text-amber-900">
+          This version extracts selectable text into a Word document. Original page layout, images, and tables may not be preserved; scanned PDFs require OCR first.
+        </p>
 
         {!isComplete && (
           <>

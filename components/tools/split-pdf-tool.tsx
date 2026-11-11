@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
+import JSZip from 'jszip';
+import { PDFDocument } from 'pdf-lib';
 
 export default function SplitPDFTool() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -57,12 +59,64 @@ export default function SplitPDFTool() {
       }
 
       const contentType = response.headers.get('content-type') || '';
-      if (!contentType.includes('application/zip')) {
-        throw new Error('Split service returned an invalid file format.');
+      if (!contentType.toLowerCase().includes('application/zip')) {
+        throw new Error('Split service returned an unexpected file type instead of a ZIP archive.');
       }
 
       const blob = await response.blob();
-      if (blob.size === 0) throw new Error('Split produced an empty output. Please try another PDF.');
+      if (blob.size < 4) {
+        throw new Error('Split produced an empty or invalid ZIP output. Please try another PDF.');
+      }
+
+      // A successful HTTP response and ZIP content-type can still carry an
+      // HTML/JSON error page. Check the ZIP local-file header before download.
+      const header = new Uint8Array(await blob.slice(0, 4).arrayBuffer());
+      if (header[0] !== 0x50 || header[1] !== 0x4b || header[2] !== 0x03 || header[3] !== 0x04) {
+        throw new Error('Split service returned an invalid ZIP archive. Please try again.');
+      }
+
+      // Inspect the archive itself so a ZIP header alone cannot trigger a
+      // false success when the archive is truncated or contains wrong files.
+      let archive: JSZip;
+      try {
+        archive = await JSZip.loadAsync(blob);
+      } catch {
+        throw new Error('Split output is damaged or incomplete. Please try again.');
+      }
+
+      const pdfEntries = Object.values(archive.files).filter(
+        (entry) => !entry.dir && entry.name.toLowerCase().endsWith('.pdf')
+      );
+      if (pdfEntries.length !== 2) {
+        throw new Error('Split output must contain exactly two PDF files.');
+      }
+
+      const expectedPart1Pages = Number(response.headers.get('X-Pages-Part1'));
+      const expectedPart2Pages = Number(response.headers.get('X-Pages-Part2'));
+      const expectedPageCounts = [expectedPart1Pages, expectedPart2Pages];
+
+      for (const [index, entry] of pdfEntries.entries()) {
+        const pdfBytes = await entry.async('uint8array');
+        const pdfHeader = new Uint8Array(pdfBytes.slice(0, 5));
+        if (String.fromCharCode(...pdfHeader) !== '%PDF-') {
+          throw new Error('Split output contains an invalid PDF part. Please try again.');
+        }
+
+        let parsedPdf: PDFDocument;
+        try {
+          parsedPdf = await PDFDocument.load(pdfBytes);
+        } catch {
+          throw new Error('Split output contains a damaged or unreadable PDF part.');
+        }
+
+        const expectedPages = expectedPageCounts[index];
+        if (!Number.isInteger(expectedPages) || expectedPages < 1) {
+          throw new Error('Split service did not provide valid page-count verification.');
+        }
+        if (parsedPdf.getPageCount() !== expectedPages) {
+          throw new Error('Split output page counts do not match the service validation. Please try again.');
+        }
+      }
 
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);

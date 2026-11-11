@@ -50,6 +50,17 @@ export async function POST(request: NextRequest) {
     zip.file(`${baseName}-part1.pdf`, part1Buffer);
     zip.file(`${baseName}-part2.pdf`, part2Buffer);
     const zipBytes = await zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+    if (
+      zipBytes.length < 4 ||
+      zipBytes[0] !== 0x50 ||
+      zipBytes[1] !== 0x4b ||
+      zipBytes[2] !== 0x03 ||
+      zipBytes[3] !== 0x04
+    ) {
+      console.error('[PDFilio] split-pdf generated ZIP failed integrity validation.');
+      return NextResponse.json({ error: 'Split output failed file integrity validation.' }, { status: 500 });
+    }
+
     const filename = `${baseName}-split.zip`;
 
     return new NextResponse(zipBytes, {

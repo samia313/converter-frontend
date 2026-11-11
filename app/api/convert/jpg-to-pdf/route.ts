@@ -15,6 +15,11 @@ function getExtension(name: string) {
   return index >= 0 ? name.slice(index).toLowerCase() : '';
 }
 
+function safeBaseName(name: string) {
+  const base = name.replace(/\.[^.]+$/, '').normalize('NFKC').replace(/[\\/\r\n"<>:|?*]/g, '_').replace(/\s+/g, ' ').trim().replace(/[. ]+$/g, '').slice(0, 120);
+  return base || 'jpg-images';
+}
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -43,6 +48,7 @@ export async function POST(request: NextRequest) {
       }
 
       const bytes = new Uint8Array(await entry.arrayBuffer());
+      if (bytes.length < 3 || bytes[0] !== 0xff || bytes[1] !== 0xd8 || bytes[2] !== 0xff) return NextResponse.json({ error: 'One uploaded file is not a valid JPEG image.' }, { status: 415 });
       const image = await pdfDoc.embedJpg(bytes);
       const pixelWidth = image.width;
       const pixelHeight = image.height;
@@ -70,7 +76,7 @@ export async function POST(request: NextRequest) {
 
     const pdfBytes = await pdfDoc.save();
     const first = files[0] as File;
-    const baseName = files.length === 1 ? first.name.replace(/\.[^.]+$/, '') : 'jpg-images';
+    const baseName = files.length === 1 ? safeBaseName(first.name) : 'jpg-images';
 
     return new NextResponse(Buffer.from(pdfBytes), {
       headers: {

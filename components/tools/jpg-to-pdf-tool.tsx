@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
 
@@ -11,6 +11,8 @@ export default function JpgToPdfTool() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+  useEffect(() => () => { if (downloadUrl) URL.revokeObjectURL(downloadUrl); }, [downloadUrl]);
 
   const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
   const totalSizeMb = (totalSize / (1024 * 1024)).toFixed(1);
@@ -27,8 +29,13 @@ export default function JpgToPdfTool() {
         const data = await response.json().catch(() => null);
         throw new Error(data?.error || 'JPG to PDF conversion failed.');
       }
+      const blob = await response.blob();
+      const signature = new Uint8Array(await blob.slice(0, 5).arrayBuffer());
+      if (blob.type !== 'application/pdf' || signature.length !== 5 || String.fromCharCode(...signature) !== '%PDF-') {
+        throw new Error('The converter returned an invalid PDF file. Please try again.');
+      }
       if (downloadUrl) URL.revokeObjectURL(downloadUrl);
-      setDownloadUrl(URL.createObjectURL(await response.blob()));
+      setDownloadUrl(URL.createObjectURL(blob));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'JPG to PDF conversion failed.');
     } finally {
@@ -59,7 +66,7 @@ export default function JpgToPdfTool() {
           <p className="text-lg text-gray-600">Convert JPG and JPEG images into PDF pages</p>
         </div>
         <div className="bg-white rounded-2xl shadow-lg p-8">
-          <FileUploader accept=".jpg,.jpeg" multiple onFileSelected={setSelectedFiles} maxSize={100} />
+          <FileUploader accept=".jpg,.jpeg" multiple onFileSelected={(files) => { if (downloadUrl) URL.revokeObjectURL(downloadUrl); setSelectedFiles(files); setDownloadUrl(null); setError(null); }} maxSize={100} />
           {selectedFiles.length > 0 && (
             <p className="mt-4 text-sm text-gray-600">
               {selectedFiles.length} image{selectedFiles.length === 1 ? '' : 's'} selected · {totalSizeMb}MB total · 100MB/file · 500MB total · Maximum 30 images

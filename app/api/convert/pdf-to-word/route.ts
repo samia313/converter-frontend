@@ -19,11 +19,14 @@ async function extractPdfText(pdfBuffer: Buffer): Promise<string> {
 
   try {
     const result = await parser.getText();
+    // pdf-parse v2 inserts page-separator labels (for example, "-- 1 of 4 --")
+    // into result.text. Those labels are not document content and must not make
+    // a scanned or textless PDF appear to contain selectable text.
     return result.text
-      .split(/\f/)
-      .map((page: string) => normalizeText(page))
-      .filter(Boolean)
-      .join('\n\n');
+      .split(/\f|\n/)
+      .map((line: string) => normalizeText(line))
+      .filter((line: string) => line && !/^--\s*\d+\s+of\s+\d+\s*--$/i.test(line))
+      .join('\n');
   } finally {
     await parser.destroy();
   }
@@ -57,11 +60,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'File must be a PDF' }, { status: 400 });
     }
 
+    const maxSize = 100 * 1024 * 1024;
+    // Check the multipart metadata before reading the entire upload into memory.
+    // This avoids allocating a huge Buffer for files that already exceed our limit.
+    if (file.size === 0) {
+      return NextResponse.json({ error: 'File is empty' }, { status: 400 });
+    }
+    if (file.size > maxSize) {
+      return NextResponse.json({ error: 'File size exceeds the 100MB limit.' }, { status: 413 });
+    }
+
+    // Extension and MIME type can be spoofed; validate the signature before parsing.
+    const header = Buffer.from(await file.slice(0, 5).arrayBuffer());
+    if (header.length < 5 || header.toString('ascii') !== '%PDF-') {
+      return NextResponse.json({ error: 'The uploaded file is not a valid PDF.' }, { status: 400 });
+    }
+
     const pdfBuffer = Buffer.from(await file.arrayBuffer());
+    // Recheck the actual buffer length as defense in depth.
     if (pdfBuffer.length === 0) {
       return NextResponse.json({ error: 'File is empty' }, { status: 400 });
     }
-    const maxSize = 100 * 1024 * 1024;
     if (pdfBuffer.length > maxSize) {
       return NextResponse.json({ error: 'File size exceeds the 100MB limit.' }, { status: 413 });
     }
@@ -95,7 +114,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Word document creation failed' }, { status: 500 });
     }
 
-    const fileName = file.name.replace(/\.pdf$/i, '') + '.docx';
+    // DOCX is a ZIP package; validate its container signature before offering a download.
+    if (
+      wordBuffer.length < 4 ||
+      wordBuffer[0] !== 0x50 ||
+      wordBuffer[1] !== 0x4b ||
+      wordBuffer[2] !== 0x03 ||
+      wordBuffer[3] !== 0x04
+    ) {
+      console.error('[pdf-to-word] Generated DOCX failed container validation.');
+      return NextResponse.json({ error: 'The Word output failed file integrity validation. Please try again.' }, { status: 500 });
+    }
+    if (wordBuffer.length > 100 * 1024 * 1024) {
+      return NextResponse.json({ error: 'The generated Word document exceeds the 100MB download limit.' }, { status: 413 });
+    }
+
+    const safeBaseName = file.name
+      .replace(/\.pdf$/i, '')
+      .replace(/[\\\/\r\n"\x00-\x1f]/g, '_')
+      .trim()
+      .slice(0, 150) || 'converted-document';
+    const fileName = `${safeBaseName}.docx`;
 
     return new NextResponse(wordBuffer as BodyInit, {
       headers: {
@@ -104,12 +143,13 @@ export async function POST(request: NextRequest) {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Content-Length': String(wordBuffer.length),
         'X-Converted-Pages': String(pageCount),
+        'X-Conversion-Limitations': 'Text-only conversion; original layout, images, and tables may not be preserved.',
       },
     });
   } catch (error) {
-    console.error('[pdf-to-word] Conversion error:', error);
+    console.error('[pdf-to-word] Conversion error:', error instanceof Error ? error.message : 'Unknown error');
     return NextResponse.json(
-      { error: 'Conversion failed', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Conversion failed. Please check that the PDF is valid and try again.' },
       { status: 500 },
     );
   }

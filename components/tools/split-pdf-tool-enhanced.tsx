@@ -1,287 +1,174 @@
 'use client';
 
-import { useState } from 'react';
-import { Download, Upload, Loader2, CheckCircle2, AlertCircle, Scissors } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Download, Loader2, AlertCircle, Scissors } from 'lucide-react';
 import FileUploader from '@/components/file-uploader';
-
-interface SplitResult {
-  message: string;
-  fileCount: number;
-  size: number;
-}
 
 export default function SplitPDFToolEnhanced() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [splitPage, setSplitPage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-  const [result, setResult] = useState<SplitResult | null>(null);
-  const [progress, setProgress] = useState(0);
-  const [splitType, setSplitType] = useState<'pages' | 'range'>('range');
-  const [pageRange, setPageRange] = useState('');
-  const [allPages, setAllPages] = useState(false);
 
-  const handleFileSelect = (files: File[]) => {
-    const file = files[0];
-    if (file && (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'))) {
-      setSelectedFile(file);
-      setError(null);
-    } else {
-      setError('Please select a valid PDF file');
-    }
-  };
+  useEffect(() => {
+    return () => {
+      if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    };
+  }, [downloadUrl]);
 
   const handleSplit = async () => {
     if (!selectedFile) {
-      setError('Please select a PDF file');
+      setError('Please select a PDF file.');
       return;
     }
-
-    if (splitType === 'range' && !pageRange.trim() && !allPages) {
-      setError('Please enter page range (e.g., 1-3, 5, 7-9)');
+    if (splitPage.trim() && (!/^\d+$/.test(splitPage.trim()) || Number(splitPage) < 1)) {
+      setError('Enter a whole page number greater than zero, or leave it blank to split in the middle.');
       return;
     }
 
     setIsProcessing(true);
     setError(null);
-    setResult(null);
-    setProgress(0);
+    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    setDownloadUrl(null);
 
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 55_000);
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
-      if (!allPages) {
-        formData.append('pages', pageRange);
-      }
-
-      setProgress(25);
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 60000);
+      if (splitPage.trim()) formData.append('splitPage', splitPage.trim());
 
       const response = await fetch('/api/convert/split-pdf', {
         method: 'POST',
         body: formData,
         signal: controller.signal,
       });
-
-      clearTimeout(timeoutId);
-
       if (!response.ok) {
-        throw new Error('Failed to split PDF');
+        let message = 'Split failed. Please try another PDF.';
+        try {
+          const payload = await response.json();
+          if (typeof payload?.error === 'string') message = payload.error;
+        } catch {
+          // Retain the safe fallback if the server did not return JSON.
+        }
+        throw new Error(message);
       }
 
-      setProgress(75);
+      const contentType = (response.headers.get('content-type') || '').toLowerCase();
+      if (!contentType.includes('application/zip')) {
+        throw new Error('Split service returned an unexpected file format. No download was created.');
+      }
       const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-
-      setDownloadUrl(url);
-      setResult({
-        message: 'PDF split successfully!',
-        fileCount: 1,
-        size: blob.size,
-      });
-      setProgress(100);
+      if (blob.size < 4) throw new Error('Split produced an empty or invalid ZIP. Please try another PDF.');
+      const header = new Uint8Array(await blob.slice(0, 4).arrayBuffer());
+      if (header[0] !== 0x50 || header[1] !== 0x4b || header[2] !== 0x03 || header[3] !== 0x04) {
+        throw new Error('Split output failed ZIP integrity validation. No download was created.');
+      }
+      setDownloadUrl(URL.createObjectURL(blob));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to split PDF');
-      setProgress(0);
+      setError(err instanceof DOMException && err.name === 'AbortError'
+        ? 'Splitting took too long. Try a smaller or simpler PDF.'
+        : err instanceof Error ? err.message : 'Split failed.');
     } finally {
+      window.clearTimeout(timeoutId);
       setIsProcessing(false);
     }
   };
 
   const handleDownload = () => {
-    if (!downloadUrl) return;
+    if (!downloadUrl || !selectedFile) return;
     const link = document.createElement('a');
     link.href = downloadUrl;
-    link.download = `split-${Date.now()}.pdf`;
+    link.download = selectedFile.name.replace(/\.pdf$/i, '') + '-split.zip';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const handleReset = () => {
+  const reset = () => {
+    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
     setSelectedFile(null);
-    setError(null);
+    setSplitPage('');
     setDownloadUrl(null);
-    setResult(null);
-    setProgress(0);
-    setPageRange('');
-    setAllPages(false);
+    setError(null);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 py-12">
-      <div className="container mx-auto max-w-4xl px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <Scissors className="w-6 h-6 text-blue-600" />
-            </div>
-            <h1 className="text-4xl font-bold text-gray-900">Split PDF</h1>
+    <section className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 md:py-20">
+      <div className="container mx-auto max-w-3xl px-4">
+        <div className="mb-10 text-center">
+          <div className="mb-3 flex items-center justify-center gap-3">
+            <Scissors className="h-7 w-7 text-blue-600" />
+            <h1 className="text-3xl font-bold text-gray-900 md:text-4xl">Split PDF</h1>
           </div>
-          <p className="text-lg text-gray-600">Extract specific pages or split your PDF into separate files</p>
+          <p className="text-gray-600">Divide a supported multi-page PDF into two files and download both in a ZIP.</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Controls Section */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-4 space-y-6">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Upload PDF</h2>
-                <FileUploader
-                  accept=".pdf"
-                  onFileSelected={handleFileSelect}
-                  maxSize={100}
-                />
+        <div className="space-y-6 rounded-2xl bg-white p-6 shadow-lg md:p-8">
+          <FileUploader
+            accept=".pdf"
+            onFileSelected={(files) => {
+              if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+              setDownloadUrl(null);
+              setError(null);
+              setSelectedFile(files[0] || null);
+              setSplitPage('');
+            }}
+            maxSize={100}
+          />
 
-                {selectedFile && (
-                  <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <p className="text-sm font-semibold text-gray-900">{selectedFile.name}</p>
-                    <p className="text-xs text-gray-600 mt-1">
-                      Size: {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {selectedFile && (
-                <>
-                  <div className="border-t pt-4">
-                    <h3 className="font-bold text-gray-900 mb-3">Split Type</h3>
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-3 p-3 rounded-lg border-2 border-blue-200 bg-blue-50 cursor-pointer">
-                        <input
-                          type="radio"
-                          value="range"
-                          checked={splitType === 'range'}
-                          onChange={(e) => setSplitType(e.target.value as 'range')}
-                          className="w-4 h-4"
-                        />
-                        <span className="font-medium text-gray-900">Extract Pages</span>
-                      </label>
-                    </div>
-                  </div>
-
-                  {splitType === 'range' && (
-                    <div className="border-t pt-4">
-                      <label className="block text-sm font-bold text-gray-900 mb-2">
-                        Page Range
-                      </label>
-                      <input
-                        type="text"
-                        value={pageRange}
-                        onChange={(e) => setPageRange(e.target.value)}
-                        placeholder="e.g., 1-3, 5, 7-9"
-                        className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                      />
-                      <p className="text-xs text-gray-600 mt-2">
-                        Enter page numbers separated by commas or ranges with hyphens
-                      </p>
-                    </div>
-                  )}
-
-                  <div>
-                    <button
-                      onClick={handleSplit}
-                      disabled={!selectedFile || isProcessing}
-                      className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
-                    >
-                      {isProcessing && <Loader2 className="w-5 h-5 animate-spin" />}
-                      {isProcessing ? `Processing... ${progress}%` : 'Split PDF'}
-                    </button>
-                  </div>
-
-                  {selectedFile && (
-                    <button
-                      onClick={handleReset}
-                      className="w-full text-sm text-gray-600 hover:text-gray-900 font-semibold py-2"
-                    >
-                      Start Over
-                    </button>
-                  )}
-                </>
-              )}
-
-              {error && (
-                <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
-                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
-                  <p className="text-sm text-red-700">{error}</p>
-                </div>
-              )}
-
-              {result && (
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-semibold text-green-900">{result.message}</p>
-                    <p className="text-xs text-green-700">
-                      Output: {(result.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
-                  </div>
-                </div>
-              )}
+          {selectedFile && (
+            <div className="rounded-lg border border-gray-200 p-4">
+              <p className="break-all text-sm font-semibold text-gray-900">{selectedFile.name}</p>
+              <label htmlFor="enhanced-split-page" className="mt-4 block text-sm font-semibold text-gray-900">
+                Split after page (optional)
+              </label>
+              <input
+                id="enhanced-split-page"
+                type="number"
+                min="1"
+                step="1"
+                value={splitPage}
+                onChange={(event) => setSplitPage(event.target.value)}
+                placeholder="Leave blank to split in the middle"
+                className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900"
+                inputMode="numeric"
+              />
+              <p className="mt-2 text-xs text-gray-500">Example: 5 creates pages 1–5 in the first PDF and the remaining pages in the second.</p>
             </div>
-          </div>
+          )}
 
-          {/* Preview & Download Section */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Preview & Download</h2>
-
-              {!selectedFile ? (
-                <div className="p-12 text-center bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
-                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-600 font-medium">No PDF selected</p>
-                  <p className="text-sm text-gray-500">Upload a PDF file to get started</p>
-                </div>
-              ) : result && downloadUrl ? (
-                <div className="space-y-4">
-                  <div className="p-6 bg-green-50 rounded-xl border-2 border-green-200">
-                    <div className="flex items-center gap-3 mb-4">
-                      <CheckCircle2 className="w-6 h-6 text-green-600" />
-                      <span className="font-bold text-green-900">Processing Complete!</span>
-                    </div>
-                    <p className="text-sm text-green-800">Your PDF has been successfully split and is ready to download.</p>
-                  </div>
-
-                  <button
-                    onClick={handleDownload}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition flex items-center justify-center gap-2 text-lg"
-                  >
-                    <Download className="w-6 h-6" />
-                    Download Split PDF
-                  </button>
-
-                  <button
-                    onClick={handleReset}
-                    className="w-full text-sm text-gray-600 hover:text-gray-900 font-semibold py-2 border-2 border-gray-300 rounded-lg transition"
-                  >
-                    Split Another PDF
-                  </button>
-                </div>
-              ) : (
-                <div className="p-12 text-center bg-blue-50 rounded-xl border-2 border-blue-200">
-                  <Scissors className="w-12 h-12 text-blue-400 mx-auto mb-3" />
-                  <p className="text-gray-600 font-medium">Ready to split</p>
-                  <p className="text-sm text-gray-500">Fill in the page range and click "Split PDF" to extract pages</p>
-                </div>
-              )}
-
-              {/* Info Section */}
-              <div className="mt-8 pt-8 border-t">
-                <h3 className="font-bold text-gray-900 mb-3">Examples:</h3>
-                <ul className="space-y-2 text-sm text-gray-600">
-                  <li><span className="font-mono bg-gray-100 px-2 py-1 rounded">1-3</span> - Extract pages 1 to 3</li>
-                  <li><span className="font-mono bg-gray-100 px-2 py-1 rounded">5</span> - Extract only page 5</li>
-                  <li><span className="font-mono bg-gray-100 px-2 py-1 rounded">1-3,5,7-9</span> - Mix ranges and individual pages</li>
-                </ul>
-              </div>
+          {error && (
+            <div role="alert" className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-4">
+              <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-600" />
+              <p className="text-sm text-red-700">{error}</p>
             </div>
-          </div>
+          )}
+
+          {!downloadUrl ? (
+            <button
+              type="button"
+              onClick={handleSplit}
+              disabled={!selectedFile || isProcessing}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:bg-gray-400"
+            >
+              {isProcessing && <Loader2 className="h-5 w-5 animate-spin" />}
+              {isProcessing ? 'Splitting PDF…' : 'Split PDF'}
+            </button>
+          ) : (
+            <div className="space-y-4 text-center">
+              <p className="font-semibold text-green-700">Split completed. Both PDF parts are in the ZIP file.</p>
+              <button type="button" onClick={handleDownload} className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700">
+                <Download className="h-5 w-5" /> Download ZIP
+              </button>
+              <button type="button" onClick={reset} className="block w-full rounded-lg bg-gray-100 px-6 py-3 font-semibold text-gray-800 hover:bg-gray-200">
+                Split Another PDF
+              </button>
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

@@ -8,6 +8,9 @@ const nextConfig = {
     remotePatterns: [{ protocol: 'https', hostname: '**' }],
   },
   compress: true,
+  // Keep PDF.js and pdf-parse external on the Node.js server so PDF.js can resolve
+  // its worker module from node_modules instead of a missing Next.js output chunk.
+  serverExternalPackages: ['pdf-parse', 'pdfjs-dist'],
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
   headers: async () => [{

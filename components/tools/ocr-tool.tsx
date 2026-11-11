@@ -5,7 +5,6 @@ import FileUploader from '@/components/file-uploader';
 import { Copy, Download } from 'lucide-react';
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
-const MAX_PDF_PAGES = 10;
 const OCR_LANG = 'eng';
 const TESSERACT_CDN = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
 
@@ -57,14 +56,12 @@ export default function OcrTool() {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
-  const [ocrPdfUrl, setOcrPdfUrl] = useState<string | null>(null);
 
   const handleFileSelected = (files: File[]) => {
     const file = files[0] ?? null;
     setSelectedFile(file);
     setText('');
     setError('');
-    setOcrPdfUrl(null);
     setProgress(0);
     setStatus(file ? 'Ready to OCR' : '');
   };
@@ -91,8 +88,9 @@ export default function OcrTool() {
       throw new Error('OCR completed without extracted text.');
     }
 
+
+
     setProgress(100);
-    setOcrPdfUrl(typeof data?.downloadUrl === 'string' ? data.downloadUrl : null);
     return data.text.trim();
   };
 
@@ -157,7 +155,7 @@ export default function OcrTool() {
     link.href = url;
     link.download = `${selectedFile?.name.replace(/\\.[^.]+$/, '') || 'ocr-result'}.txt`;
     link.click();
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   return (
@@ -179,7 +177,7 @@ export default function OcrTool() {
         </div>
       )}
       {error && <p className="rounded-md border border-destructive/30 p-3 text-sm text-destructive">{error}</p>}
-      {text && <div className="space-y-3"><div className="flex flex-wrap gap-2"><button type="button" onClick={copyText} className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><Copy className="h-4 w-4" /> Copy Text</button><button type="button" onClick={downloadText} className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><Download className="h-4 w-4" /> Save as TXT</button>{ocrPdfUrl && <a href={ocrPdfUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><Download className="h-4 w-4" /> Download OCR PDF</a>}</div><textarea readOnly value={text} className="min-h-72 w-full rounded-md border bg-background p-4 text-sm" aria-label="OCR extracted text" /></div>}
+      {text && <div className="space-y-3"><div className="flex flex-wrap gap-2"><button type="button" onClick={copyText} className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><Copy className="h-4 w-4" /> Copy Text</button><button type="button" onClick={downloadText} className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm"><Download className="h-4 w-4" /> Save as TXT</button></div><textarea readOnly value={text} className="min-h-72 w-full rounded-md border bg-background p-4 text-sm" aria-label="OCR extracted text" /></div>}
     </div>
   );
 }
