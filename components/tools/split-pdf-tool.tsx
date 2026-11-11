@@ -32,7 +32,7 @@ export default function SplitPDFTool() {
     setError(null);
 
     const controller = new AbortController();
-    const timeoutId = window.setTimeout(() => controller.abort(), 55_000);
+    const timeoutId = window.setTimeout(() => controller.abort(), 115_000);
 
     try {
       const formData = new FormData();

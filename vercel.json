@@ -7,7 +7,7 @@
   },
   "functions": {
     "app/api/convert/**": {
-      "maxDuration": 30
+      "maxDuration": 120
     }
   }
 }
