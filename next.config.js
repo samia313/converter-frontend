@@ -22,6 +22,10 @@ const nextConfig = {
     ],
   }],
   redirects: async () => [
+    // Expanded GSC crawl audit: redirect legacy articles that currently return 404 to the closest live PDF tools.
+    { source: '/blog/pdf-annotation-for-accessibility', destination: '/edit-pdf', permanent: true },
+    { source: '/blog/pdf-header-footer-for-printing', destination: '/edit-pdf', permanent: true },
+
     // Confirmed legacy URLs from the GSC 404 audit; each target is a close, live canonical replacement.
     { source: '/blog/how-to-compress-pdf-without-losing-quality', destination: '/blog/how-to-compress-a-pdf-without-losing-quality', permanent: true },
     { source: '/blog/compress-pdf-for-email-best-practices', destination: '/blog/how-to-make-a-pdf-smaller-for-email', permanent: true },
