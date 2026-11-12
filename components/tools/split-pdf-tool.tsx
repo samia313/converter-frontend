@@ -1,5 +1,8 @@
 'use client';
 
+import { PDFDocument } from 'pdf-lib';
+import JSZip from 'jszip';
+
 import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import { Download } from 'lucide-react';
@@ -18,7 +21,6 @@ export default function SplitPDFTool() {
   }, [downloadUrl]);
 
   const reset = () => {
-    if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
     setSelectedFile(null);
     setSplitPage('');
     setDownloadUrl(null);
@@ -31,49 +33,85 @@ export default function SplitPDFTool() {
     setIsProcessing(true);
     setError(null);
 
-    const controller = new AbortController();
-    const timeoutId = window.setTimeout(() => controller.abort(), 55_000);
-
     try {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-      if (splitPage.trim()) formData.append('splitPage', splitPage.trim());
+      if (selectedFile.size > 50 * 1024 * 1024) {
+        throw new Error('PDF exceeds the 50MB browser processing limit.');
+      }
 
-      const response = await fetch('/api/convert/split-pdf', {
-        method: 'POST',
-        body: formData,
-        signal: controller.signal,
+      const sourcePdf = await PDFDocument.load(
+        await selectedFile.arrayBuffer(),
+        { ignoreEncryption: true }
+      );
+
+      const pageCount = sourcePdf.getPageCount();
+
+      if (pageCount < 2) {
+        throw new Error('Split PDF requires at least 2 pages.');
+      }
+
+      const splitAt = splitPage.trim()
+        ? Number(splitPage)
+        : Math.ceil(pageCount / 2);
+
+      if (
+        !Number.isInteger(splitAt) ||
+        splitAt < 1 ||
+        splitAt >= pageCount
+      ) {
+        throw new Error(`Enter a split page from 1 to ${pageCount - 1}.`);
+      }
+
+      const firstPdf = await PDFDocument.create();
+      const secondPdf = await PDFDocument.create();
+
+      const firstPages = await firstPdf.copyPages(
+        sourcePdf,
+        Array.from({ length: splitAt }, (_, index) => index)
+      );
+
+      const secondPages = await secondPdf.copyPages(
+        sourcePdf,
+        Array.from(
+          { length: pageCount - splitAt },
+          (_, index) => splitAt + index
+        )
+      );
+
+      firstPages.forEach((page) => firstPdf.addPage(page));
+      secondPages.forEach((page) => secondPdf.addPage(page));
+
+      const firstBytes = await firstPdf.save();
+      const secondBytes = await secondPdf.save();
+
+      const zip = new JSZip();
+      const baseName = selectedFile.name
+        .replace(/\.pdf$/i, '')
+        .replace(/[\\/\r\n"]/g, '_')
+        .slice(0, 120);
+
+      zip.file(`${baseName}-part1.pdf`, firstBytes);
+      zip.file(`${baseName}-part2.pdf`, secondBytes);
+
+      const blob = await zip.generateAsync({
+        type: 'blob',
+        compression: 'DEFLATE',
+        compressionOptions: { level: 6 },
       });
 
-      if (!response.ok) {
-        let message = 'Split failed';
-        try {
-          const data = await response.json();
-          if (typeof data?.error === 'string') message = data.error;
-        } catch {
-          // Keep the generic error when the response is not JSON.
-        }
-        throw new Error(message);
+      if (!blob.size) {
+        throw new Error('Split produced an empty ZIP file.');
       }
-
-      const contentType = response.headers.get('content-type') || '';
-      if (!contentType.includes('application/zip')) {
-        throw new Error('Split service returned an invalid file format.');
-      }
-
-      const blob = await response.blob();
-      if (blob.size === 0) throw new Error('Split produced an empty output. Please try another PDF.');
 
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
     } catch (err) {
-      if (err instanceof DOMException && err.name === 'AbortError') {
-        setError('Splitting took too long. Try a smaller or simpler PDF.');
-      } else {
-        setError(err instanceof Error ? err.message : 'Split failed');
-      }
+      const message = err instanceof Error ? err.message : 'Split failed';
+      setError(
+        /encrypt|password/i.test(message)
+          ? 'This PDF may be password-protected. Please unlock it first.'
+          : message
+      );
     } finally {
-      window.clearTimeout(timeoutId);
       setIsProcessing(false);
     }
   };
@@ -105,13 +143,12 @@ export default function SplitPDFTool() {
           <FileUploader
             accept=".pdf"
             onFileSelected={(files) => {
-              if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
               setDownloadUrl(null);
               setError(null);
               setSplitPage('');
               setSelectedFile(files[0] || null);
             }}
-            maxSize={100}
+            maxSize={50}
           />
 
           {selectedFile && (
@@ -125,7 +162,11 @@ export default function SplitPDFTool() {
                 min="1"
                 step="1"
                 value={splitPage}
-                onChange={(event) => setSplitPage(event.target.value)}
+                onChange={(event) => {
+                  setSplitPage(event.target.value);
+                  setDownloadUrl(null);
+                  setError(null);
+                }}
                 placeholder="Leave blank to split in the middle"
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
                 inputMode="numeric"

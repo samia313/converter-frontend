@@ -14,3 +14,9 @@ node_modules
 .next/
 .DS_Store
 .vercel
+# Generated Next.js and TypeScript files
+next-env.d.ts
+*.tsbuildinfo
+# Accidental terminal pager output files
+c --noEmit
+s -ltnp | grep ':3003'q

@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { PDFDocument } from 'pdf-lib';
+
+import { useEffect, useState, useRef } from 'react';
 import { Download, X, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface FileItem {
@@ -18,7 +20,14 @@ export default function MergePDFTool() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [mergedFileName, setMergedFileName] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    return () => {
+      if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
+    };
+  }, [downloadUrl]);
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
@@ -28,21 +37,28 @@ export default function MergePDFTool() {
     return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
+  const clearMergedResult = () => {
+    setDownloadUrl(null);
+    setMergedFileName(null);
+    setSuccess(null);
+  };
+
   const addFiles = (newFiles: FileList | null) => {
     if (!newFiles) return;
 
     const newFileItems: FileItem[] = [];
+    const validationErrors: string[] = [];
 
     for (let i = 0; i < newFiles.length; i++) {
       const file = newFiles[i];
 
       if (file.type !== 'application/pdf') {
-        setError(`"${file.name}" is not a PDF`);
+        validationErrors.push(`"${file.name}" is not a PDF.`);
         continue;
       }
 
-      if (file.size > 100 * 1024 * 1024) {
-        setError(`"${file.name}" exceeds 100MB limit`);
+      if (file.size > 50 * 1024 * 1024) {
+        validationErrors.push(`"${file.name}" exceeds the 50MB limit.`);
         continue;
       }
 
@@ -54,11 +70,13 @@ export default function MergePDFTool() {
       });
     }
 
+    if (newFileItems.length > 0) clearMergedResult();
     setFiles(prev => [...prev, ...newFileItems]);
-    setError(null);
+    setError(validationErrors.length > 0 ? validationErrors.join(' ') : null);
   };
 
   const removeFile = (id: string) => {
+    clearMergedResult();
     setFiles(prev => prev.filter(f => f.id !== id));
   };
 
@@ -78,7 +96,8 @@ export default function MergePDFTool() {
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    addFiles(e.target.files);
+    addFiles(e.currentTarget.files);
+    e.currentTarget.value = '';
   };
 
   const handleMerge = async () => {
@@ -88,67 +107,73 @@ export default function MergePDFTool() {
     }
 
     const totalSize = files.reduce((sum, f) => sum + f.size, 0);
-    if (totalSize > 500 * 1024 * 1024) {
-      setError('Total size exceeds 500MB');
+    if (totalSize > 100 * 1024 * 1024) {
+      setError('Total size exceeds the 100MB browser processing limit.');
       return;
     }
 
+    clearMergedResult();
     setIsProcessing(true);
     setError(null);
     setSuccess(null);
-    setProgress(10);
+    setProgress(5);
 
     try {
-      const formData = new FormData();
-      files.forEach((fileItem) => {
-        formData.append('files', fileItem.file);
-      });
+      const mergedPdf = await PDFDocument.create();
 
-      setProgress(30);
+      for (let index = 0; index < files.length; index++) {
+        const item = files[index];
 
-      const response = await fetch('/api/convert/merge-pdf', {
-        method: 'POST',
-        body: formData,
-      });
+        const sourcePdf = await PDFDocument.load(
+          await item.file.arrayBuffer(),
+          { ignoreEncryption: true }
+        );
 
-      setProgress(70);
+        const pages = await mergedPdf.copyPages(
+          sourcePdf,
+          sourcePdf.getPageIndices()
+        );
 
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Status ${response.status}: ${text}`);
+        pages.forEach((page) => mergedPdf.addPage(page));
+        setProgress(10 + Math.round(((index + 1) / files.length) * 75));
       }
 
-      const blob = await response.blob();
+      const pdfBytes = await mergedPdf.save();
+      const outputBuffer = new Uint8Array(pdfBytes).buffer as ArrayBuffer;
+      const blob = new Blob([outputBuffer], { type: 'application/pdf' });
 
-      if (blob.size === 0) {
-        throw new Error('Empty result');
+      if (!blob.size) {
+        throw new Error('Merge produced an empty PDF.');
       }
 
       const url = window.URL.createObjectURL(blob);
+      const fileName = `merged-${Date.now()}.pdf`;
       setDownloadUrl(url);
-
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `merged-${Date.now()}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      setMergedFileName(fileName);
 
       setProgress(100);
-      setSuccess(`Merged ${files.length} files!`);
-
-      setTimeout(() => {
-        setFiles([]);
-        setProgress(0);
-        setSuccess(null);
-      }, 2000);
+      setSuccess(`Successfully merged ${files.length} PDF files!`);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Unknown error';
-      setError(msg);
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      setError(
+        /encrypt|password/i.test(message)
+          ? 'A password-protected PDF could not be processed. Please unlock it first.'
+          : `Could not merge these PDFs: ${message}`
+      );
       setProgress(0);
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleDownload = () => {
+    if (!downloadUrl || !mergedFileName) return;
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = mergedFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const totalSize = files.reduce((sum, f) => sum + f.size, 0);
@@ -173,7 +198,7 @@ export default function MergePDFTool() {
               }`}
             >
               <p className="text-gray-600 text-lg font-medium">Drag PDFs here or click</p>
-              <p className="text-gray-500 text-sm mt-2">Max 100MB per file · 500MB total</p>
+              <p className="text-gray-500 text-sm mt-2">Max 50MB per file · 100MB total</p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -228,7 +253,7 @@ export default function MergePDFTool() {
                   ))}
                   <div className="text-sm text-gray-600 pt-2 border-t border-gray-200 mt-4 flex items-center justify-between gap-4">
                     <span>Total: <span className="font-semibold">{formatFileSize(totalSize)}</span></span>
-                    <span>Limit: 500MB</span>
+                    <span>Limit: 100MB</span>
                   </div>
                 </div>
               </div>
@@ -248,7 +273,7 @@ export default function MergePDFTool() {
 
             {files.length > 0 && (
               <div className="mt-8 flex gap-4">
-                <button
+                {!downloadUrl && <button
                   type="button"
                   onClick={handleMerge}
                   disabled={isProcessing || files.length < 2}
@@ -268,10 +293,20 @@ export default function MergePDFTool() {
                       Process Files
                     </>
                   )}
-                </button>
+                </button>}
+                {downloadUrl && (
+                  <button
+                    type="button"
+                    onClick={handleDownload}
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-lg transition flex items-center justify-center gap-2"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download PDF
+                  </button>
+                )}
                 <button
                   type="button"
-                  onClick={() => setFiles([])}
+                  onClick={() => { clearMergedResult(); setFiles([]); }}
                   disabled={isProcessing}
                   className="px-8 bg-gray-300 hover:bg-gray-400 disabled:bg-gray-200 text-gray-900 font-semibold py-4 rounded-lg transition"
                 >
