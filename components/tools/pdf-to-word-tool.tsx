@@ -21,6 +21,9 @@ export default function PDFToWordTool() {
   const handleConvert = async () => {
     if (!selectedFile || isProcessing) return;
 
+    const clickStartedAt = performance.now();
+    let submitDurationMs: number | null = null;
+    let pollCount = 0;
     setIsProcessing(true);
     setError(null);
     setDownloadUrl(null);
@@ -31,12 +34,18 @@ export default function PDFToWordTool() {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
+      const submitStartedAt = performance.now();
       const uploadResponse = await fetch('/api/convert/pdf-to-word', {
         method: 'POST',
         body: formData,
       });
 
       const uploadData = await uploadResponse.json().catch(() => null);
+      submitDurationMs = performance.now() - submitStartedAt;
+      console.info('[PDFilio timing] submit response', {
+        durationMs: Math.round(submitDurationMs), httpStatus: uploadResponse.status,
+        fileSizeBytes: selectedFile.size,
+      });
 
       if (!uploadResponse.ok || !uploadData?.success || !uploadData?.accessToken) {
         throw new Error(uploadData?.error || 'Could not submit conversion job');
@@ -44,6 +53,7 @@ export default function PDFToWordTool() {
 
       const token = uploadData.accessToken;
       const startedAt = Date.now();
+      const pollingStartedAt = performance.now();
       const maxWait = 5 * 60 * 1000;
 
       while (Date.now() - startedAt < maxWait) {
@@ -51,6 +61,7 @@ export default function PDFToWordTool() {
 
         await new Promise(resolve => setTimeout(resolve, 1500));
 
+        pollCount += 1;
         const statusResponse = await fetch(
           '/api/convert/pdf-to-word/status',
           {
@@ -70,8 +81,10 @@ export default function PDFToWordTool() {
         }
 
         if (statusData.state === 'completed') {
+          const pollingDurationMs = performance.now() - pollingStartedAt;
           setProgressText('Preparing your Word document...');
 
+          const downloadStartedAt = performance.now();
           const downloadResponse = await fetch(
             '/api/convert/pdf-to-word/download',
             {
@@ -85,13 +98,23 @@ export default function PDFToWordTool() {
             throw new Error(downloadData?.error || 'Could not download converted file');
           }
 
+          const downloadResponseDurationMs = performance.now() - downloadStartedAt;
+          const blobStartedAt = performance.now();
           const blob = await downloadResponse.blob();
+          const blobDurationMs = performance.now() - blobStartedAt;
 
           if (!blob.size) {
             throw new Error('Converted Word document is empty');
           }
 
           const url = URL.createObjectURL(blob);
+          console.info('[PDFilio timing] conversion complete', {
+            totalClickToButtonMs: Math.round(performance.now() - clickStartedAt),
+            submitDurationMs: Math.round(submitDurationMs ?? 0),
+            pollingDurationMs: Math.round(pollingDurationMs), pollCount,
+            downloadResponseDurationMs: Math.round(downloadResponseDurationMs),
+            blobDurationMs: Math.round(blobDurationMs), outputSizeBytes: blob.size,
+          });
           setDownloadUrl(url);
           setIsComplete(true);
           setProgressText('Conversion completed successfully.');
@@ -102,6 +125,11 @@ export default function PDFToWordTool() {
 
       throw new Error('Conversion is taking too long. Please try again.');
     } catch (err) {
+      console.error('[PDFilio timing] conversion failed', {
+        totalElapsedMs: Math.round(performance.now() - clickStartedAt),
+        submitDurationMs: submitDurationMs === null ? null : Math.round(submitDurationMs),
+        pollCount,
+      });
       const message = err instanceof Error ? err.message : 'Conversion failed';
       setError(message);
       setIsProcessing(false);
