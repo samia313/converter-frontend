@@ -29,7 +29,7 @@ export default function AIOCRPage() {
       toolName="AI OCR"
       toolSlug="ai-ocr"
       description="Convert supported scanned documents and images into editable, searchable text with AI-powered OCR."
-      heroImage="/tool-images/ai-ocr-hero.png"
+      heroImage="/tool-images/ai-ocr-hero.webp"
       mainContent={`AI OCR helps turn supported image-based documents into text that you can search, edit, copy, and reuse. It is useful when a PDF or image contains scanned pages instead of selectable text.
 
 Common OCR use cases include scanned PDFs, paper documents, receipts, invoices, screenshots, photos of documents, and supported handwritten material. OCR accuracy depends on image quality, language, handwriting, layout, fonts, and other document characteristics, so important extracted information should always be checked against the original.

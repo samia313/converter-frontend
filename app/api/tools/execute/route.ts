@@ -1,3 +1,4 @@
+import { enforceRateLimit } from '@/lib/rate-limit';
 /**
  * Unified Tool Execution API
  * Handles PDF, AI, and document conversion operations.
@@ -11,6 +12,9 @@ import { executeToolOperation, ToolRequest, ToolResponse } from '@/lib/unified-t
 export const maxDuration = 300;
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = await enforceRateLimit(request, { namespace: 'tools-execute', limit: 10, window: '1 m' });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const formData = await request.formData();
     const operation = formData.get('operation') as string;

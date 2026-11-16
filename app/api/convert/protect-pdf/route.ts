@@ -1,3 +1,4 @@
+import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextRequest, NextResponse } from 'next/server';
 import { encryptPDF } from '@/lib/pdf-encrypt';
 
@@ -9,6 +10,9 @@ const MAX_BYTES = 100 * 1024 * 1024;
 function errorResponse(message:string,status=400){return NextResponse.json({error:message},{status});}
 
 export async function POST(request:NextRequest){
+  const rateLimitResponse = await enforceRateLimit(request, { namespace: 'conversion', limit: 10, window: '1 m' });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try{
     const form=await request.formData();
     const file=form.get('file');

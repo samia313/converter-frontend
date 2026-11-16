@@ -1,3 +1,4 @@
+import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextRequest, NextResponse } from 'next/server';
 import { submitConversion } from '@/lib/pdfilio-conversion';
 
@@ -8,6 +9,9 @@ export const dynamic = 'force-dynamic';
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = await enforceRateLimit(request, { namespace: 'conversion', limit: 10, window: '1 m' });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const formData = await request.formData();
     const file = formData.get('file');

@@ -24,7 +24,7 @@ export default function ChatWithPdfOnlinePage() {
       toolName="Chat with PDF Online"
       toolSlug="pdf-chat"
       description="Ask questions about supported PDF documents with AI assistance and explore document content through an interactive chat workflow."
-      heroImage="/tool-images/ai-chat-pdf-hero.png"
+      heroImage="/tool-images/ai-chat-pdf-hero.webp"
       mainContent={`Chat with PDF lets you interact with supported PDF documents through an AI-assisted question-and-answer workflow. Ask focused questions about a document and use the responses to guide your review.
 
 It can be useful for reports, research papers, study material, manuals, business documents, policies, and other supported PDFs. AI responses can miss context or contain errors, so important facts, figures, citations, instructions, and conclusions should be checked against the original document.

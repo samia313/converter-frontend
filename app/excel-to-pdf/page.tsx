@@ -32,7 +32,7 @@ export default function ExcelToPDFPage() {
         toolName="Excel to PDF"
         toolSlug="excel-to-pdf"
         description="Convert supported Excel spreadsheets into PDF files for reports, printing, sharing, submissions, and archiving."
-        heroImage="/tool-images/excel-to-pdf-hero.png"
+        heroImage="/tool-images/excel-to-pdf-hero.webp"
         mainContent={`Excel to PDF converts supported Excel spreadsheets into PDF documents. PDF is useful when you want to share a report, prepare a spreadsheet for printing, submit a document through an upload portal, or keep a fixed-format copy of a workbook.
 
 The final PDF can depend on the workbook structure, print settings, page breaks, formulas, fonts, charts, images, hidden content, and the conversion engine. For important reports, review page orientation, pagination, tables, totals, charts, and other critical content before distributing the PDF.

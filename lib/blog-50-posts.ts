@@ -22,7 +22,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-20',
     readTime: 5,
-    image: '/blog/merge-pdf.png',
+    image: '/blog/merge-pdf.webp',
     featured: true,
     content: 'Merging PDF files is essential for organizing documents efficiently. Our guide covers best practices for combining reports, proposals, and documentation into single files...'
   },
@@ -35,7 +35,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-19',
     readTime: 4,
-    image: '/blog/compress-pdf.png',
+    image: '/blog/compress-pdf.webp',
     featured: true,
     content: 'PDF compression is crucial for sharing large documents. Learn advanced techniques to reduce file size while maintaining professional quality...'
   },
@@ -48,7 +48,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-18',
     readTime: 6,
-    image: '/blog/word-to-pdf.png',
+    image: '/blog/word-to-pdf.webp',
     featured: true,
     content: 'Converting Word to PDF maintains document integrity and formatting. Discover how to ensure perfect conversions every time...'
   },
@@ -61,7 +61,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-17',
     readTime: 5,
-    image: '/blog/pdf-to-word.png',
+    image: '/blog/pdf-to-word.webp',
     content: 'Converting PDF to Word allows you to edit and modify documents easily. Learn the best practices for seamless conversions...'
   },
   {
@@ -73,7 +73,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-16',
     readTime: 7,
-    image: '/blog/edit-pdf.png',
+    image: '/blog/edit-pdf.webp',
     content: 'PDF editing requires understanding modern tools and techniques. This guide covers everything from text modifications to advanced annotations...'
   },
   {
@@ -85,7 +85,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-15',
     readTime: 8,
-    image: '/blog/chat-pdf.png',
+    image: '/blog/chat-pdf.webp',
     content: 'AI-powered PDF chat is revolutionizing document analysis. Learn how to ask questions and get instant answers from your documents...'
   },
   {
@@ -97,7 +97,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-14',
     readTime: 6,
-    image: '/blog/pdf-security.png',
+    image: '/blog/pdf-security.webp',
     content: 'Securing PDFs is essential for protecting confidential information. Learn encryption techniques and best practices...'
   },
   {
@@ -109,7 +109,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-13',
     readTime: 7,
-    image: '/blog/ocr-pdf.png',
+    image: '/blog/ocr-pdf.webp',
     content: 'OCR technology makes scanned documents searchable and editable. Understand how to optimize your OCR results...'
   },
   {
@@ -121,7 +121,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-12',
     readTime: 5,
-    image: '/blog/merge-pdf.png',
+    image: '/blog/merge-pdf.webp',
     content: 'Splitting PDFs helps organize large documents into manageable sections. Master page selection and extraction techniques...'
   },
   {
@@ -133,7 +133,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-11',
     readTime: 4,
-    image: '/blog/compress-pdf.png',
+    image: '/blog/compress-pdf.webp',
     content: 'PDF rotation fixes orientation issues in documents. Learn how to rotate individual pages or entire documents...'
   },
   {
@@ -145,7 +145,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-10',
     readTime: 5,
-    image: '/blog/word-to-pdf.png',
+    image: '/blog/word-to-pdf.webp',
     content: 'Watermarking PDFs adds a professional touch and protects your documents. Learn watermarking best practices...'
   },
   {
@@ -157,7 +157,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-09',
     readTime: 5,
-    image: '/blog/pdf-to-word.png',
+    image: '/blog/pdf-to-word.webp',
     content: 'Excel to PDF conversion preserves complex formatting and calculations. Master professional conversion techniques...'
   },
   {
@@ -169,7 +169,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-08',
     readTime: 6,
-    image: '/blog/edit-pdf.png',
+    image: '/blog/edit-pdf.webp',
     content: 'Extracting PDF data to Excel requires precision and the right tools. Learn advanced data extraction methods...'
   },
   {
@@ -181,7 +181,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-07',
     readTime: 5,
-    image: '/blog/chat-pdf.png',
+    image: '/blog/chat-pdf.webp',
     content: 'PowerPoint to PDF conversion ensures compatibility and preserves animations. Learn professional presentation sharing...'
   },
   {
@@ -193,7 +193,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-06',
     readTime: 6,
-    image: '/blog/pdf-security.png',
+    image: '/blog/pdf-security.webp',
     content: 'PDF to PowerPoint conversion allows for slide editing and modification. Master conversion best practices...'
   },
   {
@@ -205,7 +205,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-05',
     readTime: 5,
-    image: '/blog/ocr-pdf.png',
+    image: '/blog/ocr-pdf.webp',
     content: 'Converting images to PDF is essential for document creation. Learn to create professional PDFs from image files...'
   },
   {
@@ -217,7 +217,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-04',
     readTime: 5,
-    image: '/blog/merge-pdf.png',
+    image: '/blog/merge-pdf.webp',
     content: 'PDF to JPG conversion creates image files for various purposes. Master image extraction and quality optimization...'
   },
   {
@@ -229,7 +229,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-03',
     readTime: 6,
-    image: '/blog/compress-pdf.png',
+    image: '/blog/compress-pdf.webp',
     content: 'HTML to PDF conversion preserves web formatting and content. Learn to capture web pages professionally...'
   },
   {
@@ -241,7 +241,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-02',
     readTime: 6,
-    image: '/blog/word-to-pdf.png',
+    image: '/blog/word-to-pdf.webp',
     content: 'PDF annotations improve collaboration and document review. Discover annotation tools and best practices...'
   },
   {
@@ -253,7 +253,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-01',
     readTime: 7,
-    image: '/blog/pdf-to-word.png',
+    image: '/blog/pdf-to-word.webp',
     content: 'Digital PDF signatures ensure document authenticity and legal compliance. Learn signature implementation...'
   },
   {
@@ -265,7 +265,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-31',
     readTime: 6,
-    image: '/blog/edit-pdf.png',
+    image: '/blog/edit-pdf.webp',
     content: 'PDF optimization improves user experience across devices. Learn responsive PDF creation techniques...'
   },
   {
@@ -277,7 +277,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-30',
     readTime: 8,
-    image: '/blog/chat-pdf.png',
+    image: '/blog/chat-pdf.webp',
     content: 'Batch processing saves time with automated PDF operations. Master advanced batch conversion techniques...'
   },
   {
@@ -289,7 +289,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-29',
     readTime: 5,
-    image: '/blog/pdf-security.png',
+    image: '/blog/pdf-security.webp',
     content: 'PDF backup and archiving protect your important documents. Learn professional archiving strategies...'
   },
   {
@@ -301,7 +301,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-28',
     readTime: 6,
-    image: '/blog/ocr-pdf.png',
+    image: '/blog/ocr-pdf.webp',
     content: 'Collaborative PDF tools streamline document workflows. Learn team-based PDF editing best practices...'
   },
   {
@@ -313,7 +313,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-27',
     readTime: 6,
-    image: '/blog/merge-pdf.png',
+    image: '/blog/merge-pdf.webp',
     content: 'PDF templates automate document creation. Master template design and implementation...'
   },
   {
@@ -325,7 +325,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-26',
     readTime: 7,
-    image: '/blog/compress-pdf.png',
+    image: '/blog/compress-pdf.webp',
     content: 'Interactive PDF forms improve data collection efficiency. Learn form design and validation...'
   },
   {
@@ -337,7 +337,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-25',
     readTime: 7,
-    image: '/blog/word-to-pdf.png',
+    image: '/blog/word-to-pdf.webp',
     content: 'PDF accessibility is legally required and ethically important. Master accessibility standards and techniques...'
   },
   {
@@ -349,7 +349,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-24',
     readTime: 5,
-    image: '/blog/pdf-to-word.png',
+    image: '/blog/pdf-to-word.webp',
     content: 'PDF metadata organization improves document management. Learn metadata editing and optimization...'
   },
   {
@@ -361,7 +361,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-23',
     readTime: 8,
-    image: '/blog/edit-pdf.png',
+    image: '/blog/edit-pdf.webp',
     content: 'PDF compliance is critical for businesses. Learn to meet GDPR, HIPAA, and PDF/A standards...'
   },
   {
@@ -373,7 +373,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-22',
     readTime: 8,
-    image: '/blog/chat-pdf.png',
+    image: '/blog/chat-pdf.webp',
     content: 'PDF workflow automation reduces manual tasks and errors. Master workflow design and implementation...'
   },
   {
@@ -385,7 +385,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-21',
     readTime: 7,
-    image: '/blog/pdf-security.png',
+    image: '/blog/pdf-security.webp',
     content: 'PDF data extraction requires advanced techniques. Learn extraction methods and accuracy optimization...'
   },
   {
@@ -397,7 +397,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-20',
     readTime: 6,
-    image: '/blog/ocr-pdf.png',
+    image: '/blog/ocr-pdf.webp',
     content: 'Invoice PDF management streamlines accounting processes. Learn invoice extraction and organization...'
   },
   {
@@ -409,7 +409,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-19',
     readTime: 7,
-    image: '/blog/merge-pdf.png',
+    image: '/blog/merge-pdf.webp',
     content: 'Professional PDF reports boost business communication. Master report design and generation...'
   },
   {
@@ -421,7 +421,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-18',
     readTime: 8,
-    image: '/blog/compress-pdf.png',
+    image: '/blog/compress-pdf.webp',
     content: 'Contract PDF management ensures legal compliance. Learn contract organization and review workflows...'
   },
   {
@@ -433,7 +433,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-17',
     readTime: 8,
-    image: '/blog/word-to-pdf.png',
+    image: '/blog/word-to-pdf.webp',
     content: 'eBook PDF creation reaches global audiences. Learn interactive design and publishing techniques...'
   },
   {
@@ -445,7 +445,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-16',
     readTime: 7,
-    image: '/blog/pdf-to-word.png',
+    image: '/blog/pdf-to-word.webp',
     content: 'Professional PDF portfolios impress potential clients. Master portfolio design and presentation...'
   },
   {
@@ -457,7 +457,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-15',
     readTime: 7,
-    image: '/blog/edit-pdf.png',
+    image: '/blog/edit-pdf.webp',
     content: 'Interactive PDF presentations enhance engagement. Learn design techniques and interactivity...'
   },
   {
@@ -469,7 +469,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-14',
     readTime: 7,
-    image: '/blog/chat-pdf.png',
+    image: '/blog/chat-pdf.webp',
     content: 'Product PDF catalogs drive sales and engagement. Master catalog design and optimization...'
   },
   {
@@ -481,7 +481,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-13',
     readTime: 6,
-    image: '/blog/pdf-security.png',
+    image: '/blog/pdf-security.webp',
     content: 'PDF newsletters maintain professional branding. Learn design best practices for newsletters...'
   },
   {
@@ -493,7 +493,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-12',
     readTime: 8,
-    image: '/blog/ocr-pdf.png',
+    image: '/blog/ocr-pdf.webp',
     content: 'Educational PDF materials enhance learning outcomes. Master instructional design techniques...'
   },
   {
@@ -505,7 +505,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-11',
     readTime: 8,
-    image: '/blog/merge-pdf.png',
+    image: '/blog/merge-pdf.webp',
     content: 'Technical PDF documentation improves user adoption. Learn documentation best practices...'
   },
   {
@@ -517,7 +517,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-10',
     readTime: 6,
-    image: '/blog/compress-pdf.png',
+    image: '/blog/compress-pdf.webp',
     content: 'Professional PDF certificates recognize achievements. Learn design and customization techniques...'
   },
   {
@@ -529,7 +529,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-09',
     readTime: 6,
-    image: '/blog/word-to-pdf.png',
+    image: '/blog/word-to-pdf.webp',
     content: 'Restaurant PDF menus enhance customer experience. Master menu design and layout...'
   },
   {
@@ -541,7 +541,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-08',
     readTime: 6,
-    image: '/blog/pdf-to-word.png',
+    image: '/blog/pdf-to-word.webp',
     content: 'Marketing PDF flyers drive awareness and engagement. Learn design principles and techniques...'
   },
   {
@@ -553,7 +553,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-07',
     readTime: 7,
-    image: '/blog/edit-pdf.png',
+    image: '/blog/edit-pdf.webp',
     content: 'Professional PDF brochures showcase your business. Master layout and design techniques...'
   },
   {
@@ -565,7 +565,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-06',
     readTime: 8,
-    image: '/blog/chat-pdf.png',
+    image: '/blog/chat-pdf.webp',
     content: 'Professional PDF proposals increase sales. Learn persuasive design and structure...'
   },
   {
@@ -577,7 +577,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-05',
     readTime: 6,
-    image: '/blog/pdf-security.png',
+    image: '/blog/pdf-security.webp',
     content: 'Professional invoice PDFs improve payment collection. Learn template design...'
   },
   {
@@ -589,7 +589,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-04',
     readTime: 8,
-    image: '/blog/ocr-pdf.png',
+    image: '/blog/ocr-pdf.webp',
     content: 'PDF business integration streamlines operations. Learn API and workflow integration...'
   },
   {
@@ -601,7 +601,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-03',
     readTime: 6,
-    image: '/blog/merge-pdf.png',
+    image: '/blog/merge-pdf.webp',
     content: 'Mobile PDF optimization improves accessibility. Learn responsive design techniques...'
   },
   {
@@ -613,7 +613,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-02',
     readTime: 7,
-    image: '/blog/compress-pdf.png',
+    image: '/blog/compress-pdf.webp',
     content: 'Cloud PDF storage ensures accessibility and security. Learn storage best practices...'
   },
   {
@@ -625,7 +625,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-05-01',
     readTime: 6,
-    image: '/blog/word-to-pdf.png',
+    image: '/blog/word-to-pdf.webp',
     content: 'PDF version control prevents confusion. Learn revision tracking and management...'
   },
   {
@@ -637,7 +637,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-04-30',
     readTime: 7,
-    image: '/blog/pdf-to-word.png',
+    image: '/blog/pdf-to-word.webp',
     content: 'PDF troubleshooting resolves common issues. Learn diagnostic and fix techniques...'
   },
   {
@@ -649,7 +649,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-04-29',
     readTime: 7,
-    image: '/blog/edit-pdf.png',
+    image: '/blog/edit-pdf.webp',
     content: 'Optimized PDFs improve user experience. Master performance enhancement techniques...'
   },
   {
@@ -661,7 +661,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-04-28',
     readTime: 9,
-    image: '/blog/chat-pdf.png',
+    image: '/blog/chat-pdf.webp',
     featured: true,
     content: 'PDF technology continues evolving with AI and cloud integration. Discover future developments...'
   },
@@ -674,7 +674,7 @@ export const expanded50Posts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-04-27',
     readTime: 8,
-    image: '/blog/pdf-security.png',
+    image: '/blog/pdf-security.webp',
     content: 'AI PDF processing revolutionizes document workflows. Explore intelligent automation possibilities...'
   }
 ];

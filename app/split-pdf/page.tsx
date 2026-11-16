@@ -23,7 +23,7 @@ export default function SplitPDFPage() {
         toolName="Split PDF"
         toolSlug="split-pdf"
         description="Split a supported PDF into two separate PDF files by choosing a split page or using the default middle split. Download both parts together as a ZIP file."
-        heroImage="/tool-images/split-pdf-hero.png"
+        heroImage="/tool-images/split-pdf-hero.webp"
         mainContent={`Split PDF helps you divide a supported PDF into two separate PDF files. You can choose the page after which the split should occur, or leave the field blank to split the document near the middle.
 
 This workflow is useful for separating sections of textbooks, reports, contracts, research papers, application documents, and other multi-page PDFs. The service creates two PDF outputs and packages them into one ZIP download.

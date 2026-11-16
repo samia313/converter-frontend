@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function MergePdfOnlinePage() {
   const schema = { '@context':'https://schema.org', '@type':'SoftwareApplication', name:'Merge PDF Online', description:'Online workflow for combining supported PDF files into one PDF document.', applicationCategory:'UtilitiesApplication', operatingSystem:'Web' }
   return <ToolLandingLayout
-    toolName="Merge PDF Online" toolSlug="merge-pdf" heroImage="/tool-images/merge-pdf-hero.png"
+    toolName="Merge PDF Online" toolSlug="merge-pdf" heroImage="/tool-images/merge-pdf-hero.webp"
     description="Combine multiple supported PDF files into one document online. Arrange related files into a single PDF for sharing, printing, submission, review, or archiving."
     mainContent={`Merge PDF is useful when several related documents need to become one organized PDF. You can combine reports, chapters, forms, contracts, receipts, scans, or project documents into a single file.
 

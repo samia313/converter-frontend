@@ -29,7 +29,7 @@ export default function AIPDFSummaryPage() {
       toolName="AI PDF Summary"
       toolSlug="ai-pdf-summary"
       description="Summarize supported PDF documents with AI and quickly identify key ideas, important points, and useful context."
-      heroImage="/tool-images/ai-pdf-summary-hero.png"
+      heroImage="/tool-images/ai-pdf-summary-hero.webp"
       mainContent={`AI PDF Summary helps you get an initial understanding of a supported PDF without manually reading every page first. The AI analyzes available document content and creates a concise summary focused on the main ideas and important information.
 
 Useful for research papers, business reports, technical manuals, proposals, study material, meeting documents, and other supported PDFs. A summary is best used as a starting point for review rather than a replacement for the original document, especially when details or context matter.

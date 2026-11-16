@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function CompressPdfOnlinePage() {
   const schema = { '@context':'https://schema.org', '@type':'SoftwareApplication', name:'Compress PDF Online', description:'Online workflow for reducing the file size of supported PDF documents.', applicationCategory:'UtilitiesApplication', operatingSystem:'Web' }
   return <ToolLandingLayout
-    toolName="Compress PDF Online" toolSlug="compress-pdf" heroImage="/tool-images/compress-pdf-hero.png"
+    toolName="Compress PDF Online" toolSlug="compress-pdf" heroImage="/tool-images/compress-pdf-hero.webp"
     description="Reduce supported PDF file sizes online for email, uploads, applications, storage, and sharing. Review the resulting file size and quality before using it."
     mainContent={`Compress PDF Online helps reduce the size of supported PDF documents when a file is too large for an email attachment, upload form, cloud workflow, or convenient sharing.
 

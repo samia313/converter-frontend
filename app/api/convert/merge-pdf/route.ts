@@ -1,9 +1,13 @@
+import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextRequest, NextResponse } from 'next/server';
 import { mergePdfs, getDownloadHeaders, validateOutputBuffer } from '@/lib/pdf-utils';
 
 export const maxDuration = 120;
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = await enforceRateLimit(request, { namespace: 'conversion', limit: 10, window: '1 m' });
+  if (rateLimitResponse) return rateLimitResponse;
+
   const startTime = Date.now();
   const timeout = 110 * 1000;
 

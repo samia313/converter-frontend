@@ -29,7 +29,7 @@ export default function OCRPdfOnlinePage() {
       toolName="OCR PDF Online"
       toolSlug="ocr"
       description="Extract text from supported scanned and image-based PDF files with OCR. Make document content easier to search, copy, edit, and reuse."
-      heroImage="/tool-images/ai-ocr-hero.png"
+      heroImage="/tool-images/ai-ocr-hero.webp"
       mainContent={`OCR PDF technology recognizes text in scanned or image-based PDF pages and converts that visual content into machine-readable text. PDFilio's OCR PDF workflow is useful when a PDF does not contain selectable text and you need to work with the words inside the document.
 
 Common uses include scanned forms, receipts, invoices, archived documents, photographed pages, research material, and other image-based PDFs. OCR accuracy can vary with scan quality, handwriting, unusual fonts, page layout, language, and image clarity, so important extracted text should be reviewed against the original document.

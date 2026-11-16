@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'PDF to Excel Online – Convert PDF to XLSX | PDFilio',
     description: 'Convert supported PDF tables into editable Excel spreadsheets. Review extracted figures and tables before using the XLSX file.',
-    images: ['/tool-images/pdf-to-excel-hero.png'],
+    images: ['/tool-images/pdf-to-excel-hero.webp'],
   },
 };
 
@@ -38,7 +38,7 @@ export default function PDFToExcelPage() {
         toolName="PDF to Excel"
         toolSlug="pdf-to-excel"
         description="Convert supported PDF tables and structured data into editable Excel spreadsheets for analysis, reporting, accounting, and data workflows."
-        heroImage="/tool-images/pdf-to-excel-hero.png"
+        heroImage="/tool-images/pdf-to-excel-hero.webp"
         mainContent={`## Convert PDF to Excel Online
 
 PDF to Excel helps turn supported PDF tables and structured information into editable Excel spreadsheets. Use it when data is inside reports, invoices, financial statements, research papers, or other PDF documents and you need to sort, review, or analyze it in a spreadsheet.

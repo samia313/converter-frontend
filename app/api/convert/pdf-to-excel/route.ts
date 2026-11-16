@@ -1,3 +1,4 @@
+import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument } from 'pdf-lib';
 import JSZip from 'jszip';
@@ -143,6 +144,9 @@ async function createXlsx(rows: string[][]): Promise<Buffer> {
 }
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = await enforceRateLimit(request, { namespace: 'conversion', limit: 10, window: '1 m' });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const formData = await request.formData();
     const file = formData.get('file');

@@ -45,7 +45,7 @@ export default function PDFToWordPage() {
         toolName="PDF to Word Converter"
         toolSlug="pdf-to-word"
         description="Convert supported PDF documents into editable Word DOCX files for editing, reuse, collaboration, and document preparation."
-        heroImage="/tool-images/pdf-to-word-hero.png"
+        heroImage="/tool-images/pdf-to-word-hero.webp"
         mainContent={`PDF to Word conversion is useful when you need to edit or reuse text from a supported PDF.
 
 ## Convert PDF to Word Without Losing Formatting

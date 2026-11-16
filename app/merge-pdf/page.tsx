@@ -12,13 +12,13 @@ export const metadata: Metadata = {
     description: 'Combine PDF files online with PDFilio. Merge multiple PDFs into one document in your chosen file order, then review and download the combined PDF.',
     url: 'https://pdfilio.com/merge-pdf',
     type: 'website',
-    images: [{ url: 'https://pdfilio.com/tool-images/merge-pdf-hero.png', alt: 'Merge PDF files online with PDFilio' }],
+    images: [{ url: 'https://pdfilio.com/tool-images/merge-pdf-hero.webp', alt: 'Merge PDF files online with PDFilio' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Combine PDF Files Online | Merge PDF | PDFilio',
     description: 'Merge multiple PDF files into one document in your chosen order. Review the combined PDF before downloading.',
-    images: ['https://pdfilio.com/tool-images/merge-pdf-hero.png'],
+    images: ['https://pdfilio.com/tool-images/merge-pdf-hero.webp'],
   },
 };
 
@@ -30,7 +30,7 @@ export default function MergePDFPage() {
         toolName="Merge PDF"
         toolSlug="merge-pdf"
         description="Combine supported PDF files into a single document for easier sharing, printing, submission, review, and archiving."
-        heroImage="/tool-images/merge-pdf-hero.png"
+        heroImage="/tool-images/merge-pdf-hero.webp"
         mainContent={`Merge PDF helps you combine multiple supported PDF files into one document. This is useful when related reports, chapters, forms, receipts, contracts, or project documents are stored as separate PDF files and need to be shared or managed together.
 
 ## Combine PDFs in the Right Order

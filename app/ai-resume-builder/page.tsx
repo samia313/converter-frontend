@@ -24,7 +24,7 @@ export default function AIResumeBuilderPage() {
       toolName="AI Resume Builder"
       toolSlug="ai-resume-builder"
       description="Create and refine professional resumes with AI assistance. Improve wording, organize experience, and tailor your resume to supported job requirements."
-      heroImage="/tool-images/ai-resume-builder-hero.png"
+      heroImage="/tool-images/ai-resume-builder-hero.webp"
       mainContent={`AI Resume Builder helps you create and refine professional resumes with AI-assisted wording, structure, and job-focused content. ATS compatibility depends on the template, formatting, employer system, and job requirements.
 
 Choose from professionally designed templates, customize with your information, and let AI enhance your content. Optimize keywords for job titles, highlight achievements effectively, and present your best professional self.

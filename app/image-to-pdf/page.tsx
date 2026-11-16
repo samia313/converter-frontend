@@ -23,7 +23,7 @@ export default function ImageToPDFPage() {
         toolName="Image to PDF"
         toolSlug="image-to-pdf"
         description="Convert supported images into PDF documents and combine multiple images into organized pages for sharing, printing, or archiving."
-        heroImage="/tool-images/image-to-pdf-hero.png"
+        heroImage="/tool-images/image-to-pdf-hero.webp"
         mainContent={`Image to PDF helps turn supported photos and image files into portable PDF documents. It is useful for digitizing photographed paperwork, combining receipts, organizing notes, preparing image-based reports, and creating printable photo documents.
 
 When combining multiple images, review their order, orientation, page size, margins, and final readability. Image dimensions and source quality can affect how the resulting PDF looks and how large the final file becomes.

@@ -1,9 +1,13 @@
+import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextRequest, NextResponse } from 'next/server'
 import { PDFDocument, rgb } from 'pdf-lib'
 export const runtime='nodejs'
 export const maxDuration=120
 const MAX=100*1024*1024
 export async function POST(request:NextRequest){
+  const rateLimitResponse = await enforceRateLimit(request, { namespace: 'conversion', limit: 10, window: '1 m' });
+  if (rateLimitResponse) return rateLimitResponse;
+
  try{
   const form=await request.formData(), file=form.get('file')
   if(!(file instanceof File)) return NextResponse.json({error:'Please upload a PDF file.'},{status:400})

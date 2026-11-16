@@ -38,7 +38,7 @@ export default function RotatePagesLandingPage() {
         toolName="Rotate PDF Pages Online"
         toolSlug="rotate-pdf"
         description="Rotate PDF pages online to fix sideways, upside-down, or incorrectly oriented documents. Choose the required angle and review the resulting PDF."
-        heroImage="/tool-images/rotate-pdf-hero.png"
+        heroImage="/tool-images/rotate-pdf-hero.webp"
         mainContent={`Rotate PDF pages online when a document is difficult to read because one or more pages have the wrong orientation.
 
 ## Rotate PDF pages to fix orientation

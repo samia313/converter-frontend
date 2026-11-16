@@ -28,7 +28,7 @@ export default function ImagesToPdfPage() {
     toolName="Convert Images to PDF"
     toolSlug="image-to-pdf"
     description="Turn supported JPG, PNG, photos, scans, receipts, notes, and other image files into organized PDF documents for sharing, printing, submission, and archiving."
-    heroImage="/tool-images/image-to-pdf-hero.png"
+    heroImage="/tool-images/image-to-pdf-hero.webp"
     mainContent={`Images are useful for photos, scanned paperwork, receipts, notes, screenshots, certificates, and other visual documents. Converting multiple images into a PDF can make them easier to organize, share, print, submit, or archive. PDFilio provides an online workflow for converting supported image files into PDF documents.
 
 ## Convert Images to PDF Online

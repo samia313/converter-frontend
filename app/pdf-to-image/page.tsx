@@ -23,7 +23,7 @@ export default function PDFToImagePage() {
         toolName="PDF to Image"
         toolSlug="pdf-to-image"
         description="Convert supported PDF pages into image files and prepare selected pages or complete documents for sharing, web use, presentations, or editing."
-        heroImage="/tool-images/pdf-to-image-hero.png"
+        heroImage="/tool-images/pdf-to-image-hero.webp"
         mainContent={`PDF to Image turns supported PDF pages into image files. This can be useful when a page needs to be displayed as a visual preview, shared on a platform that expects an image, placed into a presentation, or opened in an image-editing workflow.
 
 Choose the image format and quality settings that fit your purpose. JPG can be useful for compact photographic content, while PNG can be preferable when sharp text, diagrams, or transparency-related requirements matter. Higher resolution can improve readability but may also increase file size.

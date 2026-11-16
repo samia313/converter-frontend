@@ -37,7 +37,7 @@ export default function PDFFileToExcelPage() {
       toolName="PDF File to Excel"
       toolSlug="pdf-to-excel"
       description="Convert supported PDF files into editable Excel spreadsheets for reports, invoices, statements, research tables, accounting, and data analysis."
-      heroImage="/tool-images/pdf-to-excel-hero.png"
+      heroImage="/tool-images/pdf-to-excel-hero.webp"
       mainContent={`Convert PDF files to Excel when important tables or structured data need to be edited, sorted, filtered, or analyzed in a spreadsheet. PDFilio's PDF to Excel workflow is designed for supported PDFs containing readable tables and structured information.
 
 Digital PDFs with clear table structures are generally easier to extract than scanned or heavily formatted documents. Scanned PDFs may require OCR first, while merged cells, unusual layouts, images, and low-quality source documents can affect the resulting spreadsheet. Always compare important figures and totals with the original PDF.

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function OcrOnlinePage() {
   const schema = { '@context':'https://schema.org', '@type':'SoftwareApplication', name:'OCR Online', description:'Online OCR workflow for extracting text from supported scanned PDFs and images.', applicationCategory:'UtilitiesApplication', operatingSystem:'Web' }
   return <ToolLandingLayout
-    toolName="OCR Online" toolSlug="ocr" heroImage="/tool-images/ai-ocr-hero.png"
+    toolName="OCR Online" toolSlug="ocr" heroImage="/tool-images/ai-ocr-hero.webp"
     description="Extract text from supported scanned PDFs and images with online OCR. Turn image-based content into machine-readable text for copying, editing, searching, and reuse."
     mainContent={`OCR (Optical Character Recognition) identifies visible text in scanned documents and images and converts recognized content into machine-readable text.
 

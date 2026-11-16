@@ -15,7 +15,7 @@ export default function QRCodeGeneratorPage() {
     <ToolLandingLayout
       toolName="QR Code Generator"
       toolSlug="tools"
-      heroImage="/tool-images/qr-code-generator-hero.png"
+      heroImage="/tool-images/qr-code-generator-hero.webp"
       description="Create QR codes online from supported links, text, contact information, and other content, then review the generated code before sharing or printing."
       mainContent={`A QR code generator turns supported information into a scannable two-dimensional code. QR codes can make it easier for people to open a web address, access text, or use other supported information from a phone camera or QR scanner.
 

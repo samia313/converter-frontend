@@ -2,6 +2,7 @@
 
 import { ChevronRight, Star, Shield, Zap } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getRelatedTools } from '@/lib/seo-keywords';
 
 interface ToolLandingLayoutProps {
@@ -237,7 +238,15 @@ export default function ToolLandingLayout({
             </div>
             {heroImage && (
               <div className="hidden min-w-0 lg:block">
-                <img src={heroImage} alt={toolName} loading="eager" className="h-auto w-full rounded-lg object-cover shadow-2xl" />
+                <Image
+                  src={heroImage}
+                  alt={toolName}
+                  width={1024}
+                  height={1024}
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  loading="eager"
+                  className="h-auto w-full rounded-lg object-cover shadow-2xl"
+                />
               </div>
             )}
           </div>

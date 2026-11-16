@@ -22,7 +22,7 @@ export default function RotatePdfFilesPage() {
   return <ToolLandingLayout
     toolName="Rotate PDF Files Online"
     toolSlug="rotate-pdf"
-    heroImage="/tool-images/rotate-pdf-hero.png"
+    heroImage="/tool-images/rotate-pdf-hero.webp"
     description="Turn supported PDF pages by 90, 180, or 270 degrees to fix sideways, upside-down, or incorrectly oriented documents."
     mainContent={`A PDF can sometimes contain pages that are sideways or upside down because of scanning, photography, document assembly, or mixed page orientation. PDFilio provides a browser-based workflow for rotating supported PDF files.
 

@@ -1,3 +1,4 @@
+import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextRequest, NextResponse } from 'next/server'
 
 export const maxDuration = 60
@@ -19,6 +20,9 @@ interface ChatRequest {
 }
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = await enforceRateLimit(request, { namespace: 'ai', limit: 10, window: '1 m' });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     if (!openai) {
       return NextResponse.json(

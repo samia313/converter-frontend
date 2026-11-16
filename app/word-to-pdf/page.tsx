@@ -12,13 +12,13 @@ export const metadata: Metadata = {
     description: 'Convert Word to PDF free online with PDFilio. Turn DOC and DOCX files into shareable PDFs for resumes, reports, forms, and applications. Review the result before downloading.',
     url: 'https://pdfilio.com/word-to-pdf',
     type: 'website',
-    images: [{ url: 'https://pdfilio.com/tool-images/word-to-pdf-hero.png', alt: 'Convert Word documents to PDF with PDFilio' }],
+    images: [{ url: 'https://pdfilio.com/tool-images/word-to-pdf-hero.webp', alt: 'Convert Word documents to PDF with PDFilio' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Word to PDF Converter Free Online | DOCX to PDF | PDFilio',
     description: 'Convert Word to PDF free online with PDFilio. Turn DOC and DOCX files into shareable PDFs, then review before downloading.',
-    images: ['https://pdfilio.com/tool-images/word-to-pdf-hero.png'],
+    images: ['https://pdfilio.com/tool-images/word-to-pdf-hero.webp'],
   },
 };
 
@@ -30,7 +30,7 @@ export default function WordToPDFPage() {
         toolName="Word to PDF Converter"
         toolSlug="word-to-pdf"
         description="Convert supported Word DOC and DOCX documents into PDF files for sharing, printing, archiving, and professional document workflows."
-        heroImage="/tool-images/word-to-pdf-hero.png"
+        heroImage="/tool-images/word-to-pdf-hero.webp"
         mainContent={`Use the Word to PDF converter to turn a supported Microsoft Word document into a PDF you can share, print, submit, or archive. PDF is useful when recipients need to view a document without editing the original Word file. Common examples include resumes, job applications, reports, proposals, letters, forms, and contracts.
 
 To convert Word to PDF online, choose a supported DOC or DOCX file in the uploader, start the conversion, then open the generated PDF and check it before downloading. If you have several documents, convert each supported file using the tool's available workflow and keep the original Word files as editable backups.

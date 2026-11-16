@@ -27,7 +27,7 @@ export const legacyBlogPosts: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-15',
     readTime: 5,
-    image: '/blog/merge-pdf.png',
+    image: '/blog/merge-pdf.webp',
     featured: true,
     content: `# Complete Guide to Merging PDF Files
 
@@ -85,7 +85,7 @@ Merging PDF files is essential for modern document management. With PDFilio's Me
     author: 'PDFilio Team',
     date: '2024-06-14',
     readTime: 6,
-    image: '/blog/compress-pdf.png',
+    image: '/blog/compress-pdf.webp',
     featured: true,
     content: `# How to Reduce PDF File Size Without Losing Quality
 
@@ -155,7 +155,7 @@ PDFilio's Compress PDF tool uses intelligent algorithms to reduce file size whil
     author: 'PDFilio Team',
     date: '2024-06-13',
     readTime: 7,
-    image: '/blog/word-to-pdf.png',
+    image: '/blog/word-to-pdf.webp',
     featured: true,
     content: `# Professional Word to PDF Conversion Guide
 
@@ -231,7 +231,7 @@ PDFilio's Word to PDF converter handles complex formatting with precision. Conve
     author: 'PDFilio Team',
     date: '2024-06-12',
     readTime: 6,
-    image: '/blog/pdf-to-word.png',
+    image: '/blog/pdf-to-word.webp',
     content: `# Converting PDFs to Word: Complete Workflow
 
 Sometimes you need to edit content from a PDF. Converting to Word format allows full editing capabilities.
@@ -290,7 +290,7 @@ PDFilio's PDF to Word converter accurately extracts and formats your document co
     author: 'PDFilio Team',
     date: '2024-06-11',
     readTime: 5,
-    image: '/blog/edit-pdf.png',
+    image: '/blog/edit-pdf.webp',
     content: `# Adding Text and Editing PDF Documents
 
 PDF editing doesn't require expensive software. Learn to add text, make corrections, and modify PDFs efficiently online.
@@ -354,7 +354,7 @@ PDFilio's Edit PDF tool gives you complete control over your documents. Add text
     author: 'PDFilio Team',
     date: '2024-06-10',
     readTime: 8,
-    image: '/blog/chat-pdf.png',
+    image: '/blog/chat-pdf.webp',
     featured: true,
     content: `# Chat With Your PDFs: The Future of Document Analysis
 
@@ -444,7 +444,7 @@ PDFilio's Chat With PDF feature uses cutting-edge AI to make document interactio
     author: 'PDFilio Team',
     date: '2024-06-09',
     readTime: 7,
-    image: '/blog/pdf-security.png',
+    image: '/blog/pdf-security.webp',
     content: `# Securing Your PDFs: Complete Protection Guide
 
 In today's data-conscious world, protecting sensitive PDF documents is essential. Learn how to secure your files with encryption and password protection.
@@ -544,7 +544,7 @@ PDFilio's Protect PDF tool provides enterprise-grade security for your sensitive
     author: 'PDFilio Team',
     date: '2024-06-08',
     readTime: 6,
-    image: '/blog/ocr-pdf.png',
+    image: '/blog/ocr-pdf.webp',
     content: `# OCR Technology: Making Scanned PDFs Searchable
 
 Scanned documents are images, not text. OCR technology converts these images into searchable, editable text. Learn how this powerful technology works.

@@ -1,3 +1,4 @@
+import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextRequest, NextResponse } from 'next/server'
 import { PDFDocument } from 'pdf-lib'
 
@@ -12,6 +13,9 @@ function num(value: FormDataEntryValue | null) {
 }
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = await enforceRateLimit(request, { namespace: 'conversion', limit: 10, window: '1 m' });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const form = await request.formData()
     const file = form.get('file')

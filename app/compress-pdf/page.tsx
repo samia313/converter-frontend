@@ -31,7 +31,7 @@ export default function CompressPDFPage() {
         toolName="Compress PDF Online"
         toolSlug="compress-pdf"
         description="Reduce PDF file size for email, WhatsApp, online forms, uploads, storage, and sharing. Choose a compression level and check the final file size and quality."
-        heroImage="/tool-images/compress-pdf-hero.png"
+        heroImage="/tool-images/compress-pdf-hero.webp"
         mainContent={`Compress PDF online when a document is too large to email, upload, store, or share.
 
 ## Compress PDF to 2MB

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function SplitPdfOnlinePage() {
   const schema = { '@context':'https://schema.org', '@type':'SoftwareApplication', name:'Split PDF Online', description:'Online workflow for splitting supported PDF documents into two separate PDF files.', applicationCategory:'UtilitiesApplication', operatingSystem:'Web' }
   return <ToolLandingLayout
-    toolName="Split PDF Online" toolSlug="split-pdf" heroImage="/tool-images/split-pdf-hero.png"
+    toolName="Split PDF Online" toolSlug="split-pdf" heroImage="/tool-images/split-pdf-hero.webp"
     description="Divide a supported PDF into two separate PDF files online. Choose the split point and download both resulting parts together."
     mainContent={`Split PDF Online helps you divide a multi-page PDF into two separate documents. This is useful when a long PDF contains sections that need to be shared, reviewed, submitted, or organized separately.
 

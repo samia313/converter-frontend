@@ -1,3 +1,4 @@
+import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
@@ -7,6 +8,9 @@ export const maxDuration = 60;
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
 export async function POST(request: Request) {
+  const rateLimitResponse = await enforceRateLimit(request, { namespace: 'conversion', limit: 10, window: '1 m' });
+  if (rateLimitResponse) return rateLimitResponse;
+
   const baseUrl = process.env.DIGITALOCEAN_CONVERTER_URL?.replace(/\/$/, '');
   const apiKey = process.env.DIGITALOCEAN_CONVERTER_API_KEY;
   if (!baseUrl || !apiKey) {

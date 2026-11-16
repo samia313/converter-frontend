@@ -15,7 +15,7 @@ export default function BatchConversionPage() {
     <ToolLandingLayout
       toolName="Batch PDF Conversion"
       toolSlug="tools"
-      heroImage="/tool-images/batch-conversion-hero.png"
+      heroImage="/tool-images/batch-conversion-hero.webp"
       description="Process multiple supported document conversions in a streamlined batch workflow instead of handling every file as a separate task."
       mainContent={`Batch PDF conversion is useful when you have a group of documents that need the same or related conversion workflow. Instead of repeating the same steps for every file, a batch workflow can help organize multiple files for processing.
 

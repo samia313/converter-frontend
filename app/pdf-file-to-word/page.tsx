@@ -28,7 +28,7 @@ export default function PdfFileToWordPage() {
     toolName="Convert PDF File to Word"
     toolSlug="pdf-to-word"
     description="Turn supported PDF files into editable Word DOCX documents for editing, reuse, collaboration, reports, and document preparation."
-    heroImage="/tool-images/pdf-to-word-hero.png"
+    heroImage="/tool-images/pdf-to-word-hero.webp"
     mainContent={`PDF is useful for sharing and fixed-format documents, but you may need Word when the content needs editing or reuse. PDFilio provides an online workflow for converting supported PDF files into editable DOCX documents.
 
 ## Convert a PDF File to Word Online

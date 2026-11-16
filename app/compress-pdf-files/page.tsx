@@ -28,7 +28,7 @@ export default function CompressPdfFilesPage() {
     toolName="Compress PDF Files Online"
     toolSlug="compress-pdf"
     description="Reduce the size of supported PDF files for email, uploads, applications, storage, and sharing while checking the final file size and readability."
-    heroImage="/tool-images/compress-pdf-hero.png"
+    heroImage="/tool-images/compress-pdf-hero.webp"
     mainContent={`Large PDF files can be difficult to upload, email, store, or share. PDFilio provides a browser-based workflow for compressing supported PDF files and creating a smaller copy.
 
 ## Reduce PDF File Size Online

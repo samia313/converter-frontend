@@ -22,7 +22,7 @@ export const comprehensiveBlogs: BlogPost[] = [
     author: 'PDFilio Team',
     date: '2024-06-20',
     readTime: 12,
-    image: '/blog/merge-pdf.png',
+    image: '/blog/merge-pdf.webp',
     featured: true,
     content: `# Complete Guide to Merging PDF Files Efficiently
 
@@ -171,7 +171,7 @@ The key to successful PDF merging lies not just in combining files, but in creat
     author: 'PDFilio Team',
     date: '2024-06-19',
     readTime: 12,
-    image: '/blog/compress-pdf.png',
+    image: '/blog/compress-pdf.webp',
     featured: true,
     content: `# How to Reduce PDF File Size Without Losing Quality
 
@@ -318,7 +318,7 @@ Effective PDF compression requires understanding the sources of file size and ap
     author: 'PDFilio Team',
     date: '2024-06-18',
     readTime: 12,
-    image: '/blog/word-to-pdf.png',
+    image: '/blog/word-to-pdf.webp',
     content: `# Convert Word Documents to PDF Format Perfectly
 
 Converting Word documents to PDF is one of the most common document transformation tasks in modern workplaces. Whether you need to preserve formatting for client distribution, create documents suitable for archival storage, or ensure consistent viewing across different devices, understanding the conversion process and its nuances is essential for maintaining professional document quality.
@@ -548,7 +548,7 @@ Converting Word documents to PDF is a straightforward process when approached ca
     author: 'PDFilio Team',
     date: '2024-06-17',
     readTime: 12,
-    image: '/blog/pdf-to-word.png',
+    image: '/blog/pdf-to-word.webp',
     content: `# Edit PDF Files by Converting to Microsoft Word
 
 PDF files are designed for document preservation and consistent viewing, but this strength becomes a limitation when you need to edit content. Converting PDFs to Microsoft Word documents provides an elegant solution, transforming static documents into fully editable files. Understanding this conversion process and its considerations ensures you maintain document quality and integrity throughout the transformation.
@@ -805,7 +805,7 @@ Converting PDF files to Microsoft Word provides valuable editing capabilities an
     author: 'PDFilio Team',
     date: '2024-06-16',
     readTime: 12,
-    image: '/blog/edit-pdf.png',
+    image: '/blog/edit-pdf.webp',
     content: `# Professional PDF Editing Tips and Tricks
 
 PDF editing has evolved significantly from being practically impossible to remarkably sophisticated. Whether you need to correct a typo in a critical document, modify images, add annotations, or restructure content, mastering professional PDF editing techniques ensures you maintain document quality and professionalism. This comprehensive guide explores advanced editing strategies that transform how you work with PDF documents.
@@ -1061,7 +1061,7 @@ Professional PDF editing requires understanding both the capabilities and limita
     author: 'PDFilio Team',
     date: '2024-06-15',
     readTime: 12,
-    image: '/blog/chat-pdf.png',
+    image: '/blog/chat-pdf.webp',
     content: `# AI-Powered Document Analysis with Chat Features
 
 Artificial intelligence is fundamentally transforming how we interact with documents. Chat-based PDF analysis represents a breakthrough in document processing, allowing users to ask natural language questions and receive intelligent answers extracted from document content. This technology eliminates tedious manual searching and synthesizes information across multiple pages, providing instant insights that previously required hours of document review.
@@ -1272,7 +1272,7 @@ AI-powered document chat represents a fundamental shift in how we interact with 
     author: 'PDFilio Team',
     date: '2024-06-14',
     readTime: 12,
-    image: '/blog/pdf-security.png',
+    image: '/blog/pdf-security.webp',
     content: `# Secure Your PDF Files with Advanced Encryption
 
 In an era of increasing data breaches and privacy concerns, protecting sensitive documents has never been more critical. PDF encryption and security features provide essential protection for confidential information, ensuring that even if documents are intercepted, lost, or shared inappropriately, the sensitive content remains protected. Understanding PDF security options and implementing appropriate protection strategies is essential for professionals handling confidential information.

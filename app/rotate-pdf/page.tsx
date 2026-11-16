@@ -23,7 +23,7 @@ export default function RotatePDFPage() {
         toolName="Rotate PDF"
         toolSlug="rotate-pdf"
         description="Rotate supported PDF pages to correct orientation, fix sideways scans, and make mixed-orientation documents easier to read, share, and print."
-        heroImage="/tool-images/rotate-pdf-hero.png"
+        heroImage="/tool-images/rotate-pdf-hero.webp"
         mainContent={`Rotate PDF helps you correct the orientation of supported PDF pages. This is useful when scanned pages appear sideways or upside down, when a document contains mixed page orientations, or when you need a different page direction for viewing or printing.
 
 The tool supports 90, 180, and 270 degree rotation options. Rotation changes the page orientation rather than converting the document into another file format. The final result can depend on the source PDF and the current processing workflow, so review important documents after processing.

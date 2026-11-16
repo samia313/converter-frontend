@@ -28,7 +28,7 @@ export default function ExcelSpreadsheetToPdfPage() {
     toolName="Convert Excel Spreadsheet to PDF"
     toolSlug="excel-to-pdf"
     description="Turn supported Excel XLSX spreadsheets into PDF files for reports, budgets, invoices, tables, printing, sharing, and archiving."
-    heroImage="/tool-images/excel-to-pdf-hero.png"
+    heroImage="/tool-images/excel-to-pdf-hero.webp"
     mainContent={`Excel spreadsheets are useful for calculations, tables, reports, and structured data. PDF is often preferred when you need a fixed-format copy for sharing, printing, submitting, or archiving. PDFilio provides an online workflow for converting supported Excel files into PDF.
 
 ## Convert an Excel Spreadsheet to PDF

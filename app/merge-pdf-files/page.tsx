@@ -27,7 +27,7 @@ export default function MergePdfFilesPage() {
   return <ToolLandingLayout
     toolName="Merge PDF Files Online"
     toolSlug="merge-pdf"
-    heroImage="/tool-images/merge-pdf-hero.png"
+    heroImage="/tool-images/merge-pdf-hero.webp"
     description="Combine multiple supported PDF files into one organized document for sharing, printing, submission, review, or archiving."
     mainContent={`When several related PDF files need to become one document, merging them can make the final file easier to manage. PDFilio lets you combine supported PDFs into a single output document through a browser-based workflow.
 

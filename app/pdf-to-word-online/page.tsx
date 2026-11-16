@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function PdfToWordOnlinePage() {
   const schema = { '@context':'https://schema.org', '@type':'SoftwareApplication', name:'PDF to Word Online', description:'Online workflow for converting supported PDF documents into editable DOCX files.', applicationCategory:'UtilitiesApplication', operatingSystem:'Web' }
   return <ToolLandingLayout
-    toolName="PDF to Word Online" toolSlug="pdf-to-word" heroImage="/tool-images/pdf-to-word-hero.png"
+    toolName="PDF to Word Online" toolSlug="pdf-to-word" heroImage="/tool-images/pdf-to-word-hero.webp"
     description="Convert supported PDF files to editable Word DOCX documents online. Reuse text, edit document content, and review formatting after conversion."
     mainContent={`PDF to Word conversion turns supported PDF content into an editable DOCX document. It is useful when you need to update text, reuse content, collaborate on a document, or continue editing in Microsoft Word or another DOCX-compatible application.
 

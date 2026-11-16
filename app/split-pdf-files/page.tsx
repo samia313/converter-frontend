@@ -22,7 +22,7 @@ export default function SplitPdfFilesPage() {
   return <ToolLandingLayout
     toolName="Split PDF Files Online"
     toolSlug="split-pdf"
-    heroImage="/tool-images/split-pdf-hero.png"
+    heroImage="/tool-images/split-pdf-hero.webp"
     description="Divide a supported PDF into two separate documents by choosing the page where the split should occur."
     mainContent={`Splitting a PDF is useful when one document contains sections that need to be handled separately. PDFilio provides a browser-based workflow for dividing supported PDF files into two PDF outputs.
 

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function WordToPdfOnlinePage() {
   const schema = { '@context':'https://schema.org', '@type':'SoftwareApplication', name:'Word to PDF Online', description:'Online workflow for converting supported Word documents into PDF files.', applicationCategory:'UtilitiesApplication', operatingSystem:'Web' }
   return <ToolLandingLayout
-    toolName="Word to PDF Online" toolSlug="word-to-pdf" heroImage="/tool-images/word-to-pdf-hero.png"
+    toolName="Word to PDF Online" toolSlug="word-to-pdf" heroImage="/tool-images/word-to-pdf-hero.webp"
     description="Convert supported Word DOC and DOCX files into PDF documents online for sharing, printing, submitting, and archiving."
     mainContent={`Word to PDF conversion turns a supported Word document into a PDF that is easier to share, print, submit, and distribute. It is useful for resumes, reports, proposals, contracts, forms, and other finalized documents.
 

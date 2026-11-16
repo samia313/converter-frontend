@@ -28,7 +28,7 @@ export default function WordDocumentToPdfPage() {
     toolName="Convert Word Document to PDF"
     toolSlug="word-to-pdf"
     description="Turn supported Word DOC and DOCX documents into PDF files for applications, reports, proposals, contracts, printing, sharing, and archiving."
-    heroImage="/tool-images/word-to-pdf-hero.png"
+    heroImage="/tool-images/word-to-pdf-hero.webp"
     mainContent={`Word documents are useful for editing, while PDF is often preferred for sharing, printing, submitting, and distributing finalized documents. PDFilio provides an online workflow for converting supported Word files into PDF.
 
 ## Convert a Word Document to PDF
