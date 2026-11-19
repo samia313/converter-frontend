@@ -10,7 +10,10 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   const rateLimitResponse = await enforceRateLimit(request, { namespace: 'conversion-download', limit: 20, window: '1 m' });
-  if (rateLimitResponse) return rateLimitResponse;
+  if (rateLimitResponse) {
+    rateLimitResponse.headers.set('Cache-Control', 'no-store');
+    return rateLimitResponse;
+  }
 
   try {
     const authorization = request.headers.get('authorization') || '';
@@ -23,7 +26,7 @@ export async function GET(request: NextRequest) {
     if (!jobId) {
       return NextResponse.json(
         { success: false, error: 'Invalid or expired job token' },
-        { status: 401 }
+        { status: 401, headers: { 'Cache-Control': 'no-store' } }
       );
     }
 
@@ -46,7 +49,7 @@ export async function GET(request: NextRequest) {
   } catch {
     return NextResponse.json(
       { success: false, error: 'Converted file is not ready or download failed' },
-      { status: 502 }
+      { status: 502, headers: { 'Cache-Control': 'no-store' } }
     );
   }
 }
