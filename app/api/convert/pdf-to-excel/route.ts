@@ -157,6 +157,12 @@ export async function POST(request: NextRequest) {
     if (!file.name.toLowerCase().endsWith('.pdf') && !file.type.includes('pdf')) {
       return NextResponse.json({ error: 'File must be a PDF' }, { status: 400 });
     }
+    if (file.size === 0) {
+      return NextResponse.json({ error: 'File is empty' }, { status: 400 });
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json({ error: 'File size exceeds the 100MB limit.' }, { status: 413 });
+    }
 
     const buffer = Buffer.from(await file.arrayBuffer());
     if (!buffer.length) return NextResponse.json({ error: 'File is empty' }, { status: 400 });
@@ -189,11 +195,17 @@ export async function POST(request: NextRequest) {
     }
 
     const xlsxBuffer = await createXlsx(rows);
-    const fileName = file.name.replace(/\.pdf$/i, '') + '.xlsx';
+    const safeBaseName =
+      file.name
+        .replace(/\.pdf$/i, '')
+        .replace(/[\\/\u0000-\u001F\u007F"]/g, '_')
+        .replace(/[. ]+$/g, '')
+        .slice(0, 120) || 'converted-document';
+    const fileName = `${safeBaseName}.xlsx`;
 
     return new NextResponse(xlsxBuffer as BodyInit, {
       headers: {
-        'Content-Disposition': `attachment; filename="${fileName}"`,
+        'Content-Disposition': `attachment; filename="${encodeURIComponent(fileName)}"`,
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Content-Length': String(xlsxBuffer.length),

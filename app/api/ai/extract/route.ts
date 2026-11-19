@@ -1,4 +1,5 @@
 import { enforceRateLimit } from '@/lib/rate-limit';
+import { readJsonObject, validateStringField } from '@/lib/api-input-validation';
 import { NextRequest, NextResponse } from 'next/server'
 
 export const maxDuration = 30
@@ -8,15 +9,40 @@ export async function POST(request: NextRequest) {
   if (rateLimitResponse) return rateLimitResponse;
 
   try {
-    const { text, extractionType } = await request.json()
-
-    if (!text || !extractionType) {
+    const bodyResult = await readJsonObject(request, 1_000_000)
+    if (!bodyResult.valid) {
       return NextResponse.json(
-        { error: 'Missing required fields: text, extractionType' },
+        { error: bodyResult.error },
+        { status: bodyResult.error.includes('too large') ? 413 : 400 }
+      )
+    }
+
+    const textResult = validateStringField(
+      bodyResult.data.text,
+      'text',
+      200_000
+    )
+    if (!textResult.valid) {
+      return NextResponse.json(
+        { error: textResult.error },
         { status: 400 }
       )
     }
 
+    const typeResult = validateStringField(
+      bodyResult.data.extractionType,
+      'extractionType',
+      40
+    )
+    if (!typeResult.valid) {
+      return NextResponse.json(
+        { error: typeResult.error },
+        { status: 400 }
+      )
+    }
+
+    const text = textResult.data
+    const extractionType = typeResult.data
     const extracted = await extractInformation(text, extractionType)
 
     return NextResponse.json({

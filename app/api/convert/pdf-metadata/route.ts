@@ -1,11 +1,10 @@
 import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument } from 'pdf-lib';
+import { getDownloadHeaders, sanitizePdfDownloadFilename, validateOutputBuffer, validatePdfFile } from '@/lib/pdf-utils';
 
 export const runtime = 'nodejs';
 export const maxDuration = 120;
-
-const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
 function error(message: string, status = 400) {
   return NextResponse.json({ error: message }, { status });
@@ -25,15 +24,10 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get('file');
     if (!(file instanceof File)) return error('No PDF file provided.');
-    if (file.size > MAX_FILE_SIZE) return error('File exceeds the 100MB limit.');
-    if (file.type && file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-      return error('Please upload a PDF file.');
-    }
+    const validation = await validatePdfFile(file);
+    if (!validation.valid) return error(validation.error || 'Invalid PDF file.');
 
     const input = Buffer.from(await file.arrayBuffer());
-    if (input.length < 5 || input.subarray(0, 5).toString() !== '%PDF-') {
-      return error('The uploaded file is not a valid PDF.');
-    }
 
     const pdf = await PDFDocument.load(input, { ignoreEncryption: false });
     const title = clean(formData.get('title'), 500);
@@ -51,14 +45,12 @@ export async function POST(request: NextRequest) {
     if (creator !== undefined) pdf.setCreator(creator); else pdf.setCreator('');
     if (producer !== undefined) pdf.setProducer(producer); else pdf.setProducer('');
 
-    const output = await pdf.save();
-    const base = file.name.replace(/\.pdf$/i, '');
-    return new NextResponse(Buffer.from(output), {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="${base}_metadata.pdf"`,
-        'Cache-Control': 'no-store',
-      },
+    const output = Buffer.from(await pdf.save());
+    const outputValidation = validateOutputBuffer(output, 'PDF Metadata');
+    if (!outputValidation.valid) return error(outputValidation.error || 'Generated PDF is invalid.', 500);
+    const filename = sanitizePdfDownloadFilename(file.name, '_metadata.pdf');
+    return new NextResponse(output, {
+      headers: getDownloadHeaders(filename, output.length),
     });
   } catch {
     return error('Unable to edit this PDF. Encrypted or unsupported PDFs may require different processing.', 422);

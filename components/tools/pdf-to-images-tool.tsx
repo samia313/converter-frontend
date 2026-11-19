@@ -68,7 +68,7 @@ export default function PDFToImagesTool() {
         </div>
         <div className="bg-white rounded-2xl shadow-lg p-8">
           <FileUploader accept=".pdf" onFileSelected={(files) => { setFile(files[0] || null); setUrls([]); setError(''); }} maxSize={100} />
-          {file && <p className="mt-4 text-sm text-gray-600">PDF selected · Maximum 100MB</p>}
+          {file && <p className="mt-4 text-sm text-gray-600">PDF selected · Maximum 100MB · 50 pages</p>}
           {error && <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4"><p className="text-sm text-red-700">{error}</p></div>}
           {!urls.length ? (
             <button onClick={convert} disabled={!file || busy} className="mt-6 w-full rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white disabled:bg-gray-400">

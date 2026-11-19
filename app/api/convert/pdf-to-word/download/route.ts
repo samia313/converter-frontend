@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const file = await downloadConversion(jobId);
+    const file = await downloadConversion(jobId, 'pdf-to-word');
 
     const safeFilename = file.filename
       .replace(/[\r\n"\\]/g, '_')

@@ -4,6 +4,9 @@ import { useState } from 'react';
 import { Download, Trash2, Upload, Loader2, CheckCircle2, AlertCircle, GripVertical, File, Zap } from 'lucide-react';
 import FileUploader from '@/components/file-uploader';
 
+const MAX_FILES = 20;
+const MAX_TOTAL_SIZE = 500 * 1024 * 1024;
+
 interface MergeResult {
   filesCount: number;
   totalPages: number;
@@ -22,15 +25,29 @@ export default function MergePDFToolEnhanced() {
 
   const handleFileSelect = (files: File[]) => {
     const newFiles = files.filter(f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'));
-    
+    const nextFiles = [...selectedFiles];
+    let nextTotalSize = nextFiles.reduce((sum, file) => sum + file.size, 0);
+    let limitError: string | null = null;
+
+    for (const file of newFiles) {
+      if (nextFiles.length >= MAX_FILES) {
+        limitError = `You can merge up to ${MAX_FILES} PDF files at a time.`;
+        break;
+      }
+      if (nextTotalSize + file.size > MAX_TOTAL_SIZE) {
+        limitError = 'Combined PDF size cannot exceed 500 MB.';
+        break;
+      }
+      nextFiles.push(file);
+      nextTotalSize += file.size;
+    }
+
+    setSelectedFiles(nextFiles);
+
     if (files.length !== newFiles.length) {
       setError('Only PDF files are supported. Invalid files were ignored.');
     } else {
-      setError(null);
-    }
-    
-    if (newFiles.length > 0) {
-      setSelectedFiles([...selectedFiles, ...newFiles]);
+      setError(limitError);
     }
   };
 
@@ -155,6 +172,9 @@ export default function MergePDFToolEnhanced() {
                 onFileSelected={handleFileSelect}
                 maxSize={100}
               />
+              <p className="mt-2 text-xs text-gray-500">
+                Up to 20 PDF files, 100 MB per file, 500 MB combined.
+              </p>
 
               {selectedFiles.length > 0 && (
                 <div className="mt-6 space-y-3">

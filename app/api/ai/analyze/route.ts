@@ -1,4 +1,5 @@
 import { enforceRateLimit } from '@/lib/rate-limit';
+import { readJsonObject, validateStringField } from '@/lib/api-input-validation';
 import { NextRequest, NextResponse } from 'next/server'
 
 export const maxDuration = 30
@@ -8,16 +9,42 @@ export async function POST(request: NextRequest) {
   if (rateLimitResponse) return rateLimitResponse;
 
   try {
-    const { content, analysisType } = await request.json()
-
-    if (!content) {
+    const bodyResult = await readJsonObject(request, 1_000_000)
+    if (!bodyResult.valid) {
       return NextResponse.json(
-        { error: 'Missing content field' },
+        { error: bodyResult.error },
+        { status: bodyResult.error.includes('too large') ? 413 : 400 }
+      )
+    }
+
+    const contentResult = validateStringField(
+      bodyResult.data.content,
+      'content',
+      200_000
+    )
+    if (!contentResult.valid) {
+      return NextResponse.json(
+        { error: contentResult.error },
         { status: 400 }
       )
     }
 
-    const analysis = await analyzeContent(content, analysisType || 'general')
+    const typeResult = validateStringField(
+      bodyResult.data.analysisType,
+      'analysisType',
+      40,
+      { required: false }
+    )
+    if (!typeResult.valid) {
+      return NextResponse.json(
+        { error: typeResult.error },
+        { status: 400 }
+      )
+    }
+
+    const content = contentResult.data
+    const analysisType = typeResult.data || 'general'
+    const analysis = await analyzeContent(content, analysisType)
 
     return NextResponse.json({
       success: true,

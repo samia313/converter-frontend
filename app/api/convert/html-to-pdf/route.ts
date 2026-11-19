@@ -1,5 +1,7 @@
 import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextResponse } from 'next/server';
+import { getDownloadHeaders, sanitizePdfDownloadFilename, validateOutputBuffer } from '@/lib/pdf-utils';
+import { validateR2DownloadUrl } from '@/lib/conversion-url-validation';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -24,9 +26,55 @@ export async function POST(request: Request) {
     const response = await fetch(baseUrl + '/convert/html-to-pdf', { method: 'POST', headers: { Authorization: 'Bearer ' + apiKey }, body, cache: 'no-store', signal: AbortSignal.timeout(60000) });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) return NextResponse.json({ error: typeof data?.error === 'string' ? data.error : 'HTML to PDF conversion failed.', code: data?.code || 'CONVERSION_FAILED' }, { status: response.status });
-    if (!data?.downloadUrl) return NextResponse.json({ error: 'Conversion completed without a download URL.', code: 'MISSING_OUTPUT' }, { status: 502 });
-    const output = await fetch(data.downloadUrl, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
+    const downloadUrl = validateR2DownloadUrl(data?.downloadUrl);
+    if (!downloadUrl) return NextResponse.json({ error: 'Converter returned an invalid download URL.', code: 'INVALID_OUTPUT_URL' }, { status: 502 });
+
+    const output = await fetch(downloadUrl, {
+      cache: 'no-store',
+      redirect: 'error',
+      signal: AbortSignal.timeout(30000),
+    });
     if (!output.ok) return NextResponse.json({ error: 'Converted PDF could not be retrieved.', code: 'OUTPUT_FETCH_FAILED' }, { status: 502 });
-    return new NextResponse(await output.arrayBuffer(), { headers: { 'Content-Type': 'application/pdf', 'Content-Disposition': 'attachment; filename="' + file.name.replace(/\.(html?|HTML?)$/, '') + '.pdf"', 'Cache-Control': 'no-store' } });
+
+    const contentType = output.headers.get('content-type')?.split(';')[0].trim().toLowerCase();
+    if (contentType !== 'application/pdf') {
+      return NextResponse.json({ error: 'Converter returned an unexpected file type.', code: 'INVALID_OUTPUT_TYPE' }, { status: 502 });
+    }
+
+    const declaredLength = Number(output.headers.get('content-length'));
+    if (Number.isFinite(declaredLength) && declaredLength > MAX_FILE_SIZE) {
+      return NextResponse.json({ error: 'Converted output exceeds the 100MB limit.', code: 'OUTPUT_TOO_LARGE' }, { status: 502 });
+    }
+    if (!output.body) return NextResponse.json({ error: 'Converted output is empty.', code: 'EMPTY_OUTPUT' }, { status: 502 });
+
+    const reader = output.body.getReader();
+    const chunks: Buffer[] = [];
+    let totalSize = 0;
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        totalSize += value.byteLength;
+        if (totalSize > MAX_FILE_SIZE) {
+          await reader.cancel();
+          return NextResponse.json({ error: 'Converted output exceeds the 100MB limit.', code: 'OUTPUT_TOO_LARGE' }, { status: 502 });
+        }
+        chunks.push(Buffer.from(value));
+      }
+    } finally {
+      reader.releaseLock();
+    }
+
+    const outputBuffer = Buffer.concat(chunks);
+    const outputValidation = validateOutputBuffer(outputBuffer, 'HTML to PDF');
+    if (!outputValidation.valid) {
+      return NextResponse.json({ error: outputValidation.error || 'Converted PDF is invalid.', code: 'INVALID_OUTPUT' }, { status: 502 });
+    }
+
+    const filename = sanitizePdfDownloadFilename(file.name.replace(/\.(html?|HTML?)$/i, '.pdf'), '');
+    return new NextResponse(outputBuffer, {
+      headers: getDownloadHeaders(filename, outputBuffer.length),
+    });
   } catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : 'HTML to PDF conversion failed.', code: 'CONVERTER_UNAVAILABLE' }, { status: 502 }); }
 }

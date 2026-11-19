@@ -1,3 +1,4 @@
+import { sanitizePdfDownloadFilename } from '@/lib/pdf-utils';
 import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextRequest, NextResponse } from 'next/server'
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
@@ -13,6 +14,7 @@ export async function POST(request:NextRequest){
   if(!(file instanceof File)) return NextResponse.json({error:'Please upload a PDF file.'},{status:400})
   if(file.type!=='application/pdf'&&!file.name.toLowerCase().endsWith('.pdf')) return NextResponse.json({error:'Only PDF files are supported.'},{status:415})
   if(file.size>MAX) return NextResponse.json({error:'The PDF exceeds the 100 MB upload limit.'},{status:413})
+  if(file.size===0) return NextResponse.json({error:'The uploaded PDF is empty.'},{status:400})
   const text=String(form.get('text')??'').trim(), opacity=Number(form.get('opacity')??0.25), fontSize=Number(form.get('fontSize')??36), angle=Number(form.get('angle')??-45)
   const position=String(form.get('position')??'center')
   if(!text||text.length>120)return NextResponse.json({error:'Watermark text is required and must be 120 characters or fewer.'},{status:400})
@@ -30,7 +32,7 @@ export async function POST(request:NextRequest){
    else if(position.startsWith('bottom'))y=margin
    page.drawText(text,{x:Math.max(0,x),y:Math.max(0,y),size:fontSize,font,color:rgb(.45,.45,.45),opacity,rotate:{type:'degrees',angle} as any})
   }
-  const output=await pdf.save(),name=file.name.replace(/\.pdf$/i,'')+'_watermarked.pdf'
-  return new NextResponse(output as BodyInit,{headers:{'Content-Type':'application/pdf','Content-Disposition':`attachment; filename="${name}"`,'Content-Length':String(output.length),'Cache-Control':'no-store'}})
+  const output=await pdf.save(),name=sanitizePdfDownloadFilename(file.name,'_watermarked.pdf')
+  return new NextResponse(output as BodyInit,{headers:{'Content-Type':'application/pdf','Content-Disposition':`attachment; filename="${encodeURIComponent(name)}"`,'Content-Length':String(output.length),'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}})
  }catch(error){console.error('Watermark PDF error:',error);return NextResponse.json({error:'Could not watermark this PDF.'},{status:500})}
 }

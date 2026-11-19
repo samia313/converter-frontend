@@ -1,4 +1,5 @@
 import { enforceRateLimit } from '@/lib/rate-limit';
+import { readJsonObject, validateStringField } from '@/lib/api-input-validation';
 import { NextRequest, NextResponse } from 'next/server'
 
 export const maxDuration = 60
@@ -31,15 +32,58 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const body = (await request.json()) as ChatRequest
-    const { query, documentContent, context } = body
+    const bodyResult = await readJsonObject(request, 1_000_000)
 
-    if (!query || !documentContent) {
+    if (!bodyResult.valid) {
       return NextResponse.json(
-        { error: 'Query and document content required' },
+        { error: bodyResult.error },
+        { status: bodyResult.error.includes('too large') ? 413 : 400 }
+      )
+    }
+
+    const queryResult = validateStringField(
+      bodyResult.data.query,
+      'Query',
+      5_000
+    )
+
+    const documentResult = validateStringField(
+      bodyResult.data.documentContent,
+      'Document content',
+      200_000
+    )
+
+    const contextResult = validateStringField(
+      bodyResult.data.context,
+      'Context',
+      5_000,
+      { required: false }
+    )
+
+    if (!queryResult.valid) {
+      return NextResponse.json(
+        { error: queryResult.error },
         { status: 400 }
       )
     }
+
+    if (!documentResult.valid) {
+      return NextResponse.json(
+        { error: documentResult.error },
+        { status: 400 }
+      )
+    }
+
+    if (!contextResult.valid) {
+      return NextResponse.json(
+        { error: contextResult.error },
+        { status: 400 }
+      )
+    }
+
+    const query = queryResult.data
+    const documentContent = documentResult.data
+    const context = contextResult.data
 
     console.log('[v0] PDF Chat - Processing query with OpenAI:', query.substring(0, 50) + '...')
 

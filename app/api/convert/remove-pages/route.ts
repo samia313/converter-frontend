@@ -1,3 +1,4 @@
+import { sanitizePdfDownloadFilename } from '@/lib/pdf-utils';
 import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextRequest, NextResponse } from 'next/server'
 import { PDFDocument } from 'pdf-lib'
@@ -13,6 +14,7 @@ export async function POST(request:NextRequest){
   if(!(file instanceof File)) return NextResponse.json({error:'Please upload a PDF file.'},{status:400})
   if(file.type!=='application/pdf'&&!file.name.toLowerCase().endsWith('.pdf')) return NextResponse.json({error:'Only PDF files are supported.'},{status:415})
   if(file.size>MAX) return NextResponse.json({error:'The PDF exceeds the 100 MB upload limit.'},{status:413})
+  if(file.size===0) return NextResponse.json({error:'The uploaded PDF is empty.'},{status:400})
   if(!raw) return NextResponse.json({error:'Enter at least one page number to remove.'},{status:400})
   const bytes=new Uint8Array(await file.arrayBuffer())
   if(new TextDecoder().decode(bytes.slice(0,5))!=='%PDF-') return NextResponse.json({error:'The uploaded file is not a valid PDF.'},{status:422})
@@ -25,6 +27,7 @@ export async function POST(request:NextRequest){
   const remove=new Set(unique.map(p=>p-1)), keep=Array.from({length:count},(_,i)=>i).filter(i=>!remove.has(i))
   const output=await PDFDocument.create(), copied=await output.copyPages(source,keep); copied.forEach(p=>output.addPage(p))
   const out=await output.save()
-  return new NextResponse(out as BodyInit,{status:200,headers:{'Content-Type':'application/pdf','Content-Disposition':'attachment; filename="'+file.name.replace(/\.pdf$/i,'')+'_pages-removed.pdf"','Content-Length':String(out.length),'Cache-Control':'no-store'}})
+  const filename=sanitizePdfDownloadFilename(file.name,'_pages-removed.pdf')
+  return new NextResponse(out as BodyInit,{status:200,headers:{'Content-Type':'application/pdf','Content-Disposition':`attachment; filename="${encodeURIComponent(filename)}"`,'Content-Length':String(out.length),'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}})
  }catch(error){console.error('Remove PDF pages error:',error);return NextResponse.json({error:'Could not remove pages from this PDF. The file may be damaged, encrypted, or unsupported.'},{status:500})}
 }

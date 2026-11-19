@@ -39,6 +39,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const header = new Uint8Array(
+      await file.slice(0, 8).arrayBuffer()
+    );
+
+    const isDocx = filename.endsWith('.docx');
+    const expectedSignature = isDocx
+      ? [0x50, 0x4b, 0x03, 0x04]
+      : [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1];
+
+    if (
+      header.length < expectedSignature.length ||
+      !expectedSignature.every((byte, index) => header[index] === byte)
+    ) {
+      return NextResponse.json(
+        { success: false, error: 'File content does not match a valid DOC or DOCX document' },
+        { status: 400 }
+      );
+    }
+
     const result = await submitConversion(file, 'word-to-pdf');
 
     return NextResponse.json({

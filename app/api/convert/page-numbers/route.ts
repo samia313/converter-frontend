@@ -1,10 +1,10 @@
 import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextRequest, NextResponse } from 'next/server'
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
+import { getDownloadHeaders, sanitizePdfDownloadFilename, validateOutputBuffer, validatePdfFile } from '@/lib/pdf-utils'
 
 export const runtime = 'nodejs'
 export const maxDuration = 120
-const MAX_FILE_SIZE = 100 * 1024 * 1024
 
 export async function POST(request: NextRequest) {
   const rateLimitResponse = await enforceRateLimit(request, { namespace: 'conversion', limit: 10, window: '1 m' });
@@ -14,8 +14,8 @@ export async function POST(request: NextRequest) {
     const form = await request.formData()
     const file = form.get('file')
     if (!(file instanceof File)) return NextResponse.json({ error: 'Please upload a PDF file.' }, { status: 400 })
-    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) return NextResponse.json({ error: 'Only PDF files are supported.' }, { status: 415 })
-    if (file.size > MAX_FILE_SIZE) return NextResponse.json({ error: 'The PDF exceeds the 100 MB upload limit.' }, { status: 413 })
+    const validation = await validatePdfFile(file)
+    if (!validation.valid) return NextResponse.json({ error: validation.error || 'Invalid PDF file.' }, { status: 400 })
     const start = Number(form.get('start') ?? 1)
     const fontSize = Number(form.get('fontSize') ?? 10)
     const position = String(form.get('position') ?? 'bottom-center')
@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
     if (!['bottom-left','bottom-center','bottom-right','top-left','top-center','top-right'].includes(position)) return NextResponse.json({ error: 'Invalid page number position.' }, { status: 400 })
 
     const bytes = new Uint8Array(await file.arrayBuffer())
-    if (new TextDecoder().decode(bytes.slice(0, 5)) !== '%PDF-') return NextResponse.json({ error: 'The uploaded file is not a valid PDF.' }, { status: 422 })
     const pdf = await PDFDocument.load(bytes)
     const font = await pdf.embedFont(StandardFonts.Helvetica)
     const margin = Math.max(18, fontSize * 1.5)
@@ -40,10 +39,12 @@ export async function POST(request: NextRequest) {
       page.drawText(label, { x, y, size: fontSize, font, color: rgb(0.2,0.2,0.2) })
     })
 
-    const output = await pdf.save()
-    const name = file.name.replace(/\.pdf$/i, '') + '_numbered.pdf'
-    return new NextResponse(output as BodyInit, {
-      headers: { 'Content-Type':'application/pdf', 'Content-Disposition':`attachment; filename="${name}"`, 'Content-Length':String(output.length), 'Cache-Control':'no-store' }
+    const output = Buffer.from(await pdf.save())
+    const outputValidation = validateOutputBuffer(output, 'Add Page Numbers')
+    if (!outputValidation.valid) return NextResponse.json({ error: outputValidation.error || 'Generated PDF is invalid.' }, { status: 500 })
+    const filename = sanitizePdfDownloadFilename(file.name, '_numbered.pdf')
+    return new NextResponse(output, {
+      headers: getDownloadHeaders(filename, output.length)
     })
   } catch (error) {
     console.error('Page Numbers error:', error)

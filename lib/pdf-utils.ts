@@ -25,16 +25,27 @@ export async function validatePdfFile(file: File): Promise<ValidationResult> {
     return { valid: false, error: 'No file provided' };
   }
 
+  if (file.size === 0) {
+    return { valid: false, error: 'PDF file is empty' };
+  }
+
   if (!file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf')) {
     return { valid: false, error: 'File must be a PDF' };
   }
 
-  const maxSize = 100 * 1024 * 1024; // 100MB
+  const maxSize = 100 * 1024 * 1024;
   if (file.size > maxSize) {
     return {
       valid: false,
       error: `File size ${(file.size / 1024 / 1024).toFixed(2)}MB exceeds limit of 100MB`,
     };
+  }
+
+  const headerBytes = new Uint8Array(await file.slice(0, 1024).arrayBuffer());
+  const header = String.fromCharCode(...headerBytes);
+
+  if (!header.includes('%PDF-')) {
+    return { valid: false, error: 'File does not contain a valid PDF signature' };
   }
 
   return { valid: true, details: { size: file.size, name: file.name } };
@@ -53,12 +64,17 @@ export async function validatePdfFiles(
     return { valid: false, error: `Please provide at least ${minFiles} PDF files` };
   }
 
-  const validFiles = files.filter((f) => f.type.includes('pdf') || f.name.toLowerCase().endsWith('.pdf'));
-  if (validFiles.length < minFiles) {
-    return { valid: false, error: `Please provide at least ${minFiles} valid PDF files` };
+  for (const file of files) {
+    const validation = await validatePdfFile(file);
+    if (!validation.valid) {
+      return {
+        valid: false,
+        error: `${file?.name || 'A supplied file'}: ${validation.error}`,
+      };
+    }
   }
 
-  const totalSize = validFiles.reduce((sum, f) => sum + f.size, 0);
+  const totalSize = files.reduce((sum, file) => sum + file.size, 0);
   if (totalSize > maxTotalSize) {
     return {
       valid: false,
@@ -69,9 +85,9 @@ export async function validatePdfFiles(
   return {
     valid: true,
     details: {
-      count: validFiles.length,
+      count: files.length,
       totalSize,
-      files: validFiles.map((f) => f.name),
+      files: files.map((file) => file.name),
     },
   };
 }
@@ -156,7 +172,7 @@ export async function mergePdfs(files: File[]): Promise<ProcessingResult> {
       return { success: false, error: validation.error };
     }
 
-    const validFiles = files.filter((f) => f.type.includes('pdf') || f.name.toLowerCase().endsWith('.pdf'));
+    const validFiles = files;
     const mergedPdf = await PDFDocument.create();
     let totalPages = 0;
 
@@ -230,7 +246,19 @@ export async function splitPdf(buffer: Buffer, splitPage?: number): Promise<Proc
     }
 
     const pageCount = pdf.getPageCount();
-    const splitAt = splitPage ? Math.max(1, Math.min(splitPage, pageCount - 1)) : Math.ceil(pageCount / 2);
+
+    if (pageCount < 2) {
+      return { success: false, error: 'PDF must contain at least 2 pages to split' };
+    }
+
+    if (
+      splitPage !== undefined &&
+      (!Number.isInteger(splitPage) || splitPage < 1 || splitPage >= pageCount)
+    ) {
+      return { success: false, error: 'Split page must be a whole number between 1 and the page count minus 1' };
+    }
+
+    const splitAt = splitPage ?? Math.ceil(pageCount / 2);
     
     console.log('[v0] PDF has', pageCount, 'pages. Splitting at page:', splitAt);
 
@@ -271,12 +299,29 @@ export async function splitPdf(buffer: Buffer, splitPage?: number): Promise<Proc
   }
 }
 
+export function sanitizePdfDownloadFilename(originalName: string, suffix: string): string {
+  const baseName = originalName
+    .replace(/\.pdf$/i, '')
+    .replace(/[\\/\u0000-\u001F\u007F"]/g, '_')
+    .replace(/[. ]+$/g, '')
+    .slice(0, 120) || 'document';
+
+  return `${baseName}${suffix}`;
+}
+
 export function getDownloadHeaders(filename: string, size: number) {
+  const safeFilename =
+    filename
+      .replace(/[\\/\u0000-\u001F\u007F"]/g, '_')
+      .replace(/[. ]+$/g, '')
+      .slice(0, 160) || 'download.pdf';
+
   return {
-    'Content-Disposition': `attachment; filename="${encodeURIComponent(filename)}"`,
+    'Content-Disposition': `attachment; filename="${encodeURIComponent(safeFilename)}"`,
     'Content-Type': 'application/pdf',
     'Content-Length': String(size),
     'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'X-Content-Type-Options': 'nosniff',
   };
 }
 

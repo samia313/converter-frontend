@@ -1,11 +1,10 @@
 import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextResponse } from 'next/server';
 import { PDFDocument } from 'pdf-lib';
+import { getDownloadHeaders, sanitizePdfDownloadFilename, validateOutputBuffer, validatePdfFile } from '@/lib/pdf-utils';
 
 export const runtime = 'nodejs';
 export const maxDuration = 120;
-
-const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
 export async function POST(request: Request) {
   const rateLimitResponse = await enforceRateLimit(request, { namespace: 'conversion', limit: 10, window: '1 m' });
@@ -18,18 +17,10 @@ export async function POST(request: Request) {
     if (!(file instanceof File)) {
       return NextResponse.json({ error: 'Please upload a PDF file.' }, { status: 400 });
     }
-    if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json({ error: 'PDF must be 100 MB or smaller.' }, { status: 413 });
-    }
-    if (file.size === 0) {
-      return NextResponse.json({ error: 'The uploaded PDF is empty.' }, { status: 400 });
-    }
+    const validation = await validatePdfFile(file);
+    if (!validation.valid) return NextResponse.json({ error: validation.error || 'Invalid PDF file.' }, { status: 400 });
 
     const bytes = new Uint8Array(await file.arrayBuffer());
-    const header = new TextDecoder().decode(bytes.slice(0, 5));
-    if (header !== '%PDF-') {
-      return NextResponse.json({ error: 'The uploaded file is not a valid PDF.' }, { status: 415 });
-    }
 
     const pdfDoc = await PDFDocument.load(bytes);
     const form = pdfDoc.getForm();
@@ -39,18 +30,14 @@ export async function POST(request: Request) {
       form.flatten();
     }
 
-    const output = await pdfDoc.save();
-    const baseName = file.name.replace(/\.pdf$/i, '') || 'document';
-    const filename = `${baseName}_flattened.pdf`;
+    const output = Buffer.from(await pdfDoc.save());
+    const outputValidation = validateOutputBuffer(output, 'Flatten PDF');
+    if (!outputValidation.valid) return NextResponse.json({ error: outputValidation.error || 'Generated PDF is invalid.' }, { status: 500 });
+    const filename = sanitizePdfDownloadFilename(file.name, '_flattened.pdf');
 
-    return new NextResponse(output as BodyInit, {
+    return new NextResponse(output, {
       status: 200,
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="${filename}"`,
-        'Content-Length': String(output.length),
-        'Cache-Control': 'no-store',
-      },
+      headers: getDownloadHeaders(filename, output.length),
     });
   } catch (error) {
     console.error('Flatten PDF error:', error);

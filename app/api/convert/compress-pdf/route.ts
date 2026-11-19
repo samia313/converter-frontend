@@ -1,5 +1,7 @@
 import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextResponse } from 'next/server';
+import { getDownloadHeaders, sanitizePdfDownloadFilename, validateOutputBuffer, validatePdfFile } from '@/lib/pdf-utils';
+import { validateR2DownloadUrl } from '@/lib/conversion-url-validation';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -23,9 +25,8 @@ export async function POST(request: Request) {
     const level = incoming.get('level');
 
     if (!(file instanceof File)) return NextResponse.json({ error: 'No PDF file provided.', code: 'NO_FILE' }, { status: 400 });
-    if (!file.size) return NextResponse.json({ error: 'The PDF file is empty.', code: 'EMPTY_FILE' }, { status: 400 });
-    if (file.size > MAX_FILE_SIZE) return NextResponse.json({ error: 'PDF file exceeds the 100MB limit.', code: 'FILE_TOO_LARGE' }, { status: 413 });
-    if (!file.name.toLowerCase().endsWith('.pdf')) return NextResponse.json({ error: 'Please upload a PDF file.', code: 'UNSUPPORTED_FORMAT' }, { status: 415 });
+    const validation = await validatePdfFile(file);
+    if (!validation.valid) return NextResponse.json({ error: validation.error || 'Invalid PDF file.', code: 'INVALID_PDF' }, { status: 400 });
 
     const selectedLevel = typeof level === 'string' && ['low', 'medium', 'high'].includes(level) ? level : 'medium';
     const body = new FormData();
@@ -48,17 +49,55 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!data?.downloadUrl) return NextResponse.json({ error: 'Compression completed without a download URL.', code: 'MISSING_OUTPUT' }, { status: 502 });
+    const downloadUrl = validateR2DownloadUrl(data?.downloadUrl);
+    if (!downloadUrl) return NextResponse.json({ error: 'Converter returned an invalid download URL.', code: 'INVALID_OUTPUT_URL' }, { status: 502 });
 
-    const output = await fetch(data.downloadUrl, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
+    const output = await fetch(downloadUrl, {
+      cache: 'no-store',
+      redirect: 'error',
+      signal: AbortSignal.timeout(30000),
+    });
     if (!output.ok) return NextResponse.json({ error: 'Compressed PDF could not be retrieved.', code: 'OUTPUT_FETCH_FAILED' }, { status: 502 });
 
-    return new NextResponse(await output.arrayBuffer(), {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="' + file.name.replace(/\.pdf$/i, '-compressed.pdf') + '"',
-        'Cache-Control': 'no-store',
-      },
+    const contentType = output.headers.get('content-type')?.split(';')[0].trim().toLowerCase();
+    if (contentType !== 'application/pdf') {
+      return NextResponse.json({ error: 'Converter returned an unexpected file type.', code: 'INVALID_OUTPUT_TYPE' }, { status: 502 });
+    }
+
+    const declaredLength = Number(output.headers.get('content-length'));
+    if (Number.isFinite(declaredLength) && declaredLength > MAX_FILE_SIZE) {
+      return NextResponse.json({ error: 'Compressed output exceeds the 100MB limit.', code: 'OUTPUT_TOO_LARGE' }, { status: 502 });
+    }
+    if (!output.body) return NextResponse.json({ error: 'Compressed output is empty.', code: 'EMPTY_OUTPUT' }, { status: 502 });
+
+    const reader = output.body.getReader();
+    const chunks: Buffer[] = [];
+    let totalSize = 0;
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        totalSize += value.byteLength;
+        if (totalSize > MAX_FILE_SIZE) {
+          await reader.cancel();
+          return NextResponse.json({ error: 'Compressed output exceeds the 100MB limit.', code: 'OUTPUT_TOO_LARGE' }, { status: 502 });
+        }
+        chunks.push(Buffer.from(value));
+      }
+    } finally {
+      reader.releaseLock();
+    }
+
+    const outputBuffer = Buffer.concat(chunks);
+    const outputValidation = validateOutputBuffer(outputBuffer, 'Compress PDF');
+    if (!outputValidation.valid) {
+      return NextResponse.json({ error: outputValidation.error || 'Compressed PDF is invalid.', code: 'INVALID_OUTPUT' }, { status: 502 });
+    }
+
+    const filename = sanitizePdfDownloadFilename(file.name, '-compressed.pdf');
+    return new NextResponse(outputBuffer, {
+      headers: getDownloadHeaders(filename, outputBuffer.length),
     });
   } catch (error) {
     return NextResponse.json(

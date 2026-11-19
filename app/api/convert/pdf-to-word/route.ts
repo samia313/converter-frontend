@@ -1,6 +1,7 @@
 import { enforceRateLimit } from '@/lib/rate-limit';
 import { NextRequest, NextResponse } from 'next/server';
 import { submitConversion } from '@/lib/pdfilio-conversion';
+import { validatePdfFile } from '@/lib/pdf-utils';
 
 export const runtime = 'nodejs';
 export const maxDuration = 120;
@@ -33,6 +34,14 @@ export async function POST(request: NextRequest) {
     if (file.size === 0 || file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         { success: false, error: 'File must be between 1 byte and 50 MB' },
+        { status: 400 }
+      );
+    }
+
+    const validation = await validatePdfFile(file);
+    if (!validation.valid) {
+      return NextResponse.json(
+        { success: false, error: validation.error || 'Invalid PDF file' },
         { status: 400 }
       );
     }
