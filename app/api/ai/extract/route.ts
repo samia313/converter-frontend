@@ -52,9 +52,9 @@ export async function POST(request: NextRequest) {
       textLength: text.length,
     })
   } catch (error) {
-    console.error('[v0] Extract API error:', error)
+    console.error('[AI] Extract request failed')
     return NextResponse.json(
-      { error: 'Extraction failed', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Extraction failed. Please try again.' },
       { status: 500 }
     )
   }

@@ -85,8 +85,6 @@ export async function POST(request: NextRequest) {
     const documentContent = documentResult.data
     const context = contextResult.data
 
-    console.log('[v0] PDF Chat - Processing query with OpenAI:', query.substring(0, 50) + '...')
-
     // Call OpenAI API
     const response = await generateChatResponseWithOpenAI(query, documentContent, context)
 
@@ -97,12 +95,9 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
-    console.error('[v0] Chat API error:', error)
+    console.error('[AI] Chat request failed')
     return NextResponse.json(
-      {
-        error: 'Chat processing failed',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
+      { error: 'Chat processing failed. Please try again.' },
       { status: 500 }
     )
   }
@@ -142,7 +137,7 @@ Question: ${query}`
     console.log('[v0] OpenAI response generated successfully')
     return response
   } catch (error) {
-    console.error('[v0] OpenAI API error:', error)
+    console.error('[AI] OpenAI request failed')
     throw error
   }
 }

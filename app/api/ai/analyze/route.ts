@@ -53,9 +53,9 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
-    console.error('[v0] Analyze API error:', error)
+    console.error('[AI] Analyze request failed')
     return NextResponse.json(
-      { error: 'Analysis failed', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Analysis failed. Please try again.' },
       { status: 500 }
     )
   }
