@@ -5,7 +5,13 @@ const nextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 365,
-    remotePatterns: [{ protocol: 'https', hostname: '**' }],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+    ],
   },
   compress: true,
   poweredByHeader: false,
@@ -308,5 +314,4 @@ const nextConfig = {
   onDemandEntries: { maxInactiveAge: 25 * 1000, pagesBufferLength: 5 },
   generateEtags: true,
 };
-
 module.exports = nextConfig;
