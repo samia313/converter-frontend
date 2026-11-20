@@ -1,1 +1,3 @@
 # Deployment trigger
+# Historical documentation is retained in GitHub but excluded from Vercel upload.
+docs/archive/**
