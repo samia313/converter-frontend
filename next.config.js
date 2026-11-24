@@ -13,6 +13,14 @@ const nextConfig = {
       },
     ],
   },
+  const nextConfig = {
+  images: {
+    ...
+  },
+  serverExternalPackages: ['pdfjs-dist', 'pdf-parse', 'sharp'],
+  compress: true,
+  poweredByHeader: false,
+  ...
   compress: true,
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
