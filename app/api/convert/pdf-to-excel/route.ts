@@ -1,222 +1,39 @@
-import { enforceRateLimit } from '@/lib/rate-limit';
-import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument } from 'pdf-lib';
-import JSZip from 'jszip';
-
-export const runtime = 'nodejs';
-export const maxDuration = 60;
-
-const MAX_FILE_SIZE = 100 * 1024 * 1024;
-
-type TextItem = { x: number; y: number; text: string; width: number };
-
-function xmlEscape(value: string): string {
-  return value.replace(/[<>&'"]/g, (char) => ({
-    '<': '&lt;',
-    '>': '&gt;',
-    '&': '&amp;',
-    "'": '&apos;',
-    '"': '&quot;',
-  }[char] as string));
-}
-
-async function extractRows(pdfBuffer: Buffer): Promise<string[][]> {
-  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
-  const loadingTask = pdfjs.getDocument({
-    data: new Uint8Array(pdfBuffer),
-    useWorkerFetch: false,
-    disableFontFace: true,
-    verbosity: 0,
-  });
-  const pdf = await loadingTask.promise;
-  const rows: string[][] = [];
-
-  try {
-    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-      const page = await pdf.getPage(pageNumber);
-      const content = await page.getTextContent();
-      const items = content.items as Array<{
-        str?: string;
-        transform?: number[];
-        width?: number;
-      }>;
-
-      const pageItems: TextItem[] = items
-        .map((item) => ({
-          x: item.transform?.[4] ?? 0,
-          y: item.transform?.[5] ?? 0,
-          text: (item.str ?? '').trim(),
-          width: Math.max(1, item.width ?? 0),
-        }))
-        .filter((item) => item.text.length > 0);
-
-      const pageRows: TextItem[][] = [];
-      for (const item of pageItems) {
-        let row = pageRows.find((candidate) => Math.abs(candidate[0].y - item.y) <= 3);
-        if (!row) {
-          row = [];
-          pageRows.push(row);
+function ensureDomPolyfills() {
+  const g = globalThis as Record<string, unknown>;
+  if (typeof g.DOMMatrix === 'undefined') {
+    class DOMMatrixPolyfill {
+      a = 1; b = 0; c = 0; d = 1; e = 0; f = 0;
+      m11 = 1; m12 = 0; m21 = 0; m22 = 1; m41 = 0; m42 = 0;
+      is2D = true;
+      isIdentity = true;
+      constructor(init?: number[] | string) {
+        if (Array.isArray(init) && init.length >= 6) {
+          [this.a, this.b, this.c, this.d, this.e, this.f] = init as number[];
+          this.m11 = this.a; this.m12 = this.b; this.m21 = this.c; this.m22 = this.d;
+          this.m41 = this.e; this.m42 = this.f;
+          this.isIdentity = false;
         }
-        row.push(item);
       }
-
-      pageRows.sort((a, b) => b[0].y - a[0].y);
-
-      for (const row of pageRows) {
-        row.sort((a, b) => a.x - b.x);
-        const cells: string[] = [];
-        let current = '';
-        let previousRight = 0;
-
-        for (const item of row) {
-          const gap = item.x - previousRight;
-          const columnBreak = current.length > 0 && gap > Math.max(10, item.width * 0.35);
-          if (columnBreak) {
-            cells.push(current.trim());
-            current = item.text;
-          } else {
-            current = current ? `${current} ${item.text}` : item.text;
-          }
-          previousRight = item.x + item.width;
-        }
-
-        if (current.trim()) cells.push(current.trim());
-        if (cells.length) rows.push(cells);
-      }
-
-      if (pageNumber < pdf.numPages) rows.push([]);
+      multiplySelf() { return this; }
+      preMultiplySelf() { return this; }
+      translateSelf() { return this; }
+      scaleSelf() { return this; }
+      rotateSelf() { return this; }
+      invertSelf() { return this; }
+      multiply() { return new DOMMatrixPolyfill(); }
+      translate() { return new DOMMatrixPolyfill(); }
+      scale() { return new DOMMatrixPolyfill(); }
+      inverse() { return new DOMMatrixPolyfill(); }
+      transformPoint(p?: { x?: number; y?: number }) { return { x: p?.x ?? 0, y: p?.y ?? 0, z: 0, w: 1 }; }
     }
-  } finally {
-    await loadingTask.destroy();
+    g.DOMMatrix = DOMMatrixPolyfill;
   }
-
-  while (rows.length && rows[rows.length - 1].length === 0) rows.pop();
-  return rows;
-}
-
-function columnName(index: number): string {
-  let n = index + 1;
-  let name = '';
-  while (n > 0) {
-    const remainder = (n - 1) % 26;
-    name = String.fromCharCode(65 + remainder) + name;
-    n = Math.floor((n - 1) / 26);
+  if (typeof g.Path2D === 'undefined') {
+    g.Path2D = class Path2D {};
   }
-  return name;
-}
-
-async function createXlsx(rows: string[][]): Promise<Buffer> {
-  const maxColumns = Math.min(50, Math.max(1, ...rows.map((row) => row.length)));
-  const normalized = rows.map((row) => Array.from({ length: maxColumns }, (_, i) => row[i] ?? '').slice(0, maxColumns));
-  const sheetRows = normalized.map((row, rowIndex) => {
-    const cells = row.map((value, columnIndex) => {
-      const ref = `${columnName(columnIndex)}${rowIndex + 1}`;
-      return `<c r="${ref}" t="inlineStr"><is><t xml:space="preserve">${xmlEscape(value)}</t></is></c>`;
-    }).join('');
-    return `<row r="${rowIndex + 1}">${cells}</row>`;
-  }).join('');
-
-  const zip = new JSZip();
-  zip.file('[Content_Types].xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-<Default Extension="xml" ContentType="application/xml"/>
-<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>
-<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>
-</Types>`);
-  zip.file('_rels/.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
-</Relationships>`);
-  zip.file('xl/workbook.xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-<sheets><sheet name="PDF Data" sheetId="1" r:id="rId1"/></sheets>
-</workbook>`);
-  zip.file('xl/_rels/workbook.xml.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>
-</Relationships>`);
-  zip.file('xl/worksheets/sheet1.xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
-<sheetData>${sheetRows}</sheetData>
-</worksheet>`);
-  return zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });
-}
-
-export async function POST(request: NextRequest) {
-  const rateLimitResponse = await enforceRateLimit(request, { namespace: 'conversion', limit: 10, window: '1 m' });
-  if (rateLimitResponse) return rateLimitResponse;
-
-  try {
-    const formData = await request.formData();
-    const file = formData.get('file');
-
-    if (!(file instanceof File)) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
-    }
-    if (!file.name.toLowerCase().endsWith('.pdf') && !file.type.includes('pdf')) {
-      return NextResponse.json({ error: 'File must be a PDF' }, { status: 400 });
-    }
-    if (file.size === 0) {
-      return NextResponse.json({ error: 'File is empty' }, { status: 400 });
-    }
-    if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json({ error: 'File size exceeds the 100MB limit.' }, { status: 413 });
-    }
-
-    const buffer = Buffer.from(await file.arrayBuffer());
-    if (!buffer.length) return NextResponse.json({ error: 'File is empty' }, { status: 400 });
-    if (buffer.length > MAX_FILE_SIZE) {
-      return NextResponse.json({ error: 'File size exceeds the 100MB limit.' }, { status: 413 });
-    }
-
-    const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
-    const pageCount = pdfDoc.getPageCount();
-    if (pageCount < 1) {
-      return NextResponse.json({ error: 'PDF contains no pages' }, { status: 400 });
-    }
-
-    let rows: string[][];
-    try {
-      rows = await extractRows(buffer);
-    } catch (error) {
-      console.error('[pdf-to-excel] Text extraction failed:', error);
-      return NextResponse.json(
-        { error: 'Could not extract text from this PDF. It may be scanned/image-only or encrypted.' },
-        { status: 422 },
-      );
-    }
-
-    if (!rows.some((row) => row.length && row.some(Boolean))) {
-      return NextResponse.json(
-        { error: 'No selectable text was found in this PDF. Scanned/image-only PDFs require OCR first.' },
-        { status: 422 },
-      );
-    }
-
-    const xlsxBuffer = await createXlsx(rows);
-    const safeBaseName =
-      file.name
-        .replace(/\.pdf$/i, '')
-        .replace(/[\\/\u0000-\u001F\u007F"]/g, '_')
-        .replace(/[. ]+$/g, '')
-        .slice(0, 120) || 'converted-document';
-    const fileName = `${safeBaseName}.xlsx`;
-
-    return new NextResponse(xlsxBuffer as BodyInit, {
-      headers: {
-        'Content-Disposition': `attachment; filename="${encodeURIComponent(fileName)}"`,
-        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Content-Length': String(xlsxBuffer.length),
-        'X-Converted-Pages': String(pageCount),
-      },
-    });
-  } catch (error) {
-    console.error('[pdf-to-excel] Conversion error:', error);
-    return NextResponse.json(
-      { error: 'Conversion failed', details: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 },
-    );
+  if (typeof g.ImageData === 'undefined') {
+    g.ImageData = class ImageData {
+      constructor(public data: Uint8ClampedArray, public width: number, public height: number) {}
+    };
   }
 }
