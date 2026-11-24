@@ -62,7 +62,10 @@ function ensureDomPolyfills() {
 
 async function extractRows(pdfBuffer: Buffer): Promise<string[][]> {
   ensureDomPolyfills();
-  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+    const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+  // @ts-ignore - worker module has no bundled types
+  const pdfWorker = await import('pdfjs-dist/legacy/build/pdf.worker.mjs');
+  (globalThis as unknown as { pdfjsWorker?: unknown }).pdfjsWorker = pdfWorker;
   const loadingTask = pdfjs.getDocument({
     data: new Uint8Array(pdfBuffer),
     useWorkerFetch: false,
